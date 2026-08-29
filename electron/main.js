@@ -128,14 +128,14 @@ ipcMain.handle('open-external', async (event, url) => {
 });
 
 ipcMain.handle('launch-terminal', async () => {
-  const sonderrPath = '/home/dxn1/.local/bin/sonderr';
+  const sonderrPath = path.join(os.homedir(), '.local', 'bin', 'sonderr');
   const terms = [
     { cmd: 'xterm', args: ['-e', sonderrPath] },
     { cmd: 'kitty', args: [sonderrPath] },
     { cmd: 'alacritty', args: ['-e', sonderrPath] },
     { cmd: 'xfce4-terminal', args: ['--command', sonderrPath] },
     { cmd: 'konsole', args: ['-e', sonderrPath] },
-    { cmd: 'gnome-terminal', args: ['--', 'bash', '-c', `export PATH="/home/dxn1/.local/bin:$PATH"; ${sonderrPath}; exec bash`] }
+    { cmd: 'gnome-terminal', args: ['--', 'bash', '-c', `export PATH="${os.homedir()}/.local/bin:$PATH"; ${sonderrPath}; exec bash`] }
   ];
   
   for (const term of terms) {
@@ -143,7 +143,7 @@ ipcMain.handle('launch-terminal', async () => {
       const child = spawn(term.cmd, term.args, { 
         detached: true,
         stdio: 'ignore',
-        env: { ...process.env, PATH: '/home/dxn1/.local/bin:' + (process.env.PATH || '') }
+        env: { ...process.env, PATH: path.join(os.homedir(), '.local/bin') + ':' + (process.env.PATH || '') }
       });
       child.unref();
       return { success: true };

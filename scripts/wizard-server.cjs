@@ -4,7 +4,7 @@ const path = require('path');
 const os = require('os');
 const crypto = require('crypto');
 
-const CONFIG_DIR = path.join(os.homedir(), '.config', 'sonderr-desktop');
+const CONFIG_DIR = path.join(os.homedir(), '.config', 'sonderr');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 
 function ensureConfigDir() {

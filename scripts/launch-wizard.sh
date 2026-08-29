@@ -2,19 +2,18 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-WIZARD_SERVER="$SCRIPT_DIR/../scripts/wizard-server.cjs"
-PORT=${SONDERR_WIZARD_PORT:-17381}
+WIZARD_PORT="${SONDERR_WIZARD_PORT:-17381}"
 
-if ! lsof -Pi :$PORT -sTCP:LISTEN -t >/dev/null 2>&1; then
-  node "$WIZARD_SERVER" &
+# Start wizard server if not running
+if ! curl -s http://localhost:$WIZARD_PORT/ > /dev/null 2>&1; then
+  node "$SCRIPT_DIR/wizard-server.cjs" &
   WIZARD_PID=$!
-  sleep 1
-else
-  WIZARD_PID=""
+  sleep 2
 fi
 
-xdg-open "http://localhost:$PORT/setup" >/dev/null 2>&1 || x-www-browser "http://localhost:$PORT/setup" >/dev/null 2>&1 || echo "Open http://localhost:$PORT/setup in your browser"
+# Open wizard in browser
+xdg-open "http://localhost:$WIZARD_PORT/setup" 2>/dev/null || \
+  xdg-open "http://localhost:$WIZARD_PORT/" 2>/dev/null || \
+  echo "Open http://localhost:$WIZARD_PORT/setup in your browser"
 
-if [ -n "$WIZARD_PID" ]; then
-  wait $WIZARD_PID
-fi
+wait $WIZARD_PID 2>/dev/null || true

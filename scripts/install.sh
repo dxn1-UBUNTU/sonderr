@@ -1,34 +1,45 @@
 #!/bin/bash
 set -e
 
-echo "=== Sonderr Desktop Setup ==="
+echo "=== Sonderr Setup ==="
 
 # Ensure config directory exists
-mkdir -p ~/.config/sonderr-desktop
+mkdir -p ~/.config/sonderr
 mkdir -p ~/.local/share/applications
 mkdir -p ~/.local/bin
+
+# Install binary
+BIN_SRC="$(pwd)/dist/sonderr-linux-x64"
+if [ ! -f "$BIN_SRC" ]; then
+  echo "Error: Binary not found at $BIN_SRC"
+  exit 1
+fi
+
+cp "$BIN_SRC" ~/.local/bin/sonderr
+chmod +x ~/.local/bin/sonderr
 
 # Symlink launcher
 ln -sf "$(pwd)/scripts/launch-wizard.sh" ~/.local/bin/sonderr-desktop
 ln -sf "$(pwd)/scripts/attach-cli.cjs" ~/.local/bin/sonderr-attach
 
 # Desktop entry
-cat > ~/.local/share/applications/sonderr-desktop.desktop << 'EOF'
+cat > ~/.local/share/applications/sonderr-desktop.desktop << 'DESKTOP'
 [Desktop Entry]
 Type=Application
-Name=Sonderr Desktop
+Name=Sonderr
 Comment=AI coding agent for desktop
 Exec=sonderr-desktop
 Icon=utilities-terminal
 Terminal=true
 Categories=Development;IDE;
-StartupWMClass=SonderrDesktop
-EOF
+StartupWMClass=Sonderr
+DESKTOP
 
-echo "✓ Installed Sonderr Desktop"
+echo "✓ Installed Sonderr"
+echo "  - Binary: ~/.local/bin/sonderr"
 echo "  - Launcher: ~/.local/bin/sonderr-desktop"
 echo "  - Attach CLI: ~/.local/bin/sonderr-attach"
 echo "  - Desktop entry: ~/.local/share/applications/sonderr-desktop.desktop"
 echo ""
 echo "Run 'sonderr-desktop' to launch the setup wizard"
-echo "Run '/api_attach' in Kilo to attach a new API key"
+echo "Run '/api_attach' in Sonderr to attach a new API key"
