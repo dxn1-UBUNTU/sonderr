@@ -8,7 +8,7 @@ const { autoUpdater } = require('electron-updater');
 
 const CONFIG_DIR = path.join(os.homedir(), '.config', 'sonderr-desktop');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
-const APP_VERSION = '1.0.5';
+const APP_VERSION = '1.0.6';
 
 function getSecret() {
   const machineId = os.hostname() + os.userInfo().username;
@@ -130,38 +130,27 @@ ipcMain.handle('open-external', async (event, url) => {
 
 ipcMain.handle('launch-terminal', async () => {
   const kiloPath = '/home/dxn1/.npm-global/bin/kilo';
-  
-  // Desktop Linux terminals
   const terms = [
-    { cmd: 'gnome-terminal', args: ['--', 'bash', '-c', `${kiloPath}; exec bash`] },
-    { cmd: 'konsole', args: ['-e', kiloPath] },
-    { cmd: 'xfce4-terminal', args: ['--command', kiloPath] },
-    { cmd: 'alacritty', args: ['-e', kiloPath] },
+    { cmd: 'xterm', args: ['-e', kiloPath] },
     { cmd: 'kitty', args: [kiloPath] },
-    { cmd: 'xterm', args: ['-e', kiloPath] }
+    { cmd: 'alacritty', args: ['-e', kiloPath] },
+    { cmd: 'xfce4-terminal', args: ['--command', kiloPath] },
+    { cmd: 'konsole', args: ['-e', kiloPath] },
+    { cmd: 'gnome-terminal', args: ['--', 'bash', '-c', `export PATH="/home/dxn1/.npm-global/bin:$PATH"; ${kiloPath}; exec bash`] }
   ];
   
   for (const term of terms) {
     try {
-      spawn(term.cmd, term.args, { detached: true });
+      const child = spawn(term.cmd, term.args, { 
+        detached: true,
+        stdio: 'ignore',
+        env: { ...process.env, PATH: '/home/dxn1/.npm-global/bin:' + (process.env.PATH || '') }
+      });
+      child.unref();
       return { success: true };
     } catch (e) {
       continue;
     }
-  }
-  
-  // Termux/Android fallback: open Kilo web UI or run directly
-  try {
-    if (process.platform === 'linux' && !terms.some(t => {
-      try { require('child_process').execSync(`which ${t.cmd}`, { stdio: 'ignore' }); return true; }
-      catch(e) { return false; }
-    })) {
-      // No desktop terminal found - open web UI
-      shell.openExternal('http://localhost:17381/setup');
-      return { success: true };
-    }
-  } catch (e) {
-    return { error: 'No compatible terminal found. Run kilo manually in your terminal.' };
   }
   
   return { error: 'No compatible terminal found. Run kilo manually in your terminal.' }
