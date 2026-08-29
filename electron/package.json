@@ -1,6 +1,6 @@
 {
   "name": "sonderr-desktop",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Sonderr Desktop — AI coding agent for Linux",
   "main": "main.js",
   "homepage": "https://sonderr-desktop.vercel.app",
@@ -10,6 +10,9 @@
   },
   "author": "DXN1 <dxn1.0day@gmail.com>",
   "license": "MIT",
+  "dependencies": {
+    "electron-updater": "^6.3.9"
+  },
   "devDependencies": {
     "electron": "^38.0.0",
     "electron-builder": "^26.0.0"
@@ -17,6 +20,11 @@
   "build": {
     "appId": "com.sonderr.desktop",
     "productName": "Sonderr Desktop",
+    "publish": {
+      "provider": "github",
+      "owner": "dxn1-UBUNTU",
+      "repo": "sonderr-desktop"
+    },
     "linux": {
       "target": "deb",
       "category": "Development",

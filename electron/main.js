@@ -1,13 +1,14 @@
-const { app, BrowserWindow, ipcMain, shell, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, Menu, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const crypto = require('crypto');
 const { spawn } = require('child_process');
+const { autoUpdater } = require('electron-updater');
 
 const CONFIG_DIR = path.join(os.homedir(), '.config', 'sonderr-desktop');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
-const APP_VERSION = '1.0.3';
+const APP_VERSION = '1.0.5';
 
 function getSecret() {
   const machineId = os.hostname() + os.userInfo().username;
@@ -196,6 +197,9 @@ function createMenu() {
 app.whenReady().then(() => {
   createMenu();
   
+  // Check for updates
+  autoUpdater.checkForUpdatesAndNotify();
+  
   if (hasConfig()) {
     createMainWindow();
   } else {
@@ -208,6 +212,27 @@ app.whenReady().then(() => {
       else createSetupWindow();
     }
   });
+});
+
+autoUpdater.on('update-available', () => {
+  autoUpdater.downloadUpdate();
+});
+
+autoUpdater.on('update-downloaded', () => {
+  dialog.showMessageBox(mainWindow, {
+    type: 'info',
+    title: 'Update Available',
+    message: 'A new version of Sonderr Desktop is ready to install.',
+    buttons: ['Install Now', 'Later']
+  }).then(({ response }) => {
+    if (response === 0) {
+      autoUpdater.quitAndInstall();
+    }
+  });
+});
+
+autoUpdater.on('error', (err) => {
+  console.error('Update error:', err);
 });
 
 app.on('window-all-closed', () => {
