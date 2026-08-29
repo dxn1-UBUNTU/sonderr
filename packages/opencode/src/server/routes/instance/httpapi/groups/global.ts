@@ -5,7 +5,7 @@ import { InstanceDisposed } from "@/server/event"
 import { BusEvent } from "@/bus/bus-event" // kilocode_change - include legacy Kilo events until they migrate to EventV2
 import "@opencode-ai/core/account"
 import "@/server/event"
-import "@/sonderr/indexing-event" // kilocode_change - register indexing.status before HttpApi event schemas
+import "@/kilocode/indexing-event" // kilocode_change - register indexing.status before HttpApi event schemas
 import { Schema } from "effect"
 import { HttpApi, HttpApiEndpoint, HttpApiError, HttpApiGroup, HttpApiSchema, OpenApi } from "effect/unstable/httpapi"
 import { described } from "./metadata"

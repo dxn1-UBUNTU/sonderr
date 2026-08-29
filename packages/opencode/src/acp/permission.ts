@@ -12,7 +12,7 @@ import { exists, readText } from "@/util/filesystem"
 import type { ACPSession } from "./session"
 import { pendingToolCall, toLocations, type ToolInput } from "./tool"
 import { Effect } from "effect"
-import { SkillShellPrompt } from "@/sonderr/acp/permission" // kilocode_change
+import { SkillShellPrompt } from "@/kilocode/acp/permission" // kilocode_change
 
 type PermissionEvent = Extract<Event, { type: "permission.asked" }>
 type Reply = "once" | "always" | "reject"

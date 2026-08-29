@@ -5,7 +5,7 @@ import * as Tool from "./tool"
 import TurndownService from "turndown"
 import DESCRIPTION from "./webfetch.txt"
 import { isIconMimeType, isImageAttachment } from "@/util/media" // kilocode_change
-import { normalizeUrls } from "@/sonderr/util/url" // kilocode_change
+import { normalizeUrls } from "@/kilocode/util/url" // kilocode_change
 
 const MAX_RESPONSE_SIZE = 5 * 1024 * 1024 // 5MB
 const DEFAULT_TIMEOUT = 30 * 1000 // 30 seconds

@@ -9,7 +9,7 @@ import { mergeDeep } from "remeda"
 import { Config } from "@/config/config"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 import { errorMessage } from "@/util/error"
-import { model as modelEnv } from "@/sonderr/process/env" // kilocode_change
+import { model as modelEnv } from "@/kilocode/process/env" // kilocode_change
 import * as Formatter from "./formatter"
 
 export const Status = Schema.Struct({

@@ -7,7 +7,7 @@ import type { Permission } from "../permission"
 import type { SessionID, MessageID } from "../session/schema"
 import * as Truncate from "./truncate"
 import { Agent } from "@/agent/agent"
-import { format } from "@/sonderr/tool/tool" // kilocode_change
+import { format } from "@/kilocode/tool/tool" // kilocode_change
 
 interface Metadata {
   [key: string]: any

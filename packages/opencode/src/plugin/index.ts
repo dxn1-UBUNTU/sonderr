@@ -29,7 +29,7 @@ import { PluginLoader } from "./loader"
 import { parsePluginSpecifier, readPluginId, readV1Plugin, resolvePluginId } from "./shared"
 import { KiloAuthPlugin } from "@kilocode/kilo-gateway" // kilocode_change
 import { AtomicChatPlugin } from "@kilocode/plugin-atomic-chat" // kilocode_change
-import { AnacondaDesktopPlugin } from "@/sonderr/anaconda-desktop/provider" // kilocode_change
+import { AnacondaDesktopPlugin } from "@/kilocode/anaconda-desktop/provider" // kilocode_change
 import { registerAdapter } from "@/control-plane/adapters"
 import type { WorkspaceAdapter } from "@/control-plane/types"
 import { RuntimeFlags } from "@/effect/runtime-flags"

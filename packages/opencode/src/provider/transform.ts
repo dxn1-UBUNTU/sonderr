@@ -4,9 +4,9 @@ import type { JSONSchema7 } from "@ai-sdk/provider"
 import type * as Provider from "./provider"
 import type * as ModelsDev from "@opencode-ai/core/models-dev"
 import { iife } from "@/util/iife"
-import { kiloProviderOptions } from "@/sonderr/provider-options"
-import { isLing } from "@/sonderr/model-match" // kilocode_change
-import { reasoningSummary } from "@/sonderr/provider/reasoning-summary" // kilocode_change
+import { kiloProviderOptions } from "@/kilocode/provider-options"
+import { isLing } from "@/kilocode/model-match" // kilocode_change
+import { reasoningSummary } from "@/kilocode/provider/reasoning-summary" // kilocode_change
 
 type Modality = NonNullable<ModelsDev.Model["modalities"]>["input"][number]
 

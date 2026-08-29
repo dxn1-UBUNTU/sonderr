@@ -1,5 +1,5 @@
 // sonderr_change start
-import { plain } from "../sonderr/cli/logo"
+import { plain } from "../kilocode/cli/logo"
 
 export const logo = {
   left: ["", "", ""],

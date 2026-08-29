@@ -5,7 +5,7 @@ import { EventV2Bridge } from "@/event-v2-bridge"
 import { Snapshot } from "@/snapshot"
 import { Session } from "./session"
 import { SessionID, MessageID } from "./schema"
-import { appendSessionDiffs, readSessionDiffBase } from "@/sonderr/session-portability/cumulative-diff" // kilocode_change
+import { appendSessionDiffs, readSessionDiffBase } from "@/kilocode/session-portability/cumulative-diff" // kilocode_change
 import { Storage } from "@/storage/storage" // kilocode_change
 import { Config } from "@/config/config"
 

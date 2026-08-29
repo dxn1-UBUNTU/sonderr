@@ -45,10 +45,10 @@ export function ConversationList() {
 
   const groups = createMemo(() =>
     groupConversations(claw.conversations(), {
-      today: t("sonderrClaw.conversations.groupToday"),
-      yesterday: t("sonderrClaw.conversations.groupYesterday"),
-      week: t("sonderrClaw.conversations.groupThisWeek"),
-      older: t("sonderrClaw.conversations.groupOlder"),
+      today: t("kiloClaw.conversations.groupToday"),
+      yesterday: t("kiloClaw.conversations.groupYesterday"),
+      week: t("kiloClaw.conversations.groupThisWeek"),
+      older: t("kiloClaw.conversations.groupOlder"),
     }),
   )
 
@@ -68,13 +68,13 @@ export function ConversationList() {
   return (
     <div class="kiloclaw-convlist">
       <div class="kiloclaw-convlist-header">
-        <span class="kiloclaw-convlist-title">{t("sonderrClaw.conversations.title")}</span>
+        <span class="kiloclaw-convlist-title">{t("kiloClaw.conversations.title")}</span>
         <button
           type="button"
           class="kiloclaw-iconbtn"
           onClick={() => claw.createConversation()}
-          aria-label={t("sonderrClaw.conversations.new")}
-          title={t("sonderrClaw.conversations.new")}
+          aria-label={t("kiloClaw.conversations.new")}
+          title={t("kiloClaw.conversations.new")}
         >
           +
         </button>
@@ -82,7 +82,7 @@ export function ConversationList() {
       <div class="kiloclaw-convlist-scroll" ref={scrollEl}>
         <Show
           when={claw.conversations().length > 0}
-          fallback={<div class="kiloclaw-convlist-empty">{t("sonderrClaw.conversations.empty")}</div>}
+          fallback={<div class="kiloclaw-convlist-empty">{t("kiloClaw.conversations.empty")}</div>}
         >
           <For each={groups()}>
             {(group) => (
@@ -171,7 +171,7 @@ function ConversationItem(props: { conversation: ConversationListItem }) {
           <Show when={isUnread()}>
             <span class="kiloclaw-convitem-unread" aria-hidden="true" />
           </Show>
-          {props.conversation.title ?? t("sonderrClaw.conversations.untitled")}
+          {props.conversation.title ?? t("kiloClaw.conversations.untitled")}
         </span>
       </Show>
       <div class="kiloclaw-convitem-actions" onClick={(e) => e.stopPropagation()}>
@@ -179,8 +179,8 @@ function ConversationItem(props: { conversation: ConversationListItem }) {
           type="button"
           class="kiloclaw-iconbtn-sm"
           onClick={startRename}
-          title={t("sonderrClaw.conversations.rename")}
-          aria-label={t("sonderrClaw.conversations.rename")}
+          title={t("kiloClaw.conversations.rename")}
+          aria-label={t("kiloClaw.conversations.rename")}
         >
           ✎
         </button>
@@ -188,8 +188,8 @@ function ConversationItem(props: { conversation: ConversationListItem }) {
           type="button"
           class="kiloclaw-iconbtn-sm kiloclaw-iconbtn-danger"
           onClick={() => claw.leaveConversation(props.conversation.conversationId)}
-          title={t("sonderrClaw.conversations.leave")}
-          aria-label={t("sonderrClaw.conversations.leave")}
+          title={t("kiloClaw.conversations.leave")}
+          aria-label={t("kiloClaw.conversations.leave")}
         >
           ×
         </button>

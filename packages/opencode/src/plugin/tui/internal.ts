@@ -1,6 +1,6 @@
 import { createBuiltinPlugins, type BuiltinTuiPlugin } from "@opencode-ai/tui/builtins"
 import type { RuntimeFlags } from "@/effect/runtime-flags"
-import { withKiloTuiPlugins } from "@/sonderr/plugins/internal" // kilocode_change
+import { withKiloTuiPlugins } from "@/kilocode/plugins/internal" // kilocode_change
 
 export type InternalTuiPlugin = BuiltinTuiPlugin
 

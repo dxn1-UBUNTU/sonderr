@@ -16,7 +16,7 @@ import {
   WithParts,
 } from "@opencode-ai/core/v1/session"
 
-export { EditorContext } from "@/sonderr/editor-context" // kilocode_change
+export { EditorContext } from "@/kilocode/editor-context" // kilocode_change
 import { NamedError } from "@opencode-ai/core/util/error"
 import { APICallError, convertToModelMessages, LoadAPIKeyError, type ModelMessage, type UIMessage } from "ai"
 import { Database } from "@opencode-ai/core/database/database"
@@ -37,9 +37,9 @@ import type { SystemError } from "bun"
 import type { Provider } from "@/provider/provider"
 import { Snapshot } from "@/snapshot" // kilocode_change
 import { SessionNetwork } from "./network" // kilocode_change
-import { CodexAuthExpiredError } from "@/sonderr/provider/codex-refresh" // kilocode_change
-import { KiloSessionMessageOrder } from "@/sonderr/session/message-order" // kilocode_change
-import * as TextStream from "@/sonderr/text-stream" // kilocode_change
+import { CodexAuthExpiredError } from "@/kilocode/provider/codex-refresh" // kilocode_change
+import { KiloSessionMessageOrder } from "@/kilocode/session/message-order" // kilocode_change
+import * as TextStream from "@/kilocode/text-stream" // kilocode_change
 import { Effect, Schema } from "effect"
 
 /** Error shape thrown by Bun's fetch() when gzip/br decompression fails mid-stream */

@@ -30,7 +30,7 @@ export const ServeCommand = effectCmd({
     // yield* Effect.never
     const { InstanceRuntime } = yield* Effect.promise(() => import("../../project/instance-runtime"))
     const { startParentWatchdog } = yield* Effect.promise(() => import("../../kilocode/parent-watchdog"))
-    const { KiloSessions } = yield* Effect.promise(() => import("@/sonderr-sessions/kilo-sessions"))
+    const { KiloSessions } = yield* Effect.promise(() => import("@/kilo-sessions/kilo-sessions"))
     yield* Effect.promise(
       () =>
         new Promise<void>((resolve) => {

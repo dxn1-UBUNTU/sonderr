@@ -1,5 +1,5 @@
 import { Effect, ScopedCache, Scope } from "effect"
-import { capture, type InstanceContext } from "@/sonderr/instance" // kilocode_change
+import { capture, type InstanceContext } from "@/kilocode/instance" // kilocode_change
 import { InstanceRef, WorkspaceRef } from "./instance-ref"
 import { registerDisposer } from "./instance-registry"
 import { WorkspaceContext } from "@/control-plane/workspace-context"

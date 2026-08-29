@@ -1,7 +1,7 @@
 // sonderr_change - new file
 import { useTheme } from "../context/theme"
 import { RGBA } from "@opentui/core"
-import { tui } from "@/sonderr/cli/logo"
+import { tui } from "@/kilocode/cli/logo"
 
 const SHADOW_MARKER = /[_^~]/ // ~ = shadow top only (▀ with fg=shadow)
 

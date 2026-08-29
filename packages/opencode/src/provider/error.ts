@@ -1,7 +1,7 @@
 import { APICallError } from "ai"
 import { STATUS_CODES } from "http"
 import { iife } from "@/util/iife"
-import * as KiloError from "@/sonderr/provider/error" // kilocode_change
+import * as KiloError from "@/kilocode/provider/error" // kilocode_change
 import type { ProviderV2 } from "@opencode-ai/core/provider"
 import { isContextOverflow } from "@opencode-ai/llm"
 

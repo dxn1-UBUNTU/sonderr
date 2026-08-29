@@ -1,6 +1,6 @@
 import type { ChildProcessWithoutNullStreams } from "child_process"
 import { Process } from "@/util/process"
-import { model as modelEnv } from "@/sonderr/process/env" // kilocode_change
+import { model as modelEnv } from "@/kilocode/process/env" // kilocode_change
 
 type Child = Process.Child & ChildProcessWithoutNullStreams
 

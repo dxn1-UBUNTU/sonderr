@@ -5,7 +5,7 @@ import { HttpApiBuilder, HttpApiError } from "effect/unstable/httpapi"
 import { InstanceHttpApi } from "../api"
 import { McpServerNotFoundError } from "../errors"
 import { AddPayload, AuthCallbackPayload, StatusMap, UnsupportedOAuthError } from "../groups/mcp"
-import { McpApps } from "@/sonderr/mcp/apps" // kilocode_change
+import { McpApps } from "@/kilocode/mcp/apps" // kilocode_change
 
 export const mcpHandlers = HttpApiBuilder.group(InstanceHttpApi, "mcp", (handlers) =>
   Effect.gen(function* () {
@@ -101,7 +101,7 @@ export const mcpHandlers = HttpApiBuilder.group(InstanceHttpApi, "mcp", (handler
       return true
     })
 
-    // kilocode_change start - MCP Apps experimental resource/tool endpoints; logic lives in @/sonderr/mcp/apps
+    // kilocode_change start - MCP Apps experimental resource/tool endpoints; logic lives in @/kilocode/mcp/apps
     const readResource = McpApps.readResource(mcp, flags)
     const callTool = McpApps.callTool(mcp, flags)
     // kilocode_change end

@@ -16,8 +16,8 @@ import { ChildProcess } from "effect/unstable/process"
 import { FSUtil } from "@opencode-ai/core/fs-util"
 import { AppProcess } from "@opencode-ai/core/process"
 import { InstanceState } from "@/effect/instance-state"
-import { WorktreeCleanup } from "@/sonderr/worktree-cleanup" // kilocode_change
-import { clearPtys } from "@/sonderr/worktree/pty-cleanup" // kilocode_change
+import { WorktreeCleanup } from "@/kilocode/worktree-cleanup" // kilocode_change
+import { clearPtys } from "@/kilocode/worktree/pty-cleanup" // kilocode_change
 import { WorktreeEvent } from "@opencode-ai/schema/worktree-event"
 
 export const Event = WorktreeEvent

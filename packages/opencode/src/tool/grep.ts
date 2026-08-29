@@ -3,7 +3,7 @@ import { Effect, Schema } from "effect"
 import { InstanceState } from "@/effect/instance-state"
 import { FSUtil } from "@opencode-ai/core/fs-util"
 import { Ripgrep } from "@opencode-ai/core/ripgrep"
-import * as KiloGrep from "@/sonderr/tool/grep-signal-controls" // kilocode_change
+import * as KiloGrep from "@/kilocode/tool/grep-signal-controls" // kilocode_change
 import { assertExternalDirectoryEffect } from "./external-directory"
 import DESCRIPTION from "./grep.txt"
 import * as Tool from "./tool"

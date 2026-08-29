@@ -1,6 +1,6 @@
 import { Agent } from "@/agent/agent"
-import { KiloSessionPrompt } from "@/sonderr/session/prompt" // kilocode_change
-import { MemoryMarker } from "@/sonderr/memory/marker" // kilocode_change
+import { KiloSessionPrompt } from "@/kilocode/session/prompt" // kilocode_change
+import { MemoryMarker } from "@/kilocode/memory/marker" // kilocode_change
 import { SessionV1 } from "@opencode-ai/core/v1/session"
 import { Provider } from "@/provider/provider"
 import { ProviderTransform } from "@/provider/transform"
@@ -21,13 +21,13 @@ import { Session } from "./session"
 import { SessionProcessor } from "./processor"
 import { PartID } from "./schema"
 import { EffectBridge } from "@/effect/bridge"
-import * as SandboxPolicy from "@/sonderr/sandbox/policy" // kilocode_change
+import * as SandboxPolicy from "@/kilocode/sandbox/policy" // kilocode_change
 import { ProviderV2 } from "@opencode-ai/core/provider"
 import { ModelV2 } from "@opencode-ai/core/model"
 // kilocode_change start
 import { Config } from "@/config/config"
-import { PermissionProvenance } from "@/sonderr/permission/provenance"
-import { McpApps } from "@/sonderr/mcp/apps"
+import { PermissionProvenance } from "@/kilocode/permission/provenance"
+import { McpApps } from "@/kilocode/mcp/apps"
 // kilocode_change end
 import { isRecord } from "@/util/record"
 import { RuntimeFlags } from "@/effect/runtime-flags"

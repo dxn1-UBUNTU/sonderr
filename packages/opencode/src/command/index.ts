@@ -7,11 +7,11 @@ import { Effect, Layer, Context, Schema } from "effect"
 import { Config } from "@/config/config"
 import { MCP } from "../mcp"
 import { Skill } from "../skill"
-import { legacyReviewCommand, reviewCommand } from "@/sonderr/review/command" // kilocode_change
-import { apply as applyOverride, type Override } from "@/sonderr/command/override" // kilocode_change
+import { legacyReviewCommand, reviewCommand } from "@/kilocode/review/command" // kilocode_change
+import { apply as applyOverride, type Override } from "@/kilocode/command/override" // kilocode_change
 import PROMPT_INITIALIZE from "./template/initialize.txt"
 import { LegacyEvent } from "@opencode-ai/schema/legacy-event"
-import { SessionResume } from "@/sonderr/session-resume" // kilocode_change
+import { SessionResume } from "@/kilocode/session-resume" // kilocode_change
 
 type State = {
   commands: Record<string, Info>

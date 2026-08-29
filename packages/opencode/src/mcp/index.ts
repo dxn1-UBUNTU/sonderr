@@ -37,11 +37,11 @@ import { EventV2Bridge } from "@/event-v2-bridge"
 import { TuiEvent } from "@/server/tui-event"
 import { Cause, Effect, Exit, Layer, Context, Schema, Stream } from "effect"
 import { EffectBridge } from "@/effect/bridge"
-import { model as modelEnv } from "@/sonderr/process/env" // kilocode_change
+import { model as modelEnv } from "@/kilocode/process/env" // kilocode_change
 import { InstanceState } from "@/effect/instance-state"
 import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process"
 import { CrossSpawnSpawner } from "@opencode-ai/core/cross-spawn-spawner"
-import * as SandboxNetwork from "@/sonderr/sandbox/network" // kilocode_change
+import * as SandboxNetwork from "@/kilocode/sandbox/network" // kilocode_change
 import { McpCatalog } from "./catalog"
 import { McpEvent } from "@opencode-ai/schema/mcp-event"
 import { McpBrowser } from "./browser"

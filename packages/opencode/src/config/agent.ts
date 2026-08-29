@@ -11,8 +11,8 @@ import { ConfigParse } from "./parse"
 import { ConfigVariable } from "./variable" // kilocode_change
 // kilocode_change start
 import { ConfigErrorV1 as ConfigError, FrontmatterError } from "@opencode-ai/core/v1/config/error"
-import { KilocodeConfig } from "@/sonderr/config/config"
-import { report } from "@/sonderr/config/report"
+import { KilocodeConfig } from "@/kilocode/config/config"
+import { report } from "@/kilocode/config/report"
 import type { Warning } from "./config"
 // kilocode_change end
 
@@ -43,7 +43,7 @@ export async function load(
       // kilocode_change start
       if (warnings) warnings.push({ path: item, message })
       try {
-        const { capture } = await import("@/sonderr/instance")
+        const { capture } = await import("@/kilocode/instance")
         const ctx = capture()
         if (ctx) await report(ctx, message)
       } catch (error) {
@@ -124,7 +124,7 @@ export async function loadMode(
       // kilocode_change start
       if (warnings) warnings.push({ path: item, message })
       try {
-        const { capture } = await import("@/sonderr/instance")
+        const { capture } = await import("@/kilocode/instance")
         const ctx = capture()
         if (ctx) await report(ctx, message)
       } catch (error) {

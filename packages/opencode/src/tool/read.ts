@@ -14,9 +14,9 @@ import { Instruction } from "../session/instruction"
 import { isPdfAttachment, sniffAttachmentMime } from "@/util/media"
 // kilocode_change start
 import * as Encoding from "../kilocode/encoding"
-import { KiloReference } from "@/sonderr/reference/contains"
-import * as KiloConfiguredReference from "@/sonderr/reference"
-import { KiloReadObject } from "@/sonderr/tool/read-object"
+import { KiloReference } from "@/kilocode/reference/contains"
+import * as KiloConfiguredReference from "@/kilocode/reference"
+import { KiloReadObject } from "@/kilocode/tool/read-object"
 import * as Extract from "../kilocode/tool/read-extract"
 import * as TextStream from "../kilocode/text-stream"
 // kilocode_change end

@@ -12,19 +12,19 @@ export function UpgradeView() {
   return (
     <div class="kiloclaw-center">
       <Card class="kiloclaw-card">
-        <CardTitle icon={false}>{t("sonderrClaw.upgrade.title")}</CardTitle>
+        <CardTitle icon={false}>{t("kiloClaw.upgrade.title")}</CardTitle>
         <CardDescription>
-          <p class="kiloclaw-card-text">{t("sonderrClaw.upgrade.description1")}</p>
+          <p class="kiloclaw-card-text">{t("kiloClaw.upgrade.description1")}</p>
           <p class="kiloclaw-card-text">
-            {t("sonderrClaw.upgrade.description2.before")}
-            <strong>{t("sonderrClaw.upgrade.description2.bold")}</strong>
-            {t("sonderrClaw.upgrade.description2.after")}
+            {t("kiloClaw.upgrade.description2.before")}
+            <strong>{t("kiloClaw.upgrade.description2.bold")}</strong>
+            {t("kiloClaw.upgrade.description2.after")}
           </p>
         </CardDescription>
         <CardActions>
           <div />
           <Button variant="primary" onClick={() => claw.openExternal("https://app.kilo.ai/claw")}>
-            {t("sonderrClaw.upgrade.openDashboard")}
+            {t("kiloClaw.upgrade.openDashboard")}
           </Button>
         </CardActions>
       </Card>

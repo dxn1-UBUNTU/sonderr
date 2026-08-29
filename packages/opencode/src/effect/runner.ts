@@ -1,5 +1,5 @@
 import { Cause, Deferred, Effect, Exit, Fiber, Latch, Schema, Scope, SynchronizedRef } from "effect"
-import { KiloRunner } from "@/sonderr/effect/runner" // kilocode_change
+import { KiloRunner } from "@/kilocode/effect/runner" // kilocode_change
 
 export interface Runner<A, E = never> {
   readonly state: State<A, E>

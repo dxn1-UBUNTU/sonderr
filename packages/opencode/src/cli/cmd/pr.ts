@@ -7,7 +7,7 @@ import { Git } from "@/git"
 import { InstanceRef } from "@/effect/instance-ref"
 import { Process } from "@/util/process"
 import { existsSync } from "node:fs" // kilocode_change
-import { detectPrLink, parsePrUrl, readPrLinkOverride, writePrLinkOverride } from "@/sonderr-sessions/pr-link" // kilocode_change
+import { detectPrLink, parsePrUrl, readPrLinkOverride, writePrLinkOverride } from "@/kilo-sessions/pr-link" // kilocode_change
 
 const subcommand = "pr" // kilocode_change
 

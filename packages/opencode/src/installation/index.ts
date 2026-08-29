@@ -20,8 +20,8 @@ import {
   Npm as KiloNpm,
   Release as KiloRelease,
   Scoop as KiloScoop,
-} from "@/sonderr/installation"
-import { latest as kiloLatest } from "@/sonderr/installation/latest"
+} from "@/kilocode/installation"
+import { latest as kiloLatest } from "@/kilocode/installation/latest"
 // kilocode_change end
 import { InstallationEvent } from "@opencode-ai/schema/installation-event"
 

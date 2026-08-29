@@ -12,18 +12,18 @@ export function SetupView() {
   return (
     <div class="kiloclaw-center">
       <Card class="kiloclaw-card">
-        <CardTitle icon={false}>{t("sonderrClaw.setup.title")}</CardTitle>
+        <CardTitle icon={false}>{t("kiloClaw.setup.title")}</CardTitle>
         <CardDescription>
-          <h3 class="kiloclaw-card-subtitle">{t("sonderrClaw.setup.subtitle")}</h3>
-          <p class="kiloclaw-card-text">{t("sonderrClaw.setup.description1")}</p>
-          <p class="kiloclaw-card-text">{t("sonderrClaw.setup.description2")}</p>
+          <h3 class="kiloclaw-card-subtitle">{t("kiloClaw.setup.subtitle")}</h3>
+          <p class="kiloclaw-card-text">{t("kiloClaw.setup.description1")}</p>
+          <p class="kiloclaw-card-text">{t("kiloClaw.setup.description2")}</p>
         </CardDescription>
         <CardActions>
           <Button variant="ghost" onClick={() => claw.openExternal("https://kilo.ai/kiloclaw")}>
-            {t("sonderrClaw.setup.learnMore")}
+            {t("kiloClaw.setup.learnMore")}
           </Button>
           <Button variant="primary" onClick={() => claw.openExternal("https://app.kilo.ai/claw")}>
-            {t("sonderrClaw.setup.tryKiloClaw")}
+            {t("kiloClaw.setup.tryKiloClaw")}
           </Button>
         </CardActions>
       </Card>

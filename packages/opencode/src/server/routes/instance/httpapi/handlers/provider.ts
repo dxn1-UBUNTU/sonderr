@@ -8,10 +8,10 @@ import { ModelCache } from "@/provider/model-cache" // kilocode_change
 import {
   disposeAllInstancesAfterProviderAuthCallback,
   invalidatePresence,
-} from "@/sonderr/server/provider-auth-lifecycle" // kilocode_change
-import { providerMetadata } from "@/sonderr/provider/metadata" // kilocode_change
-import { filterPromptTrainingModels } from "@/sonderr/provider/model-filter" // kilocode_change
-import { overlay as overlayAnacondaDesktop } from "@/sonderr/anaconda-desktop/provider" // kilocode_change
+} from "@/kilocode/server/provider-auth-lifecycle" // kilocode_change
+import { providerMetadata } from "@/kilocode/provider/metadata" // kilocode_change
+import { filterPromptTrainingModels } from "@/kilocode/provider/model-filter" // kilocode_change
+import { overlay as overlayAnacondaDesktop } from "@/kilocode/anaconda-desktop/provider" // kilocode_change
 import { Effect, Schema } from "effect"
 import { HttpServerRequest, HttpServerResponse } from "effect/unstable/http"
 import { HttpApiBuilder } from "effect/unstable/httpapi"

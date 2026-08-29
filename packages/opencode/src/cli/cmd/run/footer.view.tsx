@@ -12,7 +12,7 @@ import { useTerminalDimensions } from "@opentui/solid"
 import { For, Match, Show, Switch, createEffect, createMemo, createSignal, onCleanup } from "solid-js"
 import { registerOpencodeSpinner } from "@opencode-ai/tui/component/register-spinner"
 import { createColors, createFrames } from "@opencode-ai/tui/ui/spinner"
-import { RunInteractiveTerminalBody } from "@/sonderr/cli/cmd/run/interactive-terminal" // kilocode_change
+import { RunInteractiveTerminalBody } from "@/kilocode/cli/cmd/run/interactive-terminal" // kilocode_change
 import {
   RUN_SUBAGENT_PANEL_ROWS,
   RunCommandMenuBody,

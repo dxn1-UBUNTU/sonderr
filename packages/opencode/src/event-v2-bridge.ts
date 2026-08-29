@@ -4,7 +4,7 @@ import { LayerNode } from "@opencode-ai/core/effect/layer-node"
 import { InstanceRef, WorkspaceRef } from "@/effect/instance-ref"
 import { GlobalBus } from "@/bus/global"
 import { EventManifest } from "@/event-manifest" // kilocode_change
-import * as EventWire from "@/sonderr/event-wire" // kilocode_change
+import * as EventWire from "@/kilocode/event-wire" // kilocode_change
 import { EventV2 } from "@opencode-ai/core/event"
 import { Location } from "@opencode-ai/core/location"
 import { Project } from "@opencode-ai/core/project"

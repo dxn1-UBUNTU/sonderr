@@ -8,7 +8,7 @@ import path from "path"
 import os from "os"
 import { Filesystem } from "@/util/filesystem"
 import { Process } from "@/util/process"
-import { Brew as KiloBrew } from "@/sonderr/installation" // kilocode_change
+import { Brew as KiloBrew } from "@/kilocode/installation" // kilocode_change
 
 interface UninstallArgs {
   keepConfig: boolean

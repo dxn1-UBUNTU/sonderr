@@ -3,14 +3,14 @@ import { Auth } from "@/auth"
 import {
   invalidateAfterProviderAuthChange,
   invalidatePresence,
-} from "@/sonderr/server/provider-auth-lifecycle"
+} from "@/kilocode/server/provider-auth-lifecycle"
 // kilocode_change end
 import { Effect } from "effect"
 import { HttpApiBuilder } from "effect/unstable/httpapi"
 import { RootHttpApi } from "../api"
 import { LogInput } from "../groups/control"
 import { ProviderV2 } from "@opencode-ai/core/provider"
-import { remove as removeAuth } from "@/sonderr/auth/remove" // kilocode_change
+import { remove as removeAuth } from "@/kilocode/auth/remove" // kilocode_change
 
 export const controlHandlers = HttpApiBuilder.group(RootHttpApi, "control", (handlers) =>
   Effect.gen(function* () {

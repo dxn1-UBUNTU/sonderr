@@ -1,9 +1,9 @@
 import { Image } from "@/image/image" // kilocode_change - classify user image validation defects
-import { busyMessage, isBusy } from "@/sonderr/database/sqlite-error" // kilocode_change
-import { KiloSessionHttpApi } from "@/sonderr/server/httpapi/session-fork" // kilocode_change
-import { KiloSessionPromptQueue } from "@/sonderr/session/prompt-queue" // kilocode_change
+import { busyMessage, isBusy } from "@/kilocode/database/sqlite-error" // kilocode_change
+import { KiloSessionHttpApi } from "@/kilocode/server/httpapi/session-fork" // kilocode_change
+import { KiloSessionPromptQueue } from "@/kilocode/session/prompt-queue" // kilocode_change
 import { PermissionV1 } from "@opencode-ai/core/v1/permission"
-import { KiloViewers } from "@/sonderr/presence/service" // kilocode_change
+import { KiloViewers } from "@/kilocode/presence/service" // kilocode_change
 import { Agent } from "@/agent/agent"
 import { SessionV1 } from "@opencode-ai/core/v1/session"
 import { EventV2Bridge } from "@/event-v2-bridge"

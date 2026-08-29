@@ -1,7 +1,7 @@
 import { OpenApi } from "effect/unstable/httpapi"
 // kilocode_change start
-import { matchLegacyKiloOpenApi } from "@/sonderr/server/httpapi/public"
-import * as KiloServer from "@/sonderr/server/server"
+import { matchLegacyKiloOpenApi } from "@/kilocode/server/httpapi/public"
+import * as KiloServer from "@/kilocode/server/server"
 // kilocode_change end
 import { OpenCodeHttpApi } from "./api"
 import { QueryBooleanOpenApi } from "./groups/query"

@@ -14,9 +14,9 @@ import { Effect, Record } from "effect"
 import { jsonSchema, tool as aiTool, type ModelMessage, type Tool } from "ai"
 import type { Plugin } from "@/plugin"
 import { mergeDeep } from "remeda"
-import { DEFAULT_HEADERS } from "@/sonderr/const" // kilocode_change
+import { DEFAULT_HEADERS } from "@/kilocode/const" // kilocode_change
 // kilocode_change start
-import { getKiloProjectId } from "@/sonderr/project-id"
+import { getKiloProjectId } from "@/kilocode/project-id"
 import {
   HEADER_FEATURE,
   HEADER_PARENT_TASKID,
@@ -25,9 +25,9 @@ import {
   HEADER_TASKID,
 } from "@kilocode/kilo-gateway"
 import { Identity } from "@kilocode/kilo-telemetry"
-import { KiloSession } from "@/sonderr/session"
-import { stripInternalOptions } from "@/sonderr/agent/options"
-import { KilocodeSystemPrompt } from "@/sonderr/system-prompt"
+import { KiloSession } from "@/kilocode/session"
+import { stripInternalOptions } from "@/kilocode/agent/options"
+import { KilocodeSystemPrompt } from "@/kilocode/system-prompt"
 // kilocode_change end
 
 type PrepareInput = {

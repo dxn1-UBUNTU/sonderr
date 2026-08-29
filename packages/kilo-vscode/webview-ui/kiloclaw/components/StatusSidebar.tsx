@@ -58,8 +58,8 @@ export function StatusSidebar() {
 
   const conversationTitle = createMemo(() => {
     const conv = activeConversation()
-    if (!conv) return t("sonderrClaw.conversations.new")
-    return conv.title ?? t("sonderrClaw.conversations.untitled")
+    if (!conv) return t("kiloClaw.conversations.new")
+    return conv.title ?? t("kiloClaw.conversations.untitled")
   })
 
   const handleTitleClick = () => {
@@ -110,7 +110,7 @@ export function StatusSidebar() {
               type="button"
               class="kiloclaw-sidebar-titlebtn"
               onClick={handleTitleClick}
-              title={t("sonderrClaw.conversations.rename")}
+              title={t("kiloClaw.conversations.rename")}
             >
               {conversationTitle()}
             </button>
@@ -121,10 +121,10 @@ export function StatusSidebar() {
       {/* Bot Status */}
       <Show when={claw.activeConversationId()}>
         <div class="kiloclaw-sidebar-section">
-          <div class="kiloclaw-sidebar-label">{t("sonderrClaw.sidebar.botStatus")}</div>
+          <div class="kiloclaw-sidebar-label">{t("kiloClaw.sidebar.botStatus")}</div>
           <div class="kiloclaw-sidebar-row">
             <span class={`kiloclaw-dot ${claw.botStatus()?.online ? "kiloclaw-dot-online" : "kiloclaw-dot-offline"}`} />
-            <span>{claw.botStatus()?.online ? t("sonderrClaw.chat.online") : t("sonderrClaw.chat.offline")}</span>
+            <span>{claw.botStatus()?.online ? t("kiloClaw.chat.online") : t("kiloClaw.chat.offline")}</span>
           </div>
         </div>
       </Show>
@@ -133,28 +133,28 @@ export function StatusSidebar() {
       <Show when={ctx()}>
         {(c) => (
           <div class="kiloclaw-sidebar-section">
-            <div class="kiloclaw-sidebar-label">{t("sonderrClaw.sidebar.context")}</div>
+            <div class="kiloclaw-sidebar-label">{t("kiloClaw.sidebar.context")}</div>
             <Show when={c().contextWindow > 0}>
               <div class="kiloclaw-sidebar-detail">
-                <span class="kiloclaw-sidebar-muted">{t("sonderrClaw.sidebar.used")}</span>
+                <span class="kiloclaw-sidebar-muted">{t("kiloClaw.sidebar.used")}</span>
                 <span>{Math.min(100, Math.round((c().contextTokens / c().contextWindow) * 100))}%</span>
               </div>
             </Show>
             <div class="kiloclaw-sidebar-detail">
-              <span class="kiloclaw-sidebar-muted">{t("sonderrClaw.sidebar.tokens")}</span>
+              <span class="kiloclaw-sidebar-muted">{t("kiloClaw.sidebar.tokens")}</span>
               <span>
                 {formatTokens(c().contextTokens)} / {formatTokens(c().contextWindow)}
               </span>
             </div>
             <Show when={c().model}>
               <div class="kiloclaw-sidebar-detail">
-                <span class="kiloclaw-sidebar-muted">{t("sonderrClaw.sidebar.model")}</span>
+                <span class="kiloclaw-sidebar-muted">{t("kiloClaw.sidebar.model")}</span>
                 <span class="kiloclaw-sidebar-value-truncate">{c().model}</span>
               </div>
             </Show>
             <Show when={c().provider}>
               <div class="kiloclaw-sidebar-detail">
-                <span class="kiloclaw-sidebar-muted">{t("sonderrClaw.sidebar.provider")}</span>
+                <span class="kiloclaw-sidebar-muted">{t("kiloClaw.sidebar.provider")}</span>
                 <span class="kiloclaw-sidebar-value-truncate">{c().provider}</span>
               </div>
             </Show>
@@ -165,11 +165,11 @@ export function StatusSidebar() {
       {/* Instance status */}
       <Show when={status()}>
         <div class="kiloclaw-sidebar-section">
-          <div class="kiloclaw-sidebar-label">{t("sonderrClaw.sidebar.instance")}</div>
+          <div class="kiloclaw-sidebar-label">{t("kiloClaw.sidebar.instance")}</div>
           <div class="kiloclaw-sidebar-row">
             <span class={`kiloclaw-dot ${dot(status()!.status)}`} />
             <span>
-              {capitalize(status()!.status, t("sonderrClaw.sidebar.unknown"))}
+              {capitalize(status()!.status, t("kiloClaw.sidebar.unknown"))}
               <Show when={status()!.status === "running"}>
                 <span class="kiloclaw-sidebar-muted"> {uptime(status()!.lastStartedAt)}</span>
               </Show>
@@ -179,13 +179,13 @@ export function StatusSidebar() {
 
         {/* Details */}
         <div class="kiloclaw-sidebar-section">
-          <div class="kiloclaw-sidebar-label">{t("sonderrClaw.sidebar.details")}</div>
+          <div class="kiloclaw-sidebar-label">{t("kiloClaw.sidebar.details")}</div>
           <div class="kiloclaw-sidebar-detail">
-            <span class="kiloclaw-sidebar-muted">{t("sonderrClaw.sidebar.region")}</span>
+            <span class="kiloclaw-sidebar-muted">{t("kiloClaw.sidebar.region")}</span>
             <span>{status()!.flyRegion?.toUpperCase() ?? "\u2014"}</span>
           </div>
           <div class="kiloclaw-sidebar-detail">
-            <span class="kiloclaw-sidebar-muted">{t("sonderrClaw.sidebar.version")}</span>
+            <span class="kiloclaw-sidebar-muted">{t("kiloClaw.sidebar.version")}</span>
             <span>{status()!.openclawVersion ?? "\u2014"}</span>
           </div>
           <Show
@@ -196,7 +196,7 @@ export function StatusSidebar() {
             }
           >
             <div class="kiloclaw-sidebar-detail">
-              <span class="kiloclaw-sidebar-muted">{t("sonderrClaw.sidebar.channels")}</span>
+              <span class="kiloclaw-sidebar-muted">{t("kiloClaw.sidebar.channels")}</span>
               <span>{status()!.channelCount}</span>
             </div>
           </Show>
@@ -205,7 +205,7 @@ export function StatusSidebar() {
 
       <Show when={!status()}>
         <div class="kiloclaw-sidebar-section">
-          <span class="kiloclaw-sidebar-muted">{t("sonderrClaw.sidebar.noData")}</span>
+          <span class="kiloclaw-sidebar-muted">{t("kiloClaw.sidebar.noData")}</span>
         </div>
       </Show>
     </div>

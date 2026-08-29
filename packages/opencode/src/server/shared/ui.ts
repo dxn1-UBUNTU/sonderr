@@ -2,7 +2,7 @@ import { FSUtil } from "@opencode-ai/core/fs-util"
 import { Effect } from "effect"
 import { HttpClient, HttpServerRequest, HttpServerResponse } from "effect/unstable/http"
 import { createHash } from "node:crypto"
-import { ConsoleAssets } from "@/sonderr/console/assets" // kilocode_change
+import { ConsoleAssets } from "@/kilocode/console/assets" // kilocode_change
 
 let embeddedUIPromise: Promise<Record<string, string> | null> | undefined
 

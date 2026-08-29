@@ -12,7 +12,7 @@
 //       → footer.ts queues commits and patches the footer view
 //         → OpenTUI split-footer renderer writes to terminal
 import type { KiloClient, PermissionRequest, QuestionRequest, ToolPart } from "@kilocode/sdk/v2"
-import type { RunInteractiveTerminalSnapshot } from "@/sonderr/cli/cmd/run/types" // kilocode_change
+import type { RunInteractiveTerminalSnapshot } from "@/kilocode/cli/cmd/run/types" // kilocode_change
 import type { TuiConfig } from "@opencode-ai/tui/config"
 
 export type RunFilePart = {

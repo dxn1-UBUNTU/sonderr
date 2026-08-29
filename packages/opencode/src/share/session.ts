@@ -4,7 +4,7 @@ import { SessionID } from "@/session/schema"
 import { Effect, Layer, Scope, Context } from "effect"
 import { Config } from "@/config/config"
 import { RuntimeFlags } from "@/effect/runtime-flags"
-import { KiloSession } from "@/sonderr/session" // kilocode_change
+import { KiloSession } from "@/kilocode/session" // kilocode_change
 
 export interface Interface {
   readonly create: (input?: Session.CreateInput) => Effect.Effect<Session.Info>

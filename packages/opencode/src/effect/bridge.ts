@@ -3,7 +3,7 @@ import { WorkspaceContext } from "@/control-plane/workspace-context"
 import type { WorkspaceV2 } from "@opencode-ai/core/workspace"
 import { InstanceRef, WorkspaceRef } from "./instance-ref"
 import { attachWith } from "./run-service"
-import { Instance, type InstanceContext } from "@/sonderr/instance" // kilocode_change
+import { Instance, type InstanceContext } from "@/kilocode/instance" // kilocode_change
 
 export interface Shape {
   readonly promise: <A, E, R>(effect: Effect.Effect<A, E, R>) => Promise<A>

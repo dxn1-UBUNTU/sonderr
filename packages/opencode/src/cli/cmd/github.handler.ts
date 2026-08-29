@@ -33,7 +33,7 @@ import { setTimeout as sleep } from "node:timers/promises"
 import { Process } from "@/util/process"
 import { parseGitHubRemote } from "@/util/repository"
 import { Effect } from "effect"
-import { GitHubSecurity } from "@/sonderr/security/github" // kilocode_change
+import { GitHubSecurity } from "@/kilocode/security/github" // kilocode_change
 import { extractResponseText, formatPromptTooLargeError } from "./github.shared"
 
 type GitHubAuthor = {

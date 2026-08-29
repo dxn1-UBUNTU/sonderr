@@ -1,4 +1,4 @@
-import { AllowEverythingPermission } from "@/sonderr/permission/allow-everything" // kilocode_change
+import { AllowEverythingPermission } from "@/kilocode/permission/allow-everything" // kilocode_change
 import { PermissionV1 } from "@opencode-ai/core/v1/permission"
 import { Permission } from "@/permission"
 // kilocode_change start

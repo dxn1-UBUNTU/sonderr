@@ -2,7 +2,7 @@ import type { Argv } from "yargs"
 import { Effect, Schema } from "effect"
 import type { AppServices } from "@/effect/app-runtime"
 import type { InstanceStore } from "@/project/instance-store"
-import { Instance } from "@/sonderr/instance" // kilocode_change
+import { Instance } from "@/kilocode/instance" // kilocode_change
 import { cmd, type WithDoubleDash } from "./cmd/cmd"
 
 /**

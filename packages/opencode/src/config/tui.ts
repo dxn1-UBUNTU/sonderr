@@ -21,7 +21,7 @@ import { makeRuntime } from "@opencode-ai/core/effect/runtime"
 import { Filesystem } from "@/util/filesystem"
 import { ConfigVariable } from "@/config/variable"
 import { Npm } from "@opencode-ai/core/npm"
-import { KilocodeDefaultPlugins } from "@/sonderr/config/default-plugins" // kilocode_change
+import { KilocodeDefaultPlugins } from "@/kilocode/config/default-plugins" // kilocode_change
 import { FormatError, FormatUnknownError } from "@/cli/error"
 import { TuiConfig } from "@opencode-ai/tui/config"
 

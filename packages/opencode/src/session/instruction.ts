@@ -11,8 +11,8 @@ import { Flag } from "@opencode-ai/core/flag/flag"
 import { FSUtil } from "@opencode-ai/core/fs-util"
 import { withTransientReadRetry } from "@/util/effect-http-client"
 import { Global } from "@opencode-ai/core/global"
-import { KilocodeInstruction } from "@/sonderr/session/instruction" // kilocode_change
-import type { KilocodeMarkdown } from "@/sonderr/config/markdown" // kilocode_change
+import { KilocodeInstruction } from "@/kilocode/session/instruction" // kilocode_change
+import type { KilocodeMarkdown } from "@/kilocode/config/markdown" // kilocode_change
 import type { MessageV2 } from "./message-v2"
 import type { MessageID } from "./schema"
 

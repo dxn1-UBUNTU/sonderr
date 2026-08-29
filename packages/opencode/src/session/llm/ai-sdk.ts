@@ -2,8 +2,8 @@ import { FinishReason, LLMEvent, ProviderMetadata, ToolResultValue } from "@open
 import { Effect, Schema } from "effect"
 import { type streamText } from "ai"
 import { errorMessage } from "@/util/error"
-import { KiloRoutedModel } from "@/sonderr/session/routed-model" // kilocode_change
-import { KiloResponseMetadata } from "@/sonderr/session/response-metadata" // kilocode_change
+import { KiloRoutedModel } from "@/kilocode/session/routed-model" // kilocode_change
+import { KiloResponseMetadata } from "@/kilocode/session/response-metadata" // kilocode_change
 
 type Result = Awaited<ReturnType<typeof streamText>>
 type AISDKEvent = Result["fullStream"] extends AsyncIterable<infer T> ? T : never

@@ -7,7 +7,7 @@ import * as Project from "./project"
 import * as Vcs from "./vcs"
 import { InstanceState } from "@/effect/instance-state"
 // kilocode_change start - ShareNext init is handled by KilocodeBootstrap; upstream dropped File/FileWatcher bootstrap init
-import { KilocodeBootstrap } from "@/sonderr/bootstrap"
+import { KilocodeBootstrap } from "@/kilocode/bootstrap"
 // import { ShareNext } from "@/share/share-next"
 // kilocode_change end
 import { Effect, Layer } from "effect"

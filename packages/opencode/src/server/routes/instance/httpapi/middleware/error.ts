@@ -1,6 +1,6 @@
 import { NamedError } from "@opencode-ai/core/util/error"
 import { ConfigErrorV1 } from "@opencode-ai/core/v1/config/error"
-import { busyMessage, isBusy } from "@/sonderr/database/sqlite-error" // kilocode_change
+import { busyMessage, isBusy } from "@/kilocode/database/sqlite-error" // kilocode_change
 import { Cause, Effect } from "effect"
 import { HttpRouter, HttpServerError, HttpServerRespondable, HttpServerResponse } from "effect/unstable/http"
 

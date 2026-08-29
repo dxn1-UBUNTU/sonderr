@@ -2,7 +2,7 @@ import { Effect, Option, Schema } from "effect" // kilocode_change - Option adde
 import { HttpClient } from "effect/unstable/http"
 import * as Tool from "./tool"
 import * as McpWebSearch from "./mcp-websearch"
-import * as KiloExa from "@/sonderr/tool/websearch-kilo-exa" // kilocode_change - Kilo-REST Exa transport
+import * as KiloExa from "@/kilocode/tool/websearch-kilo-exa" // kilocode_change - Kilo-REST Exa transport
 import DESCRIPTION from "./websearch.txt"
 import { checksum } from "@opencode-ai/core/util/encode"
 import { InstallationVersion } from "@opencode-ai/core/installation/version"

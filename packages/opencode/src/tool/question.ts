@@ -2,7 +2,7 @@ import { Effect, Schema } from "effect"
 import * as Tool from "./tool"
 import { Question } from "../question"
 import DESCRIPTION from "./question.txt"
-import { KiloQuestionTool } from "@/sonderr/tool/question" // kilocode_change
+import { KiloQuestionTool } from "@/kilocode/tool/question" // kilocode_change
 
 export const Parameters = Schema.Struct({
   questions: Schema.mutable(Schema.Array(Question.Prompt)).annotate({ description: "Questions to ask" }),

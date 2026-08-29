@@ -12,13 +12,13 @@ import { ProviderTransform } from "@/provider/transform"
 import PROMPT_GENERATE from "./generate.txt"
 import PROMPT_COMPACTION from "./prompt/compaction.txt"
 import PROMPT_EXPLORE from "./prompt/explore.txt"
-import PROMPT_SCOUT from "@/sonderr/agent/scout.txt" // kilocode_change
+import PROMPT_SCOUT from "@/kilocode/agent/scout.txt" // kilocode_change
 import PROMPT_SUMMARY from "./prompt/summary.txt"
 import PROMPT_TITLE from "./prompt/title.txt"
 import { Permission } from "@/permission"
 import { mergeDeep, pipe, sortBy, values } from "remeda"
 import { Global } from "@opencode-ai/core/global"
-import { KilocodePaths } from "@/sonderr/paths" // kilocode_change
+import { KilocodePaths } from "@/kilocode/paths" // kilocode_change
 import path from "path"
 import { Plugin } from "@/plugin"
 import { Skill } from "../skill"
@@ -28,9 +28,9 @@ import * as Option from "effect/Option"
 import * as OtelTracer from "@effect/opentelemetry/Tracer"
 import type { DeepMutable } from "@opencode-ai/core/schema" // kilocode_change
 // kilocode_change start
-import * as KiloAgent from "@/sonderr/agent"
+import * as KiloAgent from "@/kilocode/agent"
 import { RuntimeFlags } from "@/effect/runtime-flags"
-import * as KiloReference from "@/sonderr/reference"
+import * as KiloReference from "@/kilocode/reference"
 // kilocode_change end
 import { ProviderV2 } from "@opencode-ai/core/provider"
 import { ModelV2 } from "@opencode-ai/core/model"

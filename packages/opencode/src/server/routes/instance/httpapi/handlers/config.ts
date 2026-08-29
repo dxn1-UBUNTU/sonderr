@@ -4,7 +4,7 @@ import { fetchDefaultModel } from "@kilocode/kilo-gateway"
 import { Auth } from "@/auth"
 import { ProviderV2 } from "@opencode-ai/core/provider"
 import { ModelV2 } from "@opencode-ai/core/model"
-import { filterPromptTrainingModels, nonEmptyProviders } from "@/sonderr/provider/model-filter"
+import { filterPromptTrainingModels, nonEmptyProviders } from "@/kilocode/provider/model-filter"
 // kilocode_change end
 import { Provider } from "@/provider/provider"
 import * as InstanceState from "@/effect/instance-state"

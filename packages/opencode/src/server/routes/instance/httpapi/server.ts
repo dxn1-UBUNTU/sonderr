@@ -31,9 +31,9 @@ import { ModelCache } from "@/provider/model-cache" // kilocode_change
 import { Provider } from "@/provider/provider"
 import { Question } from "@/question"
 // kilocode_change start
-import { Notebook } from "@/sonderr/notebook/service"
-import { AgentManager } from "@/sonderr/agent-manager/service"
-import { KiloViewers } from "@/sonderr/presence/service"
+import { Notebook } from "@/kilocode/notebook/service"
+import { AgentManager } from "@/kilocode/agent-manager/service"
+import { KiloViewers } from "@/kilocode/presence/service"
 // kilocode_change end
 import { SessionCompaction } from "@/session/compaction"
 import { Instruction } from "@/session/instruction"
@@ -113,7 +113,7 @@ import { handlers } from "@opencode-ai/server/handlers"
 import {
   layer as referenceReconcilerLayer,
   locations as locationServiceMapLayer,
-} from "@/sonderr/server/reference-reconciler" // kilocode_change
+} from "@/kilocode/server/reference-reconciler" // kilocode_change
 import { buildLocationServiceMap, LocationServiceMap } from "@opencode-ai/core/location-services"
 import { layer as locationLayer } from "@opencode-ai/server/location"
 import { sessionLocationLayer } from "@opencode-ai/server/middleware/session-location"
@@ -124,7 +124,7 @@ import { workspaceHandlers } from "./handlers/workspace"
 import {
   provide as provideKiloHttpApiHandlers,
   provideListener as provideKiloListenerRoutes,
-} from "@/sonderr/server/httpapi/server"
+} from "@/kilocode/server/httpapi/server"
 // kilocode_change end
 import { instanceContextLayer } from "./middleware/instance-context"
 import { workspaceRoutingLayer } from "./middleware/workspace-routing"

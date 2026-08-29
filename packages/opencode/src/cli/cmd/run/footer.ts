@@ -31,7 +31,7 @@ import { createComponent, createSignal, type Accessor, type Setter } from "solid
 import { createStore, reconcile } from "solid-js/store"
 import { OpencodeKeymapProvider } from "@opencode-ai/tui/keymap"
 import { RUN_COMMAND_PANEL_ROWS, RUN_SUBAGENT_PANEL_ROWS } from "./footer.command"
-import { RUN_INTERACTIVE_TERMINAL_ROWS } from "@/sonderr/cli/cmd/run/interactive-terminal" // kilocode_change
+import { RUN_INTERACTIVE_TERMINAL_ROWS } from "@/kilocode/cli/cmd/run/interactive-terminal" // kilocode_change
 import { SUBAGENT_INSPECTOR_ROWS } from "./footer.subagent"
 import { PROMPT_MAX_ROWS, TEXTAREA_MIN_ROWS } from "./footer.prompt"
 import { RunFooterView } from "./footer.view"

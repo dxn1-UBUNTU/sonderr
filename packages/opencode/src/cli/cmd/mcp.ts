@@ -437,7 +437,7 @@ async function addMcpToConfig(name: string, mcpConfig: ConfigMCPV1.Info, configP
     formattingOptions: { tabSize: 2, insertSpaces: true },
   })
   // kilocode_change start - lazy import keeps the CLI startup graph light
-  const { KilocodeMcpConfig } = await import("@/sonderr/cli/cmd/mcp")
+  const { KilocodeMcpConfig } = await import("@/kilocode/cli/cmd/mcp")
   const result = KilocodeMcpConfig.format(configPath, applyEdits(text, edits))
   // kilocode_change end
 

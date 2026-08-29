@@ -1,6 +1,6 @@
 
 import { Effect } from "effect"
-import { KiloSessionPrompt } from "@/sonderr/session/prompt" // kilocode_change
+import { KiloSessionPrompt } from "@/kilocode/session/prompt" // kilocode_change
 import { Agent } from "@/agent/agent"
 import { FSUtil } from "@opencode-ai/core/fs-util"
 import { InstanceState } from "@/effect/instance-state"
@@ -10,7 +10,7 @@ import { MessageV2 } from "./message-v2"
 import { Session } from "./session"
 import { SessionV1 } from "@opencode-ai/core/v1/session"
 import CODE_SWITCH from "./prompt/code-switch.txt" // kilocode_change
-import ASK_CODE_SWITCH from "@/sonderr/session/ask-code-switch.txt" // kilocode_change
+import ASK_CODE_SWITCH from "@/kilocode/session/ask-code-switch.txt" // kilocode_change
 
 export const apply = Effect.fn("SessionReminders.apply")(function* (input: {
   messages: SessionV1.WithParts[]

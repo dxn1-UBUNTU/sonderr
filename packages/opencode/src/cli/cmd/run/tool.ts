@@ -25,7 +25,7 @@ import type { GrepTool } from "@/tool/grep"
 import type { InvalidTool } from "@/tool/invalid"
 import type { LspTool } from "@/tool/lsp"
 import type { PlanExitTool } from "@/tool/plan"
-import type { InteractiveTerminalTool } from "@/sonderr/tool/interactive-terminal" // kilocode_change
+import type { InteractiveTerminalTool } from "@/kilocode/tool/interactive-terminal" // kilocode_change
 import type { QuestionTool } from "@/tool/question"
 import type { ReadTool } from "@/tool/read"
 import type { SkillTool } from "@/tool/skill"

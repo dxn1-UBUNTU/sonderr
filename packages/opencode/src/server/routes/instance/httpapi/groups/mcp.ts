@@ -7,7 +7,7 @@ import { Authorization } from "../middleware/authorization"
 import { InstanceContextMiddleware } from "../middleware/instance-context"
 import { WorkspaceRoutingMiddleware, WorkspaceRoutingQuery } from "../middleware/workspace-routing"
 import { described } from "./metadata"
-import { McpApps } from "@/sonderr/mcp/apps" // kilocode_change - MCP Apps schemas live in Kilo-owned code
+import { McpApps } from "@/kilocode/mcp/apps" // kilocode_change - MCP Apps schemas live in Kilo-owned code
 
 export const AddPayload = Schema.Struct({
   name: Schema.String,

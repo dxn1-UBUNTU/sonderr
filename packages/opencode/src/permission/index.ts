@@ -13,12 +13,12 @@ import { Database } from "@opencode-ai/core/database/database" // kilocode_chang
 import { EventV2Bridge } from "@/event-v2-bridge"
 import { SessionID } from "@/session/schema" // kilocode_change - used by AllowEverythingInput
 // kilocode_change start
-import { ConfigProtection } from "@/sonderr/permission/config-paths"
-import { KiloHeadless } from "@/sonderr/permission/headless"
-import { drainCovered } from "@/sonderr/permission/drain"
-import { ReadPermission } from "@/sonderr/permission/read"
-import { AgentManagerPermission } from "@/sonderr/permission/agent-manager" // kilocode_change
-import { ExternalDirectoryPermission } from "@/sonderr/permission/external-directory"
+import { ConfigProtection } from "@/kilocode/permission/config-paths"
+import { KiloHeadless } from "@/kilocode/permission/headless"
+import { drainCovered } from "@/kilocode/permission/drain"
+import { ReadPermission } from "@/kilocode/permission/read"
+import { AgentManagerPermission } from "@/kilocode/permission/agent-manager" // kilocode_change
+import { ExternalDirectoryPermission } from "@/kilocode/permission/external-directory"
 // kilocode_change end
 
 export const Event = PermissionV1.Event

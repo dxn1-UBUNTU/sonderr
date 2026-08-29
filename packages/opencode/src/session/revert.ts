@@ -10,7 +10,7 @@ import { MessageV2 } from "./message-v2"
 import { SessionID, MessageID, PartID } from "./schema"
 import { SessionRunState } from "./run-state"
 import { SessionSummary } from "./summary"
-import { KiloSessionRevert } from "@/sonderr/session/revert" // kilocode_change
+import { KiloSessionRevert } from "@/kilocode/session/revert" // kilocode_change
 
 export const RevertInput = Schema.Struct({
   sessionID: SessionID,

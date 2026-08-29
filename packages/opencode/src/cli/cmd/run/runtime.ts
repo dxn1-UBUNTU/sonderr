@@ -15,14 +15,14 @@
 import { createKiloClient } from "@kilocode/sdk/v2"
 import { Flag } from "@opencode-ai/core/flag/flag"
 import { MessageID } from "@/session/schema"
-import { KiloRunTerminal } from "@/sonderr/cli/cmd/run-terminal" // kilocode_change
+import { KiloRunTerminal } from "@/kilocode/cli/cmd/run-terminal" // kilocode_change
 import { createRunDemo } from "./demo"
 import { resolveModelInfo, resolveRunTuiConfig, resolveSessionInfo } from "./runtime.boot"
 import { createRuntimeLifecycle } from "./runtime.lifecycle"
 import { trace } from "./trace"
 import { cycleVariant, formatModelLabel, resolveSavedVariant, resolveVariant, saveVariant } from "./variant.shared"
 // kilocode_change - preserve compatible variants when switching models
-import { resolvePreservedVariant } from "@/sonderr/cli/cmd/run/variant" // kilocode_change
+import { resolvePreservedVariant } from "@/kilocode/cli/cmd/run/variant" // kilocode_change
 import type { LocalReplayAnchor, LocalReplayRow, RunInput, RunPrompt, RunProvider, StreamCommit } from "./types"
 
 /** @internal Exported for testing */

@@ -10,7 +10,7 @@ import { Shell } from "@opencode-ai/core/shell"
 import { InstanceState } from "@/effect/instance-state"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 import { ShellPermission } from "./shell"
-import { SkillInject } from "@/sonderr/skills/inject"
+import { SkillInject } from "@/kilocode/skills/inject"
 // kilocode_change end
 
 export const Parameters = Schema.Struct({

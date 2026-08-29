@@ -12,22 +12,22 @@ import { FSUtil } from "@opencode-ai/core/fs-util"
 import { fileURLToPath } from "url"
 import { Config } from "@/config/config"
 import { RuntimeFlags } from "@/effect/runtime-flags"
-import { model as modelEnv } from "@/sonderr/process/env" // kilocode_change
+import { model as modelEnv } from "@/kilocode/process/env" // kilocode_change
 import { Shell } from "@opencode-ai/core/shell"
 import { ShellID } from "./shell/id"
 
 import * as Truncate from "./truncate"
 import { Plugin } from "@/plugin"
-import { normalizeUrls } from "@/sonderr/util/url" // kilocode_change
-import { CommandTimeout } from "@/sonderr/command-timeout" // kilocode_change
-import { heredocs } from "@/sonderr/tool/shell-heredoc" // kilocode_change
-import { unparsed } from "@/sonderr/tool/shell-unparsed" // kilocode_change
+import { normalizeUrls } from "@/kilocode/util/url" // kilocode_change
+import { CommandTimeout } from "@/kilocode/command-timeout" // kilocode_change
+import { heredocs } from "@/kilocode/tool/shell-heredoc" // kilocode_change
+import { unparsed } from "@/kilocode/tool/shell-unparsed" // kilocode_change
 import { ChildProcess } from "effect/unstable/process"
 import { ChildProcessSpawner } from "effect/unstable/process/ChildProcessSpawner"
 import { ShellPrompt, type Parameters } from "./shell/prompt"
 import { BashArity } from "@/permission/arity"
-import { mutates as mutatesGit } from "@/sonderr/sandbox/git" // kilocode_change
-import * as SandboxPolicy from "@/sonderr/sandbox/policy" // kilocode_change
+import { mutates as mutatesGit } from "@/kilocode/sandbox/git" // kilocode_change
+import * as SandboxPolicy from "@/kilocode/sandbox/policy" // kilocode_change
 
 export { Parameters } from "./shell/prompt"
 

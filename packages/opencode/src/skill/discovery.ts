@@ -6,7 +6,7 @@ import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } fr
 import { withTransientReadRetry } from "@/util/effect-http-client"
 import { FSUtil } from "@opencode-ai/core/fs-util"
 import { Global } from "@opencode-ai/core/global"
-import { isSafeSegment, isSafeRelativePath } from "@/sonderr/skill/discovery-validate" // kilocode_change
+import { isSafeSegment, isSafeRelativePath } from "@/kilocode/skill/discovery-validate" // kilocode_change
 
 const skillConcurrency = 4
 const fileConcurrency = 8

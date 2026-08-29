@@ -22,12 +22,12 @@ import { SessionSummary } from "./summary"
 import type { Provider } from "@/provider/provider"
 import { Question } from "@/question"
 // kilocode_change start
-import { KiloSessionProcessor, type ReviewTelemetry } from "@/sonderr/session/processor"
-import { PermissionProvenance } from "@/sonderr/permission/provenance" // kilocode_change
-import { KiloSessionOverflow } from "@/sonderr/session/overflow"
-import { KiloRoutedModel } from "@/sonderr/session/routed-model"
-import { KiloResponseMetadata } from "@/sonderr/session/response-metadata"
-import { Suggestion } from "@/sonderr/suggestion"
+import { KiloSessionProcessor, type ReviewTelemetry } from "@/kilocode/session/processor"
+import { PermissionProvenance } from "@/kilocode/permission/provenance" // kilocode_change
+import { KiloSessionOverflow } from "@/kilocode/session/overflow"
+import { KiloRoutedModel } from "@/kilocode/session/routed-model"
+import { KiloResponseMetadata } from "@/kilocode/session/response-metadata"
+import { Suggestion } from "@/kilocode/suggestion"
 // kilocode_change end
 import { errorMessage } from "@/util/error"
 import { isRecord } from "@/util/record"

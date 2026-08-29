@@ -280,13 +280,13 @@ export const RunCommand = effectCmd({
     const { ServerAuth } = yield* Effect.promise(() => import("@/server/auth"))
     // kilocode_change start - lazy Kilo implementations (see top-of-file note)
     const { createKiloClient } = yield* Effect.promise(() => import("@kilocode/sdk/v2"))
-    const { buildRunMessage } = yield* Effect.promise(() => import("@/sonderr/cli/cmd/run-message"))
+    const { buildRunMessage } = yield* Effect.promise(() => import("@/kilocode/cli/cmd/run-message"))
     const { importCloudSession, validateCloudFork, reportCloudImportError } = yield* Effect.promise(
-      () => import("@/sonderr/cloud-session"),
+      () => import("@/kilocode/cloud-session"),
     )
-    const { KiloRunAuto } = yield* Effect.promise(() => import("@/sonderr/cli/run-auto"))
-    const { KiloHeadless } = yield* Effect.promise(() => import("@/sonderr/permission/headless"))
-    const { KiloRun, KiloRunDaemon } = yield* Effect.promise(() => import("@/sonderr/cli/cmd/run"))
+    const { KiloRunAuto } = yield* Effect.promise(() => import("@/kilocode/cli/run-auto"))
+    const { KiloHeadless } = yield* Effect.promise(() => import("@/kilocode/permission/headless"))
+    const { KiloRun, KiloRunDaemon } = yield* Effect.promise(() => import("@/kilocode/cli/cmd/run"))
     // kilocode_change end
     const agentSvc = yield* Agent.Service
     const flags = yield* RuntimeFlags.Service

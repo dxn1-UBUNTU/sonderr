@@ -17,7 +17,7 @@ import { Process } from "@/util/process"
 import { errorMessage } from "@/util/error"
 import { text } from "node:stream/consumers"
 import { Effect, Option } from "effect"
-// kilocode_change - @/sonderr/auth/remove is dynamically imported in the logout handler to keep startup fast
+// kilocode_change - @/kilocode/auth/remove is dynamically imported in the logout handler to keep startup fast
 
 type PluginAuth = NonNullable<Hooks["auth"]>
 
@@ -539,7 +539,7 @@ export const ProvidersLogoutCommand = effectCmd({
         )
     if (!provider) return yield* fail(`Unknown configured provider "${args.provider}"`)
     // kilocode_change start - lazy import keeps the CLI startup graph light
-    const { remove: removeAuth } = yield* Effect.promise(() => import("@/sonderr/auth/remove"))
+    const { remove: removeAuth } = yield* Effect.promise(() => import("@/kilocode/auth/remove"))
     yield* removeAuth(provider)
     // kilocode_change end
     yield* Prompt.outro("Logout successful")

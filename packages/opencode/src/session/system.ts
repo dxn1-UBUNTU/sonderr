@@ -30,7 +30,7 @@ import type { EditorContext } from "../kilocode/editor-context"
 import { KilocodeSystemPrompt } from "../kilocode/system-prompt"
 import { isLing } from "../kilocode/model-match"
 import { Config } from "@/config/config"
-import * as KiloReference from "@/sonderr/reference"
+import * as KiloReference from "@/kilocode/reference"
 // kilocode_change end
 
 // kilocode_change start

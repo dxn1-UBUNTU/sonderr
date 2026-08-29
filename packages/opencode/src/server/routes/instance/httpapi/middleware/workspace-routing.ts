@@ -6,7 +6,7 @@ import { Session } from "@/session/session"
 import { HttpApiProxy } from "./proxy"
 import * as Fence from "@/server/shared/fence"
 import { getWorkspaceRouteSessionID, isLocalWorkspaceRoute, workspaceProxyURL } from "@/server/shared/workspace-routing"
-import { forkTargetDirectory } from "@/sonderr/server/routes/fork-routing" // kilocode_change - fork honors explicit target directory
+import { forkTargetDirectory } from "@/kilocode/server/routes/fork-routing" // kilocode_change - fork honors explicit target directory
 import { NotFoundError } from "@/storage/storage"
 import { Flag } from "@opencode-ai/core/flag/flag"
 import { Context, Data, Effect, Layer, Option, Schema } from "effect"

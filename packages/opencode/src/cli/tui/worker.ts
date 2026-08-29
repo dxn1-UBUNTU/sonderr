@@ -10,11 +10,11 @@ import { Heap } from "@/cli/heap"
 import { AppRuntime } from "@/effect/app-runtime"
 import { Effect } from "effect"
 import { disposeAllInstancesAndEmitGlobalDisposed } from "@/server/global-lifecycle"
-import { KiloLog } from "@/sonderr/log" // kilocode_change
+import { KiloLog } from "@/kilocode/log" // kilocode_change
 import { ensureProcessMetadata } from "@opencode-ai/core/util/opencode-process" // kilocode_change
-import { createWorkerRemoteExit } from "@/sonderr/cli/cmd/tui/remote-exit-worker" // kilocode_change
+import { createWorkerRemoteExit } from "@/kilocode/cli/cmd/tui/remote-exit-worker" // kilocode_change
 import { createWorkerShutdown } from "@/cli/tui/worker-shutdown" // kilocode_change
-import { KiloSessions } from "@/sonderr-sessions/kilo-sessions" // kilocode_change
+import { KiloSessions } from "@/kilo-sessions/kilo-sessions" // kilocode_change
 
 ensureProcessMetadata("worker") // kilocode_change - retain worker role and parent run correlation
 await KiloLog.init() // kilocode_change - keep compatibility logs off the TUI terminal

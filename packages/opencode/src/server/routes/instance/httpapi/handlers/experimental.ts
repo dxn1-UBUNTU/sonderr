@@ -14,9 +14,9 @@ import type { SessionID } from "@/session/schema"
 import { ToolJsonSchema } from "@/tool/json-schema"
 import { ToolRegistry } from "@/tool/registry"
 import { Filesystem } from "@/util/filesystem" // kilocode_change
-import { Review } from "@/sonderr/review/review" // kilocode_change
-import { WorktreeDiff } from "@/sonderr/review/worktree-diff" // kilocode_change
-import { WorktreeFamily } from "@/sonderr/worktree-family" // kilocode_change
+import { Review } from "@/kilocode/review/review" // kilocode_change
+import { WorktreeDiff } from "@/kilocode/review/worktree-diff" // kilocode_change
+import { WorktreeFamily } from "@/kilocode/worktree-family" // kilocode_change
 import { Worktree } from "@/worktree"
 import { Effect, Option } from "effect"
 import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse"

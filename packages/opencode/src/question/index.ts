@@ -3,7 +3,7 @@ import { Deferred, Effect, Layer, Schema, Context } from "effect"
 import { InstanceState } from "@/effect/instance-state"
 import { SessionID } from "@/session/schema"
 import { QuestionID } from "./schema"
-import { KiloQuestion } from "@/sonderr/question" // kilocode_change
+import { KiloQuestion } from "@/kilocode/question" // kilocode_change
 import { EventV2Bridge } from "@/event-v2-bridge"
 import { QuestionV1 } from "@opencode-ai/schema/question-v1"
 
@@ -166,7 +166,7 @@ export const layer = Layer.effect(
       return Array.from(pending.values(), (x) => x.info)
     })
 
-    // kilocode_change start - body lives in @/sonderr/question/KiloQuestion.makeDismissAll
+    // kilocode_change start - body lives in @/kilocode/question/KiloQuestion.makeDismissAll
     const dismissAll = KiloQuestion.makeDismissAll({
       state,
       publishRejected: (entry) =>

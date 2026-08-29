@@ -44,9 +44,9 @@ import {
   buildTimeoutSignal,
   requestTimeout,
   wrapFirstByte,
-} from "@/sonderr/provider/provider"
-import * as ModelsRefresh from "@/sonderr/provider/models-refresh"
-import { bedrockAuth, providerKey, vertexAuth, vertexCredentials, vertexOptions } from "@/sonderr/provider/cloud-auth"
+} from "@/kilocode/provider/provider"
+import * as ModelsRefresh from "@/kilocode/provider/models-refresh"
+import { bedrockAuth, providerKey, vertexAuth, vertexCredentials, vertexOptions } from "@/kilocode/provider/cloud-auth"
 // kilocode_change end
 import { ProviderError } from "./error"
 

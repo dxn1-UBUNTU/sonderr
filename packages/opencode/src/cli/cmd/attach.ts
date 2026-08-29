@@ -77,7 +77,7 @@ export const AttachCommand = cmd({
     const noReplay = args.replay === false || args.noReplay === true
 
     // kilocode_change start
-    const { importCloudSession, validateCloudFork, reportCloudImportError } = await import("@/sonderr/cloud-session")
+    const { importCloudSession, validateCloudFork, reportCloudImportError } = await import("@/kilocode/cloud-session")
     const cloudForkError = validateCloudFork(args)
     if (cloudForkError) {
       UI.error(cloudForkError)

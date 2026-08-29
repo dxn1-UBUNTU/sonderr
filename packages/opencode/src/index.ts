@@ -9,7 +9,7 @@ import { EOL } from "os"
 // kilocode_change - upstream web command intentionally omitted; Kilo does not ship an embedded web UI
 import { errorMessage } from "./util/error"
 import { Heap } from "./cli/heap"
-import { KiloCli } from "@/sonderr/cli/setup" // kilocode_change
+import { KiloCli } from "@/kilocode/cli/setup" // kilocode_change
 import * as Log from "@opencode-ai/core/util/log" // kilocode_change
 import { ensureProcessMetadata } from "@opencode-ai/core/util/opencode-process" // kilocode_change
 // kilocode_change start - defer heavy command implementations until yargs selects them
@@ -35,7 +35,7 @@ import {
   UninstallCommand,
   UpgradeCommand,
   waitForLazyCommands,
-} from "@/sonderr/cli/lazy-commands"
+} from "@/kilocode/cli/lazy-commands"
 // kilocode_change end
 
 const args = hideBin(process.argv)

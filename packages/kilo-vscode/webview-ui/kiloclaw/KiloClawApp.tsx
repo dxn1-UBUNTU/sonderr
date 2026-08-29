@@ -25,7 +25,7 @@ function Content() {
           <div class="kiloclaw-center">
             <div class="kiloclaw-loading">
               <Spinner />
-              <span>{t("sonderrClaw.loading")}</span>
+              <span>{t("kiloClaw.loading")}</span>
             </div>
           </div>
         </Match>
@@ -40,7 +40,7 @@ function Content() {
             <div class="kiloclaw-error-view">
               <span class="kiloclaw-error-text">{claw.error()}</span>
               <Button variant="primary" onClick={() => claw.retry()}>
-                {t("sonderrClaw.error.retry")}
+                {t("kiloClaw.error.retry")}
               </Button>
             </div>
           </div>

@@ -5,25 +5,25 @@ import path from "path"
 import fs from "node:fs" // kilocode_change
 import { SessionV1 } from "@opencode-ai/core/v1/session"
 import os from "os"
-import { KiloSessionPrompt } from "@/sonderr/session/prompt" // kilocode_change
-import { SKILL_SHELL_DISABLED, SKILL_SHELL_UNTRUSTED } from "@/sonderr/skills/display" // kilocode_change
-import { KiloSessionMessageOrder } from "@/sonderr/session/message-order" // kilocode_change
-import { KiloSessionPromptQueue } from "@/sonderr/session/prompt-queue" // kilocode_change
-import { KiloSession } from "@/sonderr/session" // kilocode_change
-import { SessionTranscript } from "@/sonderr/session/transcript" // kilocode_change
-import { KiloCostPropagation } from "@/sonderr/session/cost-propagation" // kilocode_change
-import { KiloSessionProcessor } from "@/sonderr/session/processor" // kilocode_change
-import * as KiloWorkflowVariant from "@/sonderr/session/workflow-variant" // kilocode_change
-import { KiloSessionOverflow } from "@/sonderr/session/overflow" // kilocode_change
-import { KiloReference } from "@/sonderr/reference/contains" // kilocode_change
-import { KiloReadObject } from "@/sonderr/tool/read-object" // kilocode_change
-import { isInterrupted } from "@/sonderr/effect/cause" // kilocode_change
-import * as SandboxPolicy from "@/sonderr/sandbox/policy" // kilocode_change
-import { CommandTimeout } from "@/sonderr/command-timeout" // kilocode_change
-import { Suggestion } from "@/sonderr/suggestion" // kilocode_change
+import { KiloSessionPrompt } from "@/kilocode/session/prompt" // kilocode_change
+import { SKILL_SHELL_DISABLED, SKILL_SHELL_UNTRUSTED } from "@/kilocode/skills/display" // kilocode_change
+import { KiloSessionMessageOrder } from "@/kilocode/session/message-order" // kilocode_change
+import { KiloSessionPromptQueue } from "@/kilocode/session/prompt-queue" // kilocode_change
+import { KiloSession } from "@/kilocode/session" // kilocode_change
+import { SessionTranscript } from "@/kilocode/session/transcript" // kilocode_change
+import { KiloCostPropagation } from "@/kilocode/session/cost-propagation" // kilocode_change
+import { KiloSessionProcessor } from "@/kilocode/session/processor" // kilocode_change
+import * as KiloWorkflowVariant from "@/kilocode/session/workflow-variant" // kilocode_change
+import { KiloSessionOverflow } from "@/kilocode/session/overflow" // kilocode_change
+import { KiloReference } from "@/kilocode/reference/contains" // kilocode_change
+import { KiloReadObject } from "@/kilocode/tool/read-object" // kilocode_change
+import { isInterrupted } from "@/kilocode/effect/cause" // kilocode_change
+import * as SandboxPolicy from "@/kilocode/sandbox/policy" // kilocode_change
+import { CommandTimeout } from "@/kilocode/command-timeout" // kilocode_change
+import { Suggestion } from "@/kilocode/suggestion" // kilocode_change
 import { Question } from "@/question" // kilocode_change
-import { BUILTIN_COMMANDS } from "@/sonderr/session/builtin-commands" // kilocode_change
-import { legacyReviewMessage } from "@/sonderr/review/command" // kilocode_change
+import { BUILTIN_COMMANDS } from "@/kilocode/session/builtin-commands" // kilocode_change
+import { legacyReviewMessage } from "@/kilocode/review/command" // kilocode_change
 import { zod } from "@opencode-ai/core/effect-zod" // kilocode_change
 import { withStatics } from "@opencode-ai/core/schema" // kilocode_change
 import { SessionID, MessageID, PartID } from "./schema"
@@ -71,7 +71,7 @@ import { SessionEvent } from "@opencode-ai/core/session/event" // kilocode_chang
 import { SessionMessage } from "@opencode-ai/core/session/message" // kilocode_change
 import { InstanceState } from "@/effect/instance-state"
 import { InstanceRef } from "@/effect/instance-ref"
-import { Instance } from "@/sonderr/instance"
+import { Instance } from "@/kilocode/instance"
 import { EffectBridge } from "@/effect/bridge"
 import { TaskTool, type TaskPromptOps } from "@/tool/task"
 import { assertExternalDirectoryEffect } from "@/tool/external-directory" // kilocode_change
@@ -81,15 +81,15 @@ import { EventV2Bridge } from "@/event-v2-bridge"
 import { Database } from "@opencode-ai/core/database/database"
 import { ModelV2 } from "@opencode-ai/core/model"
 import { ProviderV2 } from "@opencode-ai/core/provider"
-import * as KiloConfiguredReference from "@/sonderr/reference" // kilocode_change
+import * as KiloConfiguredReference from "@/kilocode/reference" // kilocode_change
 import { eq } from "drizzle-orm"
 import { SessionTable } from "@opencode-ai/core/session/sql"
 import { SessionReminders } from "./reminders"
 import { SessionTools } from "./tools"
 import { LLMEvent } from "@opencode-ai/llm"
 import { RepositoryCache } from "@opencode-ai/core/repository-cache" // kilocode_change
-import { SessionResume } from "@/sonderr/session-resume" // kilocode_change
-import { KiloSessionContinuation } from "@/sonderr/session/continuation" // kilocode_change
+import { SessionResume } from "@/kilocode/session-resume" // kilocode_change
+import { KiloSessionContinuation } from "@/kilocode/session/continuation" // kilocode_change
 
 // @ts-ignore
 globalThis.AI_SDK_LOG_WARNINGS = false

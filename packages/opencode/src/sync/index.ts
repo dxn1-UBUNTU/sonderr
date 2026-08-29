@@ -17,7 +17,7 @@ import { serviceUse } from "@opencode-ai/core/effect/service-use"
 import { InstanceState } from "@/effect/instance-state"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 import { EffectBridge } from "@/effect/bridge"
-import * as EventWire from "@/sonderr/event-wire" // kilocode_change
+import * as EventWire from "@/kilocode/event-wire" // kilocode_change
 import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder" // kilocode_change
 
 // Keep `Event["data"]` mutable because projectors mutate the persisted shape

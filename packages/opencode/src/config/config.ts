@@ -46,17 +46,17 @@ import { KilocodeConfig } from "../kilocode/config/config"
 import { sanitizeProjectMcpHeaders } from "../kilocode/config/mcp-headers"
 import { primaryPaths } from "../kilocode/primary-worktree"
 import { Git } from "@/git"
-import { KilocodeDefaultPlugins } from "@/sonderr/config/default-plugins"
-import { KilocodeGlobalConfigStamp } from "@/sonderr/config/global-stamp"
-import { SandboxConfig } from "@/sonderr/sandbox/config"
-import { ExternalMarkdown } from "@/sonderr/config/external-markdown"
-import type { KilocodeMarkdown } from "@/sonderr/config/markdown"
+import { KilocodeDefaultPlugins } from "@/kilocode/config/default-plugins"
+import { KilocodeGlobalConfigStamp } from "@/kilocode/config/global-stamp"
+import { SandboxConfig } from "@/kilocode/sandbox/config"
+import { ExternalMarkdown } from "@/kilocode/config/external-markdown"
+import type { KilocodeMarkdown } from "@/kilocode/config/markdown"
 import {
   IndexingConfig as KiloIndexingConfig,
   IndexingSchema as KiloIndexingSchema,
 } from "@kilocode/kilo-indexing/config"
 import { unique } from "remeda"
-import { installLocalPluginDependency, needsLocalPluginDependency } from "@/sonderr/config/plugin-deps"
+import { installLocalPluginDependency, needsLocalPluginDependency } from "@/kilocode/config/plugin-deps"
 // kilocode_change end
 import { withTransientReadRetry } from "@/util/effect-http-client"
 import * as Log from "@opencode-ai/core/util/log" // kilocode_change

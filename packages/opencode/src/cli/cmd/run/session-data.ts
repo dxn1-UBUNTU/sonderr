@@ -25,9 +25,9 @@
 //   event arrives, the queue entry is removed and the footer falls back
 //   to the next pending request or to the prompt view.
 import type { Event, Part, PermissionRequest, QuestionRequest, ToolPart } from "@kilocode/sdk/v2" // kilocode_change - revert to upstream native Event type
-import type { RunInteractiveTerminalSnapshot } from "@/sonderr/cli/cmd/run/types" // kilocode_change
+import type { RunInteractiveTerminalSnapshot } from "@/kilocode/cli/cmd/run/types" // kilocode_change
 import * as Locale from "@/util/locale"
-import { appendTerminalOutput } from "@/sonderr/interactive-terminal/output" // kilocode_change
+import { appendTerminalOutput } from "@/kilocode/interactive-terminal/output" // kilocode_change
 import { toolView } from "./tool"
 import type { FooterOutput, FooterPatch, FooterView, StreamCommit } from "./types"
 

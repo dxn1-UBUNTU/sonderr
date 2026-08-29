@@ -12,9 +12,9 @@ import { Filesystem } from "@/util/filesystem"
 import type { GlobalEvent } from "@kilocode/sdk/v2"
 import type { EventSource } from "@opencode-ai/tui/context/sdk"
 import { writeHeapSnapshot } from "v8"
-import type { StartInput } from "@/sonderr/cli/cmd/tui/thread" // kilocode_change - runtime imports deferred into handlers
+import type { StartInput } from "@/kilocode/cli/cmd/tui/thread" // kilocode_change - runtime imports deferred into handlers
 import { win32InstallCtrlCGuard } from "@opencode-ai/tui/terminal-win32"
-import { validate as validateSession } from "@/sonderr/cli/cmd/tui" // kilocode_change
+import { validate as validateSession } from "@/kilocode/cli/cmd/tui" // kilocode_change
 // kilocode_change start - correlate the TUI worker with its parent process
 import {
   KILO_PROCESS_ROLE,
@@ -23,7 +23,7 @@ import {
   sanitizedProcessEnv,
 } from "@opencode-ai/core/util/opencode-process"
 // kilocode_change end
-import type { RemoteExitBridgeClient } from "@/sonderr/cli/cmd/tui/remote-exit-bridge" // kilocode_change - runtime import deferred
+import type { RemoteExitBridgeClient } from "@/kilocode/cli/cmd/tui/remote-exit-bridge" // kilocode_change - runtime import deferred
 import type { Exit } from "@opencode-ai/tui/context/exit" // kilocode_change
 
 declare global {
@@ -43,7 +43,7 @@ export async function runEmbeddedRemoteExitBridge(input: {
   done: Promise<unknown>
   timeoutMs?: number
 }) {
-  const { createParentRemoteExitBridge } = await import("@/sonderr/cli/cmd/tui/remote-exit-bridge")
+  const { createParentRemoteExitBridge } = await import("@/kilocode/cli/cmd/tui/remote-exit-bridge")
   const timeoutMs = input.timeoutMs ?? 5_000
   const bridge = createParentRemoteExitBridge(input.client, input.exit)
   let ready = false
@@ -265,10 +265,10 @@ export const TuiThreadCommand = cmd({
 
     // kilocode_change start - lazy Kilo implementations so other CLI commands
     // don't pay their module cost at startup
-    const { importCloudSession, localSessionID, validateCloudFork, reportCloudImportError } = await import("@/sonderr/cloud-session")
-    const { KiloTuiThreadDaemon } = await import("@/sonderr/cli/cmd/tui/thread")
-    const { preload } = await import("@/sonderr/cli/cmd/tui")
-    const { resolveTuiDirectory } = await import("@/sonderr/cli/cmd/tui-worktree")
+    const { importCloudSession, localSessionID, validateCloudFork, reportCloudImportError } = await import("@/kilocode/cloud-session")
+    const { KiloTuiThreadDaemon } = await import("@/kilocode/cli/cmd/tui/thread")
+    const { preload } = await import("@/kilocode/cli/cmd/tui")
+    const { resolveTuiDirectory } = await import("@/kilocode/cli/cmd/tui-worktree")
     // kilocode_change end
     const unguard = win32InstallCtrlCGuard()
     const shutdown = {

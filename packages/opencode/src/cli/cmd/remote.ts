@@ -1,6 +1,6 @@
 // kilocode_change - new file
 import { cmd } from "./cmd"
-import { buildInstanceAdvertisement } from "@/sonderr-sessions/instance-advertisement"
+import { buildInstanceAdvertisement } from "@/kilo-sessions/instance-advertisement"
 
 // Re-export so existing unit tests that import from this module keep working.
 export { buildInstanceAdvertisement }
@@ -14,10 +14,10 @@ export const RemoteCommand = cmd({
   builder: (yargs) => yargs,
   handler: async () => {
     const { bootstrap } = await import("../bootstrap")
-    const { KiloSessions } = await import("@/sonderr-sessions/kilo-sessions")
+    const { KiloSessions } = await import("@/kilo-sessions/kilo-sessions")
     const { context } = await import("@/project/instance-context")
     const { InstanceRuntime } = await import("@/project/instance-runtime")
-    const { Instance } = await import("@/sonderr/instance")
+    const { Instance } = await import("@/kilocode/instance")
     await bootstrap(process.cwd(), async () => {
       // kilocode_change - K1 W1: advertise this instance on the relay
       // heartbeat so the cloud side can show it as a spawn-capable instance.

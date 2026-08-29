@@ -3,7 +3,7 @@ import { Snapshot } from "@/snapshot" // kilocode_change
 import { MCP } from "@/mcp"
 
 import { Session } from "@/session/session"
-import { WorktreeDiff } from "@/sonderr/review/worktree-diff" // kilocode_change
+import { WorktreeDiff } from "@/kilocode/review/worktree-diff" // kilocode_change
 import { SessionID } from "@/session/schema"
 import { Worktree } from "@/worktree"
 import { NonNegativeInt } from "@opencode-ai/core/schema"
