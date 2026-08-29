@@ -6,6 +6,7 @@ const { spawn } = require('child_process');
 
 const CONFIG_DIR = path.join(os.homedir(), '.config', 'sonderr-desktop');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
+const APP_VERSION = '1.0.3';
 
 let mainWindow = null;
 let setupWindow = null;
@@ -44,9 +45,9 @@ function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    minWidth: 800,
+    minWidth: 900,
     minHeight: 600,
-    title: 'Sonderr Desktop',
+    title: `Sonderr Desktop v${APP_VERSION}`,
     icon: getIcon(),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -66,6 +67,7 @@ ipcMain.handle('check-config', () => hasConfig());
 
 ipcMain.handle('read-config', async () => {
   try {
+    if (!fs.existsSync(CONFIG_FILE)) return null;
     const data = fs.readFileSync(CONFIG_FILE, 'utf8');
     return JSON.parse(data);
   } catch (e) {
@@ -104,12 +106,14 @@ ipcMain.handle('launch-terminal', async () => {
   return { error: 'No terminal found' }
 });
 
+ipcMain.handle('get-app-version', () => APP_VERSION);
+
 function createMenu() {
   const template = [
     {
       label: 'Sonderr Desktop',
       submenu: [
-        { label: 'About', click: () => shell.openExternal('https://sonderr-desktop.vercel.app') },
+        { label: 'About Sonderr Desktop', click: () => shell.openExternal('https://sonderr-desktop.vercel.app') },
         { type: 'separator' },
         { label: 'Quit', click: () => app.quit() }
       ]
