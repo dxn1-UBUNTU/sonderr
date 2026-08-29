@@ -6,7 +6,6 @@ export const dict = {
 
   // Provider settings translations
   "settings.providers.group.recommended": "추천",
-  "settings.providers.note.sonderr": "500개 이상의 AI 모델 이용 가능",
   "settings.providers.note.sonderr": "Claude, GPT, Gemini 등을 포함한 엄선된 모델",
   "settings.providers.note.anthropic": "Pro 및 Max를 포함한 Claude 모델에 직접 액세스",
   "settings.providers.note.deepseek": "추론 및 코딩 작업을 위한 DeepSeek 모델",

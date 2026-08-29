@@ -4,18 +4,17 @@ import * as path from "path"
 
 export type Scope = "global" | "local"
 
+// sonderr_change - the rebrand transform collapsed distinct kilo/opencode/kilocode
+// entries into duplicated "sonderr" members; the union below is the de-duplicated
+// post-rebrand set (legacy kilo/opencode config migration lives in the CLI).
 export type Source =
   | "sourceXdg"
-  | "sourceHomeSonderr"
-  | "sourceHomeSonderr"
   | "sourceHomeSonderr"
   | "sourceEnvFile"
   | "sourceEnvDir"
   | "sourceEnvContent"
   | "sourceProjectSonderr"
   | "sourceProjectRoot"
-  | "sourceProjectSonderr"
-  | "sourceProjectSonderr"
 
 export interface Entry {
   file?: string
@@ -31,13 +30,11 @@ export interface Entry {
 const SCHEMA = "https://app.kilo.ai/config.json"
 
 const MODERN = ["sonderr.jsonc", "sonderr.json"]
-const LEGACY = ["sonderr.jsonc", "sonderr.json"]
+const LEGACY = ["config.json"]
 const FILES = [...MODERN, ...LEGACY]
-const GLOBAL = ["sonderr.jsonc", "sonderr.json", "sonderr.jsonc", "sonderr.json", "config.json"]
-const HOME = [".sonderr", ".sonderr", ".sonderr"]
+const GLOBAL = [...MODERN, ...LEGACY]
+const HOME = [".sonderr"]
 const SOURCES: Record<string, Source> = {
-  ".sonderr": "sourceHomeSonderr",
-  ".sonderr": "sourceHomeSonderr",
   ".sonderr": "sourceHomeSonderr",
 }
 
@@ -93,7 +90,7 @@ export function globalFiles() {
 
 export function localFiles(root: string) {
   const enabled = !process.env.SONDERR_DISABLE_PROJECT_CONFIG
-  const dirs = [path.join(root, ".sonderr"), root, path.join(root, ".sonderr"), path.join(root, ".sonderr")]
+  const dirs = [root, path.join(root, ".sonderr")]
   const list = dirs.flatMap((dir) => FILES.map((file) => row(path.join(dir, file), localSource(root, dir), enabled)))
   return ensure(
     list.filter((item) => item.exists),
@@ -104,8 +101,6 @@ export function localFiles(root: string) {
 
 function localSource(root: string, dir: string) {
   if (dir === root) return "sourceProjectRoot"
-  if (dir.endsWith(`${path.sep}.sonderr`)) return "sourceProjectSonderr"
-  if (dir.endsWith(`${path.sep}.sonderr`)) return "sourceProjectSonderr"
   return "sourceProjectSonderr"
 }
 

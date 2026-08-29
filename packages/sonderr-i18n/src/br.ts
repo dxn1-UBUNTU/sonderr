@@ -6,7 +6,6 @@ export const dict = {
 
   // Provider settings translations
   "settings.providers.group.recommended": "Recomendados",
-  "settings.providers.note.sonderr": "Acesso a mais de 500 modelos de IA",
   "settings.providers.note.sonderr": "Modelos selecionados, incluindo Claude, GPT, Gemini e mais",
   "settings.providers.note.anthropic": "Acesso direto aos modelos Claude, incluindo Pro e Max",
   "settings.providers.note.deepseek": "Modelos DeepSeek para tarefas de raciocínio e programação",

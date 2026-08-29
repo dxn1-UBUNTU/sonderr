@@ -27,7 +27,7 @@ import {
 import { PermissionCommand } from "./PermissionCommand"
 import { PermissionDiff } from "./PermissionDiff"
 import { permissionDiffs } from "./permission-diff-utils"
-import { normalizeUrls } from "../../../../../sonderr/src/sonderr/util/url"
+import { normalizeUrls } from "../../../../../cli/src/sonderr/util/url"
 import type { PermissionRequest } from "../../types/messages"
 import { isEnterKeyCommitNotIme } from "../../utils/ime-enter"
 

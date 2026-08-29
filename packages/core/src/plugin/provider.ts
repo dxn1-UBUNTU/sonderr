@@ -15,13 +15,13 @@ import { GooglePlugin } from "./provider/google"
 import { GoogleVertexAnthropicPlugin, GoogleVertexPlugin } from "./provider/google-vertex"
 import { GroqPlugin } from "./provider/groq"
 import { SonderrPlugin } from "./provider/sonderr"
+import { OpencodePlugin } from "./provider/opencode"
 import { LLMGatewayPlugin } from "./provider/llmgateway"
 import { MistralPlugin } from "./provider/mistral"
 import { NvidiaPlugin } from "./provider/nvidia"
 import { OpenAIPlugin } from "./provider/openai"
 import { SnowflakeCortexPlugin } from "./provider/snowflake-cortex"
 import { OpenAICompatiblePlugin } from "./provider/openai-compatible"
-import { SonderrPlugin } from "./provider/sonderr"
 import { OpenRouterPlugin } from "./provider/openrouter"
 import { PerplexityPlugin } from "./provider/perplexity"
 import { SapAICorePlugin } from "./provider/sap-ai-core"
@@ -55,7 +55,7 @@ export const ProviderPlugins: PluginInternal.Plugin<PluginInternal.Requirements 
   LLMGatewayPlugin,
   MistralPlugin,
   NvidiaPlugin,
-  SonderrPlugin,
+  OpencodePlugin,
   SnowflakeCortexPlugin,
   OpenAICompatiblePlugin,
   OpenAIPlugin,

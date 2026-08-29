@@ -6,7 +6,6 @@ export const dict = {
 
   // Provider settings translations
   "settings.providers.group.recommended": "Anbefalt",
-  "settings.providers.note.sonderr": "Tilgang til 500+ AI-modeller",
   "settings.providers.note.sonderr": "Utvalgte modeller, inkludert Claude, GPT, Gemini og mer",
   "settings.providers.note.anthropic": "Direkte tilgang til Claude-modeller, inkludert Pro og Max",
   "settings.providers.note.deepseek": "DeepSeek-modeller for resonnering og kodeoppgaver",

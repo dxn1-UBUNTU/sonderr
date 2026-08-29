@@ -6,7 +6,6 @@ export const dict = {
 
   // Provider settings translations
   "settings.providers.group.recommended": "推荐",
-  "settings.providers.note.sonderr": "访问 500+ AI 模型",
   "settings.providers.note.sonderr": "精选模型，包括 Claude、GPT、Gemini 等",
   "settings.providers.note.anthropic": "直接访问 Claude 模型，包括 Pro 和 Max",
   "settings.providers.note.deepseek": "用于推理和编码任务的 DeepSeek 模型",

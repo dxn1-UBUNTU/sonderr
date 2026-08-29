@@ -2,3 +2,7 @@ node_modules
 dist/sonderr-linux-x64
 .DS_Store
 *.log
+
+# sonderr_change - turbo/task caches and incremental build artifacts
+.turbo/
+*.tsbuildinfo

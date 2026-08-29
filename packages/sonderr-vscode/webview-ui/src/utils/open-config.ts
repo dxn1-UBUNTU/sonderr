@@ -18,15 +18,11 @@ export function configMessage(scope: "local" | "global", t: LanguageContextValue
       openFailed: t("settings.config.openFailed", { scope: label, message: "{{message}}" }),
       sourceXdg: t("settings.config.source.xdg"),
       sourceHomeSonderr: t("settings.config.source.homeSonderr"),
-      sourceHomeSonderr: t("settings.config.source.homeSonderr"),
-      sourceHomeSonderr: t("settings.config.source.homeSonderr"),
       sourceEnvFile: t("settings.config.source.envFile"),
       sourceEnvDir: t("settings.config.source.envDir"),
       sourceEnvContent: t("settings.config.source.envContent"),
       sourceProjectSonderr: t("settings.config.source.projectSonderr"),
       sourceProjectRoot: t("settings.config.source.projectRoot"),
-      sourceProjectSonderr: t("settings.config.source.projectSonderr"),
-      sourceProjectSonderr: t("settings.config.source.projectSonderr"),
     },
   }
 }

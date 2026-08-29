@@ -296,15 +296,11 @@ export interface OpenConfigFileRequest {
     openFailed: string
     sourceXdg: string
     sourceHomeSonderr: string
-    sourceHomeSonderr: string
-    sourceHomeSonderr: string
     sourceEnvFile: string
     sourceEnvDir: string
     sourceEnvContent: string
     sourceProjectSonderr: string
     sourceProjectRoot: string
-    sourceProjectSonderr: string
-    sourceProjectSonderr: string
   }
 }
 

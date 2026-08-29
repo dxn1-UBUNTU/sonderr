@@ -146,7 +146,6 @@ export class ServerManager {
           ...indexingEnv,
           SONDERR_TELEMETRY_LEVEL: vscode.env.isTelemetryEnabled ? "all" : "off",
           SONDERR_APP_NAME: "sonderr-code",
-          SONDERR_EDITOR_NAME: vscode.env.appName,
           SONDERR_PLATFORM: "vscode",
           SONDERR_MACHINE_ID: vscode.env.machineId,
           SONDERR_APP_VERSION: this.context.extension.packageJSON.version,
