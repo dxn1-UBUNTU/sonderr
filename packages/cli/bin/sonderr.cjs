@@ -369,8 +369,6 @@ function updateSource(startDir) {
 }
 // sonderr_change end
 
-const envPath = process.env.SONDERR_BIN_PATH
-
 const scriptPath = fs.realpathSync(__filename)
 const scriptDir = path.dirname(scriptPath)
 
@@ -511,42 +509,54 @@ function findBinary(startDir) {
   }
 }
 
-const resolved = envPath || (fs.existsSync(cached) ? cached : findBinary(scriptDir))
+// sonderr_change start - source-first resolution: a checkout always beats a
+// (possibly stale) platform binary. The old order (binary first) made a global
+// `sonderr` silently run an old bundled binary - stale branding, stale art,
+// stale everything - even when a fresh source checkout was sitting right
+// there. Now: source -> bootstrap (git pull, bun, deps) -> TUI; binary is only
+// a fallback for real global installs with no checkout, or when Bun cannot be
+// provisioned. SONDERR_FORCE_BINARY=1 or SONDERR_BIN_PATH escape hatch.
+const envPath = process.env.SONDERR_BIN_PATH
+const forceBinary = process.env.SONDERR_FORCE_BINARY
 
-if (resolved) {
-  run(resolved, resolved === cached ? findBinary(scriptDir) : undefined) // sonderr_change - preserve cached binary fallback
-} else {
-  // sonderr_change start - full source bootstrap: bun, workspace deps, then run
-  const source = findSource(scriptDir)
-  if (!source) {
-    console.error(
-      "It seems that your package manager failed to install the right version of the Sonderr CLI for your platform. You can try manually installing " +
-        names.map((n) => `\"${n}\"`).join(" or ") +
-        " package",
-    )
-    process.exit(1)
-  }
+const source = envPath || forceBinary ? undefined : findSource(scriptDir)
 
+if (source) {
   const workspaceRoot = findWorkspaceRoot(path.dirname(source))
 
-  // sonderr_change start - full one-shot launch: git pull, bun, deps, then the TUI
   updateSource(path.dirname(source))
 
   let bun = findBun()
-  if (!bun && process.env.SONDERR_NO_BOOTSTRAP) {
-    console.error("[sonderr] SONDERR_NO_BOOTSTRAP is set but Bun was not found. Install it from https://bun.sh")
-    process.exit(1)
-  }
-  if (!bun) {
+  if (!bun && !process.env.SONDERR_NO_BOOTSTRAP) {
     bun = installBun()
   }
-  if (!bun) {
-    console.error("[sonderr] Bun is required to run Sonderr from source. Install it from https://bun.sh and re-run.")
+  if (bun) {
+    ensureDeps(bun, workspaceRoot)
+    runSource(bun, source)
+  } else {
+    // No Bun and not allowed to auto-install - a platform binary still beats nothing.
+    const fallbackBinary = findBinary(scriptDir)
+    if (fallbackBinary) {
+      console.error("[sonderr] Bun unavailable - falling back to the platform binary")
+      run(fallbackBinary)
+    } else {
+      console.error(
+        "[sonderr] Bun is required to run Sonderr from source. Install it from https://bun.sh, re-run, or set SONDERR_FORCE_BINARY=1 to use the platform binary.",
+      )
+      process.exit(1)
+    }
+  }
+} else {
+  const resolved = envPath || (fs.existsSync(cached) ? cached : findBinary(scriptDir))
+  if (resolved) {
+    run(resolved, resolved === cached ? findBinary(scriptDir) : undefined) // sonderr_change - preserve cached binary fallback
+  } else {
+    console.error(
+      "It seems that your package manager failed to install the right version of the Sonderr CLI for your platform. You can try manually installing " +
+        names.map((n) => `\"${n}\"`).join(" or ") +
+        " package, or run Sonderr from a source checkout: https://github.com/dxn1-UBUNTU/SONDERR",
+    )
     process.exit(1)
   }
-
-  ensureDeps(bun, workspaceRoot)
-
-  runSource(bun, source)
-  // sonderr_change end
 }
+// sonderr_change end

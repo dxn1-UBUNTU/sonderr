@@ -1,41 +1,29 @@
 #!/bin/bash
+# Sonderr global installer: links the `sonderr` command to this source checkout.
+# The launcher self-bootstraps on every run (git pull -> Bun install if missing
+# -> bun install -> TUI), so the global command always runs fresh SONDERR code.
 set -e
 
-echo "=== Sonderr Setup ==="
+REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+BIN_SRC="$REPO_DIR/packages/cli/bin/sonderr.cjs"
+BIN_DIR="${SONDERR_INSTALL_DIR:-$HOME/.local/bin}"
+BIN_DST="$BIN_DIR/sonderr"
 
-mkdir -p ~/.config/sonderr
-mkdir -p ~/.local/share/applications
-mkdir -p ~/.local/bin
-
-BIN_SRC="$(pwd)/dist/sonderr-linux-x64"
 if [ ! -f "$BIN_SRC" ]; then
-  echo "Error: Binary not found at $BIN_SRC"
+  echo "error: $BIN_SRC not found - run this from a SONDERR checkout (scripts/ dir)" >&2
   exit 1
 fi
 
-cp "$BIN_SRC" ~/.local/bin/sonderr
-chmod +x ~/.local/bin/sonderr
+mkdir -p "$BIN_DIR"
+chmod +x "$BIN_SRC"
+ln -sf "$BIN_SRC" "$BIN_DST"
 
-ln -sf "$(pwd)/scripts/launch-wizard.sh" ~/.local/bin/sonderr-desktop
-ln -sf "$(pwd)/scripts/attach-cli.cjs" ~/.local/bin/sonderr-attach
+echo "Installed: $BIN_DST -> $BIN_SRC"
+case ":$PATH:" in
+  *":$BIN_DIR:"*) ;;
+  *) echo "NOTE: $BIN_DIR is not in your PATH - add 'export PATH=\"$BIN_DIR:\$PATH\"' to your shell rc." ;;
+esac
 
-cat > ~/.local/share/applications/sonderr-desktop.desktop << 'DESKTOP'
-[Desktop Entry]
-Type=Application
-Name=Sonderr
-Comment=AI coding agent for desktop
-Exec=sonderr-desktop
-Icon=utilities-terminal
-Terminal=true
-Categories=Development;IDE;
-StartupWMClass=Sonderr
-DESKTOP
-
-echo "✓ Installed Sonderr"
-echo "  - Binary: ~/.local/bin/sonderr"
-echo "  - Launcher: ~/.local/bin/sonderr-desktop"
-echo "  - Attach CLI: ~/.local/bin/sonderr-attach"
-echo "  - Desktop entry: ~/.local/share/applications/sonderr-desktop.desktop"
 echo ""
-echo "Run 'sonderr-desktop' to launch the setup wizard"
-echo "Run '/api_attach' in Sonderr to attach a new API key"
+echo "Done. Run 'sonderr' from any directory - it updates the checkout, installs"
+echo "Bun automatically if missing, and opens the TUI in that directory."

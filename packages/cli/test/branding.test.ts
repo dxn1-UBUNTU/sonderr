@@ -19,7 +19,6 @@ const ROOTS = [
   join(REPO_ROOT, "packages/cli/src"),
   join(REPO_ROOT, "packages/tui/src"),
   join(REPO_ROOT, "electron"),
-  join(REPO_ROOT, "gui-wizard"),
 ]
 
 const EXTS = new Set([

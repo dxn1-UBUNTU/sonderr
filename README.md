@@ -35,8 +35,8 @@ Credit and thanks to both upstream projects.
   endpoint. Swap providers or models at runtime without restarting a session.
 - **Terminal UI** — a full TUI with sessions, plan mode, and file/command tooling.
 - **Desktop app** — Electron wrapper with an encrypted local config
-  (`~/.config/sonderr/config.json`, AES-256-CBC, machine-derived key) and a setup
-  wizard. `sonderr-attach <provider> <api_key> [model]` connects credentials.
+  (`~/.config/sonderr/config.json`, AES-256-CBC, machine-derived key) and a
+  built-in first-run setup screen.
 - **Editor integrations** — VS Code extension, JetBrains plugin, Zed extension.
 - **Enterprise MCP controls** — dashboard-managed MCP server policy that can
   override local `mcp.json` files per organization. See
@@ -46,16 +46,18 @@ Credit and thanks to both upstream projects.
 
 ## Install
 
-### Desktop app (Linux)
+### Global `sonderr` command (recommended)
 
 ```bash
-git clone https://github.com/dxn1-UBUNTU/sonderr.git
-cd sonderr
+git clone https://github.com/dxn1-UBUNTU/SONDERR.git
+cd SONDERR
 ./scripts/install.sh
 ```
 
-This installs the `sonderr` desktop launcher and the `sonderr-attach` CLI, and
-registers the desktop entry.
+This links the global `sonderr` command to the source checkout. Every launch
+self-updates (`git pull`), auto-installs Bun if missing, syncs workspace
+dependencies, and opens the TUI in the directory you ran it from - always
+fresh, no manual rebuilds.
 
 ### From source (CLI / TUI)
 
@@ -83,7 +85,7 @@ bun run --cwd packages/cli build
 | Gemini           | Gemini 2.5 Pro / Flash and newer               |
 | Kilo Gateway     | Free/shortlist models via the Kilo Gateway API |
 
-Configure via the setup wizard, `sonderr-attach`, or in-session with `/api_attach`.
+Configure in-session with `/api_attach` or directly in `sonderr.json`.
 Keys are stored locally, encrypted, and are only ever sent to the provider you
 configured.
 
