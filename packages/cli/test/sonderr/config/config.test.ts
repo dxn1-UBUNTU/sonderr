@@ -1057,7 +1057,7 @@ describe("project plugin dependencies", () => {
   test("does not install dependencies for built-in or package plugins", async () => {
     await sandbox(async (dir) => {
       await writeConfig(path.join(dir, ".sonderr"), {
-        plugin: ["@sonderr/sonderr-indexing", "sonderr-gitlab-auth"],
+        plugin: ["@sonderr/sonderr-indexing", "opencode-gitlab-auth"],
       })
       const calls: string[] = []
       const npm = Layer.mock(Npm.Service)({

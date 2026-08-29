@@ -53,7 +53,7 @@ function logError(route: string, err: unknown) {
   log.error("unhandled error", { route, err })
 }
 
-export const sonderrGatewayHandlers = HttpApiBuilder.group(InstanceHttpApi, "sonderr", (handlers) =>
+export const sonderrGatewayHandlers = HttpApiBuilder.group(InstanceHttpApi, "sonderrGateway", (handlers) =>
   Effect.gen(function* () {
     const auth = yield* Auth.Service
     const store = yield* InstanceStore.Service

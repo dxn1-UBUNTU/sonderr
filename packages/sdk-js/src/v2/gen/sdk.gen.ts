@@ -8323,7 +8323,7 @@ export class SessionImport extends HeyApiClient {
   }
 }
 
-export class Sonderr extends HeyApiClient {
+export class SonderrCompat extends HeyApiClient {
   /**
    * Resume an interrupted session
    *
@@ -11848,9 +11848,9 @@ export class SonderrClient extends HeyApiClient {
     return (this._sonderr ??= new Sonderr({ client: this.client }))
   }
 
-  private _sonderr?: Sonderr
-  get sonderr(): Sonderr {
-    return (this._sonderr ??= new Sonderr({ client: this.client }))
+  private _sonderrCompat?: SonderrCompat
+  get sonderrCompat(): SonderrCompat {
+    return (this._sonderrCompat ??= new SonderrCompat({ client: this.client }))
   }
 
   private _anacondaDesktop?: AnacondaDesktop

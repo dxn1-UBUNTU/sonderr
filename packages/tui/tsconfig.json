@@ -8,10 +8,10 @@
     "noUncheckedIndexedAccess": false,
     // sonderr_change - resolve Sonderr integrations retained during upstream's standalone TUI extraction
     "paths": {
-      "@/*": ["../sonderr/src/*"],
+      "@/*": ["../cli/src/*"],
       "@tui/*": ["./src/*"]
     }
   },
   // sonderr_change - include ambient declarations used by retained Sonderr imports from sonderr
-  "include": ["src", "test", "../sonderr/src/*.d.ts"]
+  "include": ["src", "test", "../cli/src/*.d.ts"]
 }

@@ -62,7 +62,7 @@
     "configurationDefaults": {
       "files.watcherExclude": {
         "**/.sonderr/worktrees/**": true,
-        "**/.sonderr/worktrees/**": true
+        "**/.kilo/worktrees/**": true
       }
     },
     "taskDefinitions": [

@@ -56,8 +56,8 @@ export namespace SonderrConfigSources {
 
   type Pending = Omit<Source, "order">
 
-  const roots = [".sonderr", ".sonderr"] as const
-  const global = ["config.json", "sonderr.json", "sonderr.jsonc", "sonderr.json", "sonderr.jsonc"] as const
+  const roots = [".sonderr", ".kilo", ".kilocode"] as const
+  const global = ["config.json", "sonderr.json", "sonderr.jsonc", "kilo.json", "kilo.jsonc", "opencode.json", "opencode.jsonc"] as const
 
   export async function list(input: Input): Promise<Result> {
     const project = Flag.SONDERR_DISABLE_PROJECT_CONFIG ? [] : await projectSources(input)
@@ -120,9 +120,10 @@ export namespace SonderrConfigSources {
 
   async function projectSources(input: Input): Promise<Pending[]> {
     const sonderr = await projectFiles("sonderr", input)
-    const sonderr = await projectFiles("sonderr", input)
+    const kilo = await projectFiles("kilo", input)
+    const opencode = await projectFiles("opencode", input)
     return Promise.all(
-      [...sonderr, ...sonderr].map((file) =>
+      [...sonderr, ...kilo, ...opencode].map((file) =>
         fileSource({ kind: "project-file", scope: "project", label: "Project config", file }),
       ),
     )

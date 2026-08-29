@@ -1,5 +1,5 @@
 import { EventV2 } from "@sonderr/core/event"
-import { SonderrEvent } from "@sonderr/protocol/groups/event" // sonderr_change - encode the full Sonderr event bus
+import { SonderrBusEvent as SonderrEvent } from "@sonderr/protocol/groups/event" // sonderr_change - encode the full Sonderr event bus
 import { Effect, Schema, Stream } from "effect"
 import { HttpServerResponse } from "effect/unstable/http"
 import { HttpApiBuilder } from "effect/unstable/httpapi"

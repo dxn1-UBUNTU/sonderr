@@ -55,4 +55,6 @@ export const SonderrEvent = event.schema
 export type SonderrEvent = typeof SonderrEvent.Type
 export type SonderrEventEncoded = typeof SonderrEvent.Encoded
 
-export const SonderrEvent = schema(EventManifest.Definitions) // sonderr_change - encode the full Sonderr event bus
+export const SonderrBusEvent = schema(EventManifest.Definitions) // sonderr_change - encode the full Sonderr event bus
+export type SonderrBusEvent = typeof SonderrBusEvent.Type
+export type SonderrBusEventEncoded = typeof SonderrBusEvent.Encoded

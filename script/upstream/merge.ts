@@ -420,7 +420,7 @@ async function main() {
   const author = options.author || (await getAuthor())
   const sonderrVersion = await version.getCurrentSonderrVersion()
   const dirs = ["packages/ui/src/assets/icons/provider", "packages/ui/src/components/provider-icons"]
-  const sonderrBranch = `${author}/sonderr-sonderr-${targetVersion.tag}`
+  const sonderrBranch = `${author}/sonderr-${targetVersion.tag}`
   const inplace = options.baseBranch === "HEAD" && currentBranch === sonderrBranch
 
   logger.info("Resetting generated provider icons before checkout...")
@@ -457,14 +457,14 @@ async function main() {
   logger.info(`Created Sonderr branch: ${sonderrBranch}`)
 
   // Create sonderr compatibility branch from upstream commit
-  const sonderrBranch = `${author}/sonderr-${targetVersion.tag}`
-  const sonderrBackup = await git.backupAndDeleteBranch(sonderrBranch)
+  const opencodeCompatBranch = `${author}/opencode-${targetVersion.tag}`
+  const sonderrBackup = await git.backupAndDeleteBranch(opencodeCompatBranch)
   if (sonderrBackup) {
     logger.info(`Backed up existing branch to: ${sonderrBackup}`)
   }
   await git.checkout(targetVersion.commit)
   await git.createBranch(sonderrBranch)
-  logger.info(`Created sonderr branch: ${sonderrBranch}`)
+  logger.info(`Created upstream compat branch: ${opencodeCompatBranch}`)
 
   const prior = await git.findLatestCompatCommit(config.baseBranch, targetVersion.commit)
   if (prior) {
@@ -586,7 +586,7 @@ async function main() {
       extra: [".sonderr-version"],
     })
     const commit = await git.createCommit(tree, compatMessage, prior.commit)
-    await git.updateBranch(sonderrBranch, commit)
+    await git.updateBranch(opencodeCompatBranch, commit)
     await $`git reset --hard ${commit}`.quiet()
   } else {
     await git.commit(compatMessage)
@@ -601,7 +601,7 @@ async function main() {
     const linked = await git.recordAncestor(targetVersion.commit, `merge: record upstream ${targetVersion.tag}`)
     if (linked) logger.info(`Recorded upstream ${targetVersion.tag} as Sonderr branch ancestry`)
   }
-  const mergeResult = await git.merge(sonderrBranch)
+  const mergeResult = await git.merge(opencodeCompatBranch)
 
   if (!mergeResult.success) {
     logger.warn("Merge has conflicts (these should only be files with actual code differences)")
@@ -802,7 +802,7 @@ async function main() {
     const stillConflicted = new Set(await git.getConflictedFiles())
     const reconcileResults = await reconcileAllPackageJson({
       oursRef: baseSha,
-      theirsRef: sonderrBranch,
+      theirsRef: opencodeCompatBranch,
       verbose: options.verbose,
       skip: stillConflicted,
     })
@@ -843,7 +843,7 @@ async function main() {
           tag: targetVersion.tag,
           upstream: targetVersion.commit,
           base: await git.getCommitHash("HEAD"),
-          merge: await git.getCommitHash(sonderrBranch),
+          merge: await git.getCommitHash(opencodeCompatBranch),
         },
         config.baseBranch,
       )
@@ -873,7 +873,7 @@ async function main() {
     // merge can't slip stale package.json resolutions through.
     const reconcileResults = await reconcileAllPackageJson({
       oursRef: baseSha,
-      theirsRef: sonderrBranch,
+      theirsRef: opencodeCompatBranch,
       verbose: options.verbose,
     })
     const reconcileCount = reconcileResults.filter((r) => r.action === "transformed" && r.changes.length > 0).length
@@ -942,7 +942,7 @@ async function main() {
 
   logger.info(`Upstream version: ${targetVersion.tag}`)
   logger.info(`Sonderr branch: ${sonderrBranch}`)
-  logger.info(`Sonderr branch: ${sonderrBranch}`)
+  logger.info(`Upstream compat branch: ${opencodeCompatBranch}`)
   logger.info(`Backup branch: ${backupBranch}`)
   logger.info(`Report: ${reportPath}`)
 
@@ -952,7 +952,7 @@ async function main() {
       tag: targetVersion.tag,
       upstream: targetVersion.commit,
       base: baseSha,
-      merge: sonderrBranch,
+      merge: opencodeCompatBranch,
       snapshot: autoSha,
     },
     config.baseBranch,

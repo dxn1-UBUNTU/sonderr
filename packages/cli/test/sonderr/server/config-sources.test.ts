@@ -78,7 +78,7 @@ describe("config source routes", () => {
         await Bun.write(path.join(dir, "env.json"), "{}")
         await Bun.write(path.join(dir, "sonderr.json"), "{}")
 
-        for (const root of [".sonderr", ".sonderr", ".sonderr"]) {
+        for (const root of [".opencode", ".kilo", ".kilocode", ".sonderr"]) {
           const local = path.join(dir, root)
           await fs.mkdir(local, { recursive: true })
           await Bun.write(path.join(local, "sonderr.jsonc"), "{}")
@@ -96,9 +96,10 @@ describe("config source routes", () => {
 
     const envFile = path.join(tmp.path, "env.json")
     const projectFile = path.join(tmp.path, "sonderr.json")
+    const opencodeFile = path.join(tmp.path, ".opencode", "sonderr.jsonc")
     const sonderrFile = path.join(tmp.path, ".sonderr", "sonderr.jsonc")
-    const sonderrFile = path.join(tmp.path, ".sonderr", "sonderr.jsonc")
-    const configFile = path.join(tmp.path, ".sonderr", "sonderr.jsonc")
+    const kiloFile = path.join(tmp.path, ".kilo", "sonderr.jsonc")
+    const configFile = path.join(tmp.path, ".kilocode", "sonderr.jsonc")
     const extraFile = path.join(tmp.path, "extra", "sonderr.json")
     const managedFile = path.join(tmp.path, "managed", "sonderr.json")
 
@@ -113,8 +114,9 @@ describe("config source routes", () => {
 
     expect(order(body, envFile)).toBeLessThan(order(body, projectFile))
     expect(order(body, projectFile)).toBeLessThan(order(body, sonderrFile))
-    expect(order(body, sonderrFile)).toBeLessThan(order(body, configFile))
-    expect(body.sources.some((source) => source.path === sonderrFile)).toBe(false)
+    expect(order(body, sonderrFile)).toBeLessThan(order(body, kiloFile))
+    expect(order(body, kiloFile)).toBeLessThan(order(body, configFile))
+    expect(body.sources.some((source) => source.path === opencodeFile)).toBe(false)
     expect(order(body, configFile)).toBeLessThan(order(body, extraFile))
     expect(inline?.order).toBeGreaterThan(order(body, extraFile))
     expect(inline?.order).toBeLessThan(order(body, managedFile))

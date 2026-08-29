@@ -289,7 +289,7 @@ export const SonderrGatewayPaths = {
 
 export const SonderrGatewayApi = HttpApi.make("sonderr")
   .add(
-    HttpApiGroup.make("sonderr")
+    HttpApiGroup.make("sonderrGateway")
       .add(
         HttpApiEndpoint.get("profile", SonderrGatewayPaths.profile, {
           query: WorkspaceRoutingQuery,
