@@ -1,16 +1,18 @@
 <div align="center">
 
-```
-▀▀▀▀▀ █▀▀▀█ █___█ ████_ █████ ████_ ████_
-█____ █___█ ██__█ █___█ ███__ ███__ ███__
-▀▀▀▀▀ ▀▀▀▀▀ █___█ ████_ █████ █___█ █___█
-```
+<img src=".github/assets/sonderr-banner.svg" alt="SONDERR — AI coding agent" width="800"/>
 
 **A BYOK AI coding agent — terminal-first, editor-integrated, desktop-wrapped.**
 
 Bring your own key. Your providers, your models, your machine.
 
-`MIT` · `TypeScript` · `Bun`
+[![License: MIT](https://img.shields.io/badge/license-MIT-FF6A00?style=flat-square)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-typed-3178C6?style=flat-square)](https://www.typescriptlang.org)
+[![Bun](https://img.shields.io/badge/runtime-Bun-F472B6?style=flat-square)](https://bun.sh)
+[![Stars](https://img.shields.io/github/stars/dxn1-UBUNTU/sonderr?style=flat-square&color=FF6A00)](https://github.com/dxn1-UBUNTU/sonderr/stargazers)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-2EA043?style=flat-square)](https://github.com/dxn1-UBUNTU/sonderr/pulls)
+
+[Install](#install) · [Providers](#providers) · [Monorepo](#monorepo-layout) · [Configuration](#configuration) · [Development](#development) · [License](#license)
 
 </div>
 
