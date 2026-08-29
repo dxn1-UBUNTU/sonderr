@@ -75,9 +75,21 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === '/api/config' && req.method === 'GET') {
     try {
       if (!fs.existsSync(CONFIG_FILE)) { res.writeHead(404); res.end('{}'); return; }
-      const encrypted = fs.readFileSync(CONFIG_FILE, 'utf8').trim();
+      const raw = fs.readFileSync(CONFIG_FILE, 'utf8').trim();
+      
+      // Try plain JSON first (from Electron app)
+      try {
+        const parsed = JSON.parse(raw);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(parsed));
+        return;
+      } catch (e) {
+        // If plain JSON fails, try encrypted format
+      }
+      
+      // Try encrypted format
       const secret = getSecret();
-      const decrypted = decrypt(encrypted, secret);
+      const decrypted = decrypt(raw, secret);
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(decrypted);
     } catch (e) {

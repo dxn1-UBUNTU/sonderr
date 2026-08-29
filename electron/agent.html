@@ -25,12 +25,13 @@
       color: var(--text);
       height: 100vh;
       display: flex;
+      flex-direction: row-reverse;
       overflow: hidden;
     }
     .sidebar {
       width: 260px;
       background: var(--surface);
-      border-right: 1px solid var(--border);
+      border-left: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
@@ -219,32 +220,48 @@
     </div>
   </main>
 
-  <script>
-    async function loadConfig() {
-      const config = await window.sonderr.readConfig();
-      if (config) {
-        document.getElementById('provider-value').textContent = config.provider || '—';
-        document.getElementById('model-value').textContent = config.model || '—';
+    <script>
+      async function loadConfig() {
+        try {
+          const config = await window.sonderr.readConfig();
+          if (config) {
+            document.getElementById('provider-value').textContent = config.provider || '—';
+            document.getElementById('model-value').textContent = config.model || '—';
+          }
+        } catch (e) {
+          console.error('Failed to load config:', e);
+        }
       }
-    }
 
-    document.getElementById('launch-btn').addEventListener('click', async () => {
-      const result = await window.sonderr.launchTerminal();
-      if (result.error) alert('Failed to launch terminal: ' + result.error);
-    });
+      document.getElementById('launch-btn').addEventListener('click', async () => {
+        try {
+          const result = await window.sonderr.launchTerminal();
+          if (result.error) alert('Failed to launch terminal: ' + result.error);
+        } catch (e) {
+          alert('Failed to launch terminal: ' + e.message);
+        }
+      });
 
-    document.getElementById('reattach-btn').addEventListener('click', async () => {
-      await window.sonderr.openExternal('http://localhost:17381/setup');
-    });
+      document.getElementById('reattach-btn').addEventListener('click', async () => {
+        try {
+          await window.sonderr.openExternal('http://localhost:17381/setup');
+        } catch (e) {
+          console.error('Failed to open wizard:', e);
+        }
+      });
 
-    document.getElementById('reset-btn').addEventListener('click', async () => {
-      if (confirm('Reset all settings? This will delete your API key.')) {
-        await window.sonderr.saveConfig(null);
-        loadConfig();
-      }
-    });
+      document.getElementById('reset-btn').addEventListener('click', async () => {
+        if (confirm('Reset all settings? This will delete your API key.')) {
+          try {
+            await window.sonderr.saveConfig(null);
+            loadConfig();
+          } catch (e) {
+            alert('Failed to reset: ' + e.message);
+          }
+        }
+      });
 
-    loadConfig();
-  </script>
+      loadConfig();
+    </script>
 </body>
 </html>

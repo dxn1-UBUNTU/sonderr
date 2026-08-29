@@ -2,11 +2,36 @@ const { app, BrowserWindow, ipcMain, shell, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const crypto = require('crypto');
 const { spawn } = require('child_process');
 
 const CONFIG_DIR = path.join(os.homedir(), '.config', 'sonderr-desktop');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 const APP_VERSION = '1.0.3';
+
+function getSecret() {
+  const machineId = os.hostname() + os.userInfo().username;
+  return crypto.createHash('sha256').update(machineId).digest('hex').slice(0, 32);
+}
+
+function encrypt(text, secret) {
+  const iv = crypto.randomBytes(16);
+  const key = crypto.scryptSync(secret, 'sonderr-salt', 32);
+  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+  let encrypted = cipher.update(text, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  return iv.toString('hex') + ':' + encrypted;
+}
+
+function decrypt(hash, secret) {
+  const [ivHex, encrypted] = hash.split(':');
+  const iv = Buffer.from(ivHex, 'hex');
+  const key = crypto.scryptSync(secret, 'sonderr-salt', 32);
+  const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+  let decrypted = decipher.update(Buffer.from(encrypted, 'hex'), 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+  return decrypted;
+}
 
 let mainWindow = null;
 let setupWindow = null;
@@ -68,9 +93,20 @@ ipcMain.handle('check-config', () => hasConfig());
 ipcMain.handle('read-config', async () => {
   try {
     if (!fs.existsSync(CONFIG_FILE)) return null;
-    const data = fs.readFileSync(CONFIG_FILE, 'utf8');
-    return JSON.parse(data);
+    const raw = fs.readFileSync(CONFIG_FILE, 'utf8').trim();
+    
+    // Try plain JSON first
+    try {
+      return JSON.parse(raw);
+    } catch (e) {
+      // Try encrypted format
+    }
+    
+    const secret = getSecret();
+    const decrypted = decrypt(raw, secret);
+    return JSON.parse(decrypted);
   } catch (e) {
+    console.error('Failed to read config:', e);
     return null;
   }
 });
@@ -78,7 +114,9 @@ ipcMain.handle('read-config', async () => {
 ipcMain.handle('save-config', async (event, config) => {
   try {
     if (!fs.existsSync(CONFIG_DIR)) fs.mkdirSync(CONFIG_DIR, { recursive: true });
-    fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2), { mode: 0o600 });
+    const secret = getSecret();
+    const encrypted = encrypt(JSON.stringify(config), secret);
+    fs.writeFileSync(CONFIG_FILE, encrypted, { mode: 0o600 });
     return { success: true };
   } catch (e) {
     return { error: e.message };
