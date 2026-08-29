@@ -130,6 +130,8 @@ ipcMain.handle('open-external', async (event, url) => {
 
 ipcMain.handle('launch-terminal', async () => {
   const kiloPath = '/home/dxn1/.npm-global/bin/kilo';
+  
+  // Desktop Linux terminals
   const terms = [
     { cmd: 'gnome-terminal', args: ['--', 'bash', '-c', `${kiloPath}; exec bash`] },
     { cmd: 'konsole', args: ['-e', kiloPath] },
@@ -148,14 +150,21 @@ ipcMain.handle('launch-terminal', async () => {
     }
   }
   
-  // Fallback: try xdg-terminal
+  // Termux/Android fallback: open Kilo web UI or run directly
   try {
-    const { exec } = require('child_process');
-    exec(`xdg-terminal -e "${kiloPath}"`, { detached: true });
-    return { success: true };
+    if (process.platform === 'linux' && !terms.some(t => {
+      try { require('child_process').execSync(`which ${t.cmd}`, { stdio: 'ignore' }); return true; }
+      catch(e) { return false; }
+    })) {
+      // No desktop terminal found - open web UI
+      shell.openExternal('http://localhost:17381/setup');
+      return { success: true };
+    }
   } catch (e) {
     return { error: 'No compatible terminal found. Run kilo manually in your terminal.' };
   }
+  
+  return { error: 'No compatible terminal found. Run kilo manually in your terminal.' }
 });
 
 ipcMain.handle('get-app-version', () => APP_VERSION);
