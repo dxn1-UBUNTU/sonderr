@@ -63,6 +63,7 @@ import { NudgeProvider } from "@/sonderr/cli/cmd/tui/context/nudge" // sonderr_c
 import { DialogAlert } from "./ui/dialog-alert"
 import { DialogConfirm } from "./ui/dialog-confirm"
 import { DialogHeadlessLink } from "@/sonderr/cli/cmd/tui/component/dialog-headless-link" // sonderr_change
+import { UsageChart, type SdkSessionLike } from "@/cli/cmd/chart/tui" // sonderr_change - /chart usage dashboard
 import { ToastProvider, useToast } from "./ui/toast"
 import { KVProvider, useKV } from "./context/kv"
 import * as Model from "./util/model"
@@ -790,6 +791,41 @@ function App(props: { onSnapshot?: () => Promise<string[]>; pluginHost: TuiPlugi
         },
         category: "System",
       },
+      // sonderr_change start - /chart opens a Chart.js usage dashboard in the browser
+      {
+        name: "stats.chart",
+        title: "Open usage charts",
+        desc: "Build a cost/token dashboard from your sessions and open it in your browser",
+        category: "System",
+        slashName: "chart",
+        slashAliases: ["charts", "graph", "usage"],
+        run: async () => {
+          try {
+            const response = await sdk.client.session.list({ limit: 5000 })
+            const sessions = ((response as { data?: unknown }).data ?? []) as SdkSessionLike[]
+            const { file, data } = await UsageChart.write(sessions)
+            const opened = await UsageChart.openBrowser(file)
+            if (!opened) {
+              DialogHeadlessLink.show(dialog, file, "Usage charts written to:")
+              return
+            }
+            toast.show({
+              title: "Usage charts",
+              message: `${file} · ${data.totals.sessions} sessions`,
+              variant: "info",
+              duration: 5000,
+            })
+            dialog.clear()
+          } catch (error) {
+            toast.show({
+              title: "Usage charts failed",
+              message: error instanceof Error ? error.message : String(error),
+              variant: "error",
+            })
+          }
+        },
+      },
+      // sonderr_change end
       {
         name: "sonderr.debug",
         title: "View debug info",

@@ -15,6 +15,7 @@ import { UninstallCommand } from "../cli/cmd/uninstall"
 import { ServeCommand } from "../cli/cmd/serve"
 import { ModelsCommand } from "../cli/cmd/models"
 import { StatsCommand } from "../cli/cmd/stats"
+import { ChartCommand } from "../cli/cmd/chart" // sonderr_change
 import { ExportCommand } from "../cli/cmd/export"
 import { ImportCommand } from "../cli/cmd/import"
 import { GithubCommand } from "../cli/cmd/github"
@@ -64,6 +65,7 @@ export const commands = [
   RollCallCommand,
   ProfileCommand,
   StatsCommand,
+  ChartCommand, // sonderr_change
   ExportCommand,
   ImportCommand,
   GithubCommand,

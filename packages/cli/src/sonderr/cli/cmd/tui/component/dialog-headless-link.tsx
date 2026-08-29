@@ -7,6 +7,7 @@ import { useBindings } from "@tui/keymap"
 
 export type DialogHeadlessLinkProps = {
   url: string
+  label?: string // sonderr_change - the chart command reuses this dialog for file paths
 }
 
 export function DialogHeadlessLink(props: DialogHeadlessLinkProps) {
@@ -30,13 +31,13 @@ export function DialogHeadlessLink(props: DialogHeadlessLinkProps) {
         </text>
       </box>
       <box paddingBottom={1} flexDirection="column" gap={0}>
-        <text fg={theme.textMuted}>Read the docs at:</text>
+        <text fg={theme.textMuted}>{props.label ?? "Read the docs at:"}</text>
         <text fg={theme.accent}>{props.url}</text>
       </box>
     </box>
   )
 }
 
-DialogHeadlessLink.show = (dialog: DialogContext, url: string) => {
-  dialog.replace(() => <DialogHeadlessLink url={url} />)
+DialogHeadlessLink.show = (dialog: DialogContext, url: string, label?: string) => {
+  dialog.replace(() => <DialogHeadlessLink url={url} label={label} />) // sonderr_change - optional label
 }

@@ -32,6 +32,7 @@ import {
   ServeCommand,
   SessionCommand,
   StatsCommand,
+  ChartCommand,
   UninstallCommand,
   UpgradeCommand,
   waitForLazyCommands,
@@ -114,6 +115,7 @@ let cli = yargs(args) // sonderr_change
   // sonderr_change - upstream web command intentionally omitted
   .command(ModelsCommand)
   .command(StatsCommand)
+  .command(ChartCommand) // sonderr_change - usage dashboard in the browser
   .command(ExportCommand)
   .command(ImportCommand)
   .command(GithubCommand)

@@ -6,6 +6,7 @@ import { Database } from "@sonderr/core/database/database"
 import { SessionTable } from "@sonderr/core/session/sql"
 import { Project } from "@/project/project"
 import { InstanceRef } from "@/effect/instance-ref"
+import { toMs } from "./chart/data" // sonderr_change - effect DateTime objects coerce to NaN with relational operators
 
 interface SessionStats {
   totalSessions: number
@@ -112,7 +113,8 @@ export const aggregateSessionStats = Effect.fn("Cli.stats.aggregate")(function* 
     return days
   })()
 
-  let filteredSessions = cutoffTime > 0 ? sessions.filter((session) => session.time.updated >= cutoffTime) : sessions
+  // sonderr_change - session.time.updated is an effect DateTime; `>=` against a number is always false
+  let filteredSessions = cutoffTime > 0 ? sessions.filter((session) => toMs(session.time.updated) >= cutoffTime) : sessions
 
   if (projectFilter !== undefined) {
     if (projectFilter === "") {
@@ -240,8 +242,8 @@ export const aggregateSessionStats = Effect.fn("Cli.stats.aggregate")(function* 
             sessionTokens.cache.write,
           sessionToolUsage,
           sessionModelUsage,
-          earliestTime: cutoffTime > 0 ? session.time.updated : session.time.created,
-          latestTime: session.time.updated,
+          earliestTime: cutoffTime > 0 ? toMs(session.time.updated) : toMs(session.time.created), // sonderr_change
+          latestTime: toMs(session.time.updated), // sonderr_change
         }
       }),
     { concurrency: 20 },

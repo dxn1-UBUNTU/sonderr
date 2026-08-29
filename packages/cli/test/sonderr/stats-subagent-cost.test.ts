@@ -124,4 +124,21 @@ describe("stats subagent cost", () => {
       }),
     { git: true },
   )
+
+  // sonderr_change start - regression: `--days` used to compare an effect DateTime with
+  // `>=` against a number, which is always false, so any days filter returned zero sessions
+  it.instance(
+    "stats --days includes sessions updated inside the window",
+    () =>
+      Effect.gen(function* () {
+        const svc = yield* Session.Service
+        yield* svc.create({ title: "recent" })
+        const stats = yield* aggregateSessionStats(1)
+        expect(stats.totalSessions).toBe(1)
+        expect(stats.days).toBe(1)
+        expect(Number.isNaN(stats.costPerDay)).toBe(false)
+      }),
+    { git: true },
+  )
+  // sonderr_change end
 })

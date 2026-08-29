@@ -138,6 +138,12 @@ export const StatsCommand = lazy({
   load: async () => (await import("@/cli/cmd/stats")).StatsCommand,
 })
 
+export const ChartCommand = lazy({
+  command: "chart",
+  describe: "render usage charts (cost, tokens, models, tools) and open them in your browser",
+  load: async () => (await import("@/cli/cmd/chart")).ChartCommand,
+})
+
 export const ExportCommand = lazy({
   command: "export [sessionID]",
   describe: "export session data as JSON",
