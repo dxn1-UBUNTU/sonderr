@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import { createEffect, createMemo, createSignal, Show } from "solid-js"
 import { type KeyEvent, type RGBA, type TextareaRenderable } from "@opentui/core"
 import type { JSX } from "@opentui/solid"

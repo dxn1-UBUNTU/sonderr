@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 /**
  * SonderrClaw chat panel
  *

@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 /**
  * Sonderr-specific overrides for the provider dialog.
  *

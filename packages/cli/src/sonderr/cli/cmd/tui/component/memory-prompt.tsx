@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { SonderrClient } from "@sonderr/sdk/v2"
 import open from "open"
 import type { DialogContext } from "@tui/ui/dialog"

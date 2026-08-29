@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 /**
  * Reactive TUI config provider with hot reload.
  *

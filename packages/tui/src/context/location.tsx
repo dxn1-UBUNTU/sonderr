@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { LocationRef } from "@sonderr/sdk/v2"
 import { createContext, useContext, type Accessor, type ParentProps } from "solid-js"
 

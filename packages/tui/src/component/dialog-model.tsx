@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import { useTerminalDimensions } from "@opentui/solid" // sonderr_change
 import { createEffect, createMemo, createSignal, Show } from "solid-js" // sonderr_change
 import { useLocal } from "../context/local"

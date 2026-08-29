@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 /**
  * Sonderr Gateway Profile Dialog
  *

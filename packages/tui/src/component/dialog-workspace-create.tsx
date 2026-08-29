@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { ExperimentalWorkspaceAdapterListResponse, Workspace } from "@sonderr/sdk/v2"
 import { useDialog } from "../ui/dialog"
 import { DialogSelect, type DialogSelectOption } from "../ui/dialog-select"

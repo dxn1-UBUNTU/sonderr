@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 // sonderr_change - new file
 import { TextAttributes } from "@opentui/core"
 import { useTheme } from "@tui/context/theme"

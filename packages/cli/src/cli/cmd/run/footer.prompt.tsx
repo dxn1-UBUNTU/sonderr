@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 // Prompt composer and its state machine for direct interactive mode.
 //
 // createPromptState() wires keymap command layers, history navigation, and

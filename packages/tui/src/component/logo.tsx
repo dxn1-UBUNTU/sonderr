@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import { SonderrLogo } from "./sonderr-logo" // sonderr_change
 
 export function Logo() {

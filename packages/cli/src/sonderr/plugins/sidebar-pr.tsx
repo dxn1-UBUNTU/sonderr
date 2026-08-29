@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 // sonderr_change - new file
 import type { TuiPlugin, TuiPluginApi, TuiPluginModule } from "@sonderr/plugin/tui"
 import { createMemo, createResource, Show } from "solid-js"

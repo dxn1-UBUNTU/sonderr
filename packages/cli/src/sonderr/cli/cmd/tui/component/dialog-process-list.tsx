@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { BackgroundProcessInfo } from "@sonderr/sdk/v2"
 import { TextAttributes, type ScrollBoxRenderable } from "@opentui/core"
 import { useTerminalDimensions } from "@opentui/solid"

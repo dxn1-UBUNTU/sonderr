@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import { createSonderrClient } from "@sonderr/sdk/v2"
 import type { GlobalEvent } from "@sonderr/sdk/v2"
 import { Flag } from "@sonderr/core/flag/flag"

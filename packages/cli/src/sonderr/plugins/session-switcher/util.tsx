@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { Part } from "@sonderr/sdk/v2"
 import { Locale } from "@tui/util/locale"
 

@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { TuiPlugin, TuiPluginApi, TuiPluginModule } from "@sonderr/plugin/tui"
 import { RemoteIndicator } from "@/sonderr/remote-tui"
 

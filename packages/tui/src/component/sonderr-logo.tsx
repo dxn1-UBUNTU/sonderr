@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 // sonderr_change - new file
 import { RGBA } from "@opentui/core"
 import { For, type JSX } from "solid-js"

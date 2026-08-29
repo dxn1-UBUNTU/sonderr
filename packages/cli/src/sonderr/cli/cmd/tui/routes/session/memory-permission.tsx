@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { JSX } from "solid-js"
 import type { PermissionRequest } from "@sonderr/sdk/v2"
 

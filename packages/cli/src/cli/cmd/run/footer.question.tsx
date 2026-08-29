@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 // Question UI body for the direct-mode footer.
 //
 // Renders inside the footer when the reducer pushes a FooterView of type

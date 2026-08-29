@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 /**
  * Sonderr News Component
  *

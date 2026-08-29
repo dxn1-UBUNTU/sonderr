@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import { createContext, createMemo, Show, useContext } from "solid-js"
 import type { AssistantMessage, Part, Provider, StepFinishPart } from "@sonderr/sdk/v2"
 import { useTheme } from "@tui/context/theme"

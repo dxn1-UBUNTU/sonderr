@@ -73,6 +73,22 @@ describe("session.system", () => {
     )
   })
 
+  test("falls back to the full Sonderr fable prompt for older/unknown models", () => {
+    // sonderr_change - unknown model IDs (no provider pattern match) get sonderr-fable
+    expect(SystemPrompt.provider({ api: { id: "qwen/qwen-2.5-coder-32b" } } as Provider.Model)[0]).toContain(
+      "You are Sonderr",
+    )
+    expect(SystemPrompt.provider({ api: { id: "qwen/qwen-2.5-coder-32b" } } as Provider.Model)[0]).toContain(
+      "Prime directives",
+    )
+  })
+
+  test("selects the fable prompt for models with prompt: fable metadata", () => {
+    expect(SystemPrompt.provider({ api: { id: "some-model" }, prompt: "fable" } as unknown as Provider.Model)[0]).toContain(
+      "You are Sonderr",
+    )
+  })
+
   it.effect("skills output is sorted by name and stable across calls", () =>
     Effect.gen(function* () {
       const prompt = yield* SystemPrompt.Service

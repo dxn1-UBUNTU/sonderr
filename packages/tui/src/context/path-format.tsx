@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import path from "path"
 import { abbreviateHome } from "../runtime"
 import { useLocation } from "./location"

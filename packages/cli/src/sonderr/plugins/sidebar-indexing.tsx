@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { TuiPlugin, TuiPluginApi, TuiPluginModule } from "@sonderr/plugin/tui"
 import { createEffect, createMemo, createSignal, onCleanup, onMount, Show } from "solid-js"
 import type { IndexingStatus, IndexingStatusState } from "@sonderr/sonderr-indexing/status"

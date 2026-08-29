@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import { createResource, Show, createMemo, createSignal, onCleanup, onMount, type Accessor, type JSX } from "solid-js"
 import { TextAttributes } from "@opentui/core"
 import { useTerminalDimensions } from "@opentui/solid"

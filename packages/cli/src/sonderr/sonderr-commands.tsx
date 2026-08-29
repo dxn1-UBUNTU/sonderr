@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 /**
  * Sonderr Gateway Commands for TUI
  *

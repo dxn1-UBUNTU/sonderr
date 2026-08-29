@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 /**
  * SonderrClaw full-screen view
  *

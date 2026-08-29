@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import { TextAttributes } from "@opentui/core"
 import { useKeyboard } from "@opentui/solid"
 import type { ProviderUsage, ProviderUsageSnapshot } from "@sonderr/sdk/v2"

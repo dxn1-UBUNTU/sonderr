@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { TuiPlugin, TuiPluginApi, TuiPluginModule, TuiSidebarBackgroundProcessItem } from "@sonderr/plugin/tui"
 import { createMemo, createSignal, For, Show } from "solid-js"
 

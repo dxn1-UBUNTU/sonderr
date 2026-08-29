@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 // sonderr_change - new file: soft max-cost nudge wiring for the TUI
 import { MaxCostNudge, type MaxCostChoice, type MaxCostMessage } from "@sonderr/core/sonderr/cost/max-cost-nudge"
 import { useSync } from "@tui/context/sync"

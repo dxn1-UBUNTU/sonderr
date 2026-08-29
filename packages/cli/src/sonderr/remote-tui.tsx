@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 /**
  * Remote Session Relay TUI indicator
  *

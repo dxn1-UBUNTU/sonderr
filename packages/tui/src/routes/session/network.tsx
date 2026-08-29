@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 // sonderr_change - new file
 /** @jsxImportSource @opentui/solid */
 import { Show, createEffect, createSignal, onCleanup } from "solid-js"

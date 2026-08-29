@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { TuiPlugin, TuiPluginModule } from "@sonderr/plugin/tui"
 
 const id = "internal:reload"

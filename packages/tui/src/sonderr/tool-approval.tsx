@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { RGBA } from "@opentui/core"
 import { Show } from "solid-js"
 import type { PermissionProvenance } from "@/sonderr/permission/provenance"

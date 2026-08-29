@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { AssistantMessage } from "@sonderr/sdk/v2"
 import type { TuiPlugin, TuiPluginApi } from "@sonderr/plugin/tui"
 import type { BuiltinTuiPlugin } from "../builtins"

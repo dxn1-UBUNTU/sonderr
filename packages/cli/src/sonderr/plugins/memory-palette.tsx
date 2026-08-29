@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { TuiPlugin } from "@sonderr/plugin/tui"
 import type { InternalTuiPlugin } from "@/plugin/tui/internal"
 import { DialogMemoryHelp } from "@/sonderr/cli/cmd/tui/component/dialog-memory"

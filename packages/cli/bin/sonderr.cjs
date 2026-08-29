@@ -88,7 +88,7 @@ function findSource(startDir) {
     const entry = path.join(current, "src", "index.ts")
     if (fs.existsSync(manifest) && fs.existsSync(entry)) {
       try {
-        if (JSON.parse(fs.readFileSync(manifest, "utf8")).name === "@sonderr/cli") return entry
+        if (JSON.parse(fs.readFileSync(manifest, "utf8")).name === "@sonderr/cli") return current
       } catch {
         // unreadable manifest - keep walking
       }
@@ -101,11 +101,29 @@ function findSource(startDir) {
   }
 }
 
-function runSource(bun, entry) {
+function runSource(bun, packageDir) {
+  // Spawn from the CLI package directory so Bun's module resolution and tsconfig
+  // handling are identical for every launch directory, and pass the user's real
+  // directory via SONDERR_DEV_CWD (the same wrapper contract sonderr-dev uses)
+  // so the TUI opens the project the user actually ran `sonderr` in.
+  const entry = path.join(packageDir, "src", "index.ts")
+  const userCwd = fs.realpathSync(process.cwd())
+  const spawnCwd = fs.realpathSync(packageDir)
+  const env = { ...process.env }
+  if (userCwd !== spawnCwd) {
+    // Same wrapper contract as sonderr-dev: run from the checkout, but keep the
+    // user's directory as the project via SONDERR_DEV_CWD. PWD is updated to
+    // match the spawn cwd so "stale PWD" guards inside the app stay consistent.
+    if (env.SONDERR_DEV_CWD === undefined) env.SONDERR_DEV_CWD = userCwd
+    env.PWD = spawnCwd
+  }
+
   const child = (() => {
     try {
       return childProcess.spawn(bun, ["run", "--conditions=browser", entry, ...process.argv.slice(2)], {
         stdio: "inherit",
+        cwd: spawnCwd,
+        env,
       })
     } catch (error) {
       console.error(error.message)
@@ -287,10 +305,10 @@ function ensureDeps(bun, workspaceRoot) {
     }
   }
   console.error("[sonderr] syncing dependencies with bun install...")
-  let result = childProcess.spawnSync(bun, ["install", "--frozen-lockfile"], { cwd: workspaceRoot, stdio: "inherit" })
+  let result = childProcess.spawnSync(bun, ["install", "--frozen-lockfile", "--linker=hoisted"], { cwd: workspaceRoot, stdio: "inherit" })
   if (result.status !== 0) {
     console.error("[sonderr] lockfile out of date - updating...")
-    result = childProcess.spawnSync(bun, ["install"], { cwd: workspaceRoot, stdio: "inherit" })
+    result = childProcess.spawnSync(bun, ["install", "--linker=hoisted"], { cwd: workspaceRoot, stdio: "inherit" })
     if (result.status !== 0) {
       console.error("[sonderr] bun install failed - if the lockfile needs a newer Bun, run: bun upgrade")
       process.exit(result.status === null ? 1 : result.status)
@@ -305,6 +323,48 @@ function ensureDeps(bun, workspaceRoot) {
     fs.writeFileSync(stampPath, settled)
   } catch {
     // stamp is best-effort
+  }
+}
+
+// sonderr_change start - keep the checkout fresh: git pull before the toolchain dance
+function gitRoot(startDir) {
+  let current = startDir
+  for (;;) {
+    if (fs.existsSync(path.join(current, ".git"))) return current
+    const parent = path.dirname(current)
+    if (parent === current) {
+      return
+    }
+    current = parent
+  }
+}
+
+function updateSource(startDir) {
+  if (process.env.SONDERR_NO_UPDATE || process.env.SONDERR_NO_BOOTSTRAP) return
+  const root = gitRoot(startDir)
+  if (!root) return
+  try {
+    if (childProcess.spawnSync("git", ["--version"], { stdio: "ignore" }).status !== 0) return
+  } catch {
+    return
+  }
+  console.error("[sonderr] updating Sonderr (git pull)...")
+  const result = childProcess.spawnSync(
+    "git",
+    ["pull", "--ff-only", "--autostash"],
+    {
+      cwd: root,
+      stdio: "inherit",
+      timeout: 120000,
+      env: {
+        ...process.env,
+        GIT_TERMINAL_PROMPT: "0",
+        GIT_SSH_COMMAND: "ssh -oBatchMode=yes",
+      },
+    },
+  )
+  if (result.status !== 0) {
+    console.error("[sonderr] git pull failed (offline, diverged, or auth required) - continuing with the local checkout")
   }
 }
 // sonderr_change end
@@ -467,6 +527,11 @@ if (resolved) {
     process.exit(1)
   }
 
+  const workspaceRoot = findWorkspaceRoot(path.dirname(source))
+
+  // sonderr_change start - full one-shot launch: git pull, bun, deps, then the TUI
+  updateSource(path.dirname(source))
+
   let bun = findBun()
   if (!bun && process.env.SONDERR_NO_BOOTSTRAP) {
     console.error("[sonderr] SONDERR_NO_BOOTSTRAP is set but Bun was not found. Install it from https://bun.sh")
@@ -480,7 +545,7 @@ if (resolved) {
     process.exit(1)
   }
 
-  ensureDeps(bun, findWorkspaceRoot(path.dirname(source)))
+  ensureDeps(bun, workspaceRoot)
 
   runSource(bun, source)
   // sonderr_change end

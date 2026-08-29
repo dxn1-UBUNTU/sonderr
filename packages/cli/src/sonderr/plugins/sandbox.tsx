@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { TuiPlugin, TuiPluginApi, TuiPluginModule } from "@sonderr/plugin/tui"
 import { createEffect, createSignal, on, type Accessor } from "solid-js"
 

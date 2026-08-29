@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import { For } from "solid-js"
 import { DEFAULT_THEMES, useTheme } from "@tui/context/theme"
 

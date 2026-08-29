@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 /**
  * Conversation selector for the SonderrClaw chat.
  *

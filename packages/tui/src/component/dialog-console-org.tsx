@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import { createResource, createMemo, createSignal } from "solid-js"
 import { TextAttributes } from "@opentui/core"
 import { DialogSelect } from "../ui/dialog-select"

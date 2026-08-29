@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import { useEvent } from "@tui/context/event"
 import type {
   Event,

@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { TuiPlugin, TuiPluginApi, TuiPluginModule } from "@sonderr/plugin/tui"
 import { createMemo, createSignal, onCleanup, onMount, Show } from "solid-js"
 import { Global } from "@sonderr/core/global"

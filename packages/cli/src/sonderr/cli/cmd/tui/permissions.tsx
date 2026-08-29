@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { PermissionRequest } from "@sonderr/sdk/v2"
 import { useTheme } from "@tui/context/theme"
 import { MemoryPermissionRegistry } from "@/sonderr/cli/cmd/tui/routes/session/memory-permission"

@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import { createStore } from "solid-js/store"
 import { useArgs } from "./args"
 import { createSimpleContext } from "./helper"

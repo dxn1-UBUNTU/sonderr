@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { TuiPlugin, TuiPluginApi } from "@sonderr/plugin/tui"
 import type { InternalTuiPlugin } from "@/plugin/tui/internal"
 import { SyncProviderV2, useSyncV2 } from "./sync-v2"

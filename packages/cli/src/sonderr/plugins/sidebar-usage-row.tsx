@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { RGBA } from "@opentui/core"
 
 export function UsageRow(props: { label: string; value: string; color: RGBA }) {

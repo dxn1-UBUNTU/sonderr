@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 // sonderr_change - new file
 import { TextAttributes, decodePasteBytes, type MouseEvent, type PasteEvent } from "@opentui/core"
 import { useKeyboard, usePaste, useRenderer, useTerminalDimensions } from "@opentui/solid"

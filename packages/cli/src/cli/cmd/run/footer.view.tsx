@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 // Footer layout
 //
 // Renders the footer region as a compact vertical stack:

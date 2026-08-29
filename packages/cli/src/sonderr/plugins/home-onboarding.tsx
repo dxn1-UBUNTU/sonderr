@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import type { TuiPlugin, TuiPluginModule } from "@sonderr/plugin/tui"
 import { createMemo, Show } from "solid-js"
 import { Tips } from "@/sonderr/components/tips"

@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import { MemoryTuiEvents } from "@/sonderr/cli/cmd/tui/memory-events"
 
 export namespace MemorySessionTui {
