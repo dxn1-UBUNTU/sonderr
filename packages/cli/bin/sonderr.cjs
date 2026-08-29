@@ -101,8 +101,7 @@ function findSource(startDir) {
   }
 }
 
-function runSource(entry) {
-  const bun = process.env.SONDERR_BUN_PATH || "bun"
+function runSource(bun, entry) {
   const child = (() => {
     try {
       return childProcess.spawn(bun, ["run", "--conditions=browser", entry, ...process.argv.slice(2)], {
@@ -122,9 +121,9 @@ function runSource(entry) {
     }
   }
 
-  child.on("error", () => {
+  child.on("error", (error) => {
     clear()
-    console.error("Sonderr found its source tree but Bun is not available to run it. Install Bun first: https://bun.sh")
+    console.error(`[sonderr] failed to launch Bun (${error.message}). Install it manually: https://bun.sh`)
     process.exit(1)
   })
 
@@ -149,6 +148,164 @@ function runSource(entry) {
 
     process.exit(typeof code === "number" ? code : 0)
   })
+}
+// sonderr_change end
+
+// sonderr_change start - source bootstrap: locate/download Bun + install workspace deps
+function bunVersion(bun) {
+  const probe = childProcess.spawnSync(bun, ["--version"], { encoding: "utf8" })
+  return probe.status === 0 ? (probe.stdout || "").trim() : undefined
+}
+
+function bunBin() {
+  return process.platform === "win32" ? "bun.exe" : "bun"
+}
+
+// The official installer targets the passwd home (not $HOME) unless BUN_INSTALL
+// is set, so probe every plausible location before deciding Bun is missing.
+function bunCandidates() {
+  const candidates = []
+  if (process.env.BUN_INSTALL) candidates.push(path.join(process.env.BUN_INSTALL, "bin", bunBin()))
+  candidates.push(path.join(os.homedir(), ".bun", "bin", bunBin()))
+  if (process.platform !== "win32") {
+    try {
+      const passwdHome = childProcess
+        .spawnSync("/bin/bash", ["-c", 'eval echo "~$(id -un)"'], { encoding: "utf8" })
+        .stdout?.trim()
+      if (passwdHome) candidates.push(path.join(passwdHome, ".bun", "bin", bunBin()))
+    } catch {
+      // passwd lookup unavailable - skip
+    }
+  }
+  return [...new Set(candidates)]
+}
+
+function findBun() {
+  const override = process.env.SONDERR_BUN_PATH
+  if (override && fs.existsSync(override)) return override
+  if (bunVersion("bun")) return "bun"
+  for (const candidate of bunCandidates()) {
+    if (fs.existsSync(candidate) && bunVersion(candidate)) return candidate
+  }
+}
+
+function installBun() {
+  console.error("[sonderr] Bun not found - downloading the official installer...")
+  if (platform === "windows") {
+    const script = 'irm bun.sh/install.ps1 | iex'
+    for (const exe of ["powershell.exe", "pwsh.exe", "pwsh", "powershell"]) {
+      try {
+        const result = childProcess.spawnSync(exe, ["-NoProfile", "-NonInteractive", "-Command", script], {
+          stdio: "inherit",
+          timeout: 300000,
+        })
+        if (result.status === 0) break
+      } catch {
+        continue
+      }
+    }
+  } else {
+    const oneLiner = (() => {
+      try {
+        if (childProcess.spawnSync("curl", ["--version"], { stdio: "ignore" }).status === 0) {
+          return "curl -fsSL https://bun.sh/install | bash"
+        }
+      } catch {}
+      try {
+        if (childProcess.spawnSync("wget", ["--version"], { stdio: "ignore" }).status === 0) {
+          return "wget -qO- https://bun.sh/install | bash"
+        }
+      } catch {}
+    })()
+    if (!oneLiner) {
+      console.error("[sonderr] neither curl nor wget is available - cannot download Bun automatically")
+      return
+    }
+    const shell = fs.existsSync("/bin/bash") ? "/bin/bash" : "sh"
+    const result = childProcess.spawnSync(shell, ["-c", oneLiner], { stdio: "inherit", timeout: 300000 })
+    if (result.status !== 0) {
+      console.error("[sonderr] the Bun installer failed - install it manually: https://bun.sh")
+      return
+    }
+  }
+  for (const candidate of bunCandidates()) {
+    if (fs.existsSync(candidate) && bunVersion(candidate)) {
+      console.error(`[sonderr] Bun ${bunVersion(candidate)} installed to ${candidate}`)
+      return candidate
+    }
+  }
+  console.error("[sonderr] Bun was installed but could not be found - restart your shell or set SONDERR_BUN_PATH")
+}
+
+function findWorkspaceRoot(startDir) {
+  let current = startDir
+  for (;;) {
+    if (fs.existsSync(path.join(current, "bun.lock")) || fs.existsSync(path.join(current, "bun.lockb"))) {
+      return current
+    }
+    const parent = path.dirname(current)
+    if (parent === current) {
+      return
+    }
+    current = parent
+  }
+}
+
+function depsFingerprint(workspaceRoot) {
+  const inputs = ["bun.lock", "bun.lockb", "package.json"]
+  try {
+    for (const name of fs.readdirSync(path.join(workspaceRoot, "packages"))) {
+      inputs.push(path.join("packages", name, "package.json"))
+    }
+  } catch {
+    // not a workspace checkout - root inputs only
+  }
+  const parts = []
+  for (const rel of inputs) {
+    try {
+      parts.push(rel + ":" + Math.round(fs.statSync(path.join(workspaceRoot, rel)).mtimeMs))
+    } catch {
+      // missing file - skip
+    }
+  }
+  return parts.join("|")
+}
+
+function ensureDeps(bun, workspaceRoot) {
+  if (!workspaceRoot) return
+  const modules = path.join(workspaceRoot, "node_modules")
+  if (!fs.existsSync(modules)) {
+    console.error("[sonderr] first run - installing dependencies (this can take a minute)...")
+  }
+  const stampPath = path.join(modules, ".sonderr-source-stamp")
+  const fingerprint = depsFingerprint(workspaceRoot)
+  if (fs.existsSync(stampPath)) {
+    try {
+      if (fs.readFileSync(stampPath, "utf8") === fingerprint) return
+    } catch {
+      // unreadable stamp - reinstall
+    }
+  }
+  console.error("[sonderr] syncing dependencies with bun install...")
+  let result = childProcess.spawnSync(bun, ["install", "--frozen-lockfile"], { cwd: workspaceRoot, stdio: "inherit" })
+  if (result.status !== 0) {
+    console.error("[sonderr] lockfile out of date - updating...")
+    result = childProcess.spawnSync(bun, ["install"], { cwd: workspaceRoot, stdio: "inherit" })
+    if (result.status !== 0) {
+      console.error("[sonderr] bun install failed - if the lockfile needs a newer Bun, run: bun upgrade")
+      process.exit(result.status === null ? 1 : result.status)
+    }
+    console.error("[sonderr] note: bun.lock was updated - commit it if your checkout tracks it")
+  }
+  // stamp with the post-install fingerprint - bun install may rewrite bun.lock,
+  // and a pre-install fingerprint would trigger a resync on every launch
+  const settled = depsFingerprint(workspaceRoot)
+  try {
+    fs.mkdirSync(modules, { recursive: true })
+    fs.writeFileSync(stampPath, settled)
+  } catch {
+    // stamp is best-effort
+  }
 }
 // sonderr_change end
 
@@ -299,7 +456,7 @@ const resolved = envPath || (fs.existsSync(cached) ? cached : findBinary(scriptD
 if (resolved) {
   run(resolved, resolved === cached ? findBinary(scriptDir) : undefined) // sonderr_change - preserve cached binary fallback
 } else {
-  // sonderr_change start - fall back to running the TypeScript source via Bun (dev checkouts)
+  // sonderr_change start - full source bootstrap: bun, workspace deps, then run
   const source = findSource(scriptDir)
   if (!source) {
     console.error(
@@ -309,6 +466,22 @@ if (resolved) {
     )
     process.exit(1)
   }
-  runSource(source)
+
+  let bun = findBun()
+  if (!bun && process.env.SONDERR_NO_BOOTSTRAP) {
+    console.error("[sonderr] SONDERR_NO_BOOTSTRAP is set but Bun was not found. Install it from https://bun.sh")
+    process.exit(1)
+  }
+  if (!bun) {
+    bun = installBun()
+  }
+  if (!bun) {
+    console.error("[sonderr] Bun is required to run Sonderr from source. Install it from https://bun.sh and re-run.")
+    process.exit(1)
+  }
+
+  ensureDeps(bun, findWorkspaceRoot(path.dirname(source)))
+
+  runSource(bun, source)
   // sonderr_change end
 }
