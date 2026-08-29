@@ -1,0 +1,12 @@
+package ai.sonderr.rpc.dto
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class SkillDto(
+    val name: String,
+    val description: String? = null,
+    val location: String,
+    val content: String? = null,
+    val editable: Boolean = false,
+)

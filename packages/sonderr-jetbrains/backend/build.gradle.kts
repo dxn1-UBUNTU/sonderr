@@ -19,15 +19,15 @@ kotlin {
 val generatedApi = layout.buildDirectory.dir("generated/openapi/src/main/kotlin")
 val rawSpec = layout.buildDirectory.file("generated/openapi-spec/openapi.raw.json")
 val generatedSpec = layout.buildDirectory.file("generated/openapi-spec/openapi.json")
-val generatedProps = layout.buildDirectory.dir("generated/kilo-props")
-val generatedCli = layout.buildDirectory.dir("generated/kilo-cli-res")
-val generatedChecksums = layout.buildDirectory.dir("generated/kilo-cli-checksums")
-val pinned = providers.gradleProperty("kilo.cli.pinned").map { it.trim().toBoolean() }.orElse(true)
+val generatedProps = layout.buildDirectory.dir("generated/sonderr-props")
+val generatedCli = layout.buildDirectory.dir("generated/sonderr-cli-res")
+val generatedChecksums = layout.buildDirectory.dir("generated/sonderr-cli-checksums")
+val pinned = providers.gradleProperty("sonderr.cli.pinned").map { it.trim().toBoolean() }.orElse(true)
 val repoCli = pinned.map { !it }
-val bundled = providers.gradleProperty("kilo.cli.bundled").map { it.trim().toBoolean() }.orElse(false)
+val bundled = providers.gradleProperty("sonderr.cli.bundled").map { it.trim().toBoolean() }.orElse(false)
 val downloadsCli = repoCli.zip(bundled) { repo, bundle -> !repo && !bundle }
-val repoRootDir = rootProject.layout.projectDirectory.dir("../opencode")
-val local = rootProject.layout.projectDirectory.file(".gradle/kilo-cli-pin.properties")
+val repoRootDir = rootProject.layout.projectDirectory.dir("../sonderr")
+val local = rootProject.layout.projectDirectory.file(".gradle/sonderr-cli-pin.properties")
 val bunPathProvider = providers.fileContents(local).asText.map { text ->
     text.lineSequence().firstNotNullOfOrNull { line ->
         val pair = line.split("=", limit = 2)
@@ -50,12 +50,12 @@ sourceSets {
 }
 
 if (repoCli.get() && bundled.get()) {
-    error("kilo.cli.bundled=true requires kilo.cli.pinned=true; do not combine release CLI bundling with local repo CLI mode.")
+    error("sonderr.cli.bundled=true requires sonderr.cli.pinned=true; do not combine release CLI bundling with local repo CLI mode.")
 }
 
-val writeKiloProperties by tasks.registering(WriteProperties::class) {
-    description = "Write pinned Kilo CLI properties"
-    val out = generatedProps.map { it.file("kilo.properties") }
+val writeSonderrProperties by tasks.registering(WriteProperties::class) {
+    description = "Write pinned Sonderr CLI properties"
+    val out = generatedProps.map { it.file("sonderr.properties") }
     destinationFile.set(out)
     property("cli.version", pinnedCliVersion)
     property("cli.pinned", pinned.map { it.toString() })
@@ -99,31 +99,31 @@ fun platform(): String {
 
 val stageRepoCli by tasks.registering(StageRepoCliTask::class) {
     description = "Stage the local repo CLI into backend resources"
-    val bin = repoRootDir.dir("dist/@kilocode/cli-${platform()}/bin")
+    val bin = repoRootDir.dir("dist/@sonderr/cli-${platform()}/bin")
     this.bin.set(bin)
-    archive.set(generatedCli.map { it.file("kilo-cli.zip") })
+    archive.set(generatedCli.map { it.file("sonderr-cli.zip") })
     outputs.upToDateWhen { false }
 }
 
 val stageBundledCli by tasks.registering(StageBundledCliTask::class) {
-    description = "Stage all pinned Kilo CLI release assets into backend resources"
+    description = "Stage all pinned Sonderr CLI release assets into backend resources"
     cliVersion.set(pinnedCliVersion)
     token.set(
         providers.environmentVariable("GH_TOKEN")
             .orElse(providers.environmentVariable("GITHUB_TOKEN"))
     )
     cacheDir.set(layout.buildDirectory.dir("cli-cache"))
-    archive.set(generatedCli.map { it.file("kilo-cli.zip") })
+    archive.set(generatedCli.map { it.file("sonderr-cli.zip") })
 }
 
 val writeCliChecksums by tasks.registering(WriteCliChecksumsTask::class) {
-    description = "Write pinned Kilo CLI checksums"
+    description = "Write pinned Sonderr CLI checksums"
     cliVersion.set(pinnedCliVersion)
     token.set(
         providers.environmentVariable("GH_TOKEN")
             .orElse(providers.environmentVariable("GITHUB_TOKEN"))
     )
-    checksums.set(generatedChecksums.map { it.file("kilo-cli-checksums.properties") })
+    checksums.set(generatedChecksums.map { it.file("sonderr-cli-checksums.properties") })
 }
 
 val normalizeOpenApiSpec by tasks.registering(NormalizeOpenApiSpecTask::class) {
@@ -138,9 +138,9 @@ openApiGenerate {
     library.set("jvm-okhttp4")
     inputSpec.set(generatedSpec.map { it.asFile.absolutePath })
     outputDir.set(layout.buildDirectory.dir("generated/openapi").get().asFile.absolutePath)
-    packageName.set("ai.kilocode.jetbrains.api")
-    apiPackage.set("ai.kilocode.jetbrains.api.client")
-    modelPackage.set("ai.kilocode.jetbrains.api.model")
+    packageName.set("ai.sonderr.jetbrains.api")
+    apiPackage.set("ai.sonderr.jetbrains.api.client")
+    modelPackage.set("ai.sonderr.jetbrains.api.model")
     configOptions.set(mapOf(
         "serializationLibrary" to "kotlinx_serialization",
         "omitGradleWrapper" to "true",
@@ -179,7 +179,7 @@ val fixGeneratedApi by tasks.registering(FixGeneratedApiTask::class) {
 }
 
 tasks.named("compileKotlin") {
-    dependsOn(fixGeneratedApi, writeKiloProperties)
+    dependsOn(fixGeneratedApi, writeSonderrProperties)
     if (downloadsCli.get()) dependsOn(writeCliChecksums)
     if (repoCli.get()) dependsOn(stageRepoCli)
     if (bundled.get()) dependsOn(stageBundledCli)
@@ -187,7 +187,7 @@ tasks.named("compileKotlin") {
 }
 
 tasks.named("processResources") {
-    dependsOn(writeKiloProperties)
+    dependsOn(writeSonderrProperties)
     if (downloadsCli.get()) dependsOn(writeCliChecksums)
     if (repoCli.get()) dependsOn(stageRepoCli)
     if (bundled.get()) dependsOn(stageBundledCli)

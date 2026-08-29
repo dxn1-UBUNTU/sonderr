@@ -23,7 +23,7 @@ abstract class StageRepoCliTask : DefaultTask() {
         if (!exe.isFile) {
             throw GradleException(
                 "Repo CLI binary not found at ${exe.absolutePath}. Run ./gradlew :backend:buildRepoCli " +
-                    "(or bun run script/build.ts --single --skip-install in packages/opencode) first."
+                    "(or bun run script/build.ts --single --skip-install in packages/cli) first."
             )
         }
 
@@ -42,7 +42,7 @@ abstract class StageRepoCliTask : DefaultTask() {
         }
     }
 
-    private fun exe() = if (System.getProperty("os.name").lowercase().contains("windows")) "kilo.exe" else "kilo"
+    private fun exe() = if (System.getProperty("os.name").lowercase().contains("windows")) "sonderr.exe" else "sonderr"
 
     private fun platform(): String {
         val os = System.getProperty("os.name").lowercase()

@@ -94,19 +94,19 @@ const DOCS = new Map<string, string[]>([
   [
     "chat--task-header-with-todos",
     [
-      "packages/kilo-docs/pages/code-with-ai/features/task-todo-list.md:/docs/img/screenshot-tests/kilo-vscode/visual-regression/chat/task-header-with-todos-chromium-linux.png",
+      "packages/sonderr-docs/pages/code-with-ai/features/task-todo-list.md:/docs/img/screenshot-tests/sonderr-vscode/visual-regression/chat/task-header-with-todos-chromium-linux.png",
     ],
   ],
   [
     "composite-webview--todo-write-docs-overview",
     [
-      "packages/kilo-docs/pages/code-with-ai/features/task-todo-list.md:/docs/img/screenshot-tests/kilo-vscode/visual-regression/composite-webview/todo-write-docs-overview-chromium-linux.png",
+      "packages/sonderr-docs/pages/code-with-ai/features/task-todo-list.md:/docs/img/screenshot-tests/sonderr-vscode/visual-regression/composite-webview/todo-write-docs-overview-chromium-linux.png",
     ],
   ],
   [
     "settings--agent-behaviour-workflows",
     [
-      "packages/kilo-docs/pages/customize/workflows.md:/docs/img/screenshot-tests/kilo-vscode/visual-regression/settings/agent-behaviour-workflows-chromium-linux.png",
+      "packages/sonderr-docs/pages/customize/workflows.md:/docs/img/screenshot-tests/sonderr-vscode/visual-regression/settings/agent-behaviour-workflows-chromium-linux.png",
     ],
   ],
 ])
@@ -127,7 +127,7 @@ for (const story of stories) {
     await page.setViewportSize({ width, height: 720 })
 
     await page.goto(
-      `/iframe.html?id=${story.id}&viewMode=story&globals=colorScheme:dark;theme:kilo-vscode;vscodeTheme:dark-modern`,
+      `/iframe.html?id=${story.id}&viewMode=story&globals=colorScheme:dark;theme:sonderr-vscode;vscodeTheme:dark-modern`,
       { waitUntil: "load" },
     )
     await disableAnimations(page)

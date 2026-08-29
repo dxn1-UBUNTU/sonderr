@@ -43,7 +43,7 @@ abstract class FixGeneratedApiTask : DefaultTask() {
     }
 
     private fun fixEmptyWrappers(root: File) {
-        val models = File(root, "ai/kilocode/jetbrains/api/model")
+        val models = File(root, "ai/sonderr/jetbrains/api/model")
         if (!models.isDirectory) return
 
         val empty = Regex("""\nclass \w+ \(\n\n\)""")
@@ -76,7 +76,7 @@ abstract class FixGeneratedApiTask : DefaultTask() {
      * them with `kotlinx.serialization.json.JsonElement`.
      */
     private fun fixAnyOfUnionWrappers(root: File) {
-        val models = File(root, "ai/kilocode/jetbrains/api/model")
+        val models = File(root, "ai/sonderr/jetbrains/api/model")
         if (!models.isDirectory) return
 
         val files = models.listFiles()?.filter { it.extension == "kt" } ?: return
@@ -119,12 +119,12 @@ abstract class FixGeneratedApiTask : DefaultTask() {
     }
 
     private fun fixJsonElementQueryParams(root: File) {
-        val api = File(root, "ai/kilocode/jetbrains/api/client/DefaultApi.kt")
+        val api = File(root, "ai/sonderr/jetbrains/api/client/DefaultApi.kt")
         if (!api.isFile) return
 
-        val models = File(root, "ai/kilocode/jetbrains/api/model")
+        val models = File(root, "ai/sonderr/jetbrains/api/model")
         val missing = mutableSetOf<String>()
-        val text = Regex("""import ai\.kilocode\.jetbrains\.api\.model\.(\w+Parameter)\n""")
+        val text = Regex("""import ai\.sonderr\.jetbrains\.api\.model\.(\w+Parameter)\n""")
             .replace(api.readText()) { m ->
                 val name = m.groupValues[1]
                 if (File(models, "$name.kt").isFile) return@replace m.value
@@ -146,10 +146,10 @@ abstract class FixGeneratedApiTask : DefaultTask() {
     }
 
     private fun fixMissingModels(root: File) {
-        val models = File(root, "ai/kilocode/jetbrains/api/model")
+        val models = File(root, "ai/sonderr/jetbrains/api/model")
         if (!models.isDirectory) return
 
-        val imports = Regex("""import ai\.kilocode\.jetbrains\.api\.model\.(\w+)\n""")
+        val imports = Regex("""import ai\.sonderr\.jetbrains\.api\.model\.(\w+)\n""")
         root.walkTopDown().filter { it.extension == "kt" }.forEach { file ->
             val missing = mutableSetOf<String>()
             val text = imports.replace(file.readText()) { m ->

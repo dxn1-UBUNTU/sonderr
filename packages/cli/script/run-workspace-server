@@ -1,20 +1,20 @@
 #!/usr/bin/env bun
 
-// This script runs a separate Kilo server to be used as a remote // kilocode_change
+// This script runs a separate Sonderr server to be used as a remote // sonderr_change
 // workspace, simulating a remote environment but all local to make
 // debugger easier
 //
 // *Important*: make sure you add the debug workspace plugin first.
-// In `.kilo/kilo.jsonc` in the root of this project add: // kilocode_change
+// In `.sonderr/sonderr.jsonc` in the root of this project add: // sonderr_change
 //
-// "plugin": ["../packages/opencode/src/control-plane/dev/debug-workspace-plugin.ts"]
+// "plugin": ["../packages/cli/src/control-plane/dev/debug-workspace-plugin.ts"]
 //
-// Afterwards, run `./packages/opencode/script/run-workspace-server`
+// Afterwards, run `./packages/cli/script/run-workspace-server`
 
 import { stat } from "node:fs/promises"
 import { setTimeout as sleep } from "node:timers/promises"
 
-const DEV_DATA_FILE = "/tmp/opencode-workspace-dev-data.json"
+const DEV_DATA_FILE = "/tmp/sonderr-workspace-dev-data.json"
 const RESTART_POLL_INTERVAL = 250
 
 async function readData() {

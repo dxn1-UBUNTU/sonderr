@@ -15,7 +15,7 @@ internal object OpenApiSpecNormalizer {
         //         camelCase equivalents so the spec remains self-consistent.
         // Step 2: Strip operation-level tags so all routes land in DefaultApi.
         // Step 3: Deduplicate the root-level tags array.
-        // Step 4: Fix nullable fields in the /kilo/profile response that Effect's
+        // Step 4: Fix nullable fields in the /sonderr/profile response that Effect's
         //         OpenAPI generator incorrectly emits as non-nullable.
         val (noDotsRoot, _) = remapDotSchemas(root)
         val stripped = stripTags(noDotsRoot)
@@ -105,8 +105,8 @@ internal object OpenApiSpecNormalizer {
     }
 
     /**
-     * Fix the `/kilo/profile` GET 200 response schema: Effect's OpenAPI generator
-     * emits `balance`, `kiloPass`, and `currentOrgId` as non-nullable required fields even
+     * Fix the `/sonderr/profile` GET 200 response schema: Effect's OpenAPI generator
+     * emits `balance`, `sonderrPass`, and `currentOrgId` as non-nullable required fields even
      * though the server schema is `Schema.NullOr(...)`.  Wrap each non-nullable
      * property in `anyOf: [<original-schema>, {"type": "null"}]` so the generated
      * Kotlin model uses a nullable type.  Already-nullable properties (those that
@@ -114,7 +114,7 @@ internal object OpenApiSpecNormalizer {
      */
     private fun fixProfileNullable(root: JsonObject): JsonObject {
         val paths = root["paths"] as? JsonObject ?: return root
-        val profileItem = paths["/kilo/profile"] as? JsonObject ?: return root
+        val profileItem = paths["/sonderr/profile"] as? JsonObject ?: return root
         val getOp = profileItem["get"] as? JsonObject ?: return root
         val schema = getOp["responses"]
             ?.let { it as? JsonObject }?.get("200")
@@ -124,13 +124,13 @@ internal object OpenApiSpecNormalizer {
             as? JsonObject ?: return root
         val props = schema["properties"] as? JsonObject ?: return root
 
-        val keys = setOf("balance", "kiloPass", "currentOrgId")
+        val keys = setOf("balance", "sonderrPass", "currentOrgId")
         val fixed = JsonObject(props.mapValues { (key, value) ->
             if (key !in keys) return@mapValues value
             val wrapped = nullable(value)
             when (key) {
                 "balance" -> nullableProps(wrapped, setOf("balance"))
-                "kiloPass" -> nullableProps(wrapped, setOf(
+                "sonderrPass" -> nullableProps(wrapped, setOf(
                     "currentPeriodBaseCreditsUsd",
                     "currentPeriodUsageUsd",
                     "currentPeriodBonusCreditsUsd",
@@ -151,7 +151,7 @@ internal object OpenApiSpecNormalizer {
         val newResponses = JsonObject(responses + mapOf("200" to new200))
         val newGet = JsonObject(getOp + mapOf("responses" to newResponses))
         val newProfile = JsonObject(profileItem + mapOf("get" to newGet))
-        val newPaths = JsonObject(paths + mapOf("/kilo/profile" to newProfile))
+        val newPaths = JsonObject(paths + mapOf("/sonderr/profile" to newProfile))
         return JsonObject(root + mapOf("paths" to newPaths))
     }
 

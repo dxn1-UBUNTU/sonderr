@@ -7,17 +7,17 @@ import org.jetbrains.intellij.platform.gradle.tasks.aware.SplitModeAware.PluginI
 import java.io.File
 import java.time.LocalDate
 
-group = "ai.kilocode.jetbrains"
+group = "ai.sonderr.jetbrains"
 
 fun port(value: String): Int {
     val text = value.trim()
     require(text.isNotEmpty()) {
-        "kilo.splitModeServerPort must be an integer from 0 to 65535; use 0 or omit it for a random port"
+        "sonderr.splitModeServerPort must be an integer from 0 to 65535; use 0 or omit it for a random port"
     }
     val n = text.toIntOrNull()
-        ?: error("kilo.splitModeServerPort must be an integer from 0 to 65535; use 0 or omit it for a random port")
+        ?: error("sonderr.splitModeServerPort must be an integer from 0 to 65535; use 0 or omit it for a random port")
     require(n in 0..65535) {
-        "kilo.splitModeServerPort must be an integer from 0 to 65535; use 0 or omit it for a random port"
+        "sonderr.splitModeServerPort must be an integer from 0 to 65535; use 0 or omit it for a random port"
     }
     return n
 }
@@ -83,22 +83,22 @@ fun gitTag(): String? {
 }
 
 val release = providers.gradleProperty("production").map { it.toBoolean() }.orElse(false).get()
-val pinned = providers.gradleProperty("kilo.cli.pinned").map { it.trim().toBoolean() }.orElse(true).get()
-val override = providers.gradleProperty("kilo.version").orNull?.trim()?.takeIf { it.isNotEmpty() }
-val prop = providers.gradleProperty("kilo.jetbrains.version").orNull?.trim()?.takeIf { it.isNotEmpty() }
+val pinned = providers.gradleProperty("sonderr.cli.pinned").map { it.trim().toBoolean() }.orElse(true).get()
+val override = providers.gradleProperty("sonderr.version").orNull?.trim()?.takeIf { it.isNotEmpty() }
+val prop = providers.gradleProperty("sonderr.jetbrains.version").orNull?.trim()?.takeIf { it.isNotEmpty() }
 val tag = gitTag()?.removePrefix("jetbrains/v")
 val ver = override?.let(::checked) ?: prop?.let(::checked) ?: if (release) checked(
-    tag ?: error("Missing JetBrains plugin version. Publish builds must set kilo.jetbrains.version or run from a jetbrains/v<version> tag."),
+    tag ?: error("Missing JetBrains plugin version. Publish builds must set sonderr.jetbrains.version or run from a jetbrains/v<version> tag."),
 ) else checked(tag ?: "0.0.0-dev")
 
 if (release && !pinned) error(
-    "kilo.cli.pinned=false is a dev-only mode and cannot be released. Set kilo.cli.pinned=true before a production/publish build."
+    "sonderr.cli.pinned=false is a dev-only mode and cannot be released. Set sonderr.cli.pinned=true before a production/publish build."
 )
 
-val channel = providers.gradleProperty("kilo.channel").map { it.trim() }.orElse("default")
-val splitPort = providers.gradleProperty("kilo.splitModeServerPort").map(::port).orElse(0)
-val isolated = providers.gradleProperty("kilo.dev.storage.isolated").map { it.toBoolean() }.orElse(false)
-val worktreeRoot = providers.gradleProperty("kilo.dev.worktree.root").orElse(
+val channel = providers.gradleProperty("sonderr.channel").map { it.trim() }.orElse("default")
+val splitPort = providers.gradleProperty("sonderr.splitModeServerPort").map(::port).orElse(0)
+val isolated = providers.gradleProperty("sonderr.dev.storage.isolated").map { it.toBoolean() }.orElse(false)
+val worktreeRoot = providers.gradleProperty("sonderr.dev.worktree.root").orElse(
     providers.provider { rootProject.layout.projectDirectory.asFile.parentFile.parentFile.canonicalPath }
 )
 
@@ -144,12 +144,12 @@ changelog {
     header = provider { "[${version.get()}] - ${LocalDate.now()}" }
     unreleasedTerm = "[Unreleased]"
     keepUnreleasedSection = true
-    repositoryUrl = "https://github.com/Kilo-Org/kilocode"
+    repositoryUrl = "https://github.com/Sonderr-Org/sonderr"
     groups = listOf("Added", "Changed", "Fixed", "Removed", "Security")
     combinePreReleases = false
 }
 
-val notes = providers.gradleProperty("kilo.changeNotes").orElse(
+val notes = providers.gradleProperty("sonderr.changeNotes").orElse(
     provider {
         val versions = selected(ver).filter { changelog.has(it) }
         if (versions.isNotEmpty()) return@provider versions.joinToString("\n") { item ->
@@ -206,8 +206,8 @@ intellijPlatform {
     pluginInstallationTarget = PluginInstallationTarget.BOTH
 
     pluginConfiguration {
-        id = "ai.kilocode.jetbrains"
-        name = "Kilo Code"
+        id = "ai.sonderr.jetbrains"
+        name = "Sonderr"
         version = provider { ver }
         changeNotes = notes
 
@@ -216,7 +216,7 @@ intellijPlatform {
         }
 
         vendor {
-            name = "Kilo Code"
+            name = "Sonderr"
             url = "https://kilo.ai"
         }
     }
@@ -290,14 +290,14 @@ tasks.named<JavaExec>("runIde") {
 }
 
 tasks.withType<RunIdeTask> {
-    val level = providers.gradleProperty("kilo.dev.log.level").orNull ?: "DEBUG"
-    val content = providers.gradleProperty("kilo.dev.log.chat.content").orNull ?: "off"
-    val preview = providers.gradleProperty("kilo.dev.log.chat.preview.max").orNull ?: "160"
-    systemProperty("kilo.dev.log.level", level)
-    systemProperty("kilo.dev.log.chat.content", content)
-    systemProperty("kilo.dev.log.chat.preview.max", preview)
-    systemProperty("kilo.dev.storage.isolated", isolated.get().toString())
-    systemProperty("kilo.dev.worktree.root", worktreeRoot.get())
+    val level = providers.gradleProperty("sonderr.dev.log.level").orNull ?: "DEBUG"
+    val content = providers.gradleProperty("sonderr.dev.log.chat.content").orNull ?: "off"
+    val preview = providers.gradleProperty("sonderr.dev.log.chat.preview.max").orNull ?: "160"
+    systemProperty("sonderr.dev.log.level", level)
+    systemProperty("sonderr.dev.log.chat.content", content)
+    systemProperty("sonderr.dev.log.chat.preview.max", preview)
+    systemProperty("sonderr.dev.storage.isolated", isolated.get().toString())
+    systemProperty("sonderr.dev.worktree.root", worktreeRoot.get())
 }
 
 tasks.named<Delete>("clean") {

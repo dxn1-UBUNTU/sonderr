@@ -105,13 +105,13 @@ class OpenApiSpecNormalizerTest {
     }
 
     @Test
-    fun `makes nullable profile fields nullable in kilo profile response`() {
+    fun `makes nullable profile fields nullable in sonderr profile response`() {
         val raw = """
             {
               "paths": {
-                "/kilo/profile": {
+                "/sonderr/profile": {
                   "get": {
-                    "operationId": "kilo.profile",
+                    "operationId": "sonderr.profile",
                     "responses": {
                       "200": {
                         "content": {
@@ -121,10 +121,10 @@ class OpenApiSpecNormalizerTest {
                               "properties": {
                                 "profile": { "type": "object", "properties": { "email": { "type": "string" } }, "required": ["email"], "additionalProperties": false },
                                 "balance": { "type": "object", "properties": { "balance": { "type": "number" } }, "required": ["balance"], "additionalProperties": false },
-                                "kiloPass": { "type": "object", "properties": { "currentPeriodBaseCreditsUsd": { "type": "number" } }, "required": ["currentPeriodBaseCreditsUsd"], "additionalProperties": false },
+                                "sonderrPass": { "type": "object", "properties": { "currentPeriodBaseCreditsUsd": { "type": "number" } }, "required": ["currentPeriodBaseCreditsUsd"], "additionalProperties": false },
                                 "currentOrgId": { "type": "string" }
                               },
-                              "required": ["profile", "balance", "kiloPass", "currentOrgId"],
+                              "required": ["profile", "balance", "sonderrPass", "currentOrgId"],
                               "additionalProperties": false
                             }
                           }
@@ -138,7 +138,7 @@ class OpenApiSpecNormalizerTest {
         """.trimIndent()
 
         val root = obj(OpenApiSpecNormalizer.normalize(raw))
-        val schema = obj(obj(obj(obj(obj(obj(root["paths"])["/kilo/profile"])["get"])["responses"])["200"])["content"])
+        val schema = obj(obj(obj(obj(obj(obj(root["paths"])["/sonderr/profile"])["get"])["responses"])["200"])["content"])
         val props = obj(obj(obj(schema["application/json"])["schema"])["properties"])
 
         // balance must be anyOf [object, null]
@@ -155,18 +155,18 @@ class OpenApiSpecNormalizerTest {
         }
         assert("null" in balanceValueTypes) { "inner balance value should include null but got $balanceValueTypes" }
 
-        // kiloPass must be anyOf [object, null]
-        val pass = obj(props["kiloPass"])
+        // sonderrPass must be anyOf [object, null]
+        val pass = obj(props["sonderrPass"])
         val passAnyOf = arr(pass["anyOf"])
-        assertEquals(2, passAnyOf.size, "kiloPass should have anyOf with 2 entries")
+        assertEquals(2, passAnyOf.size, "sonderrPass should have anyOf with 2 entries")
         val passTypes = passAnyOf.map { (it as? JsonObject)?.get("type").let { t -> (t as? JsonPrimitive)?.content } }
-        assert("null" in passTypes) { "kiloPass anyOf should include null but got $passTypes" }
-        assert(passAnyOf.any { it is JsonObject && "properties" in it }) { "kiloPass anyOf should include the object schema" }
+        assert("null" in passTypes) { "sonderrPass anyOf should include null but got $passTypes" }
+        assert(passAnyOf.any { it is JsonObject && "properties" in it }) { "sonderrPass anyOf should include the object schema" }
         val passObject = passAnyOf.filterIsInstance<JsonObject>().first { "properties" in it }
         val passProps = obj(passObject["properties"])
         val base = obj(passProps["currentPeriodBaseCreditsUsd"])
         val baseTypes = arr(base["anyOf"]).map { (it as? JsonObject)?.get("type").let { t -> (t as? JsonPrimitive)?.content } }
-        assert("null" in baseTypes) { "inner kiloPass value should include null but got $baseTypes" }
+        assert("null" in baseTypes) { "inner sonderrPass value should include null but got $baseTypes" }
 
         // currentOrgId must be anyOf [string, null]
         val orgId = obj(props["currentOrgId"])
@@ -183,14 +183,14 @@ class OpenApiSpecNormalizerTest {
     }
 
     @Test
-    fun `leaves already-nullable fields unchanged in kilo profile response`() {
+    fun `leaves already-nullable fields unchanged in sonderr profile response`() {
         // If nullable fields already have anyOf (i.e. the spec was generated correctly), normalizer must not double-wrap them.
         val raw = """
             {
               "paths": {
-                "/kilo/profile": {
+                "/sonderr/profile": {
                   "get": {
-                    "operationId": "kilo.profile",
+                    "operationId": "sonderr.profile",
                     "responses": {
                       "200": {
                         "content": {
@@ -200,10 +200,10 @@ class OpenApiSpecNormalizerTest {
                               "properties": {
                                 "profile": { "type": "object", "properties": { "email": { "type": "string" } }, "required": ["email"], "additionalProperties": false },
                                 "balance": { "anyOf": [{ "type": "object", "properties": { "balance": { "type": "number" } }, "required": ["balance"], "additionalProperties": false }, { "type": "null" }] },
-                                "kiloPass": { "anyOf": [{ "type": "object", "properties": { "currentPeriodBaseCreditsUsd": { "type": "number" } }, "required": ["currentPeriodBaseCreditsUsd"], "additionalProperties": false }, { "type": "null" }] },
+                                "sonderrPass": { "anyOf": [{ "type": "object", "properties": { "currentPeriodBaseCreditsUsd": { "type": "number" } }, "required": ["currentPeriodBaseCreditsUsd"], "additionalProperties": false }, { "type": "null" }] },
                                 "currentOrgId": { "anyOf": [{ "type": "string" }, { "type": "null" }] }
                               },
-                              "required": ["profile", "balance", "kiloPass", "currentOrgId"],
+                              "required": ["profile", "balance", "sonderrPass", "currentOrgId"],
                               "additionalProperties": false
                             }
                           }
@@ -217,16 +217,16 @@ class OpenApiSpecNormalizerTest {
         """.trimIndent()
 
         val root = obj(OpenApiSpecNormalizer.normalize(raw))
-        val schema = obj(obj(obj(obj(obj(obj(root["paths"])["/kilo/profile"])["get"])["responses"])["200"])["content"])
+        val schema = obj(obj(obj(obj(obj(obj(root["paths"])["/sonderr/profile"])["get"])["responses"])["200"])["content"])
         val props = obj(obj(obj(schema["application/json"])["schema"])["properties"])
 
         // balance must still have exactly 2 anyOf entries (not wrapped again)
         val balance = obj(props["balance"])
         val balanceAnyOf = arr(balance["anyOf"])
         assertEquals(2, balanceAnyOf.size, "balance should still have exactly 2 anyOf entries, not be double-wrapped")
-        val pass = obj(props["kiloPass"])
+        val pass = obj(props["sonderrPass"])
         val passAnyOf = arr(pass["anyOf"])
-        assertEquals(2, passAnyOf.size, "kiloPass should still have exactly 2 anyOf entries, not be double-wrapped")
+        assertEquals(2, passAnyOf.size, "sonderrPass should still have exactly 2 anyOf entries, not be double-wrapped")
     }
 
     @Test

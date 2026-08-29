@@ -1,7 +1,7 @@
 // Bun Snapshot v1, https://bun.sh/docs/test/snapshots
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo acp --help 1`] = `
-"kilo acp
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr acp --help 1`] = `
+"sonderr acp
 
 start ACP (Agent Client Protocol) server
 
@@ -15,24 +15,24 @@ Options:
       --hostname     hostname to listen on                           [string] [default: "127.0.0.1"]
       --mdns         enable mDNS service discovery (defaults hostname to 0.0.0.0)
                                                                           [boolean] [default: false]
-      --mdns-domain  custom domain name for mDNS service (default: kilo.local)
-                                                                [string] [default: "kilo.local"]
+      --mdns-domain  custom domain name for mDNS service (default: sonderr.local)
+                                                                [string] [default: "sonderr.local"]
       --cors         additional domains to allow for CORS                      [array] [default: []]
       --cwd          working directory [string] [default: "<HOME>"]
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo mcp --help 1`] = `
-"kilo mcp
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr mcp --help 1`] = `
+"sonderr mcp
 
 manage MCP (Model Context Protocol) servers
 
 Commands:
-  kilo mcp add [name]     add an MCP server
-  kilo mcp list           list MCP servers and their status                        [aliases: ls]
-  kilo mcp auth [name]    authenticate with an OAuth-enabled MCP server
-  kilo mcp logout [name]  remove OAuth credentials for an MCP server
-  kilo mcp debug <name>   debug OAuth connection for an MCP server
+  sonderr mcp add [name]     add an MCP server
+  sonderr mcp list           list MCP servers and their status                        [aliases: ls]
+  sonderr mcp auth [name]    authenticate with an OAuth-enabled MCP server
+  sonderr mcp logout [name]  remove OAuth credentials for an MCP server
+  sonderr mcp debug <name>   debug OAuth connection for an MCP server
 
 Options:
   -h, --help        show help                                                              [boolean]
@@ -43,10 +43,10 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo attach --help 1`] = `
-"kilo attach <url>
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr attach --help 1`] = `
+"sonderr attach <url>
 
-attach to a running kilo server
+attach to a running sonderr server
 
 Positionals:
   url  http://localhost:4096                                                     [string] [required]
@@ -62,18 +62,18 @@ Options:
   -s, --session       session id to continue                                                [string]
       --fork          fork the session when continuing (use with --continue or --session)  [boolean]
       --cloud-fork    fetch session from cloud and continue locally (use with --session)   [boolean]
-  -p, --password      basic auth password (defaults to KILO_SERVER_PASSWORD)                [string]
-  -u, --username      basic auth username (defaults to KILO_SERVER_USERNAME or 'kilo')      [string]
+  -p, --password      basic auth password (defaults to SONDERR_SERVER_PASSWORD)                [string]
+  -u, --username      basic auth username (defaults to SONDERR_SERVER_USERNAME or 'sonderr')      [string]
       --mini          start the minimal interactive interface             [boolean] [default: false]
       --no-replay     disable mini session history replay on resume and after resize       [boolean]
       --replay-limit  cap visible mini replay to the newest N messages                      [number]
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo run --help 1`] = `
-"kilo run [message..]
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr run --help 1`] = `
+"sonderr run [message..]
 
-run kilo with a message
+run sonderr with a message
 
 Positionals:
   message  message to send                                                     [array] [default: []]
@@ -96,9 +96,9 @@ Options:
                                           [string] [choices: "default", "json"] [default: "default"]
   -f, --file         file(s) to attach to message                                            [array]
       --title        title for the session (uses truncated prompt if no value provided)     [string]
-      --attach       attach to a running kilo server (e.g., http://localhost:4096)          [string]
-  -p, --password     basic auth password (defaults to KILO_SERVER_PASSWORD)                 [string]
-  -u, --username     basic auth username (defaults to KILO_SERVER_USERNAME or 'kilo')       [string]
+      --attach       attach to a running sonderr server (e.g., http://localhost:4096)          [string]
+  -p, --password     basic auth password (defaults to SONDERR_SERVER_PASSWORD)                 [string]
+  -u, --username     basic auth username (defaults to SONDERR_SERVER_USERNAME or 'sonderr')       [string]
       --dir          directory to run in, path on remote server if attaching                [string]
       --port         port for the local server (defaults to random port if no value provided)
                                                                                             [number]
@@ -111,25 +111,25 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo debug --help 1`] = `
-"kilo debug
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr debug --help 1`] = `
+"sonderr debug
 
 debugging and troubleshooting tools
 
 Commands:
-  kilo debug config        show resolved configuration
-  kilo debug lsp           LSP debugging utilities
-  kilo debug rg            ripgrep debugging utilities
-  kilo debug file          file system debugging utilities
-  kilo debug scrap         list all known projects
-  kilo debug skill         list all available skills
-  kilo debug snapshot      snapshot debugging utilities
-  kilo debug startup       print startup timing
-  kilo debug agent <name>  show agent configuration details
-  kilo debug v2            debug v2 catalog and built-in plugins
-  kilo debug info          show debug information
-  kilo debug paths         show global paths (data, config, cache, state)
-  kilo debug wait          wait indefinitely (for debugging)
+  sonderr debug config        show resolved configuration
+  sonderr debug lsp           LSP debugging utilities
+  sonderr debug rg            ripgrep debugging utilities
+  sonderr debug file          file system debugging utilities
+  sonderr debug scrap         list all known projects
+  sonderr debug skill         list all available skills
+  sonderr debug snapshot      snapshot debugging utilities
+  sonderr debug startup       print startup timing
+  sonderr debug agent <name>  show agent configuration details
+  sonderr debug v2            debug v2 catalog and built-in plugins
+  sonderr debug info          show debug information
+  sonderr debug paths         show global paths (data, config, cache, state)
+  sonderr debug wait          wait indefinitely (for debugging)
 
 Options:
   -h, --help        show help                                                              [boolean]
@@ -140,15 +140,15 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo providers --help 1`] = `
-"kilo auth
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr providers --help 1`] = `
+"sonderr auth
 
 manage AI providers and credentials
 
 Commands:
-  kilo providers list               list providers and credentials                 [aliases: ls]
-  kilo providers login [url]        log in to a provider
-  kilo providers logout [provider]  log out from a configured provider
+  sonderr providers list               list providers and credentials                 [aliases: ls]
+  sonderr providers login [url]        log in to a provider
+  sonderr providers logout [provider]  log out from a configured provider
 
 Options:
   -h, --help        show help                                                              [boolean]
@@ -159,14 +159,14 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo agent --help 1`] = `
-"kilo agent
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr agent --help 1`] = `
+"sonderr agent
 
 manage agents
 
 Commands:
-  kilo agent create  create a new agent
-  kilo agent list    list all available agents
+  sonderr agent create  create a new agent
+  sonderr agent list    list all available agents
 
 Options:
   -h, --help        show help                                                              [boolean]
@@ -177,10 +177,10 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo upgrade --help 1`] = `
-"kilo upgrade [target]
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr upgrade --help 1`] = `
+"sonderr upgrade [target]
 
-upgrade kilo to the latest or a specific version
+upgrade sonderr to the latest or a specific version
 
 Positionals:
   target  version to upgrade to, for ex '0.1.48' or 'v0.1.48'                               [string]
@@ -196,10 +196,10 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo uninstall --help 1`] = `
-"kilo uninstall
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr uninstall --help 1`] = `
+"sonderr uninstall
 
-uninstall kilo and remove all related files
+uninstall sonderr and remove all related files
 
 Options:
   -h, --help         show help                                                             [boolean]
@@ -214,10 +214,10 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo serve --help 1`] = `
-"kilo serve
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr serve --help 1`] = `
+"sonderr serve
 
-starts a headless kilo server
+starts a headless sonderr server
 
 Options:
   -h, --help         show help                                                             [boolean]
@@ -229,14 +229,14 @@ Options:
       --hostname     hostname to listen on                           [string] [default: "127.0.0.1"]
       --mdns         enable mDNS service discovery (defaults hostname to 0.0.0.0)
                                                                           [boolean] [default: false]
-      --mdns-domain  custom domain name for mDNS service (default: kilo.local)
-                                                                [string] [default: "kilo.local"]
+      --mdns-domain  custom domain name for mDNS service (default: sonderr.local)
+                                                                [string] [default: "sonderr.local"]
       --cors         additional domains to allow for CORS                      [array] [default: []]
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo models --help 1`] = `
-"kilo models [provider]
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr models --help 1`] = `
+"sonderr models [provider]
 
 list all available models
 
@@ -254,8 +254,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo stats --help 1`] = `
-"kilo stats
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr stats --help 1`] = `
+"sonderr stats
 
 show token usage and cost statistics
 
@@ -273,8 +273,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo export --help 1`] = `
-"kilo export [sessionID]
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr export --help 1`] = `
+"sonderr export [sessionID]
 
 export session data as JSON
 
@@ -291,8 +291,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo import --help 1`] = `
-"kilo import <file>
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr import --help 1`] = `
+"sonderr import <file>
 
 import session data from JSON file or URL
 
@@ -308,14 +308,14 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo github --help 1`] = `
-"kilo github
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr github --help 1`] = `
+"sonderr github
 
 manage GitHub agent
 
 Commands:
-  kilo github install  install the GitHub agent
-  kilo github run      run the GitHub agent
+  sonderr github install  install the GitHub agent
+  sonderr github run      run the GitHub agent
 
 Options:
   -h, --help        show help                                                              [boolean]
@@ -326,16 +326,16 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo pr --help 1`] = `
-"kilo pr
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr pr --help 1`] = `
+"sonderr pr
 
 manage pull requests
 
 Commands:
-  kilo pr checkout <number>  fetch and checkout a GitHub PR branch, then run kilo
-  kilo pr link <url>         link the current worktree to a pull request
-  kilo pr unlink             clear the linked pull request
-  kilo pr status             show the linked pull request
+  sonderr pr checkout <number>  fetch and checkout a GitHub PR branch, then run sonderr
+  sonderr pr link <url>         link the current worktree to a pull request
+  sonderr pr unlink             clear the linked pull request
+  sonderr pr status             show the linked pull request
 
 Options:
   -h, --help        show help                                                              [boolean]
@@ -346,14 +346,14 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo session --help 1`] = `
-"kilo session
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr session --help 1`] = `
+"sonderr session
 
 manage sessions
 
 Commands:
-  kilo session list                list sessions
-  kilo session delete <sessionID>  delete a session
+  sonderr session list                list sessions
+  sonderr session delete <sessionID>  delete a session
 
 Options:
   -h, --help        show help                                                              [boolean]
@@ -364,8 +364,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo plugin --help 1`] = `
-"kilo plugin <module>
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr plugin --help 1`] = `
+"sonderr plugin <module>
 
 install plugin and update config
 
@@ -383,14 +383,14 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo db --help 1`] = `
-"kilo db
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr db --help 1`] = `
+"sonderr db
 
 database tools
 
 Commands:
-  kilo db [query]     open an interactive sqlite3 shell or run a query                     [default]
-  kilo db path        print the database path
+  sonderr db [query]     open an interactive sqlite3 shell or run a query                     [default]
+  sonderr db path        print the database path
 
 Positionals:
   query  SQL query to execute                                                               [string]
@@ -405,8 +405,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo mcp list --help 1`] = `
-"kilo mcp list
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr mcp list --help 1`] = `
+"sonderr mcp list
 
 list MCP servers and their status
 
@@ -419,8 +419,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo mcp add --help 1`] = `
-"kilo mcp add [name]
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr mcp add --help 1`] = `
+"sonderr mcp add [name]
 
 add an MCP server
 
@@ -439,13 +439,13 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo mcp auth --help 1`] = `
-"kilo mcp auth [name]
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr mcp auth --help 1`] = `
+"sonderr mcp auth [name]
 
 authenticate with an OAuth-enabled MCP server
 
 Commands:
-  kilo mcp auth list  list OAuth-capable MCP servers and their auth status         [aliases: ls]
+  sonderr mcp auth list  list OAuth-capable MCP servers and their auth status         [aliases: ls]
 
 Positionals:
   name  name of the MCP server                                                              [string]
@@ -459,8 +459,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo mcp logout --help 1`] = `
-"kilo mcp logout [name]
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr mcp logout --help 1`] = `
+"sonderr mcp logout [name]
 
 remove OAuth credentials for an MCP server
 
@@ -476,8 +476,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo providers list --help 1`] = `
-"kilo providers list
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr providers list --help 1`] = `
+"sonderr providers list
 
 list providers and credentials
 
@@ -490,13 +490,13 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo providers login --help 1`] = `
-"kilo providers login [url]
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr providers login --help 1`] = `
+"sonderr providers login [url]
 
 log in to a provider
 
 Positionals:
-  url  kilo auth provider                                                                   [string]
+  url  sonderr auth provider                                                                   [string]
 
 Options:
   -h, --help        show help                                                              [boolean]
@@ -509,8 +509,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo providers logout --help 1`] = `
-"kilo providers logout [provider]
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr providers logout --help 1`] = `
+"sonderr providers logout [provider]
 
 log out from a configured provider
 
@@ -526,8 +526,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo agent create --help 1`] = `
-"kilo agent create
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr agent create --help 1`] = `
+"sonderr agent create
 
 create a new agent
 
@@ -547,8 +547,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo agent list --help 1`] = `
-"kilo agent list
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr agent list --help 1`] = `
+"sonderr agent list
 
 list all available agents
 
@@ -561,8 +561,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo session list --help 1`] = `
-"kilo session list
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr session list --help 1`] = `
+"sonderr session list
 
 list sessions
 
@@ -579,8 +579,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo session delete --help 1`] = `
-"kilo session delete <sessionID>
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr session delete --help 1`] = `
+"sonderr session delete <sessionID>
 
 delete a session
 
@@ -596,8 +596,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo github install --help 1`] = `
-"kilo github install
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr github install --help 1`] = `
+"sonderr github install
 
 install the GitHub agent
 
@@ -610,8 +610,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo github run --help 1`] = `
-"kilo github run
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr github run --help 1`] = `
+"sonderr github run
 
 run the GitHub agent
 
@@ -626,8 +626,8 @@ Options:
 "
 `;
 
-exports[`Kilo CLI help-text snapshots every documented command emits stable help text: kilo db path --help 1`] = `
-"kilo db path
+exports[`Sonderr CLI help-text snapshots every documented command emits stable help text: sonderr db path --help 1`] = `
+"sonderr db path
 
 print the database path
 

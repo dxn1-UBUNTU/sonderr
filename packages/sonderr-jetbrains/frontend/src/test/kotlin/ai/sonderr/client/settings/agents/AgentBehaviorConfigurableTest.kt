@@ -1,0 +1,55 @@
+package ai.sonderr.client.settings.agents
+
+import ai.sonderr.client.util.edtWait
+import ai.sonderr.client.settings.rules.RulesConfigurable
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.options.SearchableConfigurable
+import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.ui.components.ActionLink
+import java.awt.Container
+
+@Suppress("UnstableApiUsage")
+class AgentBehaviorConfigurableTest : BasePlatformTestCase() {
+
+    fun `test id matches xml registration`() {
+        val cfg = AgentBehaviorConfigurable()
+
+        assertEquals("ai.sonderr.jetbrains.settings.agentBehavior", cfg.id)
+    }
+
+    fun `test child ids match xml registration`() {
+        assertEquals("ai.sonderr.jetbrains.settings.agentBehavior.agents", AgentsConfigurable.ID)
+        assertEquals("ai.sonderr.jetbrains.settings.agentBehavior.mcp", McpConfigurable.ID)
+        assertEquals("ai.sonderr.jetbrains.settings.agentBehavior.skills", SkillsConfigurable.ID)
+        assertEquals("ai.sonderr.jetbrains.settings.agentBehavior.workflows", WorkflowsConfigurable.ID)
+        assertEquals("ai.sonderr.jetbrains.settings.agentBehavior.rules", RulesConfigurable.ID)
+    }
+
+    fun `test createComponent contains child links in order`() {
+        val cfg = AgentBehaviorConfigurable()
+
+        edt {
+            val panel = cfg.createComponent()
+            val labels = links(panel as Container).map { it.text }
+            assertEquals(listOf("Agents", "MCP Servers", "Skills", "Workflows", "Rules"), labels)
+        }
+    }
+
+    fun `test navigation page is inert`() {
+        val cfg = AgentBehaviorConfigurable()
+
+        assertTrue(cfg is SearchableConfigurable)
+        assertFalse(cfg.isModified)
+        cfg.apply()
+        assertFalse(cfg.isModified)
+    }
+
+    private fun <T> edt(block: () -> T): T = edtWait(block)
+
+    private fun links(root: Container): List<ActionLink> = buildList {
+        for (comp in root.components) {
+            if (comp is ActionLink) add(comp)
+            if (comp is Container) addAll(links(comp))
+        }
+    }
+}
