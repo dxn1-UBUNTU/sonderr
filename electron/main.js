@@ -6,9 +6,9 @@ const crypto = require('crypto');
 const { spawn } = require('child_process');
 const { autoUpdater } = require('electron-updater');
 
-const CONFIG_DIR = path.join(os.homedir(), '.config', 'sonderr-desktop');
+const CONFIG_DIR = path.join(os.homedir(), '.config', 'sonderr');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
-const APP_VERSION = '1.0.6';
+const APP_VERSION = '1.0.7';
 
 function getSecret() {
   const machineId = os.hostname() + os.userInfo().username;
@@ -29,7 +29,7 @@ function decrypt(hash, secret) {
   const iv = Buffer.from(ivHex, 'hex');
   const key = crypto.scryptSync(secret, 'sonderr-salt', 32);
   const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
-  let decrypted = decipher.update(Buffer.from(encrypted, 'hex'), 'hex', 'utf8');
+  let decrypted = decipher.update(Buffer.from(encrypted), 'hex', 'utf8');
   decrypted += decipher.final('utf8');
   return decrypted;
 }
@@ -51,7 +51,7 @@ function createSetupWindow() {
     height: 640,
     resizable: false,
     frame: true,
-    title: 'Sonderr Desktop Setup',
+    title: 'Sonderr Setup',
     icon: getIcon(),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -73,7 +73,7 @@ function createMainWindow() {
     height: 800,
     minWidth: 900,
     minHeight: 600,
-    title: `Sonderr Desktop v${APP_VERSION}`,
+    title: `Sonderr v${APP_VERSION}`,
     icon: getIcon(),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -96,7 +96,6 @@ ipcMain.handle('read-config', async () => {
     if (!fs.existsSync(CONFIG_FILE)) return null;
     const raw = fs.readFileSync(CONFIG_FILE, 'utf8').trim();
     
-    // Try plain JSON first
     try {
       return JSON.parse(raw);
     } catch (e) {
@@ -129,14 +128,14 @@ ipcMain.handle('open-external', async (event, url) => {
 });
 
 ipcMain.handle('launch-terminal', async () => {
-  const kiloPath = '/home/dxn1/.npm-global/bin/kilo';
+  const sonderrPath = '/home/dxn1/.local/bin/sonderr';
   const terms = [
-    { cmd: 'xterm', args: ['-e', kiloPath] },
-    { cmd: 'kitty', args: [kiloPath] },
-    { cmd: 'alacritty', args: ['-e', kiloPath] },
-    { cmd: 'xfce4-terminal', args: ['--command', kiloPath] },
-    { cmd: 'konsole', args: ['-e', kiloPath] },
-    { cmd: 'gnome-terminal', args: ['--', 'bash', '-c', `export PATH="/home/dxn1/.npm-global/bin:$PATH"; ${kiloPath}; exec bash`] }
+    { cmd: 'xterm', args: ['-e', sonderrPath] },
+    { cmd: 'kitty', args: [sonderrPath] },
+    { cmd: 'alacritty', args: ['-e', sonderrPath] },
+    { cmd: 'xfce4-terminal', args: ['--command', sonderrPath] },
+    { cmd: 'konsole', args: ['-e', sonderrPath] },
+    { cmd: 'gnome-terminal', args: ['--', 'bash', '-c', `export PATH="/home/dxn1/.local/bin:$PATH"; ${sonderrPath}; exec bash`] }
   ];
   
   for (const term of terms) {
@@ -144,7 +143,7 @@ ipcMain.handle('launch-terminal', async () => {
       const child = spawn(term.cmd, term.args, { 
         detached: true,
         stdio: 'ignore',
-        env: { ...process.env, PATH: '/home/dxn1/.npm-global/bin:' + (process.env.PATH || '') }
+        env: { ...process.env, PATH: '/home/dxn1/.local/bin:' + (process.env.PATH || '') }
       });
       child.unref();
       return { success: true };
@@ -153,7 +152,7 @@ ipcMain.handle('launch-terminal', async () => {
     }
   }
   
-  return { error: 'No compatible terminal found. Run kilo manually in your terminal.' }
+  return { error: 'No compatible terminal found. Run sonderr manually in your terminal.' }
 });
 
 ipcMain.handle('get-app-version', () => APP_VERSION);
@@ -161,9 +160,9 @@ ipcMain.handle('get-app-version', () => APP_VERSION);
 function createMenu() {
   const template = [
     {
-      label: 'Sonderr Desktop',
+      label: 'Sonderr',
       submenu: [
-        { label: 'About Sonderr Desktop', click: () => shell.openExternal('https://sonderr-desktop.vercel.app') },
+        { label: 'About Sonderr', click: () => shell.openExternal('https://sonderr.vercel.app') },
         { type: 'separator' },
         { label: 'Quit', click: () => app.quit() }
       ]
@@ -195,7 +194,6 @@ function createMenu() {
 app.whenReady().then(() => {
   createMenu();
   
-  // Check for updates
   autoUpdater.checkForUpdatesAndNotify();
   
   if (hasConfig()) {
@@ -220,7 +218,7 @@ autoUpdater.on('update-downloaded', () => {
   dialog.showMessageBox(mainWindow, {
     type: 'info',
     title: 'Update Available',
-    message: 'A new version of Sonderr Desktop is ready to install.',
+    message: 'A new version of Sonderr is ready to install.',
     buttons: ['Install Now', 'Later']
   }).then(({ response }) => {
     if (response === 0) {

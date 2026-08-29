@@ -1,12 +1,12 @@
-# Sonderr Desktop
+# Sonderr
 
 AI coding agent for Linux desktop. Fork of Kilo Code (MIT), rebranded and wrapped for native desktop use.
 
 ## Install
 
 ```bash
-git clone <your-repo-url>
-cd sonderr-desktop-app
+git clone https://github.com/dxn1-UBUNTU/sonderr.git
+cd sonderr
 ./scripts/install.sh
 ```
 
@@ -18,7 +18,7 @@ sonderr-desktop
 ## Usage
 
 - **First boot**: The setup wizard opens automatically. Pick a provider (OpenAI, Anthropic, Gemini), paste your API key, and choose a model.
-- **Runtime**: Use `/api_attach` in Kilo to swap keys/models without restarting.
+- **Runtime**: Use `/api_attach` in Sonderr to swap keys/models without restarting.
 - **CLI**: `sonderr-attach <provider> <api_key> [model]`
 
 ## Providers
@@ -29,7 +29,7 @@ sonderr-desktop
 
 ## Config
 
-Encrypted config stored at `~/.config/sonderr-desktop/config.json`. Your key never leaves your machine except when calling the provider API.
+Encrypted config stored at `~/.config/sonderr/config.json`. Your key never leaves your machine except when calling the provider API.
 
 ## License
 
