@@ -55,6 +55,24 @@ function windows(env: NodeJS.ProcessEnv) {
   return false
 }
 
+// sonderr_change start - the modern logo draws with Unicode 13 sextant/octant
+// glyphs (U+1FB00 block: 🬺 🬏 🬁 🬬). Those render only in terminals that ship
+// coverage for "Symbols for Legacy Computing"; in macOS Terminal.app,
+// Alacritty, older VTE/gnome-terminal, and unknown SSH clients they render as
+// tofu boxes. Detect capability with an allowlist of terminals confirmed to
+// ship the block; everything else gets the fallback art, which uses only
+// block elements (██) and literal tildes and looks right everywhere.
+// SONDERR_UNICODE_LOGO=1 still forces the modern art for power users.
+function octantCapable(env: NodeJS.ProcessEnv) {
+  if (env.WT_SESSION) return true // Windows Terminal (Cascadia Mono 2111.01+)
+  if (env.TERM_PROGRAM === "WezTerm" || env.WEZTERM_PANE) return true
+  if (env.TERM_PROGRAM === "ghostty") return true
+  if (env.TERM_PROGRAM === "iTerm.app") return true // iTerm2 3.5+
+  if (env.KITTY_WINDOW_ID || env.TERM === "xterm-kitty") return true
+  if (env.TERM_PROGRAM === "vscode") return true // xterm.js draws sextants itself
+  return false
+}
+
 export function supports(env = process.env, platform = process.platform) {
   const override = flag(env.SONDERR_UNICODE_LOGO)
   if (override !== undefined) return override
@@ -63,7 +81,9 @@ export function supports(env = process.env, platform = process.platform) {
   if (platform === "win32") return windows(env)
   if (env.ConEmuPID) return false
   if (env.ANSICON) return false
-  return true
+  // sonderr_change - default to the fallback art unless the terminal is known
+  // to cover the sextant block (was: return true).
+  return octantCapable(env)
 }
 
 export function tui(env = process.env, platform = process.platform) {
