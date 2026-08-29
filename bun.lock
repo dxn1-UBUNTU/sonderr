@@ -34,7 +34,7 @@
       "name": "@sonderr/cli",
       "version": "7.5.6",
       "bin": {
-        "sonderr": "./bin/sonderr",
+        "sonderr": "./bin/sonderr.cjs",
       },
       "dependencies": {
         "@actions/core": "1.11.1",
