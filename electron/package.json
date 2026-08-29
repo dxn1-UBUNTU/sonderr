@@ -1,0 +1,24 @@
+{
+  "name": "sonderr-desktop",
+  "version": "1.0.0",
+  "description": "Sonderr Desktop — AI coding agent for Linux",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --linux AppImage"
+  },
+  "author": "DXN1",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^38.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "com.sonderr.desktop",
+    "productName": "Sonderr Desktop",
+    "linux": {
+      "target": ["AppImage"],
+      "category": "Development;IDE;"
+    }
+  }
+}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sonderr Desktop</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #09090b;
+      --surface: #18181b;
+      --surface-2: #27272a;
+      --border: #3f3f46;
+      --text: #fafafa;
+      --text-dim: #a1a1aa;
+      --accent: #a78bfa;
+      --accent-hover: #8b5cf6;
+      --success: #22c55e;
+      --error: #ef4444;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 20px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-size: 20px; font-weight: 700; }
+    .logo span { color: var(--accent); }
+    .status-pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(34,197,94,0.1);
+      color: var(--success);
+      border: 1px solid rgba(34,197,94,0.2);
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      gap: 32px;
+    }
+    .hero {
+      text-align: center;
+      max-width: 500px;
+    }
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+      background: linear-gradient(to right, #fff, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 16px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    .config-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
+    }
+    .config-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--surface-2);
+      font-size: 14px;
+    }
+    .config-row:last-child { border-bottom: none; }
+    .config-label { color: var(--text-dim); }
+    .config-value { font-weight: 600; font-family: monospace; }
+    .launch-btn {
+      padding: 16px 32px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .launch-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+    .secondary-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .secondary-btn {
+      padding: 10px 16px;
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .secondary-btn:hover { background: var(--border); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Sonderr <span>Desktop</span></div>
+    <div class="status-pill">Ready</div>
+  </header>
+  <main>
+    <div class="hero">
+      <h1>Your AI coding agent.</h1>
+      <p>Edit files, run commands, and ship code from one window. Press launch to open the agent terminal.</p>
+    </div>
+    <div class="config-card">
+      <div id="config-rows"></div>
+    </div>
+    <button class="launch-btn" id="launch-btn">
+      <span>Launch Agent</span>
+    </button>
+    <div class="secondary-actions">
+      <button class="secondary-btn" id="reattach-btn">Attach New Key</button>
+      <button class="secondary-btn" id="reset-btn">Reset Setup</button>
+    </div>
+  </main>
+  <script>
+    async function loadConfig() {
+      const config = await window.sonderr.readConfig();
+      const rows = document.getElementById('config-rows');
+      if (!config) {
+        rows.innerHTML = '<div class="config-row"><span class="config-label">No config</span><span class="config-value">Run setup</span></div>';
+        return;
+      }
+      rows.innerHTML = `
+        <div class="config-row"><span class="config-label">Provider</span><span class="config-value">${config.provider}</span></div>
+        <div class="config-row"><span class="config-label">Model</span><span class="config-value">${config.model}</span></div>
+        <div class="config-row"><span class="config-label">Key</span><span class="config-value">${config.apiKey.slice(0, 8)}...</span></div>
+      `;
+    }
+
+    document.getElementById('launch-btn').addEventListener('click', async () => {
+      const result = await window.sonderr.launchTerminal();
+      if (result.error) {
+        alert('Failed to launch terminal: ' + result.error);
+      }
+    });
+
+    document.getElementById('reattach-btn').addEventListener('click', async () => {
+      await window.sonderr.openExternal('http://localhost:17381/setup');
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', async () => {
+      if (confirm('Reset all settings? This will delete your API key.')) {
+        await window.sonderr.saveConfig(null);
+        loadConfig();
+      }
+    });
+
+    loadConfig();
+  </script>
+</body>
+</html>

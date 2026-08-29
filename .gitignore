@@ -1,0 +1,7 @@
+node_modules/
+dist/
+dist_linux/
+*.AppImage
+squashfs-root/
+.DS_Store
+Thumbs.db
