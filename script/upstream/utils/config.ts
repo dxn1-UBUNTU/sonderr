@@ -135,6 +135,7 @@ export const defaultConfig: MergeConfig = {
     "nix/sonderr.nix",
     // sonderr CLI bin (Sonderr uses its own build output)
     "packages/cli/bin/sonderr",
+    "packages/cli/bin/sonderr.cjs",
     // Sonderr does not ship upstream's embedded web UI command.
     "packages/cli/src/cli/cmd/web.ts",
     // Removed prompt file

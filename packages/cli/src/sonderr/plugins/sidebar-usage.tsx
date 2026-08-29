@@ -43,7 +43,7 @@ function View(props: { api: TuiPluginApi; session_id: string }) {
   const [result, { refetch }] = createResource(
     () => props.session_id,
     (sessionID): Promise<UsageResult> =>
-      props.api.client.sonderr.sessionModelUsage({ sessionID }).then(
+      props.api.client.sonderrCompat.sessionModelUsage({ sessionID }).then(
         (response) => ({ sessionID, data: response.data }),
         () => ({ sessionID }),
       ),

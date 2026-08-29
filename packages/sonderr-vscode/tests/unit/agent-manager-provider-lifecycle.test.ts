@@ -19,7 +19,7 @@ describe("Agent Manager worktree deletion lifecycle", () => {
     permission: { list: ReturnType<typeof mock> }
     question: { list: ReturnType<typeof mock> }
     experimental: { session: { list: ReturnType<typeof mock> }; controlPlane: { moveSession: ReturnType<typeof mock> } }
-    sonderr: { removeSnapshot: ReturnType<typeof mock> }
+    sonderrCompat: { removeSnapshot: ReturnType<typeof mock> }
   }
   let host: LifecycleHost
 
@@ -59,7 +59,7 @@ describe("Agent Manager worktree deletion lifecycle", () => {
           }),
         },
       },
-      sonderr: {
+      sonderrCompat: {
         removeSnapshot: mock(async () => {
           calls.push("snapshots")
           return { data: true }
@@ -173,7 +173,7 @@ describe("Agent Manager worktree deletion lifecycle", () => {
       )
       expect(calls).toContain("stats:unskip")
       expect(calls).not.toContain("disk")
-      expect(client.sonderr.removeSnapshot).not.toHaveBeenCalled()
+      expect(client.sonderrCompat.removeSnapshot).not.toHaveBeenCalled()
       expect(state.getWorktrees()).toHaveLength(1)
     },
   )
@@ -182,7 +182,7 @@ describe("Agent Manager worktree deletion lifecycle", () => {
     const session = state.addSession("retained", state.getWorktrees()[0]!.id)
     const notify = mock(host.notify)
     host.notify = notify
-    client.sonderr.removeSnapshot.mockRejectedValue(new Error("checkpoint cleanup failed"))
+    client.sonderrCompat.removeSnapshot.mockRejectedValue(new Error("checkpoint cleanup failed"))
 
     await deleteWorktree()
 
@@ -222,7 +222,7 @@ describe("Agent Manager worktree deletion lifecycle", () => {
 
     expect(calls).toContain("disk")
     expect(calls).toContain("post:error")
-    expect(client.sonderr.removeSnapshot).not.toHaveBeenCalled()
+    expect(client.sonderrCompat.removeSnapshot).not.toHaveBeenCalled()
     expect(state.getWorktrees()).toHaveLength(1)
     expect(client.session.delete).not.toHaveBeenCalled()
   })
@@ -252,7 +252,7 @@ describe("Agent Manager worktree deletion lifecycle", () => {
       expect(calls.indexOf(`move:${session.id}`)).toBeGreaterThan(calls.indexOf("disk"))
       expect(calls.indexOf(`move:${session.id}`)).toBeLessThan(calls.indexOf("snapshots"))
     }
-    expect(client.sonderr.removeSnapshot).toHaveBeenCalledWith(
+    expect(client.sonderrCompat.removeSnapshot).toHaveBeenCalledWith(
       { directory: ctx.root, worktree },
       { throwOnError: true },
     )

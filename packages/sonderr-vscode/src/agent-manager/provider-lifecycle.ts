@@ -192,7 +192,7 @@ export async function deleteLifecycleWorktree(
       ),
     )
     try {
-      await client.sonderr.removeSnapshot({ directory: ctx.root, worktree: worktree.path }, { throwOnError: true })
+      await client.sonderrCompat.removeSnapshot({ directory: ctx.root, worktree: worktree.path }, { throwOnError: true })
     } catch (error) {
       host.log(`Failed to remove worktree snapshots: ${error}`)
       host.notify(

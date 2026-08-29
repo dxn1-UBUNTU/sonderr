@@ -76,9 +76,9 @@ export async function migrate(
     progress({ phase: "preparing" })
     const payload = await parseSession(source.id, source.dir, source.item, undefined, key)
     progress({ phase: "storing" })
-    const project = await client.sonderr.sessionImport.project(payload.project, { throwOnError: true })
+    const project = await client.sonderrCompat.sessionImport.project(payload.project, { throwOnError: true })
     const projectID = project.data?.id ?? payload.project.id
-    const session = await client.sonderr.sessionImport.session(
+    const session = await client.sonderrCompat.sessionImport.session(
       {
         ...payload.session,
         projectID,
@@ -99,11 +99,11 @@ export async function migrate(
     }
 
     for (const msg of payload.messages) {
-      await client.sonderr.sessionImport.message(msg, { throwOnError: true })
+      await client.sonderrCompat.sessionImport.message(msg, { throwOnError: true })
     }
 
     for (const part of payload.parts) {
-      await client.sonderr.sessionImport.part(part, { throwOnError: true })
+      await client.sonderrCompat.sessionImport.part(part, { throwOnError: true })
     }
 
     progress({ phase: "done" })

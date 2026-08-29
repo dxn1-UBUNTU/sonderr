@@ -1,10 +1,14 @@
 // sonderr_change - new file
-import { useTheme, tint } from "../context/theme"
 import { RGBA } from "@opentui/core"
-import type { JSX } from "solid-js"
+import { For, type JSX } from "solid-js"
+import { useTheme, tint } from "../context/theme"
 import { tui } from "@/sonderr/cli/logo"
 
-const SHADOW_MARKER = /[_^~]/ // ~ = shadow top only (▀ with fg=shadow)
+// Shadow markers (rendered chars in parens):
+// _ = full shadow cell (space with bg=shadow)
+// ^ = letter top, shadow bottom (▀ with fg=letter, bg=shadow)
+// ~ = shadow top only (▀ with fg=shadow)
+const SHADOW_MARKER = /[_^~]/
 
 export function SonderrLogo() {
   const { theme } = useTheme()
@@ -35,50 +39,42 @@ export function SonderrLogo() {
             {rest.slice(0, markerIndex)}
           </text>,
         )
-        i += markerIndex
       }
 
       const marker = rest[markerIndex]
-      if (marker === "_") {
-        elements.push(
-          <text fg={orange} selectable={false} bg={shadow}>
-            {" "}
-          </text>,
-        )
-        i += 1
-        continue
+      switch (marker) {
+        case "_":
+          elements.push(
+            <text fg={orange} bg={shadow} selectable={false}>
+              {" "}
+            </text>,
+          )
+          break
+        case "^":
+          elements.push(
+            <text fg={orange} bg={shadow} selectable={false}>
+              ▀
+            </text>,
+          )
+          break
+        case "~":
+          elements.push(
+            <text fg={shadow} selectable={false}>
+              ▀
+            </text>,
+          )
+          break
       }
 
-      if (marker === "^" || marker === "~") {
-        const fg = marker === "~" ? shadow : orange
-        elements.push(
-          <text fg={fg} selectable={false} bg={shadow}>
-            {"▀"}
-          </text>,
-        )
-        i += 1
-        continue
-      }
-
-      elements.push(
-        <text fg={orange} selectable={false}>
-          {marker}
-        </text>,
-      )
-      i += 1
+      i += markerIndex + 1
     }
 
     return elements
   }
 
   return (
-    <box flexDirection="column" gap={-1}>
-      {logo.map((line) => (
-        <box flexDirection="row" gap={-1}>
-          {renderLine(line)}
-        </box>
-      ))}
+    <box>
+      <For each={logo}>{(line) => <box flexDirection="row">{renderLine(line)}</box>}</For>
     </box>
   )
 }
-

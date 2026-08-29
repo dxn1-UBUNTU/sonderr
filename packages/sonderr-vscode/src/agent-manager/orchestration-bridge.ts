@@ -360,7 +360,7 @@ export class AgentManagerOrchestrationBridge {
 
   private async reply(requestID: string, directory: string, result: Result): Promise<boolean> {
     try {
-      const response = await this.connection.getClient().sonderr.agentManager.reply({ requestID, directory, result })
+      const response = await this.connection.getClient().sonderrCompat.agentManager.reply({ requestID, directory, result })
       if (!response.error) return true
       this.options.log(`Agent Manager reply ${requestID} failed:`, response.error)
     } catch (error) {
@@ -371,7 +371,7 @@ export class AgentManagerOrchestrationBridge {
 
   private async reject(requestID: string, directory: string, error: Failure): Promise<boolean> {
     try {
-      const response = await this.connection.getClient().sonderr.agentManager.reject({ requestID, directory, error })
+      const response = await this.connection.getClient().sonderrCompat.agentManager.reject({ requestID, directory, error })
       if (!response.error) return true
       this.options.log(`Agent Manager rejection ${requestID} failed:`, response.error)
     } catch (cause) {
@@ -385,7 +385,7 @@ export class AgentManagerOrchestrationBridge {
     const client = this.connection.getClient()
     await Promise.all(
       this.connection.getKnownDirectories().map(async (directory) => {
-        const response = await client.sonderr.agentManager.list({ directory }).catch((error: unknown) => {
+        const response = await client.sonderrCompat.agentManager.list({ directory }).catch((error: unknown) => {
           this.options.log(`Could not list Agent Manager requests for ${directory}:`, error)
           return undefined
         })

@@ -650,7 +650,7 @@ describe("Agent Manager Provider — onMessage routing", () => {
 
   it("limits snapshot cleanup to explicit worktree deletion without deleting sessions", () => {
     const text = body("onDeleteWorktree")
-    expect(text).toContain(".sonderr.removeSnapshot")
+    expect(text).toContain(".sonderrCompat.removeSnapshot")
     expect(text).not.toContain("session.delete")
     for (const name of ["onCreateWorktree", "onCreateMultiVersion", "onRemoveStaleWorktree"]) {
       expect(body(name)).not.toContain("removeSnapshot")

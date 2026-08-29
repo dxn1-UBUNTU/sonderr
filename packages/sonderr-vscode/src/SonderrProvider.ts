@@ -2051,7 +2051,7 @@ export class SonderrProvider implements vscode.WebviewViewProvider, TelemetryPro
     const directory = this.getWorkspaceDirectory(sessionID)
     return this.connectionService
       .getClientAsync(directory)
-      .then((client) => client.sonderr.sessionModelUsage({ sessionID, directory }, { throwOnError: true }))
+      .then((client) => client.sonderrCompat.sessionModelUsage({ sessionID, directory }, { throwOnError: true }))
       .then((response) => {
         this.modelUsageSessionIds = new Set(response.data.sessionIDs)
         this.postMessage({ type: "sessionModelUsageLoaded", sessionID, requestID, data: response.data })
@@ -2514,7 +2514,7 @@ export class SonderrProvider implements vscode.WebviewViewProvider, TelemetryPro
 
     const directory = this.getProjectDirectory(this.currentSession?.id)
     const result = await (
-      force ? client.sonderr.providerUsage.refresh({ directory }) : client.sonderr.providerUsage.get({ directory })
+      force ? client.sonderrCompat.providerUsage.refresh({ directory }) : client.sonderrCompat.providerUsage.get({ directory })
     ).catch((error) => {
       console.error("[Sonderr New] SonderrProvider: Failed to fetch provider usage:", error)
       return undefined
@@ -2756,7 +2756,7 @@ export class SonderrProvider implements vscode.WebviewViewProvider, TelemetryPro
     if (!this.client) return false
     try {
       const dir = this.getWorkspaceDirectory()
-      const result = await this.client.sonderr.removeSkill({ location, directory: dir })
+      const result = await this.client.sonderrCompat.removeSkill({ location, directory: dir })
       if (result.error) {
         console.error("[Sonderr New] removeSkill returned error:", result.error)
         this.cachedSkillsMessage = null
@@ -2932,7 +2932,7 @@ export class SonderrProvider implements vscode.WebviewViewProvider, TelemetryPro
       return
     }
     try {
-      const { data } = await client.sonderr.backgroundJobs(
+      const { data } = await client.sonderrCompat.backgroundJobs(
         { directory: this.getWorkspaceDirectory(sessionID), sessionID },
         { throwOnError: true },
       )
@@ -2956,7 +2956,7 @@ export class SonderrProvider implements vscode.WebviewViewProvider, TelemetryPro
       return
     }
     try {
-      await client.sonderr.backgroundJob.cancel(
+      await client.sonderrCompat.backgroundJob.cancel(
         { jobID, directory: this.getWorkspaceDirectory(sessionID) },
         { throwOnError: true },
       )
@@ -2977,7 +2977,7 @@ export class SonderrProvider implements vscode.WebviewViewProvider, TelemetryPro
     const client = this.client
     if (!client || this.connectionState !== "connected") return
     try {
-      await client.sonderr.backgroundJob.promote(
+      await client.sonderrCompat.backgroundJob.promote(
         { jobID, directory: this.getWorkspaceDirectory(sessionID) },
         { throwOnError: true },
       )
@@ -4221,7 +4221,7 @@ export class SonderrProvider implements vscode.WebviewViewProvider, TelemetryPro
       if (!this.client) throw new Error("Not connected to CLI backend")
       const directory = this.getWorkspaceDirectory(sessionID)
       await this.checkpoints.get(sessionID)
-      await this.client.sonderr.resumeSession(
+      await this.client.sonderrCompat.resumeSession(
         { sessionID, messageID, directory, snapshotInitialization: this.opts.snapshotInitialization },
         { throwOnError: true },
       )

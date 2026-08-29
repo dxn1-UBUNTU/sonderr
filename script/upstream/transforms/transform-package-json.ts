@@ -265,8 +265,7 @@ const SONDERR_DEPENDENCIES: Record<string, Record<string, string>> = {
 // Sonderr-specific bin entries to set on specific packages
 const SONDERR_BIN: Record<string, Record<string, string>> = {
   "packages/cli/package.json": {
-    sonderr: "./bin/sonderr",
-    sonderr: "./bin/sonderr",
+    sonderr: "./bin/sonderr.cjs",
   },
 }
 

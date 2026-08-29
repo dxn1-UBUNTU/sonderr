@@ -68,7 +68,7 @@ describe("AgentManagerOrchestrationBridge", () => {
         list: mock(async () => ({ data: [] })),
         reply: questionReply,
       },
-      sonderr: {
+      sonderrCompat: {
         agentManager: {
           list: mock(async ({ directory }: { directory?: string }) => {
             if (directory === status.failList) throw new Error("offline")
@@ -614,8 +614,8 @@ describe("AgentManagerOrchestrationBridge", () => {
     test.handlers.state?.("connected")
     await waitFor(() => test.promptAsync.mock.calls.length === 1)
 
-    expect(test.client.sonderr.agentManager.list).toHaveBeenCalledWith({ directory: root })
-    expect(test.client.sonderr.agentManager.list).toHaveBeenCalledWith({ directory: dir })
+    expect(test.client.sonderrCompat.agentManager.list).toHaveBeenCalledWith({ directory: root })
+    expect(test.client.sonderrCompat.agentManager.list).toHaveBeenCalledWith({ directory: dir })
     expect(test.promptAsync).toHaveBeenCalledTimes(1)
     expect(test.replies[0]).toEqual({
       requestID: "amr_prompt",
@@ -633,8 +633,8 @@ describe("AgentManagerOrchestrationBridge", () => {
     test.handlers.state?.("connected")
     await waitFor(() => test.promptAsync.mock.calls.length === 1)
 
-    expect(test.client.sonderr.agentManager.list).toHaveBeenCalledWith({ directory: root })
-    expect(test.client.sonderr.agentManager.list).toHaveBeenCalledWith({ directory: dir })
+    expect(test.client.sonderrCompat.agentManager.list).toHaveBeenCalledWith({ directory: root })
+    expect(test.client.sonderrCompat.agentManager.list).toHaveBeenCalledWith({ directory: dir })
     expect(test.promptAsync).toHaveBeenCalledTimes(1)
     test.bridge.dispose()
   })

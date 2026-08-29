@@ -17,7 +17,7 @@
     "test:ci": "bun run script/test-runner.ts --ci"
   },
   "bin": {
-    "sonderr": "./bin/sonderr"
+    "sonderr": "./bin/sonderr.cjs"
   },
   "exports": {
     "./*": "./src/*.ts"

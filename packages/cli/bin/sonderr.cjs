@@ -80,6 +80,78 @@ function run(target, fallback) {
   })
 }
 
+// sonderr_change start - run from source when no platform binary is available (dev checkouts)
+function findSource(startDir) {
+  let current = startDir
+  for (;;) {
+    const manifest = path.join(current, "package.json")
+    const entry = path.join(current, "src", "index.ts")
+    if (fs.existsSync(manifest) && fs.existsSync(entry)) {
+      try {
+        if (JSON.parse(fs.readFileSync(manifest, "utf8")).name === "@sonderr/cli") return entry
+      } catch {
+        // unreadable manifest - keep walking
+      }
+    }
+    const parent = path.dirname(current)
+    if (parent === current) {
+      return
+    }
+    current = parent
+  }
+}
+
+function runSource(entry) {
+  const bun = process.env.SONDERR_BUN_PATH || "bun"
+  const child = (() => {
+    try {
+      return childProcess.spawn(bun, ["run", "--conditions=browser", entry, ...process.argv.slice(2)], {
+        stdio: "inherit",
+      })
+    } catch (error) {
+      console.error(error.message)
+      process.exit(1)
+    }
+  })()
+  if (!child) return
+
+  const forwarders = {}
+  const clear = () => {
+    for (const signal of forwardedSignals) {
+      process.removeListener(signal, forwarders[signal])
+    }
+  }
+
+  child.on("error", () => {
+    clear()
+    console.error("Sonderr found its source tree but Bun is not available to run it. Install Bun first: https://bun.sh")
+    process.exit(1)
+  })
+
+  for (const signal of forwardedSignals) {
+    forwarders[signal] = () => {
+      try {
+        child.kill(signal)
+      } catch {
+        // The child may have already exited.
+      }
+    }
+    process.on(signal, forwarders[signal])
+  }
+
+  child.on("exit", (code, signal) => {
+    clear()
+
+    if (signal) {
+      process.kill(process.pid, signal)
+      return
+    }
+
+    process.exit(typeof code === "number" ? code : 0)
+  })
+}
+// sonderr_change end
+
 const envPath = process.env.SONDERR_BIN_PATH
 
 const scriptPath = fs.realpathSync(__filename)
@@ -223,13 +295,20 @@ function findBinary(startDir) {
 }
 
 const resolved = envPath || (fs.existsSync(cached) ? cached : findBinary(scriptDir))
-if (!resolved) {
-  console.error(
-    "It seems that your package manager failed to install the right version of the Sonderr CLI for your platform. You can try manually installing " +
-      names.map((n) => `\"${n}\"`).join(" or ") +
-      " package",
-  )
-  process.exit(1)
-}
 
-run(resolved, resolved === cached ? findBinary(scriptDir) : undefined) // sonderr_change - preserve cached binary fallback
+if (resolved) {
+  run(resolved, resolved === cached ? findBinary(scriptDir) : undefined) // sonderr_change - preserve cached binary fallback
+} else {
+  // sonderr_change start - fall back to running the TypeScript source via Bun (dev checkouts)
+  const source = findSource(scriptDir)
+  if (!source) {
+    console.error(
+      "It seems that your package manager failed to install the right version of the Sonderr CLI for your platform. You can try manually installing " +
+        names.map((n) => `\"${n}\"`).join(" or ") +
+        " package",
+    )
+    process.exit(1)
+  }
+  runSource(source)
+  // sonderr_change end
+}

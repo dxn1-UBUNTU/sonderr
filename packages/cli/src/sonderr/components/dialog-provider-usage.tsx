@@ -79,8 +79,8 @@ export function DialogProviderUsage() {
     setLoading(true)
     setFailure(undefined)
     const response = await (force
-      ? sdk.client.sonderr.providerUsage.refresh().catch(() => undefined)
-      : sdk.client.sonderr.providerUsage.get().catch(() => undefined))
+      ? sdk.client.sonderrCompat.providerUsage.refresh().catch(() => undefined)
+      : sdk.client.sonderrCompat.providerUsage.get().catch(() => undefined))
     if (response?.data) setData(response.data)
     if (response?.error || !response?.data) setFailure("Provider usage could not be loaded.")
     setLoading(false)

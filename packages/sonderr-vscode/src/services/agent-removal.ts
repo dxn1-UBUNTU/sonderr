@@ -12,7 +12,7 @@ interface Input {
 export async function removeAgent(input: Input): Promise<RemoveResult> {
   try {
     const client = await input.connection.getClientAsync(input.directory)
-    const result = await client.sonderr.removeAgent({
+    const result = await client.sonderrCompat.removeAgent({
       name: input.name,
       directory: input.directory,
       scope: input.scope,

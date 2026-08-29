@@ -300,7 +300,7 @@ export class NotebookBridge {
 
   private async reply(requestID: string, directory: string, result: NotebookResult): Promise<boolean> {
     try {
-      const response = await this.connection.getClient().sonderr.notebook.reply({ requestID, directory, result })
+      const response = await this.connection.getClient().sonderrCompat.notebook.reply({ requestID, directory, result })
       if (!response.error) return true
       console.error(`[Sonderr New] NotebookBridge: reply ${requestID} failed:`, response.error)
       return false
@@ -312,7 +312,7 @@ export class NotebookBridge {
 
   private async reject(requestID: string, directory: string, error: NotebookFailure): Promise<boolean> {
     try {
-      const response = await this.connection.getClient().sonderr.notebook.reject({ requestID, directory, error })
+      const response = await this.connection.getClient().sonderrCompat.notebook.reject({ requestID, directory, error })
       if (!response.error) return true
       console.error(`[Sonderr New] NotebookBridge: rejection ${requestID} failed:`, response.error)
       return false
@@ -326,7 +326,7 @@ export class NotebookBridge {
     const client = this.connection.getClient()
     for (const directory of this.connection.getKnownDirectories()) {
       try {
-        const response = await client.sonderr.notebook.list({ directory })
+        const response = await client.sonderrCompat.notebook.list({ directory })
         if (this.disposed || revision !== this.revision) return
         if (response.error) {
           console.error(`[Sonderr New] NotebookBridge: could not list requests for ${directory}:`, response.error)
