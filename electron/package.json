@@ -1,6 +1,6 @@
 {
   "name": "sonderr-desktop",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Sonderr Desktop — AI coding agent for Linux",
   "main": "main.js",
   "homepage": "https://sonderr-desktop.vercel.app",

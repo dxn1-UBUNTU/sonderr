@@ -128,20 +128,33 @@ ipcMain.handle('open-external', async (event, url) => {
 });
 
 ipcMain.handle('launch-terminal', async () => {
-  const terms = ['gnome-terminal', 'konsole', 'xfce4-terminal', 'alacritty', 'kitty', 'xterm'];
+  const kiloPath = '/home/dxn1/.npm-global/bin/kilo';
+  const terms = [
+    { cmd: 'gnome-terminal', args: ['--', 'bash', '-c', `${kiloPath}; exec bash`] },
+    { cmd: 'konsole', args: ['-e', kiloPath] },
+    { cmd: 'xfce4-terminal', args: ['--command', kiloPath] },
+    { cmd: 'alacritty', args: ['-e', kiloPath] },
+    { cmd: 'kitty', args: [kiloPath] },
+    { cmd: 'xterm', args: ['-e', kiloPath] }
+  ];
+  
   for (const term of terms) {
     try {
-      if (term === 'gnome-terminal') {
-        spawn(term, ['--', 'bash', '-c', 'kilo; exec bash'], { detached: true });
-      } else {
-        spawn(term, ['-e', 'kilo'], { detached: true });
-      }
+      spawn(term.cmd, term.args, { detached: true });
       return { success: true };
     } catch (e) {
       continue;
     }
   }
-  return { error: 'No terminal found' }
+  
+  // Fallback: try xdg-terminal
+  try {
+    const { exec } = require('child_process');
+    exec(`xdg-terminal -e "${kiloPath}"`, { detached: true });
+    return { success: true };
+  } catch (e) {
+    return { error: 'No compatible terminal found. Run kilo manually in your terminal.' };
+  }
 });
 
 ipcMain.handle('get-app-version', () => APP_VERSION);

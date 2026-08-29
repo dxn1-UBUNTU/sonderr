@@ -29,12 +29,13 @@
       overflow: hidden;
     }
     .sidebar {
-      width: 260px;
+      width: 280px;
       background: var(--surface);
       border-left: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
+      overflow-y: auto;
     }
     .sidebar-header {
       padding: 20px;
@@ -104,11 +105,11 @@
       align-items: center;
       justify-content: center;
       padding: 40px;
-      gap: 24px;
+      gap: 20px;
     }
     .hero {
       text-align: center;
-      max-width: 480px;
+      max-width: 520px;
     }
     .hero h1 {
       font-size: 36px;
@@ -160,14 +161,14 @@
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="logo">Sonderr <span>Desktop</span></div>
-      <div class="version" id="app-version">v1.0.3</div>
+      <div class="version" id="app-version">v1.0.4</div>
     </div>
 
     <div class="sidebar-section">
-      <h3>Status</h3>
+      <h3>Connection</h3>
       <div class="status-item">
         <span class="status-label">Gateway</span>
-        <span class="status-value"><span class="status-dot"></span>Online</span>
+        <span class="status-value"><span class="status-dot" id="gateway-dot"></span><span id="gateway-status">Online</span></span>
       </div>
       <div class="status-item">
         <span class="status-label">Provider</span>
@@ -195,10 +196,34 @@
       </div>
     </div>
 
+    <div class="sidebar-section">
+      <h3>Features</h3>
+      <div class="status-item">
+        <span class="status-label">Code</span>
+        <span class="status-value" id="code-status">enabled</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Indexing</span>
+        <span class="status-value" id="indexing-status">enabled</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Input</span>
+        <span class="status-value" id="input-status">enabled</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Output</span>
+        <span class="status-value" id="output-status">enabled</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Reasoning</span>
+        <span class="status-value" id="reasoning-status">enabled</span>
+      </div>
+    </div>
+
     <div class="sidebar-footer">
       <div class="status-item">
         <span class="status-label">Build</span>
-        <span class="status-value" id="build-version">v1.0.3</span>
+        <span class="status-value">v1.0.4</span>
       </div>
     </div>
   </aside>
@@ -210,58 +235,55 @@
     <div class="main-content">
       <div class="hero">
         <h1>Your AI coding agent.</h1>
-        <p>Edit files, run commands, and ship code from one window. Press launch to open the agent terminal.</p>
+        <p>Edit files, run commands, and ship code from one window. Launch the agent to start coding.</p>
       </div>
-      <button class="launch-btn" id="launch-btn">Launch Agent</button>
+      <button class="launch-btn" id="launch-btn">Launch Sonderr</button>
       <div class="secondary-actions">
+        <button class="secondary-btn" id="new-chat-btn">New Chat</button>
         <button class="secondary-btn" id="reattach-btn">Attach New Key</button>
-        <button class="secondary-btn" id="reset-btn">Reset Setup</button>
       </div>
     </div>
   </main>
 
-    <script>
-      async function loadConfig() {
-        try {
-          const config = await window.sonderr.readConfig();
-          if (config) {
-            document.getElementById('provider-value').textContent = config.provider || '—';
-            document.getElementById('model-value').textContent = config.model || '—';
-          }
-        } catch (e) {
-          console.error('Failed to load config:', e);
+  <script>
+    async function loadConfig() {
+      try {
+        const config = await window.sonderr.readConfig();
+        if (config) {
+          document.getElementById('provider-value').textContent = config.provider || '—';
+          document.getElementById('model-value').textContent = config.model || '—';
         }
+      } catch (e) {
+        console.error('Failed to load config:', e);
       }
+    }
 
-      document.getElementById('launch-btn').addEventListener('click', async () => {
-        try {
-          const result = await window.sonderr.launchTerminal();
-          if (result.error) alert('Failed to launch terminal: ' + result.error);
-        } catch (e) {
-          alert('Failed to launch terminal: ' + e.message);
-        }
-      });
+    document.getElementById('launch-btn').addEventListener('click', async () => {
+      try {
+        const result = await window.sonderr.launchTerminal();
+        if (result.error) alert('Failed to launch terminal: ' + result.error);
+      } catch (e) {
+        alert('Failed to launch terminal: ' + e.message);
+      }
+    });
 
-      document.getElementById('reattach-btn').addEventListener('click', async () => {
-        try {
-          await window.sonderr.openExternal('http://localhost:17381/setup');
-        } catch (e) {
-          console.error('Failed to open wizard:', e);
-        }
-      });
+    document.getElementById('new-chat-btn').addEventListener('click', async () => {
+      try {
+        await window.sonderr.openExternal('http://localhost:17381/setup');
+      } catch (e) {
+        console.error('Failed to open wizard:', e);
+      }
+    });
 
-      document.getElementById('reset-btn').addEventListener('click', async () => {
-        if (confirm('Reset all settings? This will delete your API key.')) {
-          try {
-            await window.sonderr.saveConfig(null);
-            loadConfig();
-          } catch (e) {
-            alert('Failed to reset: ' + e.message);
-          }
-        }
-      });
+    document.getElementById('reattach-btn').addEventListener('click', async () => {
+      try {
+        await window.sonderr.openExternal('http://localhost:17381/setup');
+      } catch (e) {
+        console.error('Failed to open wizard:', e);
+      }
+    });
 
-      loadConfig();
-    </script>
+    loadConfig();
+  </script>
 </body>
 </html>
