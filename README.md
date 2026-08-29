@@ -1,6 +1,6 @@
 # Sonderr
 
-AI coding agent for Linux desktop. Fork of Kilo Code (MIT), rebranded and wrapped for native desktop use.
+Agentic AI coding workspace for your terminal. BYOK, 32 tools, privacy-first.
 
 ## Install
 
@@ -10,14 +10,9 @@ cd sonderr
 ./scripts/install.sh
 ```
 
-Or run the wizard directly:
-```bash
-sonderr-desktop
-```
-
 ## Usage
 
-- **First boot**: The setup wizard opens automatically. Pick a provider (OpenAI, Anthropic, Gemini), paste your API key, and choose a model.
+- **First launch**: Run `sonderr`, complete the setup wizard, pick a provider, paste your API key.
 - **Runtime**: Use `/api_attach` in Sonderr to swap keys/models without restarting.
 - **CLI**: `sonderr-attach <provider> <api_key> [model]`
 
