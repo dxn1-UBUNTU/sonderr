@@ -1,6 +1,7 @@
 // sonderr_change - new file
-import { useTheme } from "../context/theme"
+import { useTheme, tint } from "../context/theme"
 import { RGBA } from "@opentui/core"
+import type { JSX } from "solid-js"
 import { tui } from "@/sonderr/cli/logo"
 
 const SHADOW_MARKER = /[_^~]/ // ~ = shadow top only (▀ with fg=shadow)
@@ -81,12 +82,3 @@ export function SonderrLogo() {
   )
 }
 
-function tint(bg: string, fg: RGBA, strength: number): RGBA {
-  const bgRGBA = RGBA.fromHex(bg)
-  return RGBA.from(
-    Math.round(bgRGBA.r * (1 - strength) + fg.r * strength),
-    Math.round(bgRGBA.g * (1 - strength) + fg.g * strength),
-    Math.round(bgRGBA.b * (1 - strength) + fg.b * strength),
-    Math.round(bgRGBA.a * (1 - strength) + fg.a * strength),
-  )
-}
