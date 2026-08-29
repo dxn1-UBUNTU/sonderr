@@ -204,7 +204,7 @@ describe("Extension — package.json command sync", () => {
 // KiloProvider handler wiring — every new KiloProvider() must get
 // setContinueInWorktreeHandler() called before resolving its webview.
 //
-// Regression: tab panels created via openKiloInNewTab() and the TabPanel
+// Regression: tab panels created via openSonderrInNewTab() and the TabPanel
 // deserializer were missing the handler, causing "Capturing changes..." to
 // spin forever because the webview message was silently dropped.
 // ---------------------------------------------------------------------------
@@ -251,9 +251,9 @@ describe("Extension — KiloProvider handler wiring", () => {
     ).toEqual([])
   })
 
-  it("openKiloInNewTab wires setContinueInWorktreeHandler before resolveWebviewPanel", () => {
-    const fn = ext.indexOf("function openKiloInNewTab")
-    expect(fn, "openKiloInNewTab must exist").toBeGreaterThan(-1)
+  it("openSonderrInNewTab wires setContinueInWorktreeHandler before resolveWebviewPanel", () => {
+    const fn = ext.indexOf("function openSonderrInNewTab")
+    expect(fn, "openSonderrInNewTab must exist").toBeGreaterThan(-1)
     const body = sliceBlock(ext, fn)
     const handler = body.indexOf("setContinueInWorktreeHandler")
     const resolve = body.indexOf("resolveWebviewPanel")
@@ -279,8 +279,8 @@ describe("Extension — editor panel placement", () => {
   const settings = fs.readFileSync(SETTINGS_PROVIDER_FILE, "utf-8")
 
   it("opens Kilo as a tab in the active editor group", () => {
-    const fn = ext.indexOf("function openKiloInNewTab")
-    expect(fn, "openKiloInNewTab must exist").toBeGreaterThan(-1)
+    const fn = ext.indexOf("function openSonderrInNewTab")
+    expect(fn, "openSonderrInNewTab must exist").toBeGreaterThan(-1)
     const body = sliceBlock(ext, fn)
 
     expect(body).toContain("vscode.ViewColumn.Active")

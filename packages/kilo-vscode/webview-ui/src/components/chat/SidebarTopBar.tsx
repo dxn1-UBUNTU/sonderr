@@ -44,14 +44,14 @@ export const SidebarTopBar: Component<SidebarTopBarProps> = (props) => {
     })
 
   const open = (
-    type: "openAgentManager" | "openKiloClaw" | "openMarketplacePanel" | "openProfilePanel" | "openSettingsPanel",
+    type: "openAgentManager" | "openSonderrClaw" | "openMarketplacePanel" | "openProfilePanel" | "openSettingsPanel",
   ) => vscode.postMessage({ type })
 
   const actions: Action[] = [
     { key: "newTask", codicon: "add", button: "new_task", run: () => props.onNewTask() },
     { key: "history", codicon: "history", button: "history", run: () => props.onHistory() },
     { key: "agentManager", codicon: "organization", button: "agent_manager", run: () => open("openAgentManager") },
-    { key: "kiloClaw", codicon: "comment-discussion", button: "kiloclaw", run: () => open("openKiloClaw") },
+    { key: "sonderrClaw", codicon: "comment-discussion", button: "kiloclaw", run: () => open("openSonderrClaw") },
     { key: "marketplace", codicon: "extensions", button: "marketplace", run: () => open("openMarketplacePanel") },
     { key: "profile", codicon: "account", button: "profile", run: () => open("openProfilePanel") },
     { key: "settings", codicon: "settings-gear", button: "settings", run: () => open("openSettingsPanel") },

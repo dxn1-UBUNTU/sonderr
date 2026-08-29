@@ -306,7 +306,7 @@ export const dict = {
   "sidebar.topBar.newTask": "Новая задача",
   "sidebar.topBar.history": "История",
   "sidebar.topBar.agentManager": "Agent Manager",
-  "sidebar.topBar.kiloClaw": "KiloClaw",
+  "sidebar.topBar.sonderrClaw": "KiloClaw",
   "sidebar.topBar.marketplace": "Маркетплейс",
   "sidebar.topBar.profile": "Профиль",
   "sidebar.topBar.settings": "Настройки",

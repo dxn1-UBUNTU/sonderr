@@ -13,7 +13,7 @@ export const GenerateCommand = {
     }
     // kilocode_change start
     specs.info.title = "kilo"
-    specs.info.description = "kilo api"
+    specs.info.description = "sonderr api"
     // kilocode_change end
     for (const item of Object.values(specs.paths)) {
       for (const method of ["get", "post", "put", "delete", "patch"] as const) {
@@ -39,7 +39,7 @@ export const GenerateCommand = {
     const raw = JSON.stringify(specs, null, 2)
       // kilocode_change start - replace upstream product name in all descriptions
       .replaceAll("OpenCode", "Kilo")
-      .replaceAll("opencode.local", "kilo.local")
+      .replaceAll("opencode.local", "sonderr.local")
       .replaceAll("opencode serve", "kilo serve")
       .replaceAll("https://opencode.ai/", "https://kilo.ai/")
     // kilocode_change end

@@ -60,8 +60,8 @@ export function MessageArea() {
   const sendDisabledReason = createMemo(() => {
     if (canSend()) return null
     const st = botDisplay().state
-    if (st === "unknown") return t("kiloClaw.chat.waitingBotStatus")
-    return t("kiloClaw.chat.botOffline")
+    if (st === "unknown") return t("sonderrClaw.chat.waitingBotStatus")
+    return t("sonderrClaw.chat.botOffline")
   })
 
   // Render the typing banner with friendly names. Bot members come in as
@@ -72,7 +72,7 @@ export function MessageArea() {
   const typingNames = createMemo(() => {
     const activeId = claw.activeConversationId()
     if (!activeId) return []
-    const assistant = claw.assistantName() ?? t("kiloClaw.message.bot")
+    const assistant = claw.assistantName() ?? t("sonderrClaw.message.bot")
     return claw.typingMembers(activeId).map((m) => (m.memberId.startsWith("bot:") ? assistant : m.memberId))
   })
 
@@ -209,7 +209,7 @@ export function MessageArea() {
       when={claw.activeConversationId()}
       fallback={
         <div class="kiloclaw-empty-area">
-          <p>{t("kiloClaw.conversations.selectOne")}</p>
+          <p>{t("sonderrClaw.conversations.selectOne")}</p>
         </div>
       }
     >
@@ -230,8 +230,8 @@ export function MessageArea() {
               <Show when={claw.messages().length === 0}>
                 <div class="kiloclaw-empty">
                   {claw.assistantName()
-                    ? t("kiloClaw.chat.emptyWithBot").replace("{bot}", claw.assistantName()!)
-                    : t("kiloClaw.chat.empty")}
+                    ? t("sonderrClaw.chat.emptyWithBot").replace("{bot}", claw.assistantName()!)
+                    : t("sonderrClaw.chat.empty")}
                 </div>
               </Show>
               <For each={claw.messages()}>
@@ -291,8 +291,8 @@ export function MessageArea() {
             <Spinner />
             <span>
               {typingNames().length === 1
-                ? t("kiloClaw.typing.one").replace("{name}", typingNames()[0])
-                : t("kiloClaw.typing.many").replace("{count}", String(typingNames().length))}
+                ? t("sonderrClaw.typing.one").replace("{name}", typingNames()[0])
+                : t("sonderrClaw.typing.many").replace("{count}", String(typingNames().length))}
             </span>
           </div>
         </Show>
@@ -301,13 +301,13 @@ export function MessageArea() {
         <Show when={replyingTo()}>
           {(r) => (
             <div class="kiloclaw-reply-preview">
-              <span class="kiloclaw-reply-preview-label">{t("kiloClaw.message.replyTo")}</span>
+              <span class="kiloclaw-reply-preview-label">{t("sonderrClaw.message.replyTo")}</span>
               <span class="kiloclaw-reply-preview-text">{replyText(r())}</span>
               <button
                 type="button"
                 class="kiloclaw-iconbtn-sm"
                 onClick={() => setReplyingTo(null)}
-                aria-label={t("kiloClaw.message.cancelReply")}
+                aria-label={t("sonderrClaw.message.cancelReply")}
               >
                 ×
               </button>
@@ -318,16 +318,16 @@ export function MessageArea() {
           <textarea
             ref={input}
             class="kiloclaw-input"
-            placeholder={sendDisabledReason() ?? t("kiloClaw.chat.placeholder")}
+            placeholder={sendDisabledReason() ?? t("sonderrClaw.chat.placeholder")}
             disabled={!canSend()}
             value={text()}
             onInput={onInput}
             onKeyDown={onKeyDown}
             rows={1}
-            aria-label={t("kiloClaw.chat.placeholder")}
+            aria-label={t("sonderrClaw.chat.placeholder")}
           />
           <Button variant="primary" disabled={!canSend() || !text().trim()} onClick={submit}>
-            {t("kiloClaw.chat.send")}
+            {t("sonderrClaw.chat.send")}
           </Button>
         </div>
       </div>

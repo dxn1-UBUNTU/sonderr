@@ -156,8 +156,8 @@ export async function activate(context: vscode.ExtensionContext) {
   ensureCommandsSkipShell(skip)
 
   // Create KiloClaw chat provider for editor panel
-  const kiloClawProvider = new KiloClawProvider(context.extensionUri, connectionService)
-  context.subscriptions.push(kiloClawProvider)
+  const sonderrClawProvider = new KiloClawProvider(context.extensionUri, connectionService)
+  context.subscriptions.push(sonderrClawProvider)
 
   // Create Agent Manager provider for editor panel
   const agentManagerHost = new VscodeHost(context.extensionUri, connectionService, context, remoteService)
@@ -238,7 +238,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.window.registerWebviewPanelSerializer(KiloClawProvider.viewType, {
       deserializeWebviewPanel(panel: vscode.WebviewPanel) {
-        kiloClawProvider.restorePanel(panel)
+        sonderrClawProvider.restorePanel(panel)
         return Promise.resolve()
       },
     }),
@@ -392,8 +392,8 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("kilo-code.new.sidebarTitle.agentManagerOpen", () => {
       track("agent_manager", "kilo-code.new.agentManagerOpen")
     }),
-    vscode.commands.registerCommand("kilo-code.new.sidebarTitle.kiloClawOpen", () => {
-      track("kiloclaw", "kilo-code.new.kiloClawOpen")
+    vscode.commands.registerCommand("kilo-code.new.sidebarTitle.sonderrClawOpen", () => {
+      track("kiloclaw", "kilo-code.new.sonderrClawOpen")
     }),
     vscode.commands.registerCommand("kilo-code.new.sidebarTitle.marketplaceButtonClicked", () => {
       track("marketplace", "kilo-code.new.marketplaceButtonClicked")
@@ -415,8 +415,8 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("kilo-code.new.marketplaceButtonClicked", (directory?: string | null) => {
       marketplacePanelProvider.openPanel(directory)
     }),
-    vscode.commands.registerCommand("kilo-code.new.kiloClawOpen", () => {
-      kiloClawProvider.openPanel()
+    vscode.commands.registerCommand("kilo-code.new.sonderrClawOpen", () => {
+      sonderrClawProvider.openPanel()
     }),
     vscode.commands.registerCommand("kilo-code.new.historyButtonClicked", () => {
       const tab = activeTabProvider()
@@ -483,7 +483,7 @@ export async function activate(context: vscode.ExtensionContext) {
       remoteService.toggle().catch((err) => console.error("[Kilo New] toggleRemote command failed:", err))
     }),
     vscode.commands.registerCommand("kilo-code.new.openInTab", () => {
-      return openKiloInNewTab(
+      return openSonderrInNewTab(
         context,
         connectionService,
         agentManagerProvider,
@@ -650,7 +650,7 @@ export async function deactivate() {
   TelemetryProxy.getInstance().shutdown()
 }
 
-function openKiloInNewTab(
+function openSonderrInNewTab(
   context: vscode.ExtensionContext,
   connectionService: KiloConnectionService,
   agentManagerProvider: AgentManagerProvider,

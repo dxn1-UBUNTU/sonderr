@@ -13,8 +13,8 @@
       --border: #3f3f46;
       --text: #fafafa;
       --text-dim: #a1a1aa;
-      --accent: #a78bfa;
-      --accent-hover: #8b5cf6;
+      --accent: #FF6B35;
+      --accent-hover: #e55a2b;
       --success: #22c55e;
       --error: #ef4444;
     }
@@ -36,6 +36,27 @@
       border-radius: 16px;
       overflow: hidden;
       box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    }
+    .brand {
+      text-align: center;
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand pre {
+      color: var(--accent);
+      font-family: monospace;
+      font-size: 12px;
+      line-height: 1.2;
+      margin: 0 auto;
+      display: inline-block;
+      text-align: left;
+    }
+    .brand h1 {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-top: 12px;
+      color: var(--accent);
     }
     .progress {
       display: flex;
@@ -67,7 +88,7 @@
       transition: all 0.2s ease;
     }
     .provider:hover { border-color: var(--border); transform: translateY(-2px); }
-    .provider.selected { border-color: var(--accent); background: rgba(167,139,250,0.08); }
+    .provider.selected { border-color: var(--accent); background: rgba(255,107,53,0.08); }
     .provider-icon { font-size: 28px; margin-bottom: 8px; }
     .provider-name { font-size: 13px; font-weight: 600; }
     .input-group { margin-bottom: 16px; }
@@ -109,7 +130,7 @@
       transition: all 0.15s ease;
     }
     .model-item:hover { border-color: var(--accent); }
-    .model-item.selected { border-color: var(--accent); background: rgba(167,139,250,0.08); }
+    .model-item.selected { border-color: var(--accent); background: rgba(255,107,53,0.08); }
     .model-name { font-size: 14px; font-weight: 600; }
     .model-id { font-size: 11px; color: var(--text-dim); font-family: monospace; }
     .model-badge {
@@ -159,19 +180,18 @@
     .status.error { background: rgba(239,68,68,0.1); color: var(--error); border: 1px solid rgba(239,68,68,0.2); }
     .status.success { background: rgba(34,197,94,0.1); color: var(--success); border: 1px solid rgba(34,197,94,0.2); }
     .hidden { display: none !important; }
-    .brand {
-      text-align: center;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 4px;
-    }
-    .brand h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
-    .brand span { color: var(--accent); }
   </style>
 </head>
 <body>
   <div class="wizard">
-    <div class="brand"><h1>SONDERR</h1></div>
+    <div class="brand">
+      <pre>
+██  ██ ██🬺🬏   ██  ██   ██🬺🬏     ████ ██     ██🬺🬏   
+████🬺🬏   ██   ██     ██  ██   ██     ██       ██   
+██  ██ ██████ 🬁🬬████ 🬁🬬██     🬁🬬████ 🬁🬬████ ██████ 
+      </pre>
+      <h1>SONDERR</h1>
+    </div>
     <div class="progress">
       <div class="progress-step active" data-step="1"></div>
       <div class="progress-step" data-step="2"></div>
@@ -358,15 +378,12 @@
         model: state.model,
         updatedAt: new Date().toISOString()
       };
-      
-      const result = await window.sonderr.saveConfig(config);
-      if (result.error) {
-        alert('Failed to save: ' + result.error);
-        return;
-      }
-      
-      // Close setup and open main window
-      window.close();
+      await fetch('/api/save-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config)
+      }).catch(() => {});
+      next(5);
     }
 
     function skip() {

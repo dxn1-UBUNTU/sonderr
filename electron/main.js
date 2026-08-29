@@ -29,7 +29,7 @@ function decrypt(hash, secret) {
   const iv = Buffer.from(ivHex, 'hex');
   const key = crypto.scryptSync(secret, 'sonderr-salt', 32);
   const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
-  let decrypted = decipher.update(Buffer.from(encrypted), 'hex', 'utf8');
+  let decrypted = decipher.update(Buffer.from(encrypted, 'hex'), 'utf8');
   decrypted += decipher.final('utf8');
   return decrypted;
 }

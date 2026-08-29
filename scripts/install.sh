@@ -3,12 +3,10 @@ set -e
 
 echo "=== Sonderr Setup ==="
 
-# Ensure config directory exists
 mkdir -p ~/.config/sonderr
 mkdir -p ~/.local/share/applications
 mkdir -p ~/.local/bin
 
-# Install binary
 BIN_SRC="$(pwd)/dist/sonderr-linux-x64"
 if [ ! -f "$BIN_SRC" ]; then
   echo "Error: Binary not found at $BIN_SRC"
@@ -18,11 +16,9 @@ fi
 cp "$BIN_SRC" ~/.local/bin/sonderr
 chmod +x ~/.local/bin/sonderr
 
-# Symlink launcher
 ln -sf "$(pwd)/scripts/launch-wizard.sh" ~/.local/bin/sonderr-desktop
 ln -sf "$(pwd)/scripts/attach-cli.cjs" ~/.local/bin/sonderr-attach
 
-# Desktop entry
 cat > ~/.local/share/applications/sonderr-desktop.desktop << 'DESKTOP'
 [Desktop Entry]
 Type=Application
