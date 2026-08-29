@@ -29,7 +29,7 @@ import {
   Todo,
   QuestionAnswer,
   QuestionInfo,
-} from "@kilocode/sdk/v2"
+} from "@sonderr/sdk/v2"
 import { useData } from "../context"
 import { useFileComponent } from "../context/file"
 import { useDialog } from "../context/dialog"
@@ -45,8 +45,8 @@ import { Checkbox } from "./checkbox"
 import { DiffChanges } from "./diff-changes"
 import { Markdown } from "./markdown"
 import { ImagePreview } from "./image-preview"
-import { getDirectory as _getDirectory, getFilename } from "@opencode-ai/core/util/path"
-import { checksum } from "@opencode-ai/core/util/encode"
+import { getDirectory as _getDirectory, getFilename } from "@sonderr/core/util/path"
+import { checksum } from "@sonderr/core/util/encode"
 import { Tooltip } from "./tooltip"
 import { IconButton } from "./icon-button"
 import { Spinner } from "./spinner"
@@ -160,7 +160,7 @@ export interface MessageProps {
   parts: PartType[]
   actions?: UserActions
   showAssistantCopyPartID?: string | null
-  queued?: boolean // kilocode_change
+  queued?: boolean // sonderr_change
   showReasoningSummaries?: boolean
 }
 
@@ -856,7 +856,7 @@ export function Message(props: MessageProps) {
             message={userMessage() as UserMessage}
             parts={props.parts}
             actions={props.actions}
-            queued={props.queued} // kilocode_change
+            queued={props.queued} // sonderr_change
           />
         )}
       </Match>
@@ -1062,7 +1062,7 @@ export function UserMessageDisplay(props: {
   message: UserMessage
   parts: PartType[]
   actions?: UserActions
-  queued?: boolean // kilocode_change
+  queued?: boolean // sonderr_change
 }) {
   const data = useData()
   const dialog = useDialog()
@@ -1152,7 +1152,7 @@ export function UserMessageDisplay(props: {
                   data-slot="user-message-attachment"
                   data-type={type}
                   data-clickable={type === "image" ? "true" : undefined}
-                  data-queued={props.queued ? "" : undefined} // kilocode_change
+                  data-queued={props.queued ? "" : undefined} // sonderr_change
                   title={type === "file" ? name : undefined}
                   onClick={() => {
                     if (type === "image") openImagePreview(file.url, name)
@@ -1178,16 +1178,16 @@ export function UserMessageDisplay(props: {
       <Show when={text()}>
         <>
           <div data-slot="user-message-body">
-            <div data-slot="user-message-text" dir="auto" data-queued={props.queued ? "" : undefined}>{/* kilocode_change */}
+            <div data-slot="user-message-text" dir="auto" data-queued={props.queued ? "" : undefined}>{/* sonderr_change */}
               <HighlightedText text={text()} references={inlineFiles()} agents={agents()} />
             </div>
-            {/* kilocode_change start */}
+            {/* sonderr_change start */}
             <Show when={props.queued}>
               <div data-slot="user-message-queued-indicator">
                 <TextShimmer text={i18n.t("ui.message.queued")} />
               </div>
             </Show>
-            {/* kilocode_change end */}
+            {/* sonderr_change end */}
           </div>
           <div data-slot="user-message-copy-wrapper">
             <Show when={metaHead() || metaTail()}>
@@ -1552,7 +1552,7 @@ PART_MAPPING["text"] = function TextPartDisplay(props) {
     () => props.message.role === "assistant" && typeof (props.message as AssistantMessage).time.completed !== "number",
   )
   const text = () => readPartText(data.store.part_text_accum_delta, part())
-  // kilocode_change start
+  // sonderr_change start
   // Synthetic text parts (e.g. "Initializing snapshot…" from the slow-repo guard)
   // are transient status indicators, not assistant output — they must never
   // carry the copy button, and they must not "steal" last-part status from
@@ -1564,15 +1564,15 @@ PART_MAPPING["text"] = function TextPartDisplay(props) {
   // re-appears on session reload; hiding it when the owning message is no
   // longer streaming keeps the scrollback clean in that edge case.
   const showSyntheticPart = createMemo(() => !part().synthetic || streaming())
-  // kilocode_change end
+  // sonderr_change end
   const isLastTextPart = createMemo(() => {
     const last = (data.store.part?.[props.message.id] ?? [])
-      .filter((item): item is TextPart => item?.type === "text" && !!item.text?.trim() && !item.synthetic) // kilocode_change
+      .filter((item): item is TextPart => item?.type === "text" && !!item.text?.trim() && !item.synthetic) // sonderr_change
       .at(-1)
     return last?.id === part().id
   })
   const showCopy = createMemo(() => {
-    if (part().synthetic) return false // kilocode_change
+    if (part().synthetic) return false // sonderr_change
     if (props.message.role !== "assistant") return isLastTextPart()
     if (props.showAssistantCopyPartID === null) return false
     if (typeof props.showAssistantCopyPartID === "string") return props.showAssistantCopyPartID === part().id
@@ -1590,7 +1590,7 @@ PART_MAPPING["text"] = function TextPartDisplay(props) {
   }
 
   return (
-    <Show when={text() && showSyntheticPart() /* kilocode_change */}>
+    <Show when={text() && showSyntheticPart() /* sonderr_change */}>
       <div data-component="text-part" data-timeline-part-id={part().id}>
         <div data-slot="text-part-body">
           <Show when={streaming()} fallback={<Markdown text={text()} cacheKey={part().id} streaming={false} />}>

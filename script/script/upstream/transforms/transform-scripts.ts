@@ -3,13 +3,13 @@
  * Transform script files with GitHub API references
  *
  * This script handles script files that contain GitHub API references
- * by transforming them from anomalyco/opencode to Kilo-Org/kilocode.
+ * by transforming them from anomalyco/sonderr to Sonderr-Org/sonderr.
  */
 
 import { $ } from "bun"
 import { info, success, warn, debug } from "../utils/logger"
 import { defaultConfig } from "../utils/config"
-import { oursHasKilocodeChanges } from "../utils/git"
+import { oursHasSonderrChanges } from "../utils/git"
 
 export interface ScriptTransformResult {
   file: string
@@ -33,58 +33,58 @@ interface ScriptReplacement {
 const SCRIPT_REPLACEMENTS: ScriptReplacement[] = [
   // GitHub API URLs
   {
-    pattern: /api\.github\.com\/repos\/anomalyco\/opencode/g,
-    replacement: "api.github.com/repos/Kilo-Org/kilocode",
+    pattern: /api\.github\.com\/repos\/anomalyco\/sonderr/g,
+    replacement: "api.github.com/repos/Sonderr-Org/sonderr",
     description: "GitHub API URL",
   },
   {
-    pattern: /\/repos\/anomalyco\/opencode/g,
-    replacement: "/repos/Kilo-Org/kilocode",
+    pattern: /\/repos\/anomalyco\/sonderr/g,
+    replacement: "/repos/Sonderr-Org/sonderr",
     description: "GitHub repos path",
   },
 
   // gh CLI commands
   {
-    pattern: /gh api "\/repos\/anomalyco\/opencode/g,
-    replacement: 'gh api "/repos/Kilo-Org/kilocode',
+    pattern: /gh api "\/repos\/anomalyco\/sonderr/g,
+    replacement: 'gh api "/repos/Sonderr-Org/sonderr',
     description: "gh api command",
   },
 
   // Direct GitHub references
   {
-    pattern: /github\.com\/anomalyco\/opencode/g,
-    replacement: "github.com/Kilo-Org/kilocode",
+    pattern: /github\.com\/anomalyco\/sonderr/g,
+    replacement: "github.com/Sonderr-Org/sonderr",
     description: "GitHub URL",
   },
   {
-    pattern: /anomalyco\/opencode/g,
-    replacement: "Kilo-Org/kilocode",
+    pattern: /anomalyco\/sonderr/g,
+    replacement: "Sonderr-Org/sonderr",
     description: "GitHub repo reference",
   },
 
   // Release artifact names
   {
-    pattern: /opencode-(linux|darwin|windows)-(arm64|x64)(-baseline)?(\.tar\.gz|\.zip)?/g,
-    replacement: "kilo-$1-$2$3$4",
+    pattern: /sonderr-(linux|darwin|windows)-(arm64|x64)(-baseline)?(\.tar\.gz|\.zip)?/g,
+    replacement: "sonderr-$1-$2$3$4",
     description: "Release artifact name",
   },
 
-  // Environment variables (exclude OPENCODE_API_KEY)
+  // Environment variables (exclude SONDERR_API_KEY)
   {
-    pattern: /\bOPENCODE_(?!API_KEY\b)([A-Z_]+)\b/g,
-    replacement: "KILO_$1",
+    pattern: /\bSONDERR_(?!API_KEY\b)([A-Z_]+)\b/g,
+    replacement: "SONDERR_$1",
     description: "Environment variable",
   },
 
-  // OpenCode branding in strings
+  // Sonderr branding in strings
   {
-    pattern: /"OpenCode"/g,
-    replacement: '"Kilo"',
+    pattern: /"Sonderr"/g,
+    replacement: '"Sonderr"',
     description: "Product name in string",
   },
   {
-    pattern: /'OpenCode'/g,
-    replacement: "'Kilo'",
+    pattern: /'Sonderr'/g,
+    replacement: "'Sonderr'",
     description: "Product name in single quotes",
   },
 ]
@@ -138,9 +138,9 @@ export async function transformScriptFile(
     return { file, action: "transformed", replacements: 0, dryRun: true }
   }
 
-  // If our version has kilocode_change markers, flag for manual resolution
-  if (await oursHasKilocodeChanges(file)) {
-    warn(`${file} has kilocode_change markers — skipping auto-transform, needs manual resolution`)
+  // If our version has sonderr_change markers, flag for manual resolution
+  if (await oursHasSonderrChanges(file)) {
+    warn(`${file} has sonderr_change markers — skipping auto-transform, needs manual resolution`)
     return { file, action: "flagged", replacements: 0, dryRun: false }
   }
 
@@ -193,7 +193,7 @@ export async function transformConflictedScripts(
 }
 
 /**
- * Transform all script files (pre-merge, on opencode branch)
+ * Transform all script files (pre-merge, on sonderr branch)
  */
 export async function transformAllScripts(options: ScriptTransformOptions = {}): Promise<ScriptTransformResult[]> {
   const { Glob } = await import("bun")

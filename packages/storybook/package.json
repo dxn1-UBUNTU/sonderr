@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@opencode-ai/storybook",
+  "name": "@sonderr/storybook",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "catalog:",
-    "@opencode-ai/ui": "workspace:*",
+    "@sonderr/ui": "workspace:*",
     "@solidjs/meta": "catalog:",
     "@storybook/addon-a11y": "^10.2.13",
     "@storybook/addon-docs": "^10.2.13",
@@ -25,7 +25,7 @@
     "storybook-solidjs-vite": "^10.0.9",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "@opencode-ai/session-ui": "workspace:*",
+    "@sonderr/session-ui": "workspace:*",
     "react-dom": "18.2.0"
   },
   "version": "7.5.6",

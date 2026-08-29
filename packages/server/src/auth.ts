@@ -17,7 +17,7 @@ export type Info = {
   readonly username: string
 }
 
-export class Config extends Context.Service<Config, Info>()("@opencode/ServerAuthConfig") {
+export class Config extends Context.Service<Config, Info>()("@sonderr/ServerAuthConfig") {
   static configLayer(input: Info) {
     return Layer.succeed(this, this.of(input))
   }
@@ -28,8 +28,8 @@ export class Config extends Context.Service<Config, Info>()("@opencode/ServerAut
       Effect.gen(function* () {
         return Config.of(
           yield* EffectConfig.all({
-            password: EffectConfig.string("KILO_SERVER_PASSWORD").pipe(EffectConfig.option),
-            username: EffectConfig.string("KILO_SERVER_USERNAME").pipe(EffectConfig.withDefault("opencode")),
+            password: EffectConfig.string("SONDERR_SERVER_PASSWORD").pipe(EffectConfig.option),
+            username: EffectConfig.string("SONDERR_SERVER_USERNAME").pipe(EffectConfig.withDefault("sonderr")),
           }),
         )
       }),
@@ -50,10 +50,10 @@ export function authorized(credentials: DecodedCredentials, config: Info) {
 }
 
 export function header(credentials?: Credentials) {
-  const password = credentials?.password ?? process.env.KILO_SERVER_PASSWORD
+  const password = credentials?.password ?? process.env.SONDERR_SERVER_PASSWORD
   if (!password) return undefined
 
-  return `Basic ${Buffer.from(`${credentials?.username ?? process.env.KILO_SERVER_USERNAME ?? "opencode"}:${password}`).toString("base64")}`
+  return `Basic ${Buffer.from(`${credentials?.username ?? process.env.SONDERR_SERVER_USERNAME ?? "sonderr"}:${password}`).toString("base64")}`
 }
 
 export function headers(credentials?: Credentials) {

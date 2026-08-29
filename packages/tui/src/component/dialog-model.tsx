@@ -1,40 +1,40 @@
-import { useTerminalDimensions } from "@opentui/solid" // kilocode_change
-import { createEffect, createMemo, createSignal, Show } from "solid-js" // kilocode_change
+import { useTerminalDimensions } from "@opentui/solid" // sonderr_change
+import { createEffect, createMemo, createSignal, Show } from "solid-js" // sonderr_change
 import { useLocal } from "../context/local"
 import { useSync } from "../context/sync"
-import { map, pipe, sortBy, take } from "remeda" // kilocode_change
+import { map, pipe, sortBy, take } from "remeda" // sonderr_change
 import { DialogSelect } from "../ui/dialog-select"
 import { useDialog } from "../ui/dialog"
 import { createDialogProviderOptions, DialogProvider } from "./dialog-provider"
 import { DialogVariant } from "./dialog-variant"
-import type { Model } from "@kilocode/sdk/v2" // kilocode_change
+import type { Model } from "@sonderr/sdk/v2" // sonderr_change
 import { useConnected } from "./use-connected"
-import { ModelInfoPanel } from "@/kilocode/components/model-info-panel" // kilocode_change
-import { FreeModelDisclosure } from "@/kilocode/components/free-model-disclosure" // kilocode_change
-import { buildModelPickerOptions, rankProviderOptions } from "../kilocode/model-picker" // kilocode_change
+import { ModelInfoPanel } from "@/sonderr/components/model-info-panel" // sonderr_change
+import { FreeModelDisclosure } from "@/sonderr/components/free-model-disclosure" // sonderr_change
+import { buildModelPickerOptions, rankProviderOptions } from "../sonderr/model-picker" // sonderr_change
 
 export function DialogModel(props: { providerID?: string }) {
   const local = useLocal()
   const sync = useSync()
   const dialog = useDialog()
   const [query, setQuery] = createSignal("")
-  const dimensions = useTerminalDimensions() // kilocode_change
+  const dimensions = useTerminalDimensions() // sonderr_change
 
   const connected = useConnected()
   const providers = createDialogProviderOptions()
-  // kilocode_change start
-  // Memoize anything that iterates all Kilo models to avoid calculating it for
-  // each Kilo model and tanking the UI at a couple hundred models
-  const kiloRank = createMemo(() => {
-    const provider = sync.data.provider.find((provider) => provider.id === "kilo")
+  // sonderr_change start
+  // Memoize anything that iterates all Sonderr models to avoid calculating it for
+  // each Sonderr model and tanking the UI at a couple hundred models
+  const sonderrRank = createMemo(() => {
+    const provider = sync.data.provider.find((provider) => provider.id === "sonderr")
     const models = provider?.models ?? {}
     return new Map(Object.entries(models).map(([id, info]) => [id, info.recommendedIndex ?? Infinity] as const))
   })
-  // kilocode_change end
+  // sonderr_change end
 
   const showExtra = createMemo(() => connected() && !props.providerID)
 
-  // kilocode_change start
+  // sonderr_change start
   const wide = createMemo(() => dimensions().width >= 108)
   const [preview, setPreview] = createSignal<{
     model: Model
@@ -65,16 +65,16 @@ export function DialogModel(props: { providerID?: string }) {
 
   const footer = (providerID: string, model: Model) => {
     const labels = [
-      providerID === "kilo" && FreeModelDisclosure.hasByok(model) ? FreeModelDisclosure.byok : undefined,
-      providerID === "kilo" && FreeModelDisclosure.collectsData(model) ? FreeModelDisclosure.label : undefined,
-      model.cost?.input === 0 && providerID === "opencode" ? "Free" : undefined,
+      providerID === "sonderr" && FreeModelDisclosure.hasByok(model) ? FreeModelDisclosure.byok : undefined,
+      providerID === "sonderr" && FreeModelDisclosure.collectsData(model) ? FreeModelDisclosure.label : undefined,
+      model.cost?.input === 0 && providerID === "sonderr" ? "Free" : undefined,
     ].filter((label) => label !== undefined)
     return labels.length > 0 ? labels.join(" · ") : undefined
   }
-  // kilocode_change end
+  // sonderr_change end
 
-  // kilocode_change start - option building lives in kilocode/model-picker so the
-  // Kilo Gateway grouping/search rules can be unit tested
+  // sonderr_change start - option building lives in sonderr/model-picker so the
+  // Sonderr Gateway grouping/search rules can be unit tested
   const options = createMemo(() => {
     const needle = query().trim()
     const modelOptions = buildModelPickerOptions({
@@ -87,7 +87,7 @@ export function DialogModel(props: { providerID?: string }) {
       query: needle,
       footer,
       onSelect,
-      sort: (items) => sortModelOptions(items, props.providerID !== undefined, kiloRank()),
+      sort: (items) => sortModelOptions(items, props.providerID !== undefined, sonderrRank()),
     })
 
     const popularProviders = !connected()
@@ -103,7 +103,7 @@ export function DialogModel(props: { providerID?: string }) {
 
     return [...modelOptions, ...(needle ? rankProviderOptions(needle, popularProviders) : popularProviders)]
   })
-  // kilocode_change end
+  // sonderr_change end
 
   const provider = createMemo(() =>
     props.providerID ? sync.data.provider.find((item) => item.id === props.providerID) : null,
@@ -130,7 +130,7 @@ export function DialogModel(props: { providerID?: string }) {
     dialog.clear()
   }
 
-  // kilocode_change start
+  // sonderr_change start
   return (
     <box flexDirection="row">
       <box flexGrow={1} flexShrink={1}>
@@ -163,7 +163,7 @@ export function DialogModel(props: { providerID?: string }) {
             if (!next) return
             setPreview(next)
           }}
-          // kilocode_change: removed flat={true} to keep section headers visible while filtering
+          // sonderr_change: removed flat={true} to keep section headers visible while filtering
           skipFilter={true}
           title={title()}
           current={local.model.current()}
@@ -174,7 +174,7 @@ export function DialogModel(props: { providerID?: string }) {
       </Show>
     </box>
   )
-  // kilocode_change end
+  // sonderr_change end
 }
 
 export function sortModelOptions<
@@ -182,29 +182,29 @@ export function sortModelOptions<
     footer?: string
     releaseDate: string | number
     title: string
-    value?: { providerID: string; modelID: string } // kilocode_change
+    value?: { providerID: string; modelID: string } // sonderr_change
   },
 >(
   options: T[],
   newestFirst: boolean,
-  rank: ReadonlyMap<string, number> = new Map(), // kilocode_change
+  rank: ReadonlyMap<string, number> = new Map(), // sonderr_change
 ) {
-  // kilocode_change start - Sort within Recommended / Kilo Gateway
+  // sonderr_change start - Sort within Recommended / Sonderr Gateway
   const recommended = (option: T) =>
-    option.value?.providerID === "kilo" ? (rank.get(option.value.modelID) ?? Infinity) : 0
-  // kilocode_change end
+    option.value?.providerID === "sonderr" ? (rank.get(option.value.modelID) ?? Infinity) : 0
+  // sonderr_change end
   if (newestFirst)
     return sortBy(
       options,
-      recommended, // kilocode_change
+      recommended, // sonderr_change
       [(option) => option.releaseDate, "desc"],
       (option) => option.title,
     )
   return sortBy(
     options,
-    recommended, // kilocode_change
+    recommended, // sonderr_change
     (option) => option.footer === undefined,
-    [(option) => option.releaseDate, "desc"], // kilocode_change - free model footers include Kilo disclosure labels
+    [(option) => option.releaseDate, "desc"], // sonderr_change - free model footers include Sonderr disclosure labels
     (option) => option.title,
   )
 }

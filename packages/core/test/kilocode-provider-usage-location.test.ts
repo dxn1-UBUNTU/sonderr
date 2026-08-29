@@ -1,7 +1,7 @@
 import { describe, expect } from "bun:test"
 import { Context, Effect } from "effect"
 import { AppNodeBuilder } from "../src/effect/app-node-builder"
-import { ProviderUsage } from "../src/kilocode/provider-usage"
+import { ProviderUsage } from "../src/sonderr/provider-usage"
 import { Location } from "../src/location"
 import { LocationServiceMap } from "../src/location-services"
 import { AbsolutePath } from "../src/schema"

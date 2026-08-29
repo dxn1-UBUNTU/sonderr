@@ -2,8 +2,8 @@ import launch from "cross-spawn"
 import { type Config } from "./gen/types.gen.js"
 import { stop, bindAbort } from "../process.js"
 
-// kilocode_change start - Merge existing KILO_CONFIG_CONTENT with new config
-// This preserves Kilocode-injected modes when spawning nested CLI instances
+// sonderr_change start - Merge existing SONDERR_CONFIG_CONTENT with new config
+// This preserves Sonderr-injected modes when spawning nested CLI instances
 function mergeConfig(existing: Config | undefined, incoming: Config | undefined): Config {
   const base = existing ?? {}
   const override = incoming ?? {}
@@ -20,7 +20,7 @@ function mergeConfig(existing: Config | undefined, incoming: Config | undefined)
 }
 
 function parseExistingConfig(): Config | undefined {
-  const content = process.env.KILO_CONFIG_CONTENT
+  const content = process.env.SONDERR_CONFIG_CONTENT
   if (!content) return undefined
   try {
     return JSON.parse(content)
@@ -33,7 +33,7 @@ export function buildConfigEnv(config?: Config): string {
   const merged = mergeConfig(parseExistingConfig(), config)
   return JSON.stringify(merged)
 }
-// kilocode_change end
+// sonderr_change end
 
 export type ServerOptions = {
   hostname?: string
@@ -52,7 +52,7 @@ export type TuiOptions = {
   config?: Config
 }
 
-export async function createKiloServer(options?: ServerOptions) {
+export async function createSonderrServer(options?: ServerOptions) {
   options = Object.assign(
     {
       hostname: "127.0.0.1",
@@ -65,12 +65,12 @@ export async function createKiloServer(options?: ServerOptions) {
   const args = [`serve`, `--hostname=${options.hostname}`, `--port=${options.port}`]
   if (options.config?.logLevel) args.push(`--log-level=${options.config.logLevel}`)
 
-  // kilocode_change start
-  const proc = launch(`kilo`, args, {
-    // kilocode_change end
+  // sonderr_change start
+  const proc = launch(`sonderr`, args, {
+    // sonderr_change end
     env: {
       ...process.env,
-      KILO_CONFIG_CONTENT: buildConfigEnv(options.config), // kilocode_change
+      SONDERR_CONFIG_CONTENT: buildConfigEnv(options.config), // sonderr_change
     },
   })
   let clear = () => {}
@@ -88,9 +88,9 @@ export async function createKiloServer(options?: ServerOptions) {
       output += chunk.toString()
       const lines = output.split("\n")
       for (const line of lines) {
-        // kilocode_change start
-        if (line.startsWith("kilo server listening")) {
-          // kilocode_change end
+        // sonderr_change start
+        if (line.startsWith("sonderr server listening")) {
+          // sonderr_change end
           const match = line.match(/on\s+(https?:\/\/[^\s]+)/)
           if (!match) {
             clear()
@@ -136,7 +136,7 @@ export async function createKiloServer(options?: ServerOptions) {
   }
 }
 
-export function createKiloTui(options?: TuiOptions) {
+export function createSonderrTui(options?: TuiOptions) {
   const args = []
 
   if (options?.project) {
@@ -152,14 +152,14 @@ export function createKiloTui(options?: TuiOptions) {
     args.push(`--agent=${options.agent}`)
   }
 
-  // kilocode_change start
-  const proc = launch(`kilo`, args, {
-    // kilocode_change end
+  // sonderr_change start
+  const proc = launch(`sonderr`, args, {
+    // sonderr_change end
     stdio: "inherit",
     windowsHide: true,
     env: {
       ...process.env,
-      KILO_CONFIG_CONTENT: buildConfigEnv(options?.config), // kilocode_change
+      SONDERR_CONFIG_CONTENT: buildConfigEnv(options?.config), // sonderr_change
     },
   })
 

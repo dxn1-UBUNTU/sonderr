@@ -1,4 +1,4 @@
-// kilocode_change - new file
+// sonderr_change - new file
 
 /**
  * Filters the full digest down to PRs the triage pass marked docs-worthy.

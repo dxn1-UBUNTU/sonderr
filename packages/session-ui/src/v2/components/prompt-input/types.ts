@@ -1,4 +1,4 @@
-import type { FilePartSource } from "@kilocode/sdk/v2/client"
+import type { FilePartSource } from "@sonderr/sdk/v2/client"
 
 type PromptInputV2PartBase = {
   content: string
@@ -31,7 +31,7 @@ export type PromptInputV2Attachment = {
   filename: string
   sourcePath?: string
   mime: string
-  blob: { id: string; url: string; revoke?: true } // kilocode_change - track locally owned object URLs
+  blob: { id: string; url: string; revoke?: true } // sonderr_change - track locally owned object URLs
 }
 
 export type PromptInputV2Prompt = (

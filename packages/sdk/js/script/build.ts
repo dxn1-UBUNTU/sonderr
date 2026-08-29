@@ -9,9 +9,9 @@ import path from "path"
 
 import { createClient } from "@hey-api/openapi-ts"
 
-const opencode = path.resolve(dir, "../../opencode")
+const sonderr = path.resolve(dir, "../../sonderr")
 
-await $`bun dev generate > ${dir}/openapi.json`.cwd(opencode)
+await $`bun dev generate > ${dir}/openapi.json`.cwd(sonderr)
 
 const document = (await Bun.file("./openapi.json").json()) as {
   components?: { schemas?: Record<string, unknown> }
@@ -58,7 +58,7 @@ await createClient({
     },
     {
       name: "@hey-api/sdk",
-      instance: "KiloClient",
+      instance: "SonderrClient",
       exportFromIndex: false,
       auth: false,
       paramsStructure: "flat",
@@ -95,7 +95,7 @@ if (historySdkPatched === generatedSdk) {
 await Bun.write("./src/v2/gen/sdk.gen.ts", historySdkPatched)
 
 // The legacy SDK generator is retired, but this public Config type remains exported.
-// Keep Kilo's released sandbox settings aligned with the current generated client.
+// Keep Sonderr's released sandbox settings aligned with the current generated client.
 const legacyTypesPath = "./src/gen/types.gen.ts"
 const legacyTypesFile = Bun.file(legacyTypesPath)
 const legacySource = await legacyTypesFile.text()

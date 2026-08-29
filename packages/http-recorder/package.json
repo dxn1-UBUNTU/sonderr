@@ -1,17 +1,17 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "version": "7.5.6",
-  "name": "@opencode-ai/http-recorder",
+  "name": "@sonderr/http-recorder",
   "description": "Record and replay Effect HTTP client traffic with deterministic cassettes",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kilo-Org/kilocode.git",
+    "url": "git+https://github.com/Sonderr-Org/sonderr.git",
     "directory": "packages/http-recorder"
   },
-  "homepage": "https://github.com/Kilo-Org/kilocode/tree/main/packages/http-recorder",
-  "bugs": "https://github.com/Kilo-Org/kilocode/issues",
+  "homepage": "https://github.com/Sonderr-Org/sonderr/tree/main/packages/http-recorder",
+  "bugs": "https://github.com/Sonderr-Org/sonderr/issues",
   "keywords": [
     "effect",
     "http",

@@ -1,4 +1,4 @@
-import type { Match } from "@opencode-ai/schema/filesystem"
+import type { Match } from "@sonderr/schema/filesystem"
 
 export interface Options {
   readonly context?: number

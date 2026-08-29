@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import fs from "fs/promises"
 import path from "path"
-import { Database } from "@opencode-ai/core/database/database"
+import { Database } from "@sonderr/core/database/database"
 import { Effect, Layer } from "effect"
 import { tmpdir } from "../fixture/tmpdir"
 
@@ -26,7 +26,7 @@ const remove = async (file: string, retry = 30): Promise<void> => {
 describe("database WAL recovery", () => {
   test("starts concurrent processes while recovering an abandoned WAL", async () => {
     await using tmp = await tmpdir()
-    const file = path.join(tmp.path, "kilo.db")
+    const file = path.join(tmp.path, "sonderr.db")
     await Effect.runPromise(Layer.build(Database.layerFromPath(file).pipe(Layer.fresh)).pipe(Effect.scoped))
 
     const worker = path.join(import.meta.dir, "fixture/database-recovery-worker.ts")

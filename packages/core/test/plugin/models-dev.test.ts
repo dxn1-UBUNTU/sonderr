@@ -1,20 +1,20 @@
 import path from "path"
 import { afterAll, describe, expect } from "bun:test"
 import { Effect, Layer } from "effect"
-import { Catalog } from "@opencode-ai/core/catalog"
-import { Integration } from "@opencode-ai/core/integration"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { EventV2 } from "@opencode-ai/core/event"
-import { Flag } from "@opencode-ai/core/flag/flag"
-import { Location } from "@opencode-ai/core/location"
-import { ModelV2 } from "@opencode-ai/core/model"
-import { ModelsDev } from "@opencode-ai/core/models-dev"
-import { ModelsDevPlugin } from "@opencode-ai/core/plugin/models-dev"
-import { ProviderV2 } from "@opencode-ai/core/provider"
-import { AbsolutePath } from "@opencode-ai/core/schema"
+import { Catalog } from "@sonderr/core/catalog"
+import { Integration } from "@sonderr/core/integration"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { EventV2 } from "@sonderr/core/event"
+import { Flag } from "@sonderr/core/flag/flag"
+import { Location } from "@sonderr/core/location"
+import { ModelV2 } from "@sonderr/core/model"
+import { ModelsDev } from "@sonderr/core/models-dev"
+import { ModelsDevPlugin } from "@sonderr/core/plugin/models-dev"
+import { ProviderV2 } from "@sonderr/core/provider"
+import { AbsolutePath } from "@sonderr/core/schema"
 import { location } from "../fixture/location"
-import { Global } from "@opencode-ai/core/global"
+import { Global } from "@sonderr/core/global"
 import fs from "node:fs"
 import os from "node:os"
 import { testEffect } from "../lib/effect"
@@ -24,14 +24,14 @@ const locationLayer = Layer.succeed(
   Location.Service,
   Location.Service.of(location({ directory: AbsolutePath.make(import.meta.dir) })),
 )
-// kilocode_change - Catalog pulls Credential, which imports Global.data/auth.json on startup, so
+// sonderr_change - Catalog pulls Credential, which imports Global.data/auth.json on startup, so
 // without this the suite reads the developer's real credential store.
-const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "kilo-modelsdev-test-"))
+const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonderr-modelsdev-test-"))
 const globalLayer = Global.layerWith({ data: dataDir })
 afterAll(() => fs.rmSync(dataDir, { recursive: true, force: true }))
 const layer = AppNodeBuilder.build(LayerNode.group([Catalog.node, Integration.node, EventV2.node]), [
   [Location.node, locationLayer],
-  [Global.node, globalLayer], // kilocode_change
+  [Global.node, globalLayer], // sonderr_change
 ])
 const it = testEffect(layer)
 
@@ -137,11 +137,11 @@ describe("ModelsDevPlugin", () => {
     Effect.acquireUseRelease(
       Effect.sync(() => {
         const previous = {
-          path: Flag.KILO_MODELS_PATH,
-          disabled: Flag.KILO_DISABLE_MODELS_FETCH,
+          path: Flag.SONDERR_MODELS_PATH,
+          disabled: Flag.SONDERR_DISABLE_MODELS_FETCH,
         }
-        Flag.KILO_MODELS_PATH = path.join(import.meta.dir, "fixtures", "models-dev.json")
-        Flag.KILO_DISABLE_MODELS_FETCH = true
+        Flag.SONDERR_MODELS_PATH = path.join(import.meta.dir, "fixtures", "models-dev.json")
+        Flag.SONDERR_DISABLE_MODELS_FETCH = true
         return previous
       }),
       () =>
@@ -171,8 +171,8 @@ describe("ModelsDevPlugin", () => {
         }).pipe(Effect.provide(AppNodeBuilder.build(ModelsDev.node))),
       (previous) =>
         Effect.sync(() => {
-          Flag.KILO_MODELS_PATH = previous.path
-          Flag.KILO_DISABLE_MODELS_FETCH = previous.disabled
+          Flag.SONDERR_MODELS_PATH = previous.path
+          Flag.SONDERR_DISABLE_MODELS_FETCH = previous.disabled
         }),
     ),
   )

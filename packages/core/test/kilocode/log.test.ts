@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test"
 import fs from "fs/promises"
 import path from "path"
-import { Global } from "@opencode-ai/core/global"
-import { Log } from "@opencode-ai/core/util/log"
+import { Global } from "@sonderr/core/global"
+import { Log } from "@sonderr/core/util/log"
 import { tmpdir } from "../fixture/tmpdir"
 
 async function files(dir: string, retries = 50): Promise<string[]> {
@@ -12,7 +12,7 @@ async function files(dir: string, retries = 50): Promise<string[]> {
   return files(dir, retries - 1)
 }
 
-describe("Kilo logger compatibility", () => {
+describe("Sonderr logger compatibility", () => {
   test("cleanup keeps the newest timestamped logs", async () => {
     const previous = Global.Path.log
     await using tmp = await tmpdir()
@@ -35,12 +35,12 @@ describe("Kilo logger compatibility", () => {
 
   test("does not truncate the dev log twice during one run", async () => {
     const previous = Global.Path.log
-    const run = process.env.KILO_RUN_ID
-    const initialized = process.env.KILO_LOG_INITIALIZED_RUN_ID
+    const run = process.env.SONDERR_RUN_ID
+    const initialized = process.env.SONDERR_LOG_INITIALIZED_RUN_ID
     await using tmp = await tmpdir()
     Global.Path.log = tmp.path
-    process.env.KILO_RUN_ID = "run-1"
-    delete process.env.KILO_LOG_INITIALIZED_RUN_ID
+    process.env.SONDERR_RUN_ID = "run-1"
+    delete process.env.SONDERR_LOG_INITIALIZED_RUN_ID
 
     try {
       await Log.init({ print: false, dev: true })
@@ -51,10 +51,10 @@ describe("Kilo logger compatibility", () => {
     } finally {
       await Log.init({ print: true })
       Global.Path.log = previous
-      if (run === undefined) delete process.env.KILO_RUN_ID
-      else process.env.KILO_RUN_ID = run
-      if (initialized === undefined) delete process.env.KILO_LOG_INITIALIZED_RUN_ID
-      else process.env.KILO_LOG_INITIALIZED_RUN_ID = initialized
+      if (run === undefined) delete process.env.SONDERR_RUN_ID
+      else process.env.SONDERR_RUN_ID = run
+      if (initialized === undefined) delete process.env.SONDERR_LOG_INITIALIZED_RUN_ID
+      else process.env.SONDERR_LOG_INITIALIZED_RUN_ID = initialized
     }
   })
 })

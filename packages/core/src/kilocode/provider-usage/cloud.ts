@@ -5,8 +5,8 @@ import {
   type ByokEntry,
   type CodingPlanQuotaWindow,
   type CodingPlanSubscription,
-} from "@kilocode/kilo-gateway"
-import type { ProviderUsage } from "@opencode-ai/schema/kilocode/provider-usage"
+} from "@sonderr/sonderr-gateway"
+import type { ProviderUsage } from "@sonderr/schema/sonderr/provider-usage"
 
 export { fetchByokEntries, fetchCodingPlanSubscriptions, fetchCodingPlanUsage }
 
@@ -35,9 +35,9 @@ export async function load(
 }
 
 function base() {
-  if (!process.env.KILO_API_URL) return "https://app.kilo.ai"
+  if (!process.env.SONDERR_API_URL) return "https://app.kilo.ai"
   try {
-    return new URL(process.env.KILO_API_URL).origin
+    return new URL(process.env.SONDERR_API_URL).origin
   } catch {
     return "https://app.kilo.ai"
   }
@@ -99,7 +99,7 @@ export async function managed(
     : subscription.status === "past_due"
       ? "past_due"
       : "active"
-  const id = `kilo-managed:${subscription.id}`
+  const id = `sonderr-managed:${subscription.id}`
   const managementUrl = `${base()}/subscriptions/coding-plans/${subscription.id}`
 
   return usage(token, subscription.id)
@@ -108,10 +108,10 @@ export async function managed(
       return {
         id,
         providerID: usage.subscription.providerId,
-        sourceKind: "kilo_managed",
+        sourceKind: "sonderr_managed",
         providerLabel: usage.subscription.providerName,
         planLabel: usage.subscription.planName,
-        sourceLabel: "via Kilo",
+        sourceLabel: "via Sonderr",
         fetchState: "ready",
         planState,
         routingState: "active",
@@ -123,10 +123,10 @@ export async function managed(
     .catch(() => ({
       id,
       providerID: subscription.providerId,
-      sourceKind: "kilo_managed",
+      sourceKind: "sonderr_managed",
       providerLabel: subscription.providerName,
       planLabel: subscription.planName,
-      sourceLabel: "via Kilo",
+      sourceLabel: "via Sonderr",
       fetchState: "unavailable",
       planState,
       routingState: "active",

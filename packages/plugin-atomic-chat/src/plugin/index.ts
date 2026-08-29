@@ -1,4 +1,4 @@
-import type { Plugin, PluginInput } from "@kilocode/plugin"
+import type { Plugin, PluginInput } from "@sonderr/plugin"
 import { ToastNotifier } from "../ui/toast-notifier"
 import { createConfigHook } from "./config-hook"
 import { createEventHook } from "./event-hook"

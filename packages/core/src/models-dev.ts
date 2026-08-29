@@ -1,18 +1,18 @@
 import path from "path"
-import { Context, Duration, Effect, Layer, Logger, Option, Schedule, Schema } from "effect" // kilocode_change
+import { Context, Duration, Effect, Layer, Logger, Option, Schedule, Schema } from "effect" // sonderr_change
 import { FetchHttpClient, HttpClient, HttpClientRequest } from "effect/unstable/http"
-import { ModelsDev } from "@opencode-ai/schema/models-dev"
+import { ModelsDev } from "@sonderr/schema/models-dev"
 import { Global } from "./global"
 import { Flag } from "./flag/flag"
 import { Flock } from "./util/flock"
 import { Hash } from "./util/hash"
 import { FSUtil } from "./fs-util"
 import { InstallationChannel, InstallationVersion } from "./installation/version"
-import * as ModelsRefresh from "./kilocode/models-refresh" // kilocode_change
+import * as ModelsRefresh from "./sonderr/models-refresh" // sonderr_change
 import { EventV2 } from "./event"
 import { makeGlobalNode } from "./effect/app-node"
 import { httpClient } from "./effect/app-node-platform"
-import { Observability } from "./observability" // kilocode_change
+import { Observability } from "./observability" // sonderr_change
 
 export const CatalogModelStatus = Schema.Literals(["alpha", "beta", "deprecated"])
 export type CatalogModelStatus = typeof CatalogModelStatus.Type
@@ -22,7 +22,7 @@ const InterleavedField = Schema.Union([
   Schema.String,
 ])
 
-const USER_AGENT = `opencode/${InstallationChannel}/${InstallationVersion}/${Flag.KILO_CLIENT}`
+const USER_AGENT = `sonderr/${InstallationChannel}/${InstallationVersion}/${Flag.SONDERR_CLIENT}`
 
 const CostTier = Schema.Struct({
   input: Schema.Finite,
@@ -97,13 +97,13 @@ export const Model = Schema.Struct({
       output: Schema.Array(Schema.Literals(["text", "audio", "image", "video", "pdf"])),
     }),
   ),
-  // kilocode_change start - preserve Kilo catalog metadata
+  // sonderr_change start - preserve Sonderr catalog metadata
   recommendedIndex: Schema.optional(Schema.Finite),
   prompt: Schema.optional(Schema.String),
   isFree: Schema.optional(Schema.Boolean),
   mayTrainOnYourPrompts: Schema.optional(Schema.Boolean),
   ai_sdk_provider: Schema.optional(Schema.String),
-  // kilocode_change end
+  // sonderr_change end
   experimental: Schema.optional(
     Schema.Struct({
       modes: Schema.optional(
@@ -132,7 +132,7 @@ export type Model = Schema.Schema.Type<typeof Model>
 export const Provider = Schema.Struct({
   api: Schema.optional(Schema.String),
   name: Schema.String,
-  description: Schema.optional(Schema.String), // kilocode_change
+  description: Schema.optional(Schema.String), // sonderr_change
   env: Schema.Array(Schema.String),
   id: Schema.String,
   npm: Schema.optional(Schema.String),
@@ -143,21 +143,21 @@ export type Provider = Schema.Schema.Type<typeof Provider>
 
 export const Event = ModelsDev.Event
 
-declare const KILO_MODELS_DEV: Record<string, Provider> | undefined
+declare const SONDERR_MODELS_DEV: Record<string, Provider> | undefined
 
 export interface Interface {
   readonly get: () => Effect.Effect<Record<string, Provider>>
   readonly refresh: (force?: boolean) => Effect.Effect<void>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/ModelsDev") {}
+export class Service extends Context.Service<Service, Interface>()("@sonderr/ModelsDev") {}
 
 const layer = Layer.effect(
   Service,
   Effect.gen(function* () {
     const fs = yield* FSUtil.Service
     const events = yield* EventV2.Service
-    const loggers = yield* Effect.service(Logger.CurrentLoggers) // kilocode_change
+    const loggers = yield* Effect.service(Logger.CurrentLoggers) // sonderr_change
     const http = HttpClient.filterStatusOk(
       (yield* HttpClient.HttpClient).pipe(
         HttpClient.retryTransient({
@@ -168,10 +168,10 @@ const layer = Layer.effect(
       ),
     )
 
-    const source = Flag.KILO_MODELS_URL || "https://models.dev" // kilocode_change
+    const source = Flag.SONDERR_MODELS_URL || "https://models.dev" // sonderr_change
     const filepath = path.join(
       Global.Path.cache,
-      source === "https://models.dev" ? "models.json" : `models-${Hash.fast(source)}.json`, // kilocode_change
+      source === "https://models.dev" ? "models.json" : `models-${Hash.fast(source)}.json`, // sonderr_change
     )
     const ttl = Duration.minutes(5)
     const lockKey = `models-dev:${filepath}`
@@ -192,9 +192,9 @@ const layer = Layer.effect(
       )
     })
 
-    const loadFromDisk = fs.readJson(Flag.KILO_MODELS_PATH ?? filepath).pipe(
+    const loadFromDisk = fs.readJson(Flag.SONDERR_MODELS_PATH ?? filepath).pipe(
       Effect.catch((error) => {
-        if (Flag.KILO_MODELS_PATH === undefined && error._tag === "FileSystemError" && error.method === "readJson") {
+        if (Flag.SONDERR_MODELS_PATH === undefined && error._tag === "FileSystemError" && error.method === "readJson") {
           return fs.remove(filepath, { force: true }).pipe(Effect.ignore, Effect.as(undefined))
         }
         return Effect.succeed(undefined)
@@ -202,7 +202,7 @@ const layer = Layer.effect(
       Effect.map((v) => v as Record<string, Provider> | undefined),
     )
 
-    const loadSnapshot = Effect.sync(() => (typeof KILO_MODELS_DEV === "undefined" ? undefined : KILO_MODELS_DEV))
+    const loadSnapshot = Effect.sync(() => (typeof SONDERR_MODELS_DEV === "undefined" ? undefined : SONDERR_MODELS_DEV))
 
     const fetchAndWrite = Effect.fn("ModelsDev.fetchAndWrite")(function* () {
       const text = yield* fetchApi()
@@ -224,17 +224,17 @@ const layer = Layer.effect(
       if (fromDisk) return fromDisk
       const snapshot = yield* loadSnapshot
       if (snapshot) return snapshot
-      if (Flag.KILO_DISABLE_MODELS_FETCH) return {}
-      // Flock is cross-process: concurrent opencode CLIs can race on this cache file.
+      if (Flag.SONDERR_DISABLE_MODELS_FETCH) return {}
+      // Flock is cross-process: concurrent sonderr CLIs can race on this cache file.
       return yield* Effect.scoped(
         Effect.gen(function* () {
           yield* Flock.effect(lockKey)
-          // kilocode_change start - re-read under the lock: a concurrent refresh
+          // sonderr_change start - re-read under the lock: a concurrent refresh
           // may already have recovered the corrupted cache while we waited, and
           // fetching again here would duplicate the network call.
           const rechecked = yield* loadFromDisk
           if (rechecked) return rechecked
-          // kilocode_change end
+          // sonderr_change end
           const text = yield* fetchAndWrite()
           return JSON.parse(text) as Record<string, Provider>
         }),
@@ -255,17 +255,17 @@ const layer = Layer.effect(
           if (!force && (yield* fresh())) return
           yield* fetchAndWrite()
           yield* invalidate
-          yield* ModelsRefresh.notify() // kilocode_change
+          yield* ModelsRefresh.notify() // sonderr_change
           yield* events.publish(Event.Refreshed, {})
         }),
       ).pipe(
         Effect.tapCause((cause) => Effect.logError("Failed to fetch models.dev", { cause: cause })),
         Effect.ignore,
-        Effect.provideService(Logger.CurrentLoggers, loggers), // kilocode_change
+        Effect.provideService(Logger.CurrentLoggers, loggers), // sonderr_change
       )
     })
 
-    if (!Flag.KILO_DISABLE_MODELS_FETCH && !process.argv.includes("--get-yargs-completions")) {
+    if (!Flag.SONDERR_DISABLE_MODELS_FETCH && !process.argv.includes("--get-yargs-completions")) {
       // Schedule.spaced runs the effect once, then waits between completions.
       yield* Effect.forkScoped(refresh().pipe(Effect.repeat(Schedule.spaced("60 minutes")), Effect.ignore))
     }
@@ -274,12 +274,12 @@ const layer = Layer.effect(
   }),
 )
 
-// kilocode_change start - capture file/OTLP loggers before the refresh fork
+// sonderr_change start - capture file/OTLP loggers before the refresh fork
 export const node = makeGlobalNode({
   service: Service,
   layer: layer,
   deps: [FSUtil.node, EventV2.node, httpClient, Observability.node],
 })
-// kilocode_change end
+// sonderr_change end
 
 export * as ModelsDev from "./models-dev"

@@ -10,7 +10,7 @@ export const Server = Schema.Struct({
   hostname: Schema.optional(Schema.String).annotate({ description: "Hostname to listen on" }),
   mdns: Schema.optional(Schema.Boolean).annotate({ description: "Enable mDNS service discovery" }),
   mdnsDomain: Schema.optional(Schema.String).annotate({
-    description: "Custom domain name for mDNS service (default: kilo.local)", // kilocode_change
+    description: "Custom domain name for mDNS service (default: sonderr.local)", // sonderr_change
   }),
   cors: Schema.optional(Schema.mutable(Schema.Array(Schema.String))).annotate({
     description: "Additional domains to allow for CORS",

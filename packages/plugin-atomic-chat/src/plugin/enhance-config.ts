@@ -8,7 +8,7 @@ import {
   isAtomicChatAutoDetectEnabled,
   shouldProbeAtomicChat,
 } from "../utils/should-probe-atomic-chat"
-import type { PluginInput } from "@kilocode/plugin"
+import type { PluginInput } from "@sonderr/plugin"
 import type { AtomicChatModel } from "../types"
 import { ATOMIC_CHAT_PROVIDER_KEY, DEFAULT_ATOMIC_CHAT_ORIGIN, LOG_PREFIX } from "../constants"
 

@@ -1,4 +1,4 @@
-import type { SkillV2Source } from "@kilocode/sdk/v2/types"
+import type { SkillV2Source } from "@sonderr/sdk/v2/types"
 import type { Hooks } from "./registration.js"
 
 export interface SkillDraft {

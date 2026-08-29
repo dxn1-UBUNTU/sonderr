@@ -1,30 +1,30 @@
-import { AgentV2 } from "@opencode-ai/core/agent"
-import { AISDK } from "@opencode-ai/core/aisdk"
-import { Catalog } from "@opencode-ai/core/catalog"
-import { CommandV2 } from "@opencode-ai/core/command"
-import { Credential } from "@opencode-ai/core/credential"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNodePlatform } from "@opencode-ai/core/effect/app-node-platform"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { EventV2 } from "@opencode-ai/core/event"
-import { FileSystem } from "@opencode-ai/core/filesystem"
-import { FSUtil } from "@opencode-ai/core/fs-util"
-import { Integration } from "@opencode-ai/core/integration"
-import { Location } from "@opencode-ai/core/location"
-import { Npm } from "@opencode-ai/core/npm"
-import { PluginV2 } from "@opencode-ai/core/plugin"
-import { Reference } from "@opencode-ai/core/reference"
-import { SkillV2 } from "@opencode-ai/core/skill"
-import { Global } from "@opencode-ai/core/global"
+import { AgentV2 } from "@sonderr/core/agent"
+import { AISDK } from "@sonderr/core/aisdk"
+import { Catalog } from "@sonderr/core/catalog"
+import { CommandV2 } from "@sonderr/core/command"
+import { Credential } from "@sonderr/core/credential"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNodePlatform } from "@sonderr/core/effect/app-node-platform"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { EventV2 } from "@sonderr/core/event"
+import { FileSystem } from "@sonderr/core/filesystem"
+import { FSUtil } from "@sonderr/core/fs-util"
+import { Integration } from "@sonderr/core/integration"
+import { Location } from "@sonderr/core/location"
+import { Npm } from "@sonderr/core/npm"
+import { PluginV2 } from "@sonderr/core/plugin"
+import { Reference } from "@sonderr/core/reference"
+import { SkillV2 } from "@sonderr/core/skill"
+import { Global } from "@sonderr/core/global"
 import { Effect, Layer } from "effect"
 import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
 import { tempLocationLayer } from "../fixture/location"
 
-// kilocode_change - Credential imports Global.data/auth.json on startup, so without this the suite
+// sonderr_change - Credential imports Global.data/auth.json on startup, so without this the suite
 // reads the developer's real credential store and its results depend on whether they are logged in.
-const globalLayer = Global.layerWith({ data: fs.mkdtempSync(path.join(os.tmpdir(), "kilo-plugin-test-")) })
+const globalLayer = Global.layerWith({ data: fs.mkdtempSync(path.join(os.tmpdir(), "sonderr-plugin-test-")) })
 
 const npmLayer = Layer.succeed(
   Npm.Service,
@@ -56,6 +56,6 @@ export const PluginTestLayer = AppNodeBuilder.build(
   [
     [Location.node, tempLocationLayer],
     [Npm.node, npmLayer],
-    [Global.node, globalLayer], // kilocode_change
+    [Global.node, globalLayer], // sonderr_change
   ],
 )

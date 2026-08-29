@@ -1,11 +1,11 @@
 #!/usr/bin/env bun
 /**
- * Reset one file to the last merged upstream version after applying Kilo merge
+ * Reset one file to the last merged upstream version after applying Sonderr merge
  * branding transforms.
  *
  * Usage:
- *   bun run script/upstream/reset-to-upstream.ts packages/opencode/src/file.ts
- *   bun run script/upstream/reset-to-upstream.ts packages/opencode/src/file.ts --dry-run
+ *   bun run script/upstream/reset-to-upstream.ts packages/cli/src/file.ts
+ *   bun run script/upstream/reset-to-upstream.ts packages/cli/src/file.ts --dry-run
  */
 
 import { error, header, info, success, warn } from "./utils/logger"

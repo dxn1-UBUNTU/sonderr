@@ -2,7 +2,7 @@ export * as Reference from "./reference"
 
 import { makeLocationNode } from "./effect/app-node"
 import { Context, Effect, Layer, Scope, Types } from "effect"
-import { Reference } from "@opencode-ai/schema/reference"
+import { Reference } from "@sonderr/schema/reference"
 import { Global } from "./global"
 import { EventV2 } from "./event"
 import { Repository } from "./repository"
@@ -35,11 +35,11 @@ type Draft = {
 }
 
 export interface Interface extends State.Transformable<Draft> {
-  readonly replace: (sources: readonly (readonly [string, Source])[]) => Effect.Effect<void> // kilocode_change
+  readonly replace: (sources: readonly (readonly [string, Source])[]) => Effect.Effect<void> // sonderr_change
   readonly list: () => Effect.Effect<Info[]>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/v2/Reference") {}
+export class Service extends Context.Service<Service, Interface>()("@sonderr/v2/Reference") {}
 
 const layer = Layer.effect(
   Service,
@@ -109,7 +109,7 @@ const layer = Layer.effect(
 
     return Service.of({
       transform: state.transform,
-      // kilocode_change start - reconcile Kilo's effective config without a request-scoped transform slot.
+      // sonderr_change start - reconcile Sonderr's effective config without a request-scoped transform slot.
       replace: (sources) =>
         state.mutate((editor) =>
           Effect.sync(() => {
@@ -117,7 +117,7 @@ const layer = Layer.effect(
             for (const [name, source] of sources) editor.add(name, source)
           }),
         ),
-      // kilocode_change end
+      // sonderr_change end
       reload: state.reload,
       list: Effect.fn("Reference.list")(function* () {
       return Array.from(materialized.values())

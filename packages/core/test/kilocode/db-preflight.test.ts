@@ -2,8 +2,8 @@ import { describe, expect, test } from "bun:test"
 import { Database } from "bun:sqlite"
 import { accessSync, chmodSync, constants } from "fs"
 import path from "path"
-import { DbPreflight } from "@opencode-ai/core/kilocode/db-preflight"
-import { Database as KiloDatabase } from "@opencode-ai/core/database/database"
+import { DbPreflight } from "@sonderr/core/sonderr/db-preflight"
+import { Database as SonderrDatabase } from "@sonderr/core/database/database"
 import { tmpdir } from "../fixture/tmpdir"
 
 const writable = (file: string) => {
@@ -27,7 +27,7 @@ function createWalDb(file: string) {
 }
 
 // leaves committed-but-uncheckpointed frames in the WAL by SIGKILLing the writer,
-// reproducing the state a crashed kilo process leaves behind
+// reproducing the state a crashed sonderr process leaves behind
 async function createWalDbWithPendingFrames(file: string) {
   const script = [
     `const { Database } = require("bun:sqlite")`,
@@ -53,15 +53,15 @@ describe("DbPreflight", () => {
 
   test("accepts a writable database", async () => {
     await using tmp = await tmpdir()
-    const file = path.join(tmp.path, "kilo.db")
+    const file = path.join(tmp.path, "sonderr.db")
     createWalDb(file)
     expect(() => DbPreflight.assertWritable(file)).not.toThrow()
   })
 
-  test("names the offending file for a read-only sidecar outside the kilo data dir", async () => {
+  test("names the offending file for a read-only sidecar outside the sonderr data dir", async () => {
     if (skip) return
     await using tmp = await tmpdir()
-    const file = path.join(tmp.path, "kilo.db")
+    const file = path.join(tmp.path, "sonderr.db")
     // a clean close deletes the sidecars on some platforms; a killed writer always leaves them
     await createWalDbWithPendingFrames(file)
     chmodSync(`${file}-wal`, 0o444)
@@ -72,7 +72,7 @@ describe("DbPreflight", () => {
   test("repairs read-only files inside the trusted dir", async () => {
     if (skip) return
     await using tmp = await tmpdir()
-    const file = path.join(tmp.path, "kilo.db")
+    const file = path.join(tmp.path, "sonderr.db")
     await createWalDbWithPendingFrames(file)
     chmodSync(file, 0o444)
     chmodSync(`${file}-wal`, 0o444)
@@ -84,7 +84,7 @@ describe("DbPreflight", () => {
   test("reports a missing directory as missing, not as read-only", async () => {
     await using tmp = await tmpdir()
     const dir = path.join(tmp.path, "absent")
-    const file = path.join(dir, "kilo.db")
+    const file = path.join(dir, "sonderr.db")
     expect(() => DbPreflight.assertWritable(file)).toThrow(`Database directory does not exist: ${dir}`)
   })
 
@@ -92,7 +92,7 @@ describe("DbPreflight", () => {
     if (skip) return
     await using tmp = await tmpdir()
     const dir = path.join(tmp.path, "locked")
-    const file = path.join(dir, "kilo.db")
+    const file = path.join(dir, "sonderr.db")
     await Bun.write(path.join(dir, ".keep"), "")
     chmodSync(dir, 0o555)
     try {
@@ -105,12 +105,12 @@ describe("DbPreflight", () => {
   test("pending WAL frames with a read-only sidecar fail with the actionable error, and repair recovers the data", async () => {
     if (skip) return
     await using tmp = await tmpdir()
-    const file = path.join(tmp.path, "kilo.db")
+    const file = path.join(tmp.path, "sonderr.db")
     await createWalDbWithPendingFrames(file)
     chmodSync(`${file}-wal`, 0o444)
 
     // without repair (untrusted dir) the wiring in layerFromPath surfaces the clear error
-    expect(() => KiloDatabase.layerFromPath(file)).toThrow(`Database file is not writable: ${file}-wal`)
+    expect(() => SonderrDatabase.layerFromPath(file)).toThrow(`Database file is not writable: ${file}-wal`)
 
     // with repair the startup pragma sequence succeeds and the committed row survives
     DbPreflight.assertWritable(file, tmp.path)

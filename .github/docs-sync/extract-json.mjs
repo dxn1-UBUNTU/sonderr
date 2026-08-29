@@ -1,4 +1,4 @@
-// kilocode_change - new file
+// sonderr_change - new file
 
 /**
  * Extracts and validates the triage JSON array from raw LLM stdout.
@@ -12,7 +12,7 @@ import { pathToFileURL } from "node:url"
 
 /** Returns validated triage entries, or null when extraction fails. */
 export function parseTriageEntries(raw) {
-  // `kilo run` prints the assistant message twice (streaming render + final
+  // `sonderr run` prints the assistant message twice (streaming render + final
   // summary), so stdout can hold the same array back-to-back. Try each "["
   // from the right and return the first slice that parses — i.e. the last
   // (most recent) valid array in the output.

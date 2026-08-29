@@ -3,9 +3,9 @@ export type { FileSystemEntry as LocationFileSystemEntry } from "./gen/types.gen
 
 import { createClient } from "./gen/client/client.gen.js"
 import { type Config } from "./gen/client/types.gen.js"
-import { KiloClient } from "./gen/sdk.gen.js"
+import { SonderrClient } from "./gen/sdk.gen.js"
 import { wrapClientError } from "../error-interceptor.js"
-export { type Config as KiloClientConfig, KiloClient }
+export { type Config as SonderrClientConfig, SonderrClient }
 
 function pick(value: string | null, fallback?: string, encode?: (value: string) => string) {
   if (!value) return
@@ -22,8 +22,8 @@ function rewrite(request: Request, values: { directory?: string; workspace?: str
   let changed = false
 
   for (const [name, key] of [
-    ["x-kilo-directory", "directory"],
-    ["x-kilo-workspace", "workspace"],
+    ["x-sonderr-directory", "directory"],
+    ["x-sonderr-workspace", "workspace"],
   ] as const) {
     const value = pick(
       request.headers.get(name),
@@ -42,12 +42,12 @@ function rewrite(request: Request, values: { directory?: string; workspace?: str
   if (!changed) return request
 
   const next = new Request(url, request)
-  next.headers.delete("x-kilo-directory")
-  next.headers.delete("x-kilo-workspace")
+  next.headers.delete("x-sonderr-directory")
+  next.headers.delete("x-sonderr-workspace")
   return next
 }
 
-export function createKiloClient(config?: Config & { directory?: string; experimental_workspaceID?: string }) {
+export function createSonderrClient(config?: Config & { directory?: string; experimental_workspaceID?: string }) {
   if (!config?.fetch) {
     const customFetch: any = (req: any) => {
       // Pass duplex in the init arg so it survives VS Code's proxy-agent
@@ -67,14 +67,14 @@ export function createKiloClient(config?: Config & { directory?: string; experim
   if (config?.directory) {
     config.headers = {
       ...config.headers,
-      "x-kilo-directory": encodeURIComponent(config.directory),
+      "x-sonderr-directory": encodeURIComponent(config.directory),
     }
   }
 
   if (config?.experimental_workspaceID) {
     config.headers = {
       ...config.headers,
-      "x-kilo-workspace": config.experimental_workspaceID,
+      "x-sonderr-workspace": config.experimental_workspaceID,
     }
   }
 
@@ -93,10 +93,10 @@ export function createKiloClient(config?: Config & { directory?: string; experim
   client.interceptors.response.use((response) => {
     const contentType = response.headers.get("content-type")
     if (contentType === "text/html")
-      throw new Error("Request is not supported by this version of OpenCode Server (Server responded with text/html)")
+      throw new Error("Request is not supported by this version of Sonderr Server (Server responded with text/html)")
 
     return response
   })
   client.interceptors.error.use(wrapClientError)
-  return new KiloClient({ client })
+  return new SonderrClient({ client })
 }

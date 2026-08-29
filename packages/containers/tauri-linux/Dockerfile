@@ -1,6 +1,6 @@
-# kilocode_change start
-ARG REGISTRY=ghcr.io/kilo-org
-# kilocode_change end
+# sonderr_change start
+ARG REGISTRY=ghcr.io/sonderr-org
+# sonderr_change end
 FROM ${REGISTRY}/build/rust:24.04
 
 ARG DEBIAN_FRONTEND=noninteractive

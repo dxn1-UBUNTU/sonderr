@@ -1,4 +1,4 @@
-import type { ProviderAuthMethod } from "@opencode-ai/sdk/v2/client"
+import type { ProviderAuthMethod } from "@sonderr/sdk/v2/client"
 
 const data = {
   provider: {

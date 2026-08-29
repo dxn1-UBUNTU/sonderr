@@ -55,12 +55,12 @@ export function DialogSessionList() {
   const [toDelete, setToDelete] = createSignal<string>()
   const [deleted, setDeleted] = createSignal(new Set<string>())
   const [search, setSearch] = createDebouncedSignal("", 150)
-  const [global, setGlobal] = createSignal(false) // kilocode_change - show current worktree by default
+  const [global, setGlobal] = createSignal(false) // sonderr_change - show current worktree by default
   const deleteHint = useCommandShortcut("session.delete")
   const quickSwitch1 = useCommandShortcut("session.quick_switch.1")
   const quickSwitch9 = useCommandShortcut("session.quick_switch.9")
 
-  // kilocode_change start - experimental sessions retain worktree labels and scope
+  // sonderr_change start - experimental sessions retain worktree labels and scope
   const list = async (input: { search?: string; global: boolean; directory?: string; limit: number }) => {
     const result = await sdk.client.experimental.session.list(
       {
@@ -83,7 +83,7 @@ export function DialogSessionList() {
     () => ({ search: search().trim() || undefined, global: global(), directory: project.instance.directory() }),
     (input) => (input.search ? list({ ...input, limit: 30 }) : undefined),
   )
-  // kilocode_change end
+  // sonderr_change end
 
   const currentSessionID = createMemo(() => (route.data.type === "session" ? route.data.sessionID : undefined))
   const sessions = createMemo(() => {
@@ -195,7 +195,7 @@ export function DialogSessionList() {
     ))
   }
 
-  // kilocode_change - support local and global sessions
+  // sonderr_change - support local and global sessions
   function orderByRecency(sessionsList: { id: string; parentID?: string; time: { updated: number } }[]) {
     return sessionsList
       .filter((x) => x.parentID === undefined)
@@ -217,7 +217,7 @@ export function DialogSessionList() {
 
   const options = createMemo(() => {
     const today = new Date().toDateString()
-    const all = global() // kilocode_change
+    const all = global() // sonderr_change
     const sessionMap = new Map(
       sessions()
         .filter((x) => x.parentID === undefined)
@@ -255,7 +255,7 @@ export function DialogSessionList() {
           : undefined
       return {
         title: isDeleting ? `Press ${deleteHint()} again to confirm` : x.title,
-        description: all && "worktreeName" in x && x.worktreeName ? `(${x.worktreeName})` : undefined, // kilocode_change
+        description: all && "worktreeName" in x && x.worktreeName ? `(${x.worktreeName})` : undefined, // sonderr_change
         bg: isDeleting ? theme.error : undefined,
         value: x.id,
         category,
@@ -283,7 +283,7 @@ export function DialogSessionList() {
 
   return (
     <DialogSelect
-      title={global() ? "Sessions (all worktrees)" : "Sessions (current worktree)"} // kilocode_change
+      title={global() ? "Sessions (all worktrees)" : "Sessions (current worktree)"} // sonderr_change
       options={options()}
       skipFilter={true}
       preserveSelection={true}
@@ -359,7 +359,7 @@ export function DialogSessionList() {
         {
           command: "session.rename",
           title: "rename",
-          // kilocode_change start
+          // sonderr_change start
           onTrigger: async (option) => {
             const item = sessions().find((x) => x.id === option.value)
             dialog.replace(() => (
@@ -383,11 +383,11 @@ export function DialogSessionList() {
             setGlobal((v) => !v)
           },
         },
-        // kilocode_change end
+        // sonderr_change end
       ]}
-      // kilocode_change start - preserve Ctrl+A worktree scope toggle with the upstream keymap engine
+      // sonderr_change start - preserve Ctrl+A worktree scope toggle with the upstream keymap engine
       bindings={[{ key: "ctrl+a", cmd: "session.scope.toggle" }]}
-      // kilocode_change end
+      // sonderr_change end
       footerHints={quickSwitchFooterHints()}
     />
   )

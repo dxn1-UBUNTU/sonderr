@@ -30,7 +30,7 @@ export function createPromptInputV2Store(input: PromptInputV2StoreInput) {
       return store()
     },
     setPrompt(prompt: PromptInputV2Prompt, cursor?: number) {
-      release(store().prompt, prompt) // kilocode_change - release locally owned attachments removed by replacement
+      release(store().prompt, prompt) // sonderr_change - release locally owned attachments removed by replacement
       batch(() => {
         setStore()("prompt", prompt)
         if (cursor !== undefined) setStore()("cursor", cursor)
@@ -41,7 +41,7 @@ export function createPromptInputV2Store(input: PromptInputV2StoreInput) {
     },
     setText(content: string) {
       batch(() => {
-        setStore()("prompt", (prompt) => replaceText(prompt, content)) // kilocode_change - preserve mention ordering
+        setStore()("prompt", (prompt) => replaceText(prompt, content)) // sonderr_change - preserve mention ordering
         setStore()("cursor", content.length)
       })
     },
@@ -53,7 +53,7 @@ export function createPromptInputV2Store(input: PromptInputV2StoreInput) {
       })
     },
     reset() {
-      release(store().prompt) // kilocode_change - release locally owned attachment URLs on reset
+      release(store().prompt) // sonderr_change - release locally owned attachment URLs on reset
       batch(() => {
         setStore()("prompt", [{ type: "text", content: "", start: 0, end: 0 }])
         setStore()("cursor", 0)
@@ -86,7 +86,7 @@ export function createPromptInputV2Store(input: PromptInputV2StoreInput) {
     },
     removeAttachment(id: string) {
       const attachment = store().prompt.find((part) => part.type === "image" && part.id === id)
-      if (attachment) release([attachment]) // kilocode_change - release locally owned attachment URLs on removal
+      if (attachment) release([attachment]) // sonderr_change - release locally owned attachment URLs on removal
       setStore()("prompt", (parts) => parts.filter((part) => part.type !== "image" || part.id !== id))
     },
   }
@@ -148,7 +148,7 @@ function withOffsets(prompt: PromptInputV2Prompt): PromptInputV2Prompt {
   })
 }
 
-// kilocode_change start - replace text while keeping structured parts at their original boundaries
+// sonderr_change start - replace text while keeping structured parts at their original boundaries
 function replaceText(prompt: PromptInputV2Prompt, content: string): PromptInputV2Prompt {
   const current = prompt
     .filter((part) => part.type === "text")
@@ -198,7 +198,7 @@ function release(prompt: PromptInputV2Prompt, next: PromptInputV2Prompt = []) {
     if (part.type === "image" && part.blob.revoke && !keep.has(part.blob.url)) URL.revokeObjectURL(part.blob.url)
   })
 }
-// kilocode_change end
+// sonderr_change end
 
 function promptLength(prompt: PromptInputV2Prompt) {
   return prompt.reduce((length, part) => length + ("content" in part ? part.content.length : 0), 0)

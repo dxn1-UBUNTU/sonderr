@@ -4,7 +4,7 @@ import { createMemo, For, Match, Show, Switch } from "solid-js"
 import { Portal, useRenderer, useTerminalDimensions, type JSX } from "@opentui/solid"
 import type { TextareaRenderable } from "@opentui/core"
 import { useTheme, selectedForeground } from "../../context/theme"
-import type { PermissionRequest } from "@kilocode/sdk/v2"
+import type { PermissionRequest } from "@sonderr/sdk/v2"
 import { useSDK } from "../../context/sdk"
 import { SplitBorder } from "../../ui/border"
 import { useSync } from "../../context/sync"
@@ -14,14 +14,14 @@ import { Locale } from "../../util/locale"
 import { webSearchProviderLabel } from "../../util/tool-display"
 import { getScrollAcceleration } from "../../util/scroll"
 import { useTuiConfig } from "../../config"
-// kilocode_change start
-import { ConfigProtection } from "@/kilocode/permission/config-paths"
-import { splitDiffHunks } from "@/kilocode/tui/diff"
-import { normalizeUrls } from "@/kilocode/util/url"
-import { MemoryPermissionRegistry } from "@/kilocode/cli/cmd/tui/routes/session/memory-permission"
-import { skillShellPrompt } from "@/kilocode/skills/display"
-// kilocode_change end
-import { KILO_BASE_MODE, useBindings, useCommandShortcut } from "../../keymap"
+// sonderr_change start
+import { ConfigProtection } from "@/sonderr/permission/config-paths"
+import { splitDiffHunks } from "@/sonderr/tui/diff"
+import { normalizeUrls } from "@/sonderr/util/url"
+import { MemoryPermissionRegistry } from "@/sonderr/cli/cmd/tui/routes/session/memory-permission"
+import { skillShellPrompt } from "@/sonderr/skills/display"
+// sonderr_change end
+import { SONDERR_BASE_MODE, useBindings, useCommandShortcut } from "../../keymap"
 import { usePathFormatter } from "../../context/path-format"
 
 type PermissionStage = "permission" | "always" | "reject"
@@ -50,7 +50,7 @@ function EditBody(props: { request: PermissionRequest }) {
 
   const ft = createMemo(() => filetype(filepath()))
   const scrollAcceleration = createMemo(() => getScrollAcceleration(config))
-  const hunks = createMemo(() => splitDiffHunks(diff())) // kilocode_change
+  const hunks = createMemo(() => splitDiffHunks(diff())) // sonderr_change
 
   return (
     <box flexDirection="column" gap={1}>
@@ -65,7 +65,7 @@ function EditBody(props: { request: PermissionRequest }) {
             },
           }}
         >
-          {/* kilocode_change start */}
+          {/* sonderr_change start */}
           <box flexDirection="column">
             <For each={hunks()}>
               {(hunk, i) => (
@@ -96,7 +96,7 @@ function EditBody(props: { request: PermissionRequest }) {
               )}
             </For>
           </box>
-          {/* kilocode_change end */}
+          {/* sonderr_change end */}
         </scrollbox>
       </Show>
       <Show when={!diff()}>
@@ -162,12 +162,12 @@ export function PermissionPrompt(props: { request: PermissionRequest; directory?
           body={
             <Switch>
               <Match when={props.request.always.length === 1 && props.request.always[0] === "*"}>
-                {/* kilocode_change */}
+                {/* sonderr_change */}
                 <TextBody title={"This will allow " + props.request.permission + " permanently."} />
               </Match>
               <Match when={true}>
                 <box paddingLeft={1} gap={1}>
-                  {/* kilocode_change */}
+                  {/* sonderr_change */}
                   <text fg={theme.textMuted}>This will allow the following patterns permanently</text>
                   <box>
                     <For each={props.request.always}>
@@ -193,7 +193,7 @@ export function PermissionPrompt(props: { request: PermissionRequest; directory?
               requestID: props.request.id,
               directory: props.directory,
               workspace: project.workspace.current(),
-              interactive: true, // kilocode_change - human answered this prompt
+              interactive: true, // sonderr_change - human answered this prompt
             })
           }}
         />
@@ -293,7 +293,7 @@ export function PermissionPrompt(props: { request: PermissionRequest; directory?
             }
 
             if (permission === "bash") {
-              // kilocode_change start - skill shell batches show the verbatim, escaped commands + skill title
+              // sonderr_change start - skill shell batches show the verbatim, escaped commands + skill title
               const skillShell = skillShellPrompt(props.request.metadata)
               if (skillShell) {
                 return {
@@ -306,8 +306,8 @@ export function PermissionPrompt(props: { request: PermissionRequest; directory?
                   ),
                 }
               }
-              // kilocode_change end
-              // kilocode_change start
+              // sonderr_change end
+              // sonderr_change start
               const meta = props.request.metadata ?? {}
               const desc =
                 typeof data.description === "string" && data.description
@@ -320,7 +320,7 @@ export function PermissionPrompt(props: { request: PermissionRequest; directory?
               const command = normalizeUrls(
                 typeof data.command === "string" ? data.command : typeof meta.command === "string" ? meta.command : "",
               )
-              // kilocode_change end
+              // sonderr_change end
               return {
                 icon: "#",
                 title,
@@ -334,7 +334,7 @@ export function PermissionPrompt(props: { request: PermissionRequest; directory?
               }
             }
 
-            // kilocode_change start - show sandbox escalation details and keep approval one-shot
+            // sonderr_change start - show sandbox escalation details and keep approval one-shot
             if (permission === "sandbox_escalation") {
               const meta = props.request.metadata ?? {}
               const command = normalizeUrls(
@@ -353,7 +353,7 @@ export function PermissionPrompt(props: { request: PermissionRequest; directory?
                 ),
               }
             }
-            // kilocode_change end
+            // sonderr_change end
 
             if (permission === "task") {
               const type = typeof data.subagent_type === "string" ? data.subagent_type : "Unknown"
@@ -372,7 +372,7 @@ export function PermissionPrompt(props: { request: PermissionRequest; directory?
             }
 
             if (permission === "webfetch") {
-              const url = normalizeUrls(typeof data.url === "string" ? data.url : "") // kilocode_change
+              const url = normalizeUrls(typeof data.url === "string" ? data.url : "") // sonderr_change
               return {
                 icon: "%",
                 title: `WebFetch ${url}`,
@@ -441,8 +441,8 @@ export function PermissionPrompt(props: { request: PermissionRequest; directory?
               }
             }
 
-            const custom = MemoryPermissionRegistry.render(permission, props.request) // kilocode_change
-            if (custom) return custom // kilocode_change
+            const custom = MemoryPermissionRegistry.render(permission, props.request) // sonderr_change
+            if (custom) return custom // sonderr_change
 
             return {
               icon: "⚙",
@@ -469,35 +469,35 @@ export function PermissionPrompt(props: { request: PermissionRequest; directory?
                 </text>
                 <text fg={theme.text}>{current.title}</text>
               </box>
-              {/* kilocode_change start - explain protected Kilo configuration access */}
+              {/* sonderr_change start - explain protected Sonderr configuration access */}
               <Show when={props.request.metadata?.[ConfigProtection.CONFIG_PROTECTED_KEY]}>
                 <box paddingLeft={4} flexShrink={0}>
                   <text fg={theme.textMuted}>
                     {props.request.permission === "edit"
                       ? "Config file edits always require approval"
-                      : "Kilo configuration access always requires approval"}
+                      : "Sonderr configuration access always requires approval"}
                   </text>
                 </box>
               </Show>
-              {/* kilocode_change end */}
+              {/* sonderr_change end */}
             </box>
           )
 
-          // kilocode_change start - skill shell batches are never persisted: only Allow / Reject
+          // sonderr_change start - skill shell batches are never persisted: only Allow / Reject
           const options: Record<string, string> =
             props.request.metadata?.["skillShell"] || props.request.metadata?.["sandboxEscalation"]
               ? { once: "Allow", reject: "Reject" }
               : props.request.metadata?.[ConfigProtection.DISABLE_ALWAYS_KEY]
                 ? { once: "Allow once", reject: "Reject" }
                 : { once: "Allow once", always: "Allow always", reject: "Reject" }
-          // kilocode_change end
+          // sonderr_change end
 
           const body = (
             <Prompt
               title="Permission required"
               header={header()}
               body={current.body}
-              /* kilocode_change */ options={options}
+              /* sonderr_change */ options={options}
               escapeKey="reject"
               fullscreen
               onSelect={(option) => {
@@ -523,7 +523,7 @@ export function PermissionPrompt(props: { request: PermissionRequest; directory?
                   requestID: props.request.id,
                   directory: props.directory,
                   workspace: project.workspace.current(),
-                  interactive: true, // kilocode_change - human answered this prompt
+                  interactive: true, // sonderr_change - human answered this prompt
                 })
               }}
             />
@@ -543,7 +543,7 @@ function RejectPrompt(props: { onConfirm: (message: string) => void; onCancel: (
   const dimensions = useTerminalDimensions()
   const narrow = createMemo(() => dimensions().width < 80)
   useBindings(() => ({
-    mode: KILO_BASE_MODE,
+    mode: SONDERR_BASE_MODE,
     commands: [
       {
         name: "app.exit",
@@ -579,7 +579,7 @@ function RejectPrompt(props: { onConfirm: (message: string) => void; onCancel: (
           <text fg={theme.text}>Reject permission</text>
         </box>
         <box paddingLeft={1}>
-          <text fg={theme.textMuted}>Tell Kilo what to do differently</text>
+          <text fg={theme.textMuted}>Tell Sonderr what to do differently</text>
         </box>
       </box>
       <box
@@ -638,7 +638,7 @@ function Prompt<const T extends Record<string, string>>(props: {
   const fullscreenHint = useCommandShortcut("permission.prompt.fullscreen")
 
   useBindings(() => ({
-    mode: KILO_BASE_MODE,
+    mode: SONDERR_BASE_MODE,
     commands: [
       {
         name: "app.exit",

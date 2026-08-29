@@ -22,10 +22,10 @@ export const Plugin = define({
         for (const doc of (yield* config.entries()).filter(
           (entry): entry is Config.Document => entry.type === "document",
         )) {
-          // kilocode_change start
+          // sonderr_change start
           const root = path.parse(location.project.directory).root
           const directory = location.project.directory === root ? location.directory : location.project.directory
-          // kilocode_change end
+          // sonderr_change end
           for (const [name, entry] of Object.entries(doc.info.references ?? {})) {
             if (!validAlias(name)) continue
             const description = typeof entry === "string" ? undefined : entry.description

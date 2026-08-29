@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test"
 import { Effect } from "effect"
 import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process"
-import * as CrossSpawnSpawner from "@opencode-ai/core/cross-spawn-spawner"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { settle } from "@opencode-ai/core/kilocode/exit-code"
+import * as CrossSpawnSpawner from "@sonderr/core/cross-spawn-spawner"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { settle } from "@sonderr/core/sonderr/exit-code"
 import { testEffect } from "../lib/effect"
 
 const fx = testEffect(AppNodeBuilder.build(CrossSpawnSpawner.node))

@@ -1,17 +1,17 @@
 export * as GrepTool from "./grep"
 
-import { ToolFailure } from "@opencode-ai/llm"
+import { ToolFailure } from "@sonderr/llm"
 import { Effect, Layer, Schema } from "effect"
 import path from "path"
 import { makeLocationNode } from "../effect/app-node"
 import { FileSystem } from "../filesystem"
 import { FSUtil } from "../fs-util"
-// kilocode_change start
+// sonderr_change start
 import { Global } from "../global"
-import * as SearchTarget from "../kilocode/search-target"
-// kilocode_change end
+import * as SearchTarget from "../sonderr/search-target"
+// sonderr_change end
 import { Location } from "../location"
-import { Reference } from "../reference" // kilocode_change
+import { Reference } from "../reference" // sonderr_change
 import { PermissionV2 } from "../permission"
 import { Ripgrep } from "../ripgrep"
 import { RelativePath } from "../schema"
@@ -28,20 +28,20 @@ export const Input = Schema.Struct({
   path: RelativePath.pipe(Schema.optional).annotate({
     description: "Relative directory to search. Defaults to the active Location.",
   }),
-  // kilocode_change start
+  // sonderr_change start
   reference: Schema.NonEmptyString.pipe(Schema.optional).annotate({
     description: "Named project reference to search instead of the active Location",
   }),
-  // kilocode_change end
+  // sonderr_change end
   include: FileSystem.GrepInput.fields.include.annotate({
     description: 'File glob to include in the search (for example, "*.js" or "*.{ts,tsx}")',
   }),
-  limit: FileSystem.SearchLimit.pipe(Schema.optional).annotate({ // kilocode_change
+  limit: FileSystem.SearchLimit.pipe(Schema.optional).annotate({ // sonderr_change
     description: "Maximum matches to return",
   }),
 })
 
-// kilocode_change start - retain bounded-search status in tool results and model output
+// sonderr_change start - retain bounded-search status in tool results and model output
 export class Result extends Schema.Class<Result>("GrepTool.Result")({
   items: Schema.Array(FileSystem.Match),
   truncated: Schema.Boolean,
@@ -66,17 +66,17 @@ export const toModelOutput = (output: ModelOutput) => {
   if (output.partial) lines.push("", "(Some paths were inaccessible.)")
   return lines.join("\n")
 }
-// kilocode_change end
+// sonderr_change end
 
 /** Grep leaf that defaults its filesystem root to the active Location. */
 const layer = Layer.effectDiscard(
   Effect.gen(function* () {
     const tools = yield* Tools.Service
     const fs = yield* FSUtil.Service
-    const global = yield* Global.Service // kilocode_change
+    const global = yield* Global.Service // sonderr_change
     const ripgrep = yield* Ripgrep.Service
     const location = yield* Location.Service
-    const references = yield* Reference.Service // kilocode_change
+    const references = yield* Reference.Service // sonderr_change
     const permission = yield* PermissionV2.Service
 
     yield* tools
@@ -89,7 +89,7 @@ const layer = Layer.effectDiscard(
           toModelOutput: ({ output }) => [
             {
               type: "text",
-              // kilocode_change start - model paths remain absolute while the typed result retains metadata
+              // sonderr_change start - model paths remain absolute while the typed result retains metadata
               text: toModelOutput({
                 ...output,
                 items: output.items.map((match) => ({
@@ -97,7 +97,7 @@ const layer = Layer.effectDiscard(
                   entry: { ...match.entry, path: path.resolve(location.directory, match.entry.path) },
                 })),
               }),
-              // kilocode_change end
+              // sonderr_change end
             },
           ],
           execute: (input, context) =>
@@ -109,7 +109,7 @@ const layer = Layer.effectDiscard(
                 metadata: {
                   root: ".",
                   path: input.path,
-                  reference: input.reference, // kilocode_change
+                  reference: input.reference, // sonderr_change
                   include: input.include,
                   limit: input.limit,
                 },
@@ -117,7 +117,7 @@ const layer = Layer.effectDiscard(
                 agent: context.agent,
                 source: { type: "tool", messageID: context.assistantMessageID, callID: context.toolCallID },
               })
-              // kilocode_change start - enforce the active Location despite RelativePath being a nominal brand
+              // sonderr_change start - enforce the active Location despite RelativePath being a nominal brand
               const ref = input.reference
                 ? (yield* references.list()).find((item) => item.name === input.reference)
                 : undefined
@@ -134,20 +134,20 @@ const layer = Layer.effectDiscard(
               if (root.type !== "directory" || (!contained && !retained))
                 return yield* Effect.fail(new Error("Path escapes the active Location"))
               const cwd = target.type === "directory" ? target.path : path.dirname(target.path)
-              // kilocode_change end
+              // sonderr_change end
               return yield* ripgrep
                 .grep({
-                  cwd, // kilocode_change
+                  cwd, // sonderr_change
                   pattern: input.pattern,
-                  file: target.type === "file" ? path.basename(target.path) : undefined, // kilocode_change
+                  file: target.type === "file" ? path.basename(target.path) : undefined, // sonderr_change
                   include: input.include,
-                  // kilocode_change start
+                  // sonderr_change start
                   limit: input.limit ?? FileSystem.DEFAULT_SEARCH_LIMIT,
                   validate: SearchTarget.validate(fs, target),
-                  // kilocode_change end
+                  // sonderr_change end
                 })
                 .pipe(
-                  // kilocode_change start - preserve search status after canonical path mapping
+                  // sonderr_change start - preserve search status after canonical path mapping
                   Effect.map(
                     (result) =>
                       new Result({
@@ -168,7 +168,7 @@ const layer = Layer.effectDiscard(
                         ),
                       }),
                   ),
-                  // kilocode_change end
+                  // sonderr_change end
                 )
             }).pipe(Effect.mapError(() => new ToolFailure({ message: `Unable to grep for ${input.pattern}` }))),
         }),
@@ -180,5 +180,5 @@ const layer = Layer.effectDiscard(
 export const node = makeLocationNode({
   name: "tool/grep",
   layer,
-  deps: [ToolRegistry.node, FSUtil.node, Ripgrep.node, Location.node, PermissionV2.node, Global.node, Reference.node], // kilocode_change - search targets and references
+  deps: [ToolRegistry.node, FSUtil.node, Ripgrep.node, Location.node, PermissionV2.node, Global.node, Reference.node], // sonderr_change - search targets and references
 })

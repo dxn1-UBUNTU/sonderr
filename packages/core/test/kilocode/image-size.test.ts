@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { allowed, dimensions, MAX_DIMENSION, MAX_PIXELS } from "../../src/kilocode/image-size"
+import { allowed, dimensions, MAX_DIMENSION, MAX_PIXELS } from "../../src/sonderr/image-size"
 
 describe("image header dimensions", () => {
   test("reads supported formats without decoding pixels", () => {

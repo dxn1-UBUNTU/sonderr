@@ -1,0 +1,23 @@
+.gradle/
+build/
+.intellijPlatform/
+.ai/
+**/.sonderr/*
+!**/.sonderr/skills/
+!**/.sonderr/skills/**
+.classpath
+.project
+.settings/
+.kotlin/
+bin/
+**/.classpath
+**/.project
+**/.settings/
+**/.kotlin/
+**/bin/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Downloaded CLI artifacts
+**/cli-cache/
+sonderr-*.zip
+sonderr-*.tar.gz

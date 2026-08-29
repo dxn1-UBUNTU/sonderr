@@ -1,20 +1,20 @@
 import { afterAll, describe, expect } from "bun:test"
 import { Effect, Fiber, Layer, Stream } from "effect"
-import { Catalog } from "@opencode-ai/core/catalog"
-import { Integration } from "@opencode-ai/core/integration"
+import { Catalog } from "@sonderr/core/catalog"
+import { Integration } from "@sonderr/core/integration"
 import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
-import { Credential } from "@opencode-ai/core/credential"
-import { Global } from "@opencode-ai/core/global"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { EventV2 } from "@opencode-ai/core/event"
-import { Location } from "@opencode-ai/core/location"
-import { ModelV2 } from "@opencode-ai/core/model"
-import { Policy } from "@opencode-ai/core/policy"
-import { ProviderV2 } from "@opencode-ai/core/provider"
-import { AbsolutePath } from "@opencode-ai/core/schema"
+import { Credential } from "@sonderr/core/credential"
+import { Global } from "@sonderr/core/global"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { EventV2 } from "@sonderr/core/event"
+import { Location } from "@sonderr/core/location"
+import { ModelV2 } from "@sonderr/core/model"
+import { Policy } from "@sonderr/core/policy"
+import { ProviderV2 } from "@sonderr/core/provider"
+import { AbsolutePath } from "@sonderr/core/schema"
 import { location } from "./fixture/location"
 import { testEffect } from "./lib/effect"
 
@@ -27,13 +27,13 @@ const locationLayer = Layer.succeed(
   Location.Service,
   Location.Service.of(location({ directory: AbsolutePath.make("test") })),
 )
-// kilocode_change - Credential imports Global.data/auth.json on startup, so without this the suite
+// sonderr_change - Credential imports Global.data/auth.json on startup, so without this the suite
 // reads the developer's real credential store and its results depend on whether they are logged in.
 const dataDirs: string[] = []
 // Each Layer.fresh below rebuilds Credential, which re-imports data/auth.json, so a shared directory
 // would carry credentials from one test into the next. Give every layer its own.
 const globalLayer = () => {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "kilo-catalog-test-"))
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sonderr-catalog-test-"))
   dataDirs.push(dir)
   return Global.layerWith({ data: dir })
 }
@@ -44,7 +44,7 @@ const catalogLayer = AppNodeBuilder.build(
   LayerNode.group([Catalog.node, EventV2.node, Credential.node, Integration.node, Policy.node]),
   [
     [Location.node, locationLayer],
-    [Global.node, globalLayer()], // kilocode_change
+    [Global.node, globalLayer()], // sonderr_change
   ],
 )
 const it = testEffect(catalogLayer)
@@ -70,7 +70,7 @@ describe("CatalogV2", () => {
     const localCatalogLayer = Layer.fresh(
       AppNodeBuilder.build(LayerNode.group([Catalog.node, Credential.node]), [
         [Location.node, locationLayer],
-        [Global.node, globalLayer()], // kilocode_change
+        [Global.node, globalLayer()], // sonderr_change
       ]),
     )
 
@@ -102,7 +102,7 @@ describe("CatalogV2", () => {
     const localCatalogLayer = Layer.fresh(
       AppNodeBuilder.build(LayerNode.group([Catalog.node, Credential.node, Integration.node]), [
         [Location.node, locationLayer],
-        [Global.node, globalLayer()], // kilocode_change
+        [Global.node, globalLayer()], // sonderr_change
       ]),
     )
 

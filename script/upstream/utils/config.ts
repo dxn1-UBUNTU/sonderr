@@ -9,16 +9,16 @@ export interface PackageMapping {
 }
 
 export interface MergeConfig {
-  /** Package name mappings from opencode to kilo */
+  /** Package name mappings from sonderr to sonderr */
   packageMappings: PackageMapping[]
 
-  /** Files to always keep Kilo's version (never take upstream changes) */
+  /** Files to always keep Sonderr's version (never take upstream changes) */
   keepOurs: string[]
 
   /** Files to skip entirely (don't add from upstream, remove if added) */
   skipFiles: string[]
 
-  /** Files that should take upstream version and apply Kilo branding transforms */
+  /** Files that should take upstream version and apply Sonderr branding transforms */
   takeTheirsAndTransform: string[]
 
   /** Script files with GitHub API references */
@@ -33,8 +33,8 @@ export interface MergeConfig {
   /** Lock files to accept ours and regenerate after merge */
   lockFiles: string[]
 
-  /** Directories that are Kilo-specific and should be preserved */
-  kiloDirectories: string[]
+  /** Directories that are Sonderr-specific and should be preserved */
+  sonderrDirectories: string[]
 
   /** File patterns to exclude from codemods */
   excludePatterns: string[]
@@ -57,10 +57,10 @@ export interface MergeConfig {
 
 export const defaultConfig: MergeConfig = {
   packageMappings: [
-    { from: "opencode-ai", to: "@kilocode/cli" },
-    { from: "@opencode-ai/cli", to: "@kilocode/cli" },
-    { from: "@opencode-ai/sdk", to: "@kilocode/sdk" },
-    { from: "@opencode-ai/plugin", to: "@kilocode/plugin" },
+    { from: "sonderr-ai", to: "@sonderr/cli" },
+    { from: "@sonderr/cli", to: "@sonderr/cli" },
+    { from: "@sonderr/sdk", to: "@sonderr/sdk" },
+    { from: "@sonderr/plugin", to: "@sonderr/plugin" },
   ],
 
   keepOurs: [
@@ -74,23 +74,23 @@ export const defaultConfig: MergeConfig = {
     ".github/workflows/publish.yml",
     ".github/workflows/close-stale-prs.yml",
     ".github/pull_request_template.md",
-    // Kilo-specific command files
-    ".opencode/command/commit.md",
-    // Kilo-specific publish scripts
-    "packages/opencode/script/publish-registries.ts",
+    // Sonderr-specific command files
+    ".sonderr/command/commit.md",
+    // Sonderr-specific publish scripts
+    "packages/cli/script/publish-registries.ts",
     // Generated OpenAPI spec - kept ours and regenerated post-merge via script/generate.ts
     "packages/sdk/openapi.json",
-    // GitHub Action - Kilo version is fully ported and complete
+    // GitHub Action - Sonderr version is fully ported and complete
     "github/action.yml",
     "github/README.md",
     "github/script/release",
     "github/script/publish",
   ],
 
-  // Files that only exist in upstream and should NOT be added to Kilo
+  // Files that only exist in upstream and should NOT be added to Sonderr
   // These are removed during merge if they appear
   skipFiles: [
-    // Translated README files (Kilo doesn't have these)
+    // Translated README files (Sonderr doesn't have these)
     "README.ar.md",
     "README.bn.md",
     "README.br.md",
@@ -114,43 +114,43 @@ export const defaultConfig: MergeConfig = {
     "README.zht.md",
     // Stats file
     "STATS.md",
-    // Team members file (Kilo doesn't maintain this upstream list)
+    // Team members file (Sonderr doesn't maintain this upstream list)
     ".github/TEAM_MEMBERS",
-    // Workflows that don't exist in Kilo
+    // Workflows that don't exist in Sonderr
     ".github/workflows/update-nix-hashes.yml",
     ".github/workflows/deploy.yml",
     ".github/workflows/docs-update.yml",
     ".github/workflows/docs-locale-sync.yml",
-    // Workflows deleted in Kilo (replaced or no longer needed)
+    // Workflows deleted in Sonderr (replaced or no longer needed)
     ".github/workflows/close-prs.yml",
-    ".github/workflows/opencode.yml",
+    ".github/workflows/sonderr.yml",
     ".github/workflows/publish-vscode.yml",
-    // Upstream PR cleanup is replaced by .github/workflows/kilo-auto-close.yml
+    // Upstream PR cleanup is replaced by .github/workflows/sonderr-auto-close.yml
     "script/github/close-prs.ts",
-    // VS Code example configs (Kilo ships real .vscode/* files)
+    // VS Code example configs (Sonderr ships real .vscode/* files)
     ".vscode/launch.example.json",
     ".vscode/settings.example.json",
-    // Nix files for packages Kilo has removed / replaced with nix/kilo.nix
+    // Nix files for packages Sonderr has removed / replaced with nix/sonderr.nix
     "nix/desktop.nix",
-    "nix/opencode.nix",
-    // opencode CLI bin (Kilo uses its own build output)
-    "packages/opencode/bin/opencode",
-    // Kilo does not ship upstream's embedded web UI command.
-    "packages/opencode/src/cli/cmd/web.ts",
+    "nix/sonderr.nix",
+    // sonderr CLI bin (Sonderr uses its own build output)
+    "packages/cli/bin/sonderr",
+    // Sonderr does not ship upstream's embedded web UI command.
+    "packages/cli/src/cli/cmd/web.ts",
     // Removed prompt file
-    "packages/opencode/src/session/prompt/build-switch.txt",
-    // Upstream app translation automation targets products and binaries Kilo does not ship
+    "packages/cli/src/session/prompt/build-switch.txt",
+    // Upstream app translation automation targets products and binaries Sonderr does not ship
     "script/translate-app.ts",
     "script/translate-app.test.ts",
     "script/translate-app.md",
-    // Vouch files (Kilo doesn't use Vouch).
+    // Vouch files (Sonderr doesn't use Vouch).
     // Upstream currently ships VOUCHED.td (typo extension). The glob covers both
     // the current .td file and any future .md rename without another merge breaking.
     ".github/VOUCHED.*",
     ".github/workflows/vouch-check-issue.yml",
     ".github/workflows/vouch-check-pr.yml",
     ".github/workflows/vouch-manage-by-issue.yml",
-    // SST infrastructure files (Kilo is CLI-only, no hosted platform)
+    // SST infrastructure files (Sonderr is CLI-only, no hosted platform)
     "sst.config.ts",
     "sst-env.d.ts",
     // Hosted platform packages (not needed for CLI)
@@ -168,7 +168,7 @@ export const defaultConfig: MergeConfig = {
     "packages/cli/**",
     "packages/stats/**",
     "sdks/vscode/**",
-    // GitHub Action - Kilo version is fully ported and complete
+    // GitHub Action - Sonderr version is fully ported and complete
     "github/index.ts",
     "github/package.json",
     "github/tsconfig.json",
@@ -177,18 +177,18 @@ export const defaultConfig: MergeConfig = {
     "github/.gitignore",
   ],
 
-  // Files that should take upstream version and apply Kilo branding transforms
+  // Files that should take upstream version and apply Sonderr branding transforms
   // These are files with only branding differences, no logic changes
   takeTheirsAndTransform: [
-    // Model-facing prompts that need Kilo product identity and documentation links
-    "packages/opencode/src/session/prompt/meta.txt",
+    // Model-facing prompts that need Sonderr product identity and documentation links
+    "packages/cli/src/session/prompt/meta.txt",
     // UI components
     "packages/ui/src/components/**/*.tsx",
     "packages/ui/src/context/**/*.tsx",
   ],
 
   // Script files with GitHub API references
-  scriptFiles: ["script/*.ts", "packages/opencode/script/*.ts"],
+  scriptFiles: ["script/*.ts", "packages/cli/script/*.ts"],
 
   // Extension files
   extensionFiles: ["packages/extensions/**/*"],
@@ -212,16 +212,16 @@ export const defaultConfig: MergeConfig = {
     "nix/hashes.json",
   ],
 
-  kiloDirectories: [
-    "packages/opencode/src/kilocode",
-    "packages/opencode/test/kilocode",
-    "packages/kilo-gateway",
-    "packages/kilo-telemetry",
-    "packages/kilo-vscode",
-    "packages/kilo-jetbrains",
-    "packages/kilo-ui",
-    "packages/kilo-docs",
-    "packages/kilo-i18n",
+  sonderrDirectories: [
+    "packages/cli/src/sonderr",
+    "packages/cli/test/sonderr",
+    "packages/sonderr-gateway",
+    "packages/sonderr-telemetry",
+    "packages/sonderr-vscode",
+    "packages/sonderr-jetbrains",
+    "packages/sonderr-ui",
+    "packages/sonderr-docs",
+    "packages/sonderr-i18n",
     "script/upstream",
   ],
 
@@ -239,7 +239,7 @@ export const defaultConfig: MergeConfig = {
   upstreamRemote: "upstream",
   originRemote: "origin",
 
-  // i18n translation files that need Kilo branding transforms
+  // i18n translation files that need Sonderr branding transforms
   i18nPatterns: ["packages/*/src/i18n/*.ts"],
 }
 

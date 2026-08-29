@@ -76,7 +76,7 @@ describe("AtomicChatPlugin", () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {})
     const hooks = await AtomicChatPlugin({ client: null } as any)
     expect(hooks.config).toBeTypeOf("function")
-    expect(consoleSpy).toHaveBeenCalledWith("[@kilocode/plugin-atomic-chat] Invalid client provided to plugin")
+    expect(consoleSpy).toHaveBeenCalledWith("[@sonderr/plugin-atomic-chat] Invalid client provided to plugin")
     consoleSpy.mockRestore()
   })
 

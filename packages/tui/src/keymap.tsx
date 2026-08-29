@@ -18,18 +18,18 @@ import { useTuiConfig } from "./config"
 import { TuiKeybind } from "./config/keybind"
 
 export const LEADER_TOKEN = "leader"
-export const KILO_BASE_MODE = "base"
+export const SONDERR_BASE_MODE = "base"
 export const COMMAND_PALETTE_COMMAND = "command.palette.show"
 
-const KILO_MODE_KEY = "opencode.mode"
+const SONDERR_MODE_KEY = "sonderr.mode"
 
-export const OpencodeKeymapProvider = KeymapProvider
-export const useOpencodeKeymap = useKeymap
+export const SonderrKeymapProvider = KeymapProvider
+export const useSonderrKeymap = useKeymap
 
 export { useBindings, useKeymapSelector }
 
 export type OpenTuiKeymap = ReturnType<typeof useKeymap>
-type OpencodeModeStack = ReturnType<typeof createOpencodeModeStack>
+type SonderrModeStack = ReturnType<typeof createSonderrModeStack>
 type CommandSlashEntry = {
   display: string
   description?: string
@@ -44,18 +44,18 @@ type BindingLookup = {
 type FormatConfig = { keybinds: BindingLookup }
 type ResolvedKeymapConfig = FormatConfig & { leader_timeout: number }
 
-const modeStacks = new WeakMap<OpenTuiKeymap, OpencodeModeStack>()
+const modeStacks = new WeakMap<OpenTuiKeymap, SonderrModeStack>()
 
 function isVisiblePaletteCommand(command: Command) {
   return command.hidden !== true && command.name !== COMMAND_PALETTE_COMMAND
 }
 
-export function createOpencodeModeStack(keymap: OpenTuiKeymap) {
-  keymap.setData(KILO_MODE_KEY, KILO_BASE_MODE)
+export function createSonderrModeStack(keymap: OpenTuiKeymap) {
+  keymap.setData(SONDERR_MODE_KEY, SONDERR_BASE_MODE)
 
   const offFields = keymap.registerLayerFields({
     mode(value, ctx) {
-      ctx.require(KILO_MODE_KEY, value)
+      ctx.require(SONDERR_MODE_KEY, value)
     },
   })
 
@@ -63,12 +63,12 @@ export function createOpencodeModeStack(keymap: OpenTuiKeymap) {
   let disposed = false
 
   const update = () => {
-    keymap.setData(KILO_MODE_KEY, stack.at(-1)?.mode ?? KILO_BASE_MODE)
+    keymap.setData(SONDERR_MODE_KEY, stack.at(-1)?.mode ?? SONDERR_BASE_MODE)
   }
 
   const stackApi = {
     current() {
-      return stack.at(-1)?.mode ?? KILO_BASE_MODE
+      return stack.at(-1)?.mode ?? SONDERR_BASE_MODE
     },
     push(mode: string) {
       if (disposed) return () => {}
@@ -90,7 +90,7 @@ export function createOpencodeModeStack(keymap: OpenTuiKeymap) {
       disposed = true
       stack.length = 0
       offFields()
-      keymap.setData(KILO_MODE_KEY, undefined)
+      keymap.setData(SONDERR_MODE_KEY, undefined)
       modeStacks.delete(keymap)
     },
   }
@@ -99,13 +99,13 @@ export function createOpencodeModeStack(keymap: OpenTuiKeymap) {
   return stackApi
 }
 
-export function useOpencodeModeStack() {
-  return getOpencodeModeStack(useOpencodeKeymap())
+export function useSonderrModeStack() {
+  return getSonderrModeStack(useSonderrKeymap())
 }
 
-export function getOpencodeModeStack(keymap: OpenTuiKeymap) {
+export function getSonderrModeStack(keymap: OpenTuiKeymap) {
   const value = modeStacks.get(keymap)
-  if (!value) throw new Error("Kilo mode stack is not registered for this keymap") // kilocode_change
+  if (!value) throw new Error("Sonderr mode stack is not registered for this keymap") // sonderr_change
   return value
 }
 
@@ -211,8 +211,8 @@ export function formatKeyBindings(bindings: Parameters<typeof formatCommandBindi
   return formatCommandBindingsExtra(bindings, formatOptions(config))
 }
 
-export function registerOpencodeKeymap(keymap: OpenTuiKeymap, renderer: CliRenderer, config: ResolvedKeymapConfig) {
-  const modeStack = createOpencodeModeStack(keymap)
+export function registerSonderrKeymap(keymap: OpenTuiKeymap, renderer: CliRenderer, config: ResolvedKeymapConfig) {
+  const modeStack = createSonderrModeStack(keymap)
   const offCommaBindings = registerCommaBindings(keymap)
   const offAliasExpander = registerKeyAliases(keymap)
   const offBaseLayout = registerBaseLayoutFallback(keymap)
@@ -258,7 +258,7 @@ export function useCommandShortcut(command: string): Accessor<string> {
 }
 
 export function useCommandSlashes(): Accessor<readonly CommandSlashEntry[]> {
-  const keymap = useOpencodeKeymap()
+  const keymap = useSonderrKeymap()
   const entries = useKeymapSelector((keymap: OpenTuiKeymap) =>
     keymap.getCommandEntries({
       visibility: "reachable",

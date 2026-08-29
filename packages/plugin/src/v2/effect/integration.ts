@@ -8,7 +8,7 @@ import type {
   IntegrationMethod,
   IntegrationOAuthMethod,
   IntegrationRef,
-} from "@kilocode/sdk/v2/types"
+} from "@sonderr/sdk/v2/types"
 import type { Effect, Scope } from "effect"
 import type { Hooks } from "./registration.js"
 

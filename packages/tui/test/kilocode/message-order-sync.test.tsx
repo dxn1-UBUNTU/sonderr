@@ -1,12 +1,12 @@
 /** @jsxImportSource @opentui/solid */
 import { expect, test } from "bun:test"
-import type { GlobalEvent } from "@kilocode/sdk/v2"
+import type { GlobalEvent } from "@sonderr/sdk/v2"
 import { tmpdir } from "../fixture/fixture"
 import { json, mount, wait } from "../cli/cmd/tui/sync-fixture"
 
 const sessionID = "ses_order"
 const partID = "prt_order"
-const directory = "/tmp/opencode/packages/tui"
+const directory = "/tmp/sonderr/packages/tui"
 let seq = 0
 const session = {
   id: sessionID,

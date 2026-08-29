@@ -36,8 +36,8 @@ export function migrate(info: typeof ConfigV1.Info.Type) {
   return {
     $schema: info.$schema,
     shell: info.shell,
-    model: info.model ?? undefined, // kilocode_change - v1 null delete sentinel is not valid in v2
-    default_agent: info.default_agent ?? undefined, // kilocode_change
+    model: info.model ?? undefined, // sonderr_change - v1 null delete sentinel is not valid in v2
+    default_agent: info.default_agent ?? undefined, // sonderr_change
     autoupdate: info.autoupdate,
     share: info.share ?? (info.autoshare ? "auto" : undefined),
     enterprise: info.enterprise,
@@ -85,7 +85,7 @@ function permissions(info?: ConfigPermissionV1.Info, tools?: Readonly<Record<str
       rules.push({ action, resource: "*", effect: rule })
       continue
     }
-    // kilocode_change - per-resource effect may also be null (delete sentinel); skip those entries
+    // sonderr_change - per-resource effect may also be null (delete sentinel); skip those entries
     rules.push(
       ...Object.entries(rule)
         .filter((entry): entry is [string, "allow" | "ask" | "deny"] => entry[1] !== null)
@@ -108,7 +108,7 @@ function agents(info: typeof ConfigV1.Info.Type) {
   return Object.fromEntries(entries.flatMap(([name, agent]) => (agent ? [[name, migrateAgent(agent)]] : [])))
 }
 
-// kilocode_change - v1 fields are nullable (delete sentinel); the v2 format has no such concept, so null collapses to undefined
+// sonderr_change - v1 fields are nullable (delete sentinel); the v2 format has no such concept, so null collapses to undefined
 export function migrateAgent(info: ConfigAgentV1.Info) {
   const body = {
     ...info.options,
@@ -170,7 +170,7 @@ function migrateMcp(info: ConfigMCPV1.Info) {
 
 function providers(info?: Readonly<Record<string, ConfigProviderV1.Info | null>>) {
   if (!info) return undefined
-  // kilocode_change - provider entries may be null (delete sentinel); migration has nothing to convert for those
+  // sonderr_change - provider entries may be null (delete sentinel); migration has nothing to convert for those
   return Object.fromEntries(
     Object.entries(info)
       .filter((entry): entry is [string, ConfigProviderV1.Info] => entry[1] !== null)
@@ -194,7 +194,7 @@ function migrateProvider(info: ConfigProviderV1.Info) {
         }
       : undefined,
     request: info.options && { headers: options.headers, body: options.body },
-    // kilocode_change - model entries may be null (delete sentinel); migration has nothing to convert for those
+    // sonderr_change - model entries may be null (delete sentinel); migration has nothing to convert for those
     models:
       info.models &&
       Object.fromEntries(
@@ -249,7 +249,7 @@ function migrateModel(info: typeof ConfigProviderV1.Model.Type, packageName?: st
       headers: info.headers,
       body: request,
     },
-    // kilocode_change - variant entries may be null (delete sentinel); migration has nothing to convert for those
+    // sonderr_change - variant entries may be null (delete sentinel); migration has nothing to convert for those
     variants:
       info.variants &&
       Object.entries(info.variants)

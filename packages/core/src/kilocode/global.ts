@@ -5,7 +5,7 @@ import { randomUUID } from "crypto"
 /**
  * Like `fs.mkdir({ recursive: true })` but also repairs broken symlinks and
  * junctions whose target no longer exists (a Windows edge-case where the user
- * had a junction at e.g. `~/.kilocode` pointing to a deleted directory).
+ * had a junction at e.g. `~/.sonderr` pointing to a deleted directory).
  *
  * `fs.mkdir({ recursive: true })` silently no-ops when a junction exists even
  * if its target is gone, so subsequent writes inside that path fail with ENOENT.
@@ -25,7 +25,7 @@ export async function ensureRealDir(p: string) {
 }
 
 async function writable(p: string) {
-  const probe = path.join(p, `.kilo-write-${process.pid}-${randomUUID()}`)
+  const probe = path.join(p, `.sonderr-write-${process.pid}-${randomUUID()}`)
   await fs.writeFile(probe, "", { flag: "wx", mode: 0o600 })
   await fs.unlink(probe)
 }
@@ -67,6 +67,6 @@ export async function resolveState(p: string, fallback?: string) {
 
   const msg = err instanceof Error ? err.message : "Unknown error"
   // Logging is not initialized until Global.Path.log exists.
-  console.warn(`[kilo] Cannot use state directory "${p}"; using "${fallback}" instead: ${msg}`)
+  console.warn(`[sonderr] Cannot use state directory "${p}"; using "${fallback}" instead: ${msg}`)
   return fallback
 }

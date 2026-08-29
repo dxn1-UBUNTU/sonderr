@@ -69,7 +69,7 @@ export const dict: Record<string, string> = {
   "ui.sessionTurn.error.addCredits": "Kredit əlavə et",
   "dialog.usageExceeded.freeTier.title": "Pulsuz limitə çatdınız",
   "dialog.usageExceeded.freeTier.description":
-    "Ayda $5-dan başlayan Kilo Go abunəliyi ilə ən yaxşı açıq mənbəli modellərə etibarlı giriş əldə edin.",
+    "Ayda $5-dan başlayan Sonderr Go abunəliyi ilə ən yaxşı açıq mənbəli modellərə etibarlı giriş əldə edin.",
   "dialog.usageExceeded.freeTier.actionLabel": "Abunə ol",
   "dialog.usageExceeded.accountRateLimit.title": "Go limitinə çatdınız",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -188,7 +188,7 @@ export const dict: Record<string, string> = {
   "ui.patch.action.created": "Yaradıldı",
   "ui.patch.action.moved": "Köçürüldü",
   "ui.patch.action.patched": "Yamaq tətbiq edildi",
-  "ui.patch.action.plan": "Plan", // kilocode_change
+  "ui.patch.action.plan": "Plan", // sonderr_change
   "ui.question.subtitle.answered": "{{count}} cavablandı",
   "ui.question.answer.none": "(cavab yoxdur)",
   "ui.question.review.notAnswered": "(cavablanmayıb)",

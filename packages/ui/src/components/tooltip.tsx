@@ -1,5 +1,5 @@
 import { Tooltip as KobalteTooltip } from "@kobalte/core/tooltip"
-import { createEffect, Match, onCleanup, Show, splitProps, Switch, type JSX } from "solid-js" // kilocode_change
+import { createEffect, Match, onCleanup, Show, splitProps, Switch, type JSX } from "solid-js" // sonderr_change
 import type { ComponentProps } from "solid-js"
 import { createStore } from "solid-js/store"
 
@@ -103,7 +103,7 @@ export function Tooltip(props: TooltipProps) {
 
   return (
     <Switch>
-      <Match when={local.inactive || !local.value}>{/* kilocode_change */}{local.children}</Match>
+      <Match when={local.inactive || !local.value}>{/* sonderr_change */}{local.children}</Match>
       <Match when={true}>
         <KobalteTooltip
           gutter={4}
@@ -138,7 +138,7 @@ export function Tooltip(props: TooltipProps) {
           >
             {local.children}
           </KobalteTooltip.Trigger>
-          {/* kilocode_change start - only mount portal and content when open or forced open to avoid style computation when hidden */}
+          {/* sonderr_change start - only mount portal and content when open or forced open to avoid style computation when hidden */}
           <Show when={local.forceOpen || state.open}>
             <KobalteTooltip.Portal>
               <KobalteTooltip.Content
@@ -159,7 +159,7 @@ export function Tooltip(props: TooltipProps) {
               </KobalteTooltip.Content>
             </KobalteTooltip.Portal>
           </Show>
-          {/* kilocode_change end */}
+          {/* sonderr_change end */}
         </KobalteTooltip>
       </Match>
     </Switch>

@@ -1,4 +1,4 @@
-import type { FileSystemEntry } from "@kilocode/sdk/v2/types"
+import type { FileSystemEntry } from "@sonderr/sdk/v2/types"
 import type { Effect } from "effect"
 
 export interface FileSystem {

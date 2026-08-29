@@ -213,7 +213,7 @@ export const SubtaskPart = Schema.Struct({
       modelID: Model.ID,
     }),
   ),
-  variant: Schema.optional(Schema.String), // kilocode_change - preserve workflow subtask variant
+  variant: Schema.optional(Schema.String), // sonderr_change - preserve workflow subtask variant
   command: Schema.optional(Schema.String),
 }).annotate({ identifier: "SubtaskPart" })
 export type SubtaskPart = Types.DeepMutable<Schema.Schema.Type<typeof SubtaskPart>>
@@ -243,7 +243,7 @@ export const StepFinishPart = Schema.Struct({
   type: Schema.Literal("step-finish"),
   reason: Schema.String,
   snapshot: Schema.optional(Schema.String),
-  // kilocode_change start
+  // sonderr_change start
   model: Schema.optional(
     Schema.Struct({
       providerID: Provider.ID,
@@ -271,7 +271,7 @@ export const StepFinishPart = Schema.Struct({
       elapsed: Schema.Finite,
     }),
   ),
-  // kilocode_change end
+  // sonderr_change end
   cost: Schema.Finite,
   tokens: Schema.Struct({
     total: Schema.optional(Schema.Finite),
@@ -359,7 +359,7 @@ const messageBase = {
   sessionID: partBase.sessionID,
 }
 
-// kilocode_change start - editor context captured by the VS Code client
+// sonderr_change start - editor context captured by the VS Code client
 export const EditorContext = Schema.Struct({
   directory: Schema.optional(Schema.String),
   worktree: Schema.optional(Schema.String),
@@ -369,7 +369,7 @@ export const EditorContext = Schema.Struct({
   shell: Schema.optional(Schema.String),
 })
 export type EditorContext = Types.DeepMutable<Schema.Schema.Type<typeof EditorContext>>
-// kilocode_change end
+// sonderr_change end
 
 export const User = Schema.Struct({
   ...messageBase,
@@ -393,9 +393,9 @@ export const User = Schema.Struct({
   }),
   system: Schema.optional(Schema.String),
   tools: Schema.optional(Schema.Record(Schema.String, Schema.Boolean)),
-  // kilocode_change start
+  // sonderr_change start
   editorContext: Schema.optional(EditorContext),
-  // kilocode_change end
+  // sonderr_change end
 }).annotate({ identifier: "UserMessage" })
 export type User = Types.DeepMutable<Schema.Schema.Type<typeof User>>
 
@@ -491,7 +491,7 @@ export const SubtaskPartInput = Schema.Struct({
       modelID: Model.ID,
     }),
   ),
-  variant: Schema.optional(Schema.String), // kilocode_change - preserve workflow subtask variant
+  variant: Schema.optional(Schema.String), // sonderr_change - preserve workflow subtask variant
   command: Schema.optional(Schema.String),
 }).annotate({ identifier: "SubtaskPartInput" })
 export type SubtaskPartInput = Types.DeepMutable<Schema.Schema.Type<typeof SubtaskPartInput>>
@@ -578,7 +578,7 @@ const SessionRevert = Schema.Struct({
   partID: optional(PartID),
   snapshot: optional(Schema.String),
   diff: optional(Schema.String),
-  workspace: optional(Schema.Literals(["restored", "snapshots-disabled", "unavailable"])), // kilocode_change
+  workspace: optional(Schema.Literals(["restored", "snapshots-disabled", "unavailable"])), // sonderr_change
 })
 
 const SessionModel = Schema.Struct({

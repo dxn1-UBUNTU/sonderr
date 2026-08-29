@@ -5,10 +5,10 @@
  * external_directory approval before edit approval. Named project references
  * are read-oriented and deliberately are not accepted by mutation tools.
  */
-// kilocode_change - preserve named-reference mutation constraint documentation
+// sonderr_change - preserve named-reference mutation constraint documentation
 export * as WriteTool from "./write"
 
-import { ToolFailure } from "@opencode-ai/llm"
+import { ToolFailure } from "@sonderr/llm"
 import { Effect, Layer, Schema } from "effect"
 import { makeLocationNode } from "../effect/app-node"
 import { FileMutation } from "../file-mutation"

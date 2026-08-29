@@ -1,12 +1,12 @@
 export * as ConfigMCPV1 from "./mcp"
 
-import { Schema, SchemaGetter } from "effect" // kilocode_change
-import { zod } from "@opencode-ai/core/effect-zod" // kilocode_change
+import { Schema, SchemaGetter } from "effect" // sonderr_change
+import { zod } from "@sonderr/core/effect-zod" // sonderr_change
 import { PositiveInt } from "../../schema"
-import { withStatics } from "@opencode-ai/core/schema" // kilocode_change
+import { withStatics } from "@sonderr/core/schema" // sonderr_change
 
 const LocalCanonical = Schema.Struct({
-  // kilocode_change
+  // sonderr_change
   type: Schema.Literal("local").annotate({ description: "Type of MCP server connection" }),
   command: Schema.mutable(Schema.Array(Schema.String)).annotate({
     description: "Command and arguments to run the MCP server",
@@ -25,7 +25,7 @@ const LocalCanonical = Schema.Struct({
   }),
 })
 
-// kilocode_change start - accept `env` as an alias for `environment`
+// sonderr_change start - accept `env` as an alias for `environment`
 // The input schema admits either key and the transform normalises to the
 // canonical `environment` field before validation downstream.
 const LocalInput = Schema.Struct({
@@ -57,7 +57,7 @@ export const Local = LocalInput.pipe(
   .annotate({ identifier: "McpLocalConfig" })
   .pipe(withStatics((s) => ({ zod: zod(s) })))
 export type Local = Schema.Schema.Type<typeof Local>
-// kilocode_change end
+// sonderr_change end
 
 export const OAuth = Schema.Struct({
   clientId: Schema.optional(Schema.String).annotate({

@@ -10,13 +10,13 @@ import { SessionEvent } from "./event"
 import { SessionHistory } from "./history"
 import { SessionInput } from "./input"
 import { SessionMessage } from "./message"
-import { Location } from "../location" // kilocode_change
+import { Location } from "../location" // sonderr_change
 import { SessionSchema } from "./schema"
 import { SessionContextEpochTable, SessionTable } from "./sql"
 
 type DatabaseService = Database.Interface["db"]
 
-class LocationMismatch extends Error {} // kilocode_change - a concurrent Session move must abort the epoch
+class LocationMismatch extends Error {} // sonderr_change - a concurrent Session move must abort the epoch
 
 interface Prepared {
   readonly baseline: string
@@ -27,7 +27,7 @@ export function initialize(
   db: DatabaseService,
   context: Effect.Effect<SystemContext.SystemContext>,
   sessionID: SessionSchema.ID,
-  location: Location.Ref, // kilocode_change
+  location: Location.Ref, // sonderr_change
 ): Effect.Effect<Prepared | undefined, SystemContext.InitializationBlocked> {
   return initializeOnce(db, context, sessionID, location).pipe(Effect.withSpan("SessionContextEpoch.initialize"))
 }
@@ -37,7 +37,7 @@ export function prepare(
   events: EventV2.Interface,
   context: Effect.Effect<SystemContext.SystemContext>,
   sessionID: SessionSchema.ID,
-  location: Location.Ref, // kilocode_change
+  location: Location.Ref, // sonderr_change
 ): Effect.Effect<Prepared, SystemContext.InitializationBlocked | ContextSnapshotDecodeError> {
   return prepareOnce(db, events, context, sessionID, location).pipe(Effect.withSpan("SessionContextEpoch.prepare"))
 }
@@ -47,7 +47,7 @@ const prepareOnce = Effect.fnUntraced(function* (
   events: EventV2.Interface,
   context: Effect.Effect<SystemContext.SystemContext>,
   sessionID: SessionSchema.ID,
-  location: Location.Ref, // kilocode_change
+  location: Location.Ref, // sonderr_change
 ) {
   const [value, stored, compaction] = yield* Effect.all(
     [context, find(db, sessionID), SessionHistory.latestCompaction(db, sessionID)],
@@ -55,7 +55,7 @@ const prepareOnce = Effect.fnUntraced(function* (
   )
   if (!stored) {
     const generation = yield* SystemContext.initialize(value)
-    const baselineSeq = yield* insert(db, sessionID, generation, location) // kilocode_change
+    const baselineSeq = yield* insert(db, sessionID, generation, location) // sonderr_change
     return { baseline: generation.baseline, baselineSeq }
   }
 
@@ -87,11 +87,11 @@ const initializeOnce = Effect.fnUntraced(function* (
   db: DatabaseService,
   context: Effect.Effect<SystemContext.SystemContext>,
   sessionID: SessionSchema.ID,
-  location: Location.Ref, // kilocode_change
+  location: Location.Ref, // sonderr_change
 ) {
   if (yield* exists(db, sessionID)) return
   const generation = yield* context.pipe(Effect.flatMap(SystemContext.initialize))
-  const baselineSeq = yield* insert(db, sessionID, generation, location) // kilocode_change
+  const baselineSeq = yield* insert(db, sessionID, generation, location) // sonderr_change
   return { baseline: generation.baseline, baselineSeq }
 })
 
@@ -130,9 +130,9 @@ const insert = Effect.fnUntraced(function* (
   db: DatabaseService,
   sessionID: SessionSchema.ID,
   generation: SystemContext.Generation,
-  location: Location.Ref, // kilocode_change
+  location: Location.Ref, // sonderr_change
 ) {
-  // kilocode_change start - upstream only checks the Location before loading system context, so a move
+  // sonderr_change start - upstream only checks the Location before loading system context, so a move
   // that lands during the load would still write an epoch for the source Location. Re-check here.
   const placed = yield* db
     .select({ id: SessionTable.id })
@@ -149,7 +149,7 @@ const insert = Effect.fnUntraced(function* (
     .get()
     .pipe(Effect.orDie)
   if (!placed) return yield* Effect.die(new LocationMismatch())
-  // kilocode_change end
+  // sonderr_change end
   const baselineSeq = yield* EventV2.latestSequence(db, sessionID)
   yield* db
     .insert(SessionContextEpochTable)

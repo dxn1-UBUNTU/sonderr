@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 import { $ } from "bun"
-import { Script } from "@opencode-ai/script"
+import { Script } from "@sonderr/script"
 import { buildNotes, getLatestRelease } from "./changelog"
 
 const highlightsTemplate = `## Highlights
@@ -37,8 +37,8 @@ let notes: string[] = []
 
 console.log("=== publishing ===\n")
 
-const skipNotes = process.env["KILO_SKIP_NOTES"] === "1" // kilocode_change
-if (skipNotes) console.log("changelog skipped: KILO_SKIP_NOTES=1") // kilocode_change
+const skipNotes = process.env["SONDERR_SKIP_NOTES"] === "1" // sonderr_change
+if (skipNotes) console.log("changelog skipped: SONDERR_SKIP_NOTES=1") // sonderr_change
 
 if (!Script.preview && !skipNotes) {
   const previous = await getLatestRelease()
@@ -68,8 +68,8 @@ await Bun.file(extensionToml).write(toml)
 
 await $`bun install`
 
-console.log("\n=== opencode ===\n")
-await import(`../packages/opencode/script/legacy-publish.ts`)
+console.log("\n=== sonderr ===\n")
+await import(`../packages/cli/script/legacy-publish.ts`)
 
 console.log("\n=== sdk ===\n")
 await import(`../packages/sdk/js/script/publish.ts`)
@@ -89,10 +89,10 @@ if (!Script.preview) {
   await $`git cherry-pick HEAD..origin/main`.nothrow()
   await $`git push origin HEAD --tags --no-verify --force-with-lease`
   await new Promise((resolve) => setTimeout(resolve, 5_000))
-  // kilocode_change start - skip draft flag when KILO_SKIP_NOTES=1 (used by publish-stable.yml which doesn't have a publish-complete step)
+  // sonderr_change start - skip draft flag when SONDERR_SKIP_NOTES=1 (used by publish-stable.yml which doesn't have a publish-complete step)
   const draftFlag = skipNotes ? [] : ["-d"]
-  await $`gh release create v${Script.version} ${draftFlag} --title "v${Script.version}" --notes ${notes.join("\n") || "No notable changes"} ./packages/opencode/dist/archives/*.zip ./packages/opencode/dist/archives/*.tar.gz`
-  // kilocode_change end
+  await $`gh release create v${Script.version} ${draftFlag} --title "v${Script.version}" --notes ${notes.join("\n") || "No notable changes"} ./packages/cli/dist/archives/*.zip ./packages/cli/dist/archives/*.tar.gz`
+  // sonderr_change end
   const release = await $`gh release view v${Script.version} --json id,tagName`.json()
   output += `release=${release.id}\n`
   output += `tag=${release.tagName}\n`

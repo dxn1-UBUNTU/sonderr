@@ -27,7 +27,7 @@ export const Plugin = define({
           )
         }).pipe(Effect.map((documents) => documents.flat()))
 
-        // kilocode_change start - apply partial workflow overrides after every command template is registered
+        // sonderr_change start - apply partial workflow overrides after every command template is registered
         const items = documents.flatMap((document) => Object.entries(document.commands ?? {}))
         for (const [name, command] of items) {
           if (command.template === undefined) continue
@@ -52,7 +52,7 @@ export const Plugin = define({
             if (command.subtask !== undefined) item.subtask = command.subtask
           })
         }
-        // kilocode_change end
+        // sonderr_change end
       }),
     )
   }),

@@ -1,7 +1,7 @@
 import { ToastNotifier } from "../ui/toast-notifier"
 import { validateConfig } from "../utils/validation"
 import { enhanceConfig, shouldProbeAtomicChat } from "./enhance-config"
-import type { PluginInput } from "@kilocode/plugin"
+import type { PluginInput } from "@sonderr/plugin"
 import { ATOMIC_CHAT_PROVIDER_KEY, LOG_PREFIX } from "../constants"
 
 const CONFIG_DISCOVERY_TIMEOUT_MS = 5000

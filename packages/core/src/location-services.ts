@@ -1,4 +1,4 @@
-import { Duration, Effect, Layer, LayerMap } from "effect" // kilocode_change
+import { Duration, Effect, Layer, LayerMap } from "effect" // sonderr_change
 import { AgentV2 } from "./agent"
 import { AISDK } from "./aisdk"
 import { Catalog } from "./catalog"
@@ -12,7 +12,7 @@ import { FileSystemSearch } from "./filesystem/search"
 import { Watcher } from "./filesystem/watcher"
 import { Image } from "./image"
 import { Integration } from "./integration"
-import { ProviderUsage } from "./kilocode/provider-usage" // kilocode_change
+import { ProviderUsage } from "./sonderr/provider-usage" // sonderr_change
 import { Location } from "./location"
 import { LocationMutation } from "./location-mutation"
 import { LocationServiceMap } from "./location-service-map"
@@ -49,7 +49,7 @@ export const locationServices = LayerNode.group([
   Reference.node,
   Integration.node,
   Catalog.node,
-  ProviderUsage.node, // kilocode_change
+  ProviderUsage.node, // sonderr_change
   AISDK.node,
   PluginV2.node,
   PluginInternal.node,
@@ -85,7 +85,7 @@ export type LocationError = LayerNode.Error<typeof locationServices>
 
 export function buildLocationServiceMap(
   replacements: LayerNode.Replacements = [],
-  options: { readonly idleTimeToLive?: Duration.Input } = {}, // kilocode_change
+  options: { readonly idleTimeToLive?: Duration.Input } = {}, // sonderr_change
 ): Layer.Layer<LocationServiceMap.Service> {
   return Layer.effect(
     LocationServiceMap.Service,
@@ -109,7 +109,7 @@ export function buildLocationServiceMap(
           Layer.provide(LayerNode.compile(location.hoisted)),
         )
       },
-      { idleTimeToLive: options.idleTimeToLive ?? "60 minutes" }, // kilocode_change
+      { idleTimeToLive: options.idleTimeToLive ?? "60 minutes" }, // sonderr_change
     ),
   )
 }

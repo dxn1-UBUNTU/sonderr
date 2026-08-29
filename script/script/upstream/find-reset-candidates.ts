@@ -7,12 +7,12 @@
  * working tree, then classifies each candidate:
  *
  *   - identical           : local bytes already match transformed upstream
- *   - markers-only        : only diff is kilocode_change markers wrapping
+ *   - markers-only        : only diff is sonderr_change markers wrapping
  *                           identical code (stale markers)
  *   - whitespace-only     : only diff is whitespace
  *   - small-diff          : <= --review-limit non-marker diff lines
  *   - large-diff          : > --review-limit non-marker diff lines (skipped)
- *   - upstream-missing    : file does not exist upstream (kilo-only, skipped)
+ *   - upstream-missing    : file does not exist upstream (sonderr-only, skipped)
  *   - local-missing       : file tracked by git but missing locally (skipped)
  *   - binary-identical    : binary file already matches (skipped)
  *   - binary-diff         : binary file differs (skipped; use reset-to-upstream.ts
@@ -24,7 +24,7 @@
  *
  * Usage:
  *   bun run script/upstream/find-reset-candidates.ts
- *   bun run script/upstream/find-reset-candidates.ts packages/opencode/src/agent
+ *   bun run script/upstream/find-reset-candidates.ts packages/cli/src/agent
  *   bun run script/upstream/find-reset-candidates.ts --dry-run --review-limit 3
  */
 
@@ -48,9 +48,9 @@ interface Entry extends ClassifyResult {
   reset?: boolean
 }
 
-const KILO_ONLY_PATHSPECS = [
-  ":(exclude,glob)packages/kilo-*/**",
-  ":(exclude,glob)**/kilocode/**",
+const SONDERR_ONLY_PATHSPECS = [
+  ":(exclude,glob)packages/sonderr-*/**",
+  ":(exclude,glob)**/sonderr/**",
   ":(exclude)script/upstream",
 ]
 
@@ -170,7 +170,7 @@ interface CandidateSet {
 }
 
 async function candidates(commit: string, scope: string | undefined, top: string): Promise<CandidateSet> {
-  const pathspecs = [scope ?? ".", ...KILO_ONLY_PATHSPECS]
+  const pathspecs = [scope ?? ".", ...SONDERR_ONLY_PATHSPECS]
   const result = await $`git diff --name-only ${commit}..HEAD -- ${pathspecs}`.cwd(top).quiet().nothrow()
   if (result.exitCode !== 0) {
     throw new Error(`Failed to list candidate files: ${result.stderr.toString()}`)
@@ -199,10 +199,10 @@ async function candidates(commit: string, scope: string | undefined, top: string
 }
 
 /**
- * Files the upstream merge config marks as "keep ours" (Kilo-specific preserved
- * versions) or "skip" (upstream-only, removed in Kilo) should never be touched
+ * Files the upstream merge config marks as "keep ours" (Sonderr-specific preserved
+ * versions) or "skip" (upstream-only, removed in Sonderr) should never be touched
  * by the bulk resetter. They show up in `git diff` against raw upstream but
- * resetting them would undo deliberate Kilo decisions.
+ * resetting them would undo deliberate Sonderr decisions.
  */
 function policyExempt(file: string): boolean {
   if (matches(file, defaultConfig.keepOurs)) return true

@@ -7,13 +7,13 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  /* kilocode_change start — preserve Kilo's bordered card surface */
+  /* sonderr_change start — preserve Sonderr's bordered card surface */
   background-color: var(--surface-inset-base);
   border: 1px solid var(--border-weaker-base);
   transition: background-color 0.15s ease;
   padding: 6px 12px;
   overflow: clip;
-  /* kilocode_change end */
+  /* sonderr_change end */
   border-radius: var(--radius-md);
 
   /* text-14-regular */
@@ -85,7 +85,7 @@
     padding-left: var(--card-indent);
   }
 
-  /* kilocode_change start — preserve Kilo error and warning card variants */
+  /* sonderr_change start — preserve Sonderr error and warning card variants */
   &[data-variant="error"] {
     background-color: var(--surface-critical-weak);
     border: 1px solid var(--border-critical-base);
@@ -118,7 +118,7 @@
     line-height: var(--line-height-large);
     letter-spacing: var(--letter-spacing-normal);
   }
-  /* kilocode_change end */
+  /* sonderr_change end */
 }
 
 body:not([data-new-layout]) [data-component="card"] {

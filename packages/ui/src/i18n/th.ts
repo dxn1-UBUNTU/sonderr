@@ -73,7 +73,7 @@ export const dict = {
 
   "dialog.usageExceeded.freeTier.title": "ถึงขีดจำกัดฟรีแล้ว",
   "dialog.usageExceeded.freeTier.description":
-    "สมัครสมาชิก Kilo Go เพื่อการเข้าถึงโมเดลโอเพนซอร์สที่ดีที่สุดอย่างเชื่อถือได้ เริ่มต้นที่ $5/เดือน", // kilocode_change
+    "สมัครสมาชิก Sonderr Go เพื่อการเข้าถึงโมเดลโอเพนซอร์สที่ดีที่สุดอย่างเชื่อถือได้ เริ่มต้นที่ $5/เดือน", // sonderr_change
   "dialog.usageExceeded.freeTier.actionLabel": "สมัครสมาชิก",
   "dialog.usageExceeded.accountRateLimit.title": "ถึงขีดจำกัดของ Go แล้ว",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -195,7 +195,7 @@ export const dict = {
   "ui.patch.action.created": "สร้าง",
   "ui.patch.action.moved": "ย้าย",
   "ui.patch.action.patched": "แพตช์",
-  "ui.patch.action.plan": "แผน", // kilocode_change
+  "ui.patch.action.plan": "แผน", // sonderr_change
 
   "ui.question.subtitle.answered": "ตอบแล้ว {{count}} ข้อ",
   "ui.question.answer.none": "(ไม่มีคำตอบ)",
@@ -216,7 +216,7 @@ export const dict = {
   "ui.message.duration.seconds": "{{count}} วินาที",
   "ui.message.duration.minutesSeconds": "{{minutes}} นาที {{seconds}} วินาที",
 
-  // kilocode_change start - Kilo UI compatibility
+  // sonderr_change start - Sonderr UI compatibility
   "ui.mermaid.copyPng": "คัดลอก PNG",
   "ui.mermaid.copySource": "คัดลอกซอร์ส Mermaid",
   "ui.mermaid.copySvg": "คัดลอก SVG",
@@ -235,5 +235,5 @@ export const dict = {
   "ui.sessionTurn.diffs.changed": "เปลี่ยนแปลงแล้ว",
   "ui.sessionTurn.status.delegatingWaitingPermission": "Subagent waiting for permission",
   "ui.sessionTurn.status.delegatingWaitingQuestion": "Subagent waiting for response",
-  // kilocode_change end
+  // sonderr_change end
 }

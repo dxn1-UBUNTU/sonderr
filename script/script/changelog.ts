@@ -27,13 +27,13 @@ if (values.help) {
   console.log(`
 Usage: bun script/changelog.ts [options]
 
-Generates UPCOMING_CHANGELOG.md by running the kilo changelog command.
+Generates UPCOMING_CHANGELOG.md by running the sonderr changelog command.
 
 Options:
   -f, --from <version>   Starting version (default: latest non-draft GitHub release)
   -t, --to <ref>         Ending ref (default: HEAD)
-      --variant <name>   Thinking variant for kilo run (default: low)
-      --quiet            Suppress kilo command output unless it fails
+      --variant <name>   Thinking variant for sonderr run (default: low)
+      --quiet            Suppress sonderr command output unless it fails
       --print            Print the generated UPCOMING_CHANGELOG.md after success
   -h, --help             Show this help message
 
@@ -48,7 +48,7 @@ Examples:
 await rm(file, { force: true })
 
 const quiet = values.quiet
-const cmd = ["kilo", "run"] // kilocode_change - opencode -> kilo
+const cmd = ["sonderr", "run"] // sonderr_change - sonderr -> sonderr
 cmd.push("--variant", values.variant)
 cmd.push("--command", "changelog", "--", ...args)
 

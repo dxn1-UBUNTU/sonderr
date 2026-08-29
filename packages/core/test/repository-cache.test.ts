@@ -1,13 +1,13 @@
 import { describe, expect } from "bun:test"
 import fs from "fs/promises"
 import path from "path"
-import { fileURLToPath, pathToFileURL } from "url" // kilocode_change
+import { fileURLToPath, pathToFileURL } from "url" // sonderr_change
 import { Effect, Layer } from "effect"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { Global } from "@opencode-ai/core/global"
-import { Repository } from "@opencode-ai/core/repository"
-import { RepositoryCache } from "@opencode-ai/core/repository-cache"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { Global } from "@sonderr/core/global"
+import { Repository } from "@sonderr/core/repository"
+import { RepositoryCache } from "@sonderr/core/repository-cache"
 import { branch, git, gitRemote } from "./fixture/git"
 import { tmpdir } from "./fixture/tmpdir"
 import { testEffect } from "./lib/effect"
@@ -101,7 +101,7 @@ describe("RepositoryCache", () => {
     ),
   )
 
-  // kilocode_change start - regression test for canonicalized file remote origin reuse
+  // sonderr_change start - regression test for canonicalized file remote origin reuse
   it.live("reuses an existing checkout when file remote origin uses a symlinked or alternate spelling", () =>
     withRemote((fixture) =>
       Effect.gen(function* () {
@@ -123,7 +123,7 @@ describe("RepositoryCache", () => {
       }).pipe(Effect.provide(cacheLayer(fixture.root))),
     ),
   )
-  // kilocode_change end
+  // sonderr_change end
 
   it.live("returns typed validation and clone failures", () =>
     withRemote((fixture) =>

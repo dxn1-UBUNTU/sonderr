@@ -1,15 +1,15 @@
 #!/usr/bin/env bun
 /**
- * Transform extension files (Zed, etc.) with Kilo branding
+ * Transform extension files (Zed, etc.) with Sonderr branding
  *
  * This script handles extension configuration files by transforming
- * OpenCode references to Kilo.
+ * Sonderr references to Sonderr.
  */
 
 import { $ } from "bun"
 import { info, success, warn, debug } from "../utils/logger"
 import { defaultConfig } from "../utils/config"
-import { oursHasKilocodeChanges } from "../utils/git"
+import { oursHasSonderrChanges } from "../utils/git"
 
 export interface ExtensionTransformResult {
   file: string
@@ -34,66 +34,66 @@ interface ExtensionReplacement {
 const EXTENSION_REPLACEMENTS: ExtensionReplacement[] = [
   // TOML files (Zed extension)
   {
-    pattern: /name\s*=\s*"opencode"/g,
-    replacement: 'name = "kilo"',
+    pattern: /name\s*=\s*"sonderr"/g,
+    replacement: 'name = "sonderr"',
     description: "Extension name",
     fileTypes: [".toml"],
   },
   {
-    pattern: /id\s*=\s*"opencode"/g,
-    replacement: 'id = "kilo"',
+    pattern: /id\s*=\s*"sonderr"/g,
+    replacement: 'id = "sonderr"',
     description: "Extension ID",
     fileTypes: [".toml"],
   },
   {
-    pattern: /description\s*=\s*"OpenCode[^"]*"/g,
-    replacement: 'description = "Kilo - AI coding assistant"',
+    pattern: /description\s*=\s*"Sonderr[^"]*"/g,
+    replacement: 'description = "Sonderr - AI coding assistant"',
     description: "Extension description",
     fileTypes: [".toml"],
   },
 
   // GitHub/Repository references
   {
-    pattern: /repository\s*=\s*"[^"]*anomalyco\/opencode[^"]*"/g,
-    replacement: 'repository = "https://github.com/Kilo-Org/kilocode"',
+    pattern: /repository\s*=\s*"[^"]*anomalyco\/sonderr[^"]*"/g,
+    replacement: 'repository = "https://github.com/Sonderr-Org/sonderr"',
     description: "Repository URL",
     fileTypes: [".toml"],
   },
   {
-    pattern: /github\.com\/anomalyco\/opencode/g,
-    replacement: "github.com/Kilo-Org/kilocode",
+    pattern: /github\.com\/anomalyco\/sonderr/g,
+    replacement: "github.com/Sonderr-Org/sonderr",
     description: "GitHub URL",
   },
   {
-    pattern: /anomalyco\/opencode/g,
-    replacement: "Kilo-Org/kilocode",
+    pattern: /anomalyco\/sonderr/g,
+    replacement: "Sonderr-Org/sonderr",
     description: "GitHub repo",
   },
 
   // Binary/command references
   {
-    pattern: /command\s*=\s*"opencode"/g,
-    replacement: 'command = "kilo"',
+    pattern: /command\s*=\s*"sonderr"/g,
+    replacement: 'command = "sonderr"',
     description: "Command name",
     fileTypes: [".toml"],
   },
 
-  // Generic OpenCode -> Kilo in strings
+  // Generic Sonderr -> Sonderr in strings
   {
-    pattern: /"OpenCode"/g,
-    replacement: '"Kilo"',
+    pattern: /"Sonderr"/g,
+    replacement: '"Sonderr"',
     description: "Product name",
   },
 
   // Environment variables
   {
-    pattern: /_EXTENSION_OPENCODE_/g,
-    replacement: "_EXTENSION_KILO_",
+    pattern: /_EXTENSION_SONDERR_/g,
+    replacement: "_EXTENSION_SONDERR_",
     description: "Extension env var",
   },
   {
-    pattern: /OpenCode\s+language\s+server/gi,
-    replacement: "Kilo language server",
+    pattern: /Sonderr\s+language\s+server/gi,
+    replacement: "Sonderr language server",
     description: "Language server name",
   },
 ]
@@ -165,9 +165,9 @@ export async function transformExtensionFile(
     return { file, action: "transformed", replacements: 0, dryRun: true }
   }
 
-  // If our version has kilocode_change markers, flag for manual resolution
-  if (await oursHasKilocodeChanges(file)) {
-    warn(`${file} has kilocode_change markers — skipping auto-transform, needs manual resolution`)
+  // If our version has sonderr_change markers, flag for manual resolution
+  if (await oursHasSonderrChanges(file)) {
+    warn(`${file} has sonderr_change markers — skipping auto-transform, needs manual resolution`)
     return { file, action: "flagged", replacements: 0, dryRun: false }
   }
 
@@ -220,7 +220,7 @@ export async function transformConflictedExtensions(
 }
 
 /**
- * Transform all extension files (pre-merge, on opencode branch)
+ * Transform all extension files (pre-merge, on sonderr branch)
  */
 export async function transformAllExtensions(
   options: ExtensionTransformOptions = {},

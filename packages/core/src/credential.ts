@@ -1,23 +1,23 @@
 export * as Credential from "./credential"
 
-import { asc, desc, eq } from "drizzle-orm" // kilocode_change
-// kilocode_change start
+import { asc, desc, eq } from "drizzle-orm" // sonderr_change
+// sonderr_change start
 import { Context, Effect, Layer, Option, Schema, Semaphore } from "effect"
-// kilocode_change end
-import { Credential } from "@opencode-ai/schema/credential"
-import { Integration } from "@opencode-ai/schema/integration"
+// sonderr_change end
+import { Credential } from "@sonderr/schema/credential"
+import { Integration } from "@sonderr/schema/integration"
 import { Database } from "./database/database"
 import { makeGlobalNode } from "./effect/app-node"
 import { CredentialTable } from "./credential/sql"
-// kilocode_change start
+// sonderr_change start
 import { FSUtil } from "./fs-util"
 import { Global } from "./global"
 import { DataMigrationTable } from "./data-migration.sql"
 import path from "path"
-import { parse as parseKiloAccounts } from "./kilocode/credential-migration"
-import { isBusy } from "./kilocode/sqlite-error"
+import { parse as parseSonderrAccounts } from "./sonderr/credential-migration"
+import { isBusy } from "./sonderr/sqlite-error"
 import { NonNegativeInt } from "./schema"
-// kilocode_change end
+// sonderr_change end
 
 export const ID = Credential.ID
 export type ID = Credential.ID
@@ -38,7 +38,7 @@ export class Info extends Schema.Class<Info>("Credential.Info")({
   value: Value,
 }) {}
 
-// kilocode_change start - legacy JSON credential stores that predate the integration credential table
+// sonderr_change start - legacy JSON credential stores that predate the integration credential table
 const LegacyOAuth = Schema.Struct({
   type: Schema.Literal("oauth"),
   refresh: Schema.String,
@@ -83,7 +83,7 @@ const legacyValue = (integration: Integration.ID, credential: Schema.Schema.Type
           ...(credential.enterpriseUrl ? { enterpriseURL: credential.enterpriseUrl } : {}),
         },
       })
-// kilocode_change end
+// sonderr_change end
 
 export interface Interface {
   /** Returns every stored credential. */
@@ -104,21 +104,21 @@ export interface Interface {
   readonly remove: (id: ID) => Effect.Effect<void>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/v2/Credential") {}
+export class Service extends Context.Service<Service, Interface>()("@sonderr/v2/Credential") {}
 
-// kilocode_change start - preserve Kilo's account JSON stores and reconcile auth.json on every startup
+// sonderr_change start - preserve Sonderr's account JSON stores and reconcile auth.json on every startup
 export const legacyImportLayer = Layer.effectDiscard(
   Effect.gen(function* () {
     const { db } = yield* Database.Service
     const fs = yield* FSUtil.Service
     const global = yield* Global.Service
     // v3 repairs the active-only v2 import while remaining safe for users who already ran it.
-    const kiloName = "credential.kilo-account-json-v3"
-    if (!(yield* db.select().from(DataMigrationTable).where(eq(DataMigrationTable.name, kiloName)).get())) {
+    const sonderrName = "credential.sonderr-account-json-v3"
+    if (!(yield* db.select().from(DataMigrationTable).where(eq(DataMigrationTable.name, sonderrName)).get())) {
       const current = yield* fs.readJson(path.join(global.data, "account.json")).pipe(Effect.option)
       const prior = yield* fs.readJson(path.join(global.data, "auth-v2.json")).pipe(Effect.option)
       const raw = Option.isSome(current) ? current.value : Option.getOrUndefined(prior)
-      const values = parseKiloAccounts(raw).toSorted(
+      const values = parseSonderrAccounts(raw).toSorted(
         (a, b) => a.connectorID.localeCompare(b.connectorID) || Number(a.active) - Number(b.active),
       )
       if (values.length > 0) {
@@ -148,7 +148,7 @@ export const legacyImportLayer = Layer.effectDiscard(
                 continue
               }
               yield* tx.insert(CredentialTable).values({
-                id: ID.make(`cred_kilo_${Buffer.from(item.id).toString("base64url")}`),
+                id: ID.make(`cred_sonderr_${Buffer.from(item.id).toString("base64url")}`),
                 integration_id: integration,
                 label: item.label,
                 value,
@@ -156,7 +156,7 @@ export const legacyImportLayer = Layer.effectDiscard(
                 time_updated: time,
               })
             }
-            yield* tx.insert(DataMigrationTable).values({ name: kiloName, time_completed: Date.now() }).run()
+            yield* tx.insert(DataMigrationTable).values({ name: sonderrName, time_completed: Date.now() }).run()
           }),
         )
       }
@@ -190,7 +190,7 @@ export const legacyImportLayer = Layer.effectDiscard(
             .select()
             .from(CredentialTable)
             .where(eq(CredentialTable.integration_id, item.integration))
-            .orderBy(desc(CredentialTable.time_created)) // kilocode_change - reconcile the active imported account
+            .orderBy(desc(CredentialTable.time_created)) // sonderr_change - reconcile the active imported account
             .get()
           if (current) {
             if (!same(current.value, item.value))
@@ -221,9 +221,9 @@ export const legacyImportLayer = Layer.effectDiscard(
     Effect.orDie,
   ),
 )
-// kilocode_change end
+// sonderr_change end
 
-// kilocode_change - retained for Kilo migration and compatibility test layers
+// sonderr_change - retained for Sonderr migration and compatibility test layers
 export const layer = Layer.effect(
   Service,
   Effect.gen(function* () {
@@ -241,8 +241,8 @@ export const layer = Layer.effect(
       })
     }
 
-    // kilocode_change start - process-local workspace credentials override host storage without being persisted
-    const content = process.env.KILO_AUTH_CONTENT
+    // sonderr_change start - process-local workspace credentials override host storage without being persisted
+    const content = process.env.SONDERR_AUTH_CONTENT
     const injected = yield* content === undefined
       ? Effect.succeed(new Map<Integration.ID, Info>())
       : Effect.try({
@@ -276,7 +276,7 @@ export const layer = Layer.effect(
             )
           }),
           Effect.catch((cause) =>
-            Effect.logWarning("invalid KILO_AUTH_CONTENT; using no process-local credentials", { cause }).pipe(
+            Effect.logWarning("invalid SONDERR_AUTH_CONTENT; using no process-local credentials", { cause }).pipe(
               Effect.as(new Map<Integration.ID, Info>()),
             ),
           ),
@@ -308,7 +308,7 @@ export const layer = Layer.effect(
             .select()
             .from(CredentialTable)
             .where(eq(CredentialTable.integration_id, integration))
-            .orderBy(desc(CredentialTable.time_created)) // kilocode_change - persist the active imported account
+            .orderBy(desc(CredentialTable.time_created)) // sonderr_change - persist the active imported account
             .get()
             .pipe(Effect.orDie)
           delete data[integration + "/"]
@@ -330,11 +330,11 @@ export const layer = Layer.effect(
           yield* fs.writeJson(file, data, 0o600).pipe(Effect.orDie)
         }),
       )
-    // kilocode_change end
+    // sonderr_change end
 
     return Service.of({
       all: Effect.fn("Credential.all")(function* () {
-        if (isolated) return [...local.values()] // kilocode_change
+        if (isolated) return [...local.values()] // sonderr_change
         return (yield* db
           .select()
           .from(CredentialTable)
@@ -346,12 +346,12 @@ export const layer = Layer.effect(
         })
       }),
       list: Effect.fn("Credential.list")(function* (integrationID) {
-        // kilocode_change start
+        // sonderr_change start
         if (isolated) {
           const credential = local.get(integrationID)
           return credential ? [credential] : []
         }
-        // kilocode_change end
+        // sonderr_change end
         return (yield* db
           .select()
           .from(CredentialTable)
@@ -364,7 +364,7 @@ export const layer = Layer.effect(
         })
       }),
       get: Effect.fn("Credential.get")(function* (id) {
-        if (isolated) return find(id) // kilocode_change - injected workspace credentials are process-local
+        if (isolated) return find(id) // sonderr_change - injected workspace credentials are process-local
         const row = yield* db.select().from(CredentialTable).where(eq(CredentialTable.id, id)).get().pipe(Effect.orDie)
         return row ? stored(row) : undefined
       }),
@@ -375,12 +375,12 @@ export const layer = Layer.effect(
           label: input.label ?? "default",
           value: input.value,
         })
-        // kilocode_change start - credential changes in isolated workspaces are process-local
+        // sonderr_change start - credential changes in isolated workspaces are process-local
         if (isolated) {
           local.set(credential.integrationID, credential)
           return credential
         }
-        // kilocode_change end
+        // sonderr_change end
         yield* db
           .transaction((tx) =>
             Effect.gen(function* () {
@@ -400,12 +400,12 @@ export const layer = Layer.effect(
             }),
           )
           .pipe(Effect.orDie)
-        yield* writeLegacy(credential.integrationID) // kilocode_change
+        yield* writeLegacy(credential.integrationID) // sonderr_change
         return credential
       }),
       update: Effect.fn("Credential.update")(function* (id, updates) {
         if (!updates.label && !updates.value) return
-        // kilocode_change start - isolated updates never reach the host database
+        // sonderr_change start - isolated updates never reach the host database
         if (isolated) {
           const credential = find(id)
           if (!credential) return
@@ -420,26 +420,26 @@ export const layer = Layer.effect(
           return
         }
         const row = yield* db.select().from(CredentialTable).where(eq(CredentialTable.id, id)).get().pipe(Effect.orDie)
-        // kilocode_change end
+        // sonderr_change end
         yield* db
           .update(CredentialTable)
           .set({ label: updates.label, value: updates.value })
           .where(eq(CredentialTable.id, id))
           .run()
           .pipe(Effect.orDie)
-        if (row?.integration_id) yield* writeLegacy(row.integration_id) // kilocode_change
+        if (row?.integration_id) yield* writeLegacy(row.integration_id) // sonderr_change
       }),
       remove: Effect.fn("Credential.remove")(function* (id) {
-        // kilocode_change start - isolated removals remain process-local
+        // sonderr_change start - isolated removals remain process-local
         if (isolated) {
           const credential = find(id)
           if (credential) local.delete(credential.integrationID)
           return
         }
         const row = yield* db.select().from(CredentialTable).where(eq(CredentialTable.id, id)).get().pipe(Effect.orDie)
-        // kilocode_change end
+        // sonderr_change end
         yield* db.delete(CredentialTable).where(eq(CredentialTable.id, id)).run().pipe(Effect.orDie)
-        if (row?.integration_id) yield* writeLegacy(row.integration_id) // kilocode_change
+        if (row?.integration_id) yield* writeLegacy(row.integration_id) // sonderr_change
       }),
     })
   }),
@@ -447,6 +447,6 @@ export const layer = Layer.effect(
 
 export const node = makeGlobalNode({
   service: Service,
-  layer: layer.pipe(Layer.provideMerge(legacyImportLayer)), // kilocode_change
-  deps: [Database.node, FSUtil.node, Global.node], // kilocode_change
+  layer: layer.pipe(Layer.provideMerge(legacyImportLayer)), // sonderr_change
+  deps: [Database.node, FSUtil.node, Global.node], // sonderr_change
 })

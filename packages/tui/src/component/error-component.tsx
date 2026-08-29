@@ -3,11 +3,11 @@ import { useKeyboard, useTerminalDimensions } from "@opentui/solid"
 import { createSignal, For, Show } from "solid-js"
 import { getScrollAcceleration } from "../util/scroll"
 import { useClipboard } from "../context/clipboard"
-import { InstallationVersion } from "@opencode-ai/core/installation/version"
+import { InstallationVersion } from "@sonderr/core/installation/version"
 import { useExit } from "../context/exit"
 import { describeOS, describeTerminal } from "../util/system"
 
-// kilocode_change start — guard against missing renderer context in ErrorBoundary fallback
+// sonderr_change start — guard against missing renderer context in ErrorBoundary fallback
 function tryUseTerminalDimensions() {
   try {
     return useTerminalDimensions()
@@ -16,20 +16,20 @@ function tryUseTerminalDimensions() {
     return undefined
   }
 }
-// kilocode_change end
+// sonderr_change end
 
 export function ErrorComponent(props: { error: Error; reset: () => void; mode?: "dark" | "light" }) {
-  // kilocode_change start — guard against missing renderer context in ErrorBoundary fallback
+  // sonderr_change start — guard against missing renderer context in ErrorBoundary fallback
   const term = tryUseTerminalDimensions()
   const width = () => term?.().width ?? process.stdout.columns ?? 80
   const height = () => term?.().height ?? process.stdout.rows ?? 24
-  // kilocode_change end
+  // sonderr_change end
   const exit = useExit()
   const clipboard = useClipboard()
 
   const [copied, setCopied] = createSignal(false)
 
-  // Safe fallback palette per mode (mirrors theme/assets/opencode.json) since the
+  // Safe fallback palette per mode (mirrors theme/assets/sonderr.json) since the
   // theme context may be the thing that crashed.
   const isLight = props.mode === "light"
   const colors = isLight
@@ -73,7 +73,7 @@ export function ErrorComponent(props: { error: Error; reset: () => void; mode?: 
   const move = (delta: number) => setSelected((prev) => (prev + delta + actions.length) % actions.length)
   let scroll: ScrollBoxRenderable | undefined
 
-  // kilocode_change start — guard against missing keyboard context in ErrorBoundary fallback
+  // sonderr_change start — guard against missing keyboard context in ErrorBoundary fallback
   try {
     useKeyboard((evt) => {
       if (evt.ctrl && evt.name === "c") return exit()
@@ -111,7 +111,7 @@ export function ErrorComponent(props: { error: Error; reset: () => void; mode?: 
   } catch (err) {
     process.stderr.write(`error boundary keyboard unavailable: ${String(err)}\n`)
   }
-  // kilocode_change end
+  // sonderr_change end
 
   // Responsive thresholds.
   const contentWidth = () => Math.min(84, Math.max(24, width() - 4))
@@ -124,8 +124,8 @@ export function ErrorComponent(props: { error: Error; reset: () => void; mode?: 
         {/* Headline */}
         <box flexDirection="column" alignItems="center" flexShrink={0}>
           <text attributes={TextAttributes.BOLD} fg={colors.text}>
-            {/* kilocode_change */}
-            Kilo crashed
+            {/* sonderr_change */}
+            Sonderr crashed
           </text>
           <Show when={showSubtext()}>
             <text fg={colors.muted}>An unexpected error stopped the session.</text>
@@ -210,8 +210,8 @@ export function ErrorComponent(props: { error: Error; reset: () => void; mode?: 
                 : "Copy the report and open a GitHub issue to help us fix this."}
             </text>
             <text fg={colors.muted}>
-              {/* kilocode_change */}
-              Kilo {InstallationVersion}
+              {/* sonderr_change */}
+              Sonderr {InstallationVersion}
             </text>
           </box>
         </Show>
@@ -224,16 +224,16 @@ function buildIssueURL(message: string, stack: string) {
   // Field keys match the ids in .github/ISSUE_TEMPLATE/bug-report.yml so the issue
   // form opens pre-filled. Populating os/terminal/reproduce keeps the report past
   // the contributing-guidelines compliance check, which pushes for system info.
-  // kilocode_change start
-  const url = new URL("https://github.com/Kilo-Org/kilocode/issues/new?template=bug-report.yml")
-  url.searchParams.set("title", `Kilo TUI crash: ${message}`)
-  url.searchParams.set("kilo-version", InstallationVersion)
-  // kilocode_change end
+  // sonderr_change start
+  const url = new URL("https://github.com/Sonderr-Org/sonderr/issues/new?template=bug-report.yml")
+  url.searchParams.set("title", `Sonderr TUI crash: ${message}`)
+  url.searchParams.set("sonderr-version", InstallationVersion)
+  // sonderr_change end
   url.searchParams.set("os", describeOS())
   url.searchParams.set("terminal", describeTerminal())
   url.searchParams.set(
     "reproduce",
-    "Reported automatically from the Kilo crash screen. If you can, describe what you were doing when it crashed.",
+    "Reported automatically from the Sonderr crash screen. If you can, describe what you were doing when it crashed.",
   )
 
   // Budget the stack against the fully URL-encoded length (not the raw length) so
@@ -242,7 +242,7 @@ function buildIssueURL(message: string, stack: string) {
   // so measuring url.toString() is both correct and safe on any input.
   const MAX_URL_LENGTH = 6000
   const marker = "\n... (truncated)"
-  const head = `The Kilo TUI crashed with an unexpected error.\n\n**Error:** ${message}\n\n**Stack trace:**\n`
+  const head = `The Sonderr TUI crashed with an unexpected error.\n\n**Error:** ${message}\n\n**Stack trace:**\n`
   const setBody = (body: string) => url.searchParams.set("description", head + "```\n" + body + "\n```")
 
   setBody(stack)

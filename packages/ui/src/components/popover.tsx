@@ -20,7 +20,7 @@ export interface PopoverProps<T extends ValidComponent = "div">
   trigger?: JSXElement
   triggerAs?: T
   triggerProps?: ComponentProps<T>
-  contentLabel?: string // kilocode_change
+  contentLabel?: string // sonderr_change
   title?: JSXElement
   description?: JSXElement
   class?: ComponentProps<"div">["class"]
@@ -35,7 +35,7 @@ export function Popover<T extends ValidComponent = "div">(props: PopoverProps<T>
     "trigger",
     "triggerAs",
     "triggerProps",
-    "contentLabel", // kilocode_change
+    "contentLabel", // sonderr_change
     "title",
     "description",
     "class",
@@ -54,7 +54,7 @@ export function Popover<T extends ValidComponent = "div">(props: PopoverProps<T>
     triggerRef: undefined as HTMLElement | undefined,
     dismiss: null as "escape" | "outside" | null,
     uncontrolledOpen: local.defaultOpen ?? false,
-    ready: true, // kilocode_change
+    ready: true, // sonderr_change
   })
 
   const controlled = () => local.open !== undefined
@@ -138,7 +138,7 @@ export function Popover<T extends ValidComponent = "div">(props: PopoverProps<T>
     <Kobalte.Content
       ref={(el: HTMLElement | undefined) => setState("contentRef", el)}
       data-component="popover-content"
-      aria-label={local.contentLabel /* kilocode_change */}
+      aria-label={local.contentLabel /* sonderr_change */}
       classList={{
         ...local.classList,
         [local.class ?? ""]: !!local.class,
@@ -160,7 +160,7 @@ export function Popover<T extends ValidComponent = "div">(props: PopoverProps<T>
         focus(node)
       }}
       onCloseAutoFocus={(event: Event) => {
-        if (opened() || state.dismiss === "outside") event.preventDefault() // kilocode_change
+        if (opened() || state.dismiss === "outside") event.preventDefault() // sonderr_change
         setState("dismiss", null)
       }}
     >

@@ -4,7 +4,7 @@ export function getAtomicSection(config: any) {
   return config?.provider?.[ATOMIC_CHAT_PROVIDER_KEY]
 }
 
-/** User added `provider.atomic-chat` in kilo.json (explicit opt-in). */
+/** User added `provider.atomic-chat` in sonderr.json (explicit opt-in). */
 export function hasAtomicChatProviderSection(config: any): boolean {
   return Boolean(getAtomicSection(config))
 }

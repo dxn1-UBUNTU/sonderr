@@ -7,10 +7,10 @@ import os from "node:os"
 import path from "node:path"
 import { Effect, Stream } from "effect"
 import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process"
-import { backendSupport, run, type Profile } from "@kilocode/sandbox"
-import { CurrentProxyFactory, startProxy, type ProxyFactory } from "@kilocode/sandbox"
-import { CrossSpawnSpawner } from "@opencode-ai/core/cross-spawn-spawner"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
+import { backendSupport, run, type Profile } from "@sonderr/sandbox"
+import { CurrentProxyFactory, startProxy, type ProxyFactory } from "@sonderr/sandbox"
+import { CrossSpawnSpawner } from "@sonderr/core/cross-spawn-spawner"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
 
 const linux = process.platform === "linux" ? test : test.skip
 const linuxIPv6 = process.platform === "linux" && supportsIPv6() ? test : test.skip
@@ -74,7 +74,7 @@ function output(command: string, args: ReadonlyArray<string>, cwd: string, polic
 }
 
 async function fixture() {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "kilo-linux-sandbox-"))
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "sonderr-linux-sandbox-"))
   const project = path.join(root, "project")
   const outside = path.join(root, "outside")
   await fs.mkdir(project)
@@ -705,11 +705,11 @@ linux("applies the profile environment without inheriting denied values", async 
   const base = profile([root.project])
   const policy: Profile = {
     ...base,
-    environment: { deny: ["KILO_SANDBOX_DENIED"], set: { KILO_SANDBOX_SET: "expected" } },
+    environment: { deny: ["SONDERR_SANDBOX_DENIED"], set: { SONDERR_SANDBOX_SET: "expected" } },
   }
   const script = [
-    'if (process.env.KILO_SANDBOX_SET !== "expected") process.exit(2)',
-    "if (process.env.KILO_SANDBOX_DENIED !== undefined) process.exit(3)",
+    'if (process.env.SONDERR_SANDBOX_SET !== "expected") process.exit(2)',
+    "if (process.env.SONDERR_SANDBOX_DENIED !== undefined) process.exit(3)",
   ].join("\n")
 
   try {
@@ -721,7 +721,7 @@ linux("applies the profile environment without inheriting denied values", async 
             .spawn(
               ChildProcess.make(process.execPath, ["-e", script], {
                 cwd: root.project,
-                env: { KILO_SANDBOX_DENIED: "ambient" },
+                env: { SONDERR_SANDBOX_DENIED: "ambient" },
                 extendEnv: true,
               }),
             )
@@ -823,7 +823,7 @@ linux("terminates daemonized descendants when the command scope closes", async (
 
 linux("rejects a Bubblewrap helper inside a writable root", async () => {
   const root = await fixture()
-  const source = process.env.KILO_BWRAP_PATH ?? "/usr/bin/bwrap"
+  const source = process.env.SONDERR_BWRAP_PATH ?? "/usr/bin/bwrap"
   const helper = path.join(root.project, "bwrap")
   const link = path.join(root.outside, "bwrap")
   await fs.copyFile(source, helper)
@@ -832,8 +832,8 @@ linux("rejects a Bubblewrap helper inside a writable root", async () => {
   const script = [
     'import { Effect } from "effect"',
     'import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process"',
-    'import { backendSupport, run } from "@kilocode/sandbox"',
-    'import { CrossSpawnSpawner } from "@opencode-ai/core/cross-spawn-spawner"',
+    'import { backendSupport, run } from "@sonderr/sandbox"',
+    'import { CrossSpawnSpawner } from "@sonderr/core/cross-spawn-spawner"',
     "if (!backendSupport().available) process.exit(2)",
     `const profile = { filesystem: { allowWrite: [{ path: ${JSON.stringify(root.project)}, kind: "subtree" }], denyWrite: [], denyNames: [] }, network: { mode: "allow", allowedHosts: [] }, environment: { deny: [], set: {} } }`,
     'const effect = Effect.scoped(run(profile, ChildProcessSpawner.ChildProcessSpawner.use((spawner) => spawner.spawn(ChildProcess.make(process.execPath, ["-e", "process.exit(0)"])))).pipe(Effect.provide(CrossSpawnSpawner.defaultLayer)))',
@@ -843,7 +843,7 @@ linux("rejects a Bubblewrap helper inside a writable root", async () => {
   try {
     const result = spawnSync(process.execPath, ["-e", script], {
       cwd: import.meta.dir,
-      env: { ...process.env, KILO_BWRAP_PATH: link },
+      env: { ...process.env, SONDERR_BWRAP_PATH: link },
       encoding: "utf8",
     })
     expect(result.status, result.stderr).toBe(0)
@@ -854,7 +854,7 @@ linux("rejects a Bubblewrap helper inside a writable root", async () => {
 
 linux("reports network namespace support separately and fails deny mode closed", async () => {
   const root = await fixture()
-  const source = process.env.KILO_BWRAP_PATH ?? "/usr/bin/bwrap"
+  const source = process.env.SONDERR_BWRAP_PATH ?? "/usr/bin/bwrap"
   const helper = path.join(root.outside, "bwrap-no-network")
   await fs.writeFile(
     helper,
@@ -871,8 +871,8 @@ linux("reports network namespace support separately and fails deny mode closed",
   const script = [
     'import { Effect } from "effect"',
     'import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process"',
-    'import { backendSupport, run } from "@kilocode/sandbox"',
-    'import { CrossSpawnSpawner } from "@opencode-ai/core/cross-spawn-spawner"',
+    'import { backendSupport, run } from "@sonderr/sandbox"',
+    'import { CrossSpawnSpawner } from "@sonderr/core/cross-spawn-spawner"',
     'const allow = backendSupport({ mode: "allow", allowedHosts: [] })',
     'const deny = backendSupport({ mode: "deny", allowedHosts: [] })',
     "if (!allow.available) process.exit(2)",
@@ -885,7 +885,7 @@ linux("reports network namespace support separately and fails deny mode closed",
   try {
     const result = spawnSync(process.execPath, ["-e", script], {
       cwd: import.meta.dir,
-      env: { ...process.env, KILO_BWRAP_PATH: helper },
+      env: { ...process.env, SONDERR_BWRAP_PATH: helper },
       encoding: "utf8",
     })
     expect(result.status, result.stderr).toBe(0)
@@ -898,8 +898,8 @@ linux("fails closed when Bubblewrap is unavailable", () => {
   const script = [
     'import { Effect } from "effect"',
     'import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process"',
-    'import { backendSupport, run } from "@kilocode/sandbox"',
-    'import { CrossSpawnSpawner } from "@opencode-ai/core/cross-spawn-spawner"',
+    'import { backendSupport, run } from "@sonderr/sandbox"',
+    'import { CrossSpawnSpawner } from "@sonderr/core/cross-spawn-spawner"',
     "if (backendSupport().available) process.exit(2)",
     'const profile = { filesystem: { allowWrite: [], denyWrite: [], denyNames: [] }, network: { mode: "allow", allowedHosts: [] }, environment: { deny: [], set: {} } }',
     'const effect = Effect.scoped(run(profile, ChildProcessSpawner.ChildProcessSpawner.use((spawner) => spawner.spawn(ChildProcess.make(process.execPath, ["-e", "process.exit(0)"])))).pipe(Effect.provide(CrossSpawnSpawner.defaultLayer)))',
@@ -907,7 +907,7 @@ linux("fails closed when Bubblewrap is unavailable", () => {
   ].join("\n")
   const result = spawnSync(process.execPath, ["-e", script], {
     cwd: import.meta.dir,
-    env: { ...process.env, KILO_BWRAP_PATH: "/missing/kilo-bwrap" },
+    env: { ...process.env, SONDERR_BWRAP_PATH: "/missing/sonderr-bwrap" },
     encoding: "utf8",
   })
   expect(result.status, result.stderr).toBe(0)

@@ -1,16 +1,16 @@
-// kilocode_change - new file
+// sonderr_change - new file
 
 /**
  * Runs the LLM edit pass over docs-sync-out/worthy.json in batches.
  *
- * Batching bounds each `kilo run` context (a replay window can yield dozens
+ * Batching bounds each `sonderr run` context (a replay window can yield dozens
  * of docs-worthy PRs with large diffs). Each batch gets its own CLI session
  * and writes its own summary file; results are merged into
  * docs-sync-out/edit-summary.json. A batch that fails or is deferred by the
  * wall-clock budget is recorded as action "pending" so the watermark holds
  * back and the next run re-collects those PRs.
  *
- * Env: EDIT_MODEL (provider/model), KILO_API_KEY + KILO_ORG_ID (set by workflow; read natively by the kilo provider).
+ * Env: EDIT_MODEL (provider/model), SONDERR_API_KEY + SONDERR_ORG_ID (set by workflow; read natively by the sonderr provider).
  * Budgets: EDIT_BUDGET_MINUTES (default 50), EDIT_BATCH_TIMEOUT_MINUTES (default 15).
  * Test hook: DOCS_SYNC_BACKOFF_MS replaces every retry wait when set.
  */
@@ -18,7 +18,7 @@
 import fs from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
-import { backoffMsForAttempt, deadline, remainingMs, runKilo, sleepSync } from "./lib.mjs"
+import { backoffMsForAttempt, deadline, remainingMs, runSonderr, sleepSync } from "./lib.mjs"
 import { readLearningsBlock } from "./learn.mjs"
 
 const BATCH_SIZE = 5
@@ -76,12 +76,12 @@ Batch specifics for this run: the PRs to handle are in the attached ${batchFile}
       break
     }
 
-    // Headless `kilo run` auto-rejects every permission ask; without --auto the
+    // Headless `sonderr run` auto-rejects every permission ask; without --auto the
     // agent cannot run shell commands. SECURITY: --auto grants unrestricted bash
     // to an agent steered by external PR content. Hardening deferred: a scoped
-    // permission.bash map via KILO_CONFIG_CONTENT should replace --auto once the
+    // permission.bash map via SONDERR_CONFIG_CONTENT should replace --auto once the
     // required shell patterns are stable (see PR #12605 review thread).
-    const result = runKilo({
+    const result = runSonderr({
       args: [
         "run",
         "--auto",

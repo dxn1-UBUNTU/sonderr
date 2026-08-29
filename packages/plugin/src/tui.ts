@@ -1,6 +1,6 @@
 import type {
   AgentPart,
-  KiloClient,
+  SonderrClient,
   Event,
   FilePart,
   LspStatus,
@@ -16,7 +16,7 @@ import type {
   BackgroundProcessInfo,
   TextPart,
   Config as SdkConfig,
-} from "@kilocode/sdk/v2"
+} from "@sonderr/sdk/v2"
 import type { CliRenderer, KeyEvent, RGBA, Renderable, SlotMode } from "@opentui/core"
 import type { Binding, Keymap } from "@opentui/keymap"
 import {
@@ -619,7 +619,7 @@ export type TuiPluginApi = {
   kv: TuiKV
   state: TuiState
   theme: TuiTheme
-  client: KiloClient
+  client: SonderrClient
   event: TuiEventBus
   renderer: CliRenderer
   slots: TuiSlots

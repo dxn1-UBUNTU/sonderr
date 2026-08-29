@@ -103,25 +103,25 @@ export function createPromptInputV2Attachments(
       if (toast) input.warn()
       return false
     }
-    // kilocode_change start - avoid allocating local object URLs until duplicate detection succeeds
+    // sonderr_change start - avoid allocating local object URLs until duplicate detection succeeds
     const stored = input.store ? await input.store(file) : undefined
     const id = stored?.id ?? (await blobID(file))
-    // kilocode_change end
+    // sonderr_change end
     const sourcePath = input.getPathForFile?.(file) || undefined
     // Native clipboard images arrive with a fresh timestamped filename on every paste, so identical
     // clipboard content is matched on bytes alone.
     const duplicate = target.prompt.current().some(
       (part) =>
         part.type === "image" &&
-        part.blob.id === id && // kilocode_change
+        part.blob.id === id && // sonderr_change
         (sourcePath ? part.sourcePath === sourcePath : !part.sourcePath && (clipboard || part.filename === file.name)),
     )
     if (duplicate) {
-      if (stored?.revoke) URL.revokeObjectURL(stored.url) // kilocode_change - release externally supplied owned URLs
+      if (stored?.revoke) URL.revokeObjectURL(stored.url) // sonderr_change - release externally supplied owned URLs
       input.duplicate()
       return true
     }
-    // kilocode_change - this component owns object URLs it creates
+    // sonderr_change - this component owns object URLs it creates
     const blob = stored ?? { id, url: URL.createObjectURL(file), revoke: true as const }
     const attachment: PromptInputV2Attachment = {
       type: "image",
@@ -223,13 +223,13 @@ export function createPromptInputV2Attachments(
 
 const imageMimes = new Set(["image/png", "image/jpeg", "image/gif", "image/webp"])
 
-// kilocode_change start - hash before allocating an object URL so duplicate files allocate nothing
+// sonderr_change start - hash before allocating an object URL so duplicate files allocate nothing
 async function blobID(file: File) {
   return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", await file.arrayBuffer())))
     .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("")
 }
-// kilocode_change end
+// sonderr_change end
 const imageExtensions = new Map([
   ["gif", "image/gif"],
   ["jpeg", "image/jpeg"],

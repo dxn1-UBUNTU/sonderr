@@ -1,4 +1,4 @@
-import type { ExperimentalWorkspaceAdapterListResponse, Workspace } from "@kilocode/sdk/v2"
+import type { ExperimentalWorkspaceAdapterListResponse, Workspace } from "@sonderr/sdk/v2"
 import { useDialog } from "../ui/dialog"
 import { DialogSelect, type DialogSelectOption } from "../ui/dialog-select"
 import { useSync } from "../context/sync"

@@ -1,8 +1,8 @@
-import { createKiloClient, createKiloServer } from "@kilocode/sdk"
+import { createSonderrClient, createSonderrServer } from "@sonderr/sdk"
 import { pathToFileURL } from "bun"
 
-const server = await createKiloServer()
-const client = createKiloClient({ baseUrl: server.url })
+const server = await createSonderrServer()
+const client = createSonderrClient({ baseUrl: server.url })
 
 const input = await Array.fromAsync(new Bun.Glob("packages/core/*.ts").scan())
 

@@ -1,7 +1,7 @@
 export * as ApplyPatchTool from "./apply-patch"
 
-import { ToolFailure } from "@opencode-ai/llm"
-import { FileDiff } from "@opencode-ai/schema/file-diff"
+import { ToolFailure } from "@sonderr/llm"
+import { FileDiff } from "@sonderr/schema/file-diff"
 import { createTwoFilesPatch, diffLines } from "diff"
 import { Effect, Layer, Schema } from "effect"
 import { makeLocationNode } from "../effect/app-node"
@@ -10,7 +10,7 @@ import { FSUtil } from "../fs-util"
 import { LocationMutation } from "../location-mutation"
 import { Patch } from "../patch"
 import { PermissionV2 } from "../permission"
-import { ToolOutputStore } from "../tool-output-store" // kilocode_change
+import { ToolOutputStore } from "../tool-output-store" // sonderr_change
 import { ToolRegistry } from "./registry"
 import { Tool } from "./tool"
 import { Tools } from "./tools"
@@ -35,7 +35,7 @@ export const Output = Schema.Struct({
 })
 export type Output = typeof Output.Type
 
-// kilocode_change start - keep durable/SSE tool records bounded without hiding normal-sized diff previews
+// sonderr_change start - keep durable/SSE tool records bounded without hiding normal-sized diff previews
 const compact = (output: Output): Output => {
   if (Buffer.byteLength(JSON.stringify(output), "utf-8") <= ToolOutputStore.MAX_BYTES) return output
   return {
@@ -48,7 +48,7 @@ const compact = (output: Output): Output => {
     })),
   }
 }
-// kilocode_change end
+// sonderr_change end
 
 export const toModelOutput = (output: Output) =>
   [
@@ -88,8 +88,8 @@ const layer = Layer.effectDiscard(
               "Apply one patch containing add, update, and delete file operations. All targets are resolved and approved before target contents are read. Operations apply sequentially; if a later operation fails, earlier operations remain applied and the failure reports them explicitly. Moves and atomic rollback are not supported yet.",
             input: Input,
             output: Output,
-            structured: Output, // kilocode_change
-            toStructuredOutput: ({ output }) => compact(output), // kilocode_change
+            structured: Output, // sonderr_change
+            toStructuredOutput: ({ output }) => compact(output), // sonderr_change
             toModelOutput: ({ output }) => [{ type: "text", text: toModelOutput(output) }],
             execute: (input, context) => {
               const applied: Array<typeof Applied.Type> = []

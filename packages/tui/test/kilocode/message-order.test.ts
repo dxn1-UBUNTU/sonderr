@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test"
-import { at, older, recent, slot } from "../../src/kilocode/message-order"
+import { at, older, recent, slot } from "../../src/sonderr/message-order"
 
 const old = { id: "msg_ff0cb2300001Z6YIo5V52u114f", time: { created: 1 } }
 const next = { id: "msg_019f1d3da001955TwEJ8qKEbj3", time: { created: 2 } }

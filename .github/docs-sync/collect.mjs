@@ -1,4 +1,4 @@
-// kilocode_change - new file
+// sonderr_change - new file
 
 /**
  * Collects PRs merged to the source repos since the watermark, applies a
@@ -22,7 +22,7 @@ import fs from "node:fs"
 import { api, appendOutput, appendSummary, listPrFiles, searchIssues } from "./lib.mjs"
 import { revertTitleKind, parseRevertTargets, applyRevertAnnotations, unannotatedRevertSignals } from "./reverts.mjs"
 
-const SOURCE_REPOS = ["Kilo-Org/cloud", "Kilo-Org/kilocode"]
+const SOURCE_REPOS = ["Sonderr-Org/cloud", "Sonderr-Org/sonderr"]
 const OUT_DIR = "docs-sync-out"
 const BODY_LIMIT = 2000
 const SLIM_BODY_LIMIT = 300
@@ -30,7 +30,7 @@ const PATCH_LIMIT = 8000
 const FILE_LIMIT = 30
 // Revert PRs (conventional AND GitHub-native) are intercepted below BEFORE this filter; the "revert" alternative here is unreachable and kept only to minimize diff.
 const DROP_TITLE = /^(chore|test|ci|build|docs|style|refactor|revert)(\(.+\))?!?:/i
-const DOCS_ONLY_PATH = /^(packages\/kilo-docs\/|\.github\/docs-sync\/|docs-sync-out\/|docs\/|[^/]+\.md$)/
+const DOCS_ONLY_PATH = /^(packages\/sonderr-docs\/|\.github\/docs-sync\/|docs-sync-out\/|docs\/|[^/]+\.md$)/
 
 function argSince() {
   const i = process.argv.indexOf("--since")

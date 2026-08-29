@@ -1,8 +1,8 @@
 #!/usr/bin/env bun
-// kilocode_change - new file
+// sonderr_change - new file
 
 /**
- * Guards against accidentally inheriting workflows from upstream opencode.
+ * Guards against accidentally inheriting workflows from upstream sonderr.
  *
  * We regularly merge upstream. When upstream adds a new workflow under
  * `.github/workflows/`, it silently starts running in our CI unless we
@@ -12,7 +12,7 @@
  * deliberately.
  *
  * Only runnable workflows are checked (`.yml` / `.yaml`). Files under
- * `.github/workflows/disabled/` are Kilo-specific and can't run, so they're
+ * `.github/workflows/disabled/` are Sonderr-specific and can't run, so they're
  * not tracked here.
  *
  * To accept a new workflow: add its filename to `active`.
@@ -30,9 +30,9 @@ const active = new Set([
   "auto-docs.yml",
   "beta.yml",
   "check-forbidden-strings.yml",
-  "check-kilo-generated-artifacts.yml",
+  "check-sonderr-generated-artifacts.yml",
   "check-md-table-padding.yml",
-  "check-opencode-annotations.yml",
+  "check-sonderr-annotations.yml",
   "check-org-member.yml",
   "codeql-kotlin.yml",
   "codeql.yml",
@@ -41,7 +41,7 @@ const active = new Set([
   "docs-check-links.yml",
   "docs-sync.yml",
   "generate.yml",
-  "kilo-auto-close.yml",
+  "sonderr-auto-close.yml",
   "nix-eval.yml",
   "nix-hashes.yml",
   "prepare-jetbrains-release.yml",
@@ -55,7 +55,7 @@ const active = new Set([
   "test.yml",
   "typecheck.yml",
   "visual-regression.yml",
-  "watch-opencode-releases.yml",
+  "watch-sonderr-releases.yml",
 ])
 
 // GitHub picks up both .yml and .yaml in .github/workflows/. We accept both so

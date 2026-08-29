@@ -20,10 +20,10 @@ body:
       required: false
 
   - type: input
-    id: kilo-version
+    id: sonderr-version
     attributes:
-      label: Kilo version
-      description: What version of Kilo are you using?
+      label: Sonderr version
+      description: What version of Sonderr are you using?
     validations:
       required: false
 

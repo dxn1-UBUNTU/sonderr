@@ -69,7 +69,7 @@ export const dict: Record<string, string> = {
   "ui.sessionTurn.error.addCredits": "Thêm số dư",
   "dialog.usageExceeded.freeTier.title": "Đã đạt đến giới hạn miễn phí",
   "dialog.usageExceeded.freeTier.description":
-    "Đăng ký Kilo Go để có quyền truy cập đáng tin cậy vào các mô hình nguồn mở tốt nhất, bắt đầu từ $5/tháng.",
+    "Đăng ký Sonderr Go để có quyền truy cập đáng tin cậy vào các mô hình nguồn mở tốt nhất, bắt đầu từ $5/tháng.",
   "dialog.usageExceeded.freeTier.actionLabel": "Đăng ký",
   "dialog.usageExceeded.accountRateLimit.title": "Đã đạt giới hạn Go",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -188,7 +188,7 @@ export const dict: Record<string, string> = {
   "ui.patch.action.created": "Đã tạo",
   "ui.patch.action.moved": "Đã di chuyển",
   "ui.patch.action.patched": "Đã vá",
-  "ui.patch.action.plan": "Kế hoạch", // kilocode_change
+  "ui.patch.action.plan": "Kế hoạch", // sonderr_change
   "ui.question.subtitle.answered": "{{count}} đã trả lời",
   "ui.question.answer.none": "(không có câu trả lời)",
   "ui.question.review.notAnswered": "(chưa trả lời)",

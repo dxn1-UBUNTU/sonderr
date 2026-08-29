@@ -3,7 +3,7 @@ import { useSync } from "../../context/sync"
 import { createMemo, Show } from "solid-js"
 import { useTheme } from "../../context/theme"
 import { useTuiConfig } from "../../config"
-import { InstallationChannel, InstallationVersion } from "@opencode-ai/core/installation/version"
+import { InstallationChannel, InstallationVersion } from "@sonderr/core/installation/version"
 import { usePluginRuntime } from "../../plugin/runtime"
 
 import { getScrollAcceleration } from "../../util/scroll"
@@ -88,11 +88,11 @@ export function Sidebar(props: { sessionID: string; overlay?: boolean }) {
 
         <box flexShrink={0} gap={1} paddingTop={1}>
           <pluginRuntime.Slot name="sidebar_footer" mode="single_winner" session_id={props.sessionID}>
-            {/* kilocode_change start */}
+            {/* sonderr_change start */}
             <text fg={theme.textMuted}>
-              <span style={{ fg: theme.success }}>•</span> <b>Kilo</b> <span>{InstallationVersion}</span>
+              <span style={{ fg: theme.success }}>•</span> <b>Sonderr</b> <span>{InstallationVersion}</span>
             </text>
-            {/* kilocode_change end */}
+            {/* sonderr_change end */}
           </pluginRuntime.Slot>
         </box>
       </box>

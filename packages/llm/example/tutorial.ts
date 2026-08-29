@@ -1,7 +1,7 @@
 import { Config, Effect, Formatter, Layer, Schema, Stream } from "effect"
-import { LLM, LLMClient, Message, ProviderID, Tool, ToolRuntime } from "@opencode-ai/llm"
-import { Route, Auth, Endpoint, Framing, Protocol, RequestExecutor, WebSocketExecutor } from "@opencode-ai/llm/route"
-import { OpenAI } from "@opencode-ai/llm/providers"
+import { LLM, LLMClient, Message, ProviderID, Tool, ToolRuntime } from "@sonderr/llm"
+import { Route, Auth, Endpoint, Framing, Protocol, RequestExecutor, WebSocketExecutor } from "@sonderr/llm/route"
+import { OpenAI } from "@sonderr/llm/providers"
 
 /**
  * A runnable walkthrough of the LLM package use-site API.
@@ -57,7 +57,7 @@ const rawOverlayExample = LLM.request({
   prompt: "Show the final HTTP overlay shape.",
   http: {
     body: { metadata: { example: "tutorial" } },
-    headers: { "x-kilo-tutorial": "1" },
+    headers: { "x-sonderr-tutorial": "1" },
     query: { debug: "1" },
   },
 })

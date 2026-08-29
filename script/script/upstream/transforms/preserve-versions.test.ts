@@ -5,15 +5,15 @@ import { join } from "node:path"
 import { preserveZedVersion } from "./preserve-versions"
 
 describe("preserveZedVersion", () => {
-  test("preserves the Kilo extension version and release archives", async () => {
-    const dir = await mkdtemp(join(tmpdir(), "kilo-zed-version-"))
+  test("preserves the Sonderr extension version and release archives", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "sonderr-zed-version-"))
     const file = join(dir, "extension.toml")
     try {
       await writeFile(
         file,
         [
           'version = "1.14.42"',
-          'archive = "https://github.com/Kilo-Org/kilocode/releases/download/v1.14.42/opencode-linux-x64.tar.gz"',
+          'archive = "https://github.com/Sonderr-Org/sonderr/releases/download/v1.14.42/sonderr-linux-x64.tar.gz"',
           "",
         ].join("\n"),
       )
@@ -26,7 +26,7 @@ describe("preserveZedVersion", () => {
       expect(await readFile(file, "utf8")).toBe(
         [
           'version = "7.3.18"',
-          'archive = "https://github.com/Kilo-Org/kilocode/releases/download/v7.3.18/opencode-linux-x64.tar.gz"',
+          'archive = "https://github.com/Sonderr-Org/sonderr/releases/download/v7.3.18/sonderr-linux-x64.tar.gz"',
           "",
         ].join("\n"),
       )

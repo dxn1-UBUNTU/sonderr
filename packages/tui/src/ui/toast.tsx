@@ -1,6 +1,6 @@
 import { createContext, useContext, type ParentProps, Show } from "solid-js"
 import { createStore } from "solid-js/store"
-import { reconcile } from "solid-js/store" // kilocode_change
+import { reconcile } from "solid-js/store" // sonderr_change
 import { useTheme } from "../context/theme"
 import { useTerminalDimensions } from "@opentui/solid"
 import { SplitBorder } from "./border"
@@ -61,9 +61,9 @@ function init() {
   const toast = {
     show(options: ToastInput) {
       const toastOptions = { ...options, duration: options.duration ?? 5000 }
-      setStore("currentToast", reconcile(toastOptions)) // kilocode_change
+      setStore("currentToast", reconcile(toastOptions)) // sonderr_change
       if (timeoutHandle) clearTimeout(timeoutHandle)
-      // kilocode_change start
+      // sonderr_change start
       timeoutHandle = null
       if (toastOptions.duration && toastOptions.duration > 0) {
         timeoutHandle = setTimeout(() => {
@@ -77,7 +77,7 @@ function init() {
       timeoutHandle = null
       setStore("currentToast", null)
     },
-    // kilocode_change end
+    // sonderr_change end
     error: (err: any) => {
       if (err instanceof Error)
         return toast.show({

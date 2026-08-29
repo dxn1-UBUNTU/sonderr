@@ -1,19 +1,19 @@
 #!/usr/bin/env bun
-// kilocode_change - new file
+// sonderr_change - new file
 
 // This is a CI-only architecture test, not production network enforcement. Model tools run
-// inside the trusted kilo serve process, so macOS Seatbelt can only confine their spawned
+// inside the trusted sonderr serve process, so macOS Seatbelt can only confine their spawned
 // children. In-process tools must use the policy-aware HTTP capability instead of direct fetch,
 // sockets, or ad hoc clients. Keep this narrow scan to prevent future tool implementations from
 // accidentally bypassing that boundary; trusted provider and model-inference code is intentionally
-// outside the scanned directories. Runtime enforcement remains in @kilocode/sandbox.
+// outside the scanned directories. Runtime enforcement remains in @sonderr/sandbox.
 
 import path from "node:path"
-import { host, opaque } from "../packages/opencode/src/kilocode/sandbox/network-tools"
+import { host, opaque } from "../packages/cli/src/sonderr/sandbox/network-tools"
 
 const root = path.resolve(import.meta.dir, "..")
-const source = path.join(root, "packages", "opencode", "src")
-const dirs = ["tool", "kilocode/tool", "mcp"]
+const source = path.join(root, "packages", "sonderr", "src")
+const dirs = ["tool", "sonderr/tool", "mcp"]
 const checks = [
   { name: "direct fetch", pattern: /\b(?:globalThis\.)?fetch\s*\(/g },
   { name: "raw FetchHttpClient layer", pattern: /\bFetchHttpClient\.layer\b/g },
@@ -80,7 +80,7 @@ const clients = [...allow.entries()].flatMap(([key, entry]) => {
   const name = key.slice(split + 1)
   const count = hits.filter((hit) => hit.file === file && hit.name === name).length
   if (count === entry.count) return []
-  return [`  packages/opencode/src/${file}: expected ${entry.count} ${name} site(s), found ${count} (${entry.reason})`]
+  return [`  packages/cli/src/${file}: expected ${entry.count} ${name} site(s), found ${count} (${entry.reason})`]
 })
 const tools = (
   await Promise.all(
@@ -88,25 +88,25 @@ const tools = (
       const text = await Bun.file(path.join(source, item.file)).text()
       const id = item.id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
       if (new RegExp(`Tool\\.define(?:<[\\s\\S]{0,500}?>)?\\(\\s*["']${id}["']`).test(text)) return []
-      return [`  packages/opencode/src/${item.file}: opaque classification must match Tool.define("${item.id}")`]
+      return [`  packages/cli/src/${item.file}: opaque classification must match Tool.define("${item.id}")`]
     }),
   )
 ).flat()
 const drift = [...clients, ...tools]
 
-const network = await Bun.file(path.join(source, "kilocode", "sandbox", "network.ts")).text()
+const network = await Bun.file(path.join(source, "sonderr", "sandbox", "network.ts")).text()
 const registry = await Bun.file(path.join(source, "tool", "registry.ts")).text()
 const session = await Bun.file(path.join(source, "session", "tools.ts")).text()
 const mcp = await Bun.file(path.join(source, "mcp", "index.ts")).text()
 const structure = [
   ...(!network.includes('import { host, opaque } from "./network-tools"') ||
   !network.includes("opaque.map((item) => item.id)")
-    ? ["  kilocode/sandbox/network.ts must derive runtime opaque tool IDs from network-tools.ts"]
+    ? ["  sonderr/sandbox/network.ts must derive runtime opaque tool IDs from network-tools.ts"]
     : []),
   ...(!network.includes("host.map((item) => item.id)")
-    ? ["  kilocode/sandbox/network.ts must derive host-executed tool IDs from network-tools.ts"]
+    ? ["  sonderr/sandbox/network.ts must derive host-executed tool IDs from network-tools.ts"]
     : []),
-  // kilocode_change - v1.17.13 moved registry wiring from Layer.provide onto the LayerNode graph
+  // sonderr_change - v1.17.13 moved registry wiring from Layer.provide onto the LayerNode graph
   ...(!registry.includes("Layer.provide(ToolNetwork.httpLayer)") &&
   !/LayerNode\.make\(\{\s*service:\s*HttpClient\.HttpClient,\s*layer:\s*ToolNetwork\.httpLayer/.test(registry)
     ? ["  tool/registry.ts must provide the policy-aware ToolNetwork HTTP layer"]
@@ -123,7 +123,7 @@ const structure = [
   ...(!mcp.includes("SandboxNetwork.remote(tool)")
     ? ["  mcp/index.ts must classify remote MCP delegated authority"]
     : []),
-  // kilocode_change - v1.18 preserves remote authority on the native MCP entry before adapting it to an AI SDK tool
+  // sonderr_change - v1.18 preserves remote authority on the native MCP entry before adapting it to an AI SDK tool
   ...(!/SandboxPolicy\.executeMcp\(\s*ctx\.sessionID,\s*entry,/.test(session)
     ? ["  session/tools.ts must route MCP delegated authority through session-aware executeMcp"]
     : []),
@@ -132,7 +132,7 @@ const structure = [
 if (invalid.length > 0 || drift.length > 0 || structure.length > 0) {
   if (invalid.length > 0) {
     console.error("Found model-tool network clients that bypass the sandbox capability:")
-    for (const hit of invalid) console.error(`  packages/opencode/src/${hit.file}:${hit.line} (${hit.name})`)
+    for (const hit of invalid) console.error(`  packages/cli/src/${hit.file}:${hit.line} (${hit.name})`)
     console.error("")
   }
   if (drift.length > 0) {
@@ -146,7 +146,7 @@ if (invalid.length > 0 || drift.length > 0 || structure.length > 0) {
     console.error("")
   }
   console.error(
-    "Use the @kilocode/sandbox network capability or classify an opaque client at the common tool boundary.",
+    "Use the @sonderr/sandbox network capability or classify an opaque client at the common tool boundary.",
   )
   process.exit(1)
 }

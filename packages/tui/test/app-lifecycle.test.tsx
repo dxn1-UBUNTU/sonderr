@@ -1,9 +1,9 @@
 import { expect, mock, test } from "bun:test"
-import type { TuiPluginApi } from "@kilocode/plugin/tui"
+import type { TuiPluginApi } from "@sonderr/plugin/tui"
 import { createTestRenderer } from "@opentui/core/testing"
 import { Effect } from "effect"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { Global } from "@opencode-ai/core/global"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { Global } from "@sonderr/core/global"
 import { createTuiResolvedConfig } from "./fixture/tui-runtime"
 import { createEventSource, createFetch, directory, json } from "./fixture/tui-sdk"
 
@@ -119,7 +119,7 @@ test("app.exit prints the session epilogue after scoped cleanup", async () => {
     await task
 
     expect(stdout).toContain("Demo session")
-    expect(stdout).toContain("kilo -s dummy") // kilocode_change
+    expect(stdout).toContain("sonderr -s dummy") // sonderr_change
   } finally {
     process.stdout.write = originalWrite
     if (!setup.renderer.isDestroyed) setup.renderer.destroy()

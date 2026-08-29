@@ -18,7 +18,7 @@ function real(directory: string) {
   }
 }
 
-export function allowed(directory: string, home = (process.env.KILO_TEST_HOME ?? os.homedir()).trim()) {
+export function allowed(directory: string, home = (process.env.SONDERR_TEST_HOME ?? os.homedir()).trim()) {
   const value = path.win32.normalize(directory)
   const prefix = "\\\\?\\UNC\\"
   const windows = value.toUpperCase().startsWith(prefix) ? `\\\\${value.slice(prefix.length)}` : value

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@opencode-ai/tui",
+  "name": "@sonderr/tui",
   "version": "7.5.6",
   "private": true,
   "type": "module",
@@ -49,10 +49,10 @@
     "./component/register-spinner": "./src/component/register-spinner.ts"
   },
   "dependencies": {
-    "@opencode-ai/core": "workspace:*",
-    "@kilocode/plugin": "workspace:*",
-    "@kilocode/sdk": "workspace:*",
-    "@opencode-ai/ui": "workspace:*",
+    "@sonderr/core": "workspace:*",
+    "@sonderr/plugin": "workspace:*",
+    "@sonderr/sdk": "workspace:*",
+    "@sonderr/ui": "workspace:*",
     "@opentui/core": "catalog:",
     "@opentui/keymap": "catalog:",
     "@opentui/solid": "catalog:",

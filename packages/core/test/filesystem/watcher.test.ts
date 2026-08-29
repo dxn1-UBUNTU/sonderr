@@ -3,20 +3,20 @@ import { describe, expect } from "bun:test"
 import fs from "fs/promises"
 import path from "path"
 import { ConfigProvider, Deferred, Duration, Effect, Fiber, Layer, Option, Stream } from "effect"
-import { Config } from "@opencode-ai/core/config"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { EventV2 } from "@opencode-ai/core/event"
-import { FSUtil } from "@opencode-ai/core/fs-util"
-import { Watcher } from "@opencode-ai/core/filesystem/watcher"
-import { Location } from "@opencode-ai/core/location"
-import { AbsolutePath } from "@opencode-ai/core/schema"
+import { Config } from "@sonderr/core/config"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { EventV2 } from "@sonderr/core/event"
+import { FSUtil } from "@sonderr/core/fs-util"
+import { Watcher } from "@sonderr/core/filesystem/watcher"
+import { Location } from "@sonderr/core/location"
+import { AbsolutePath } from "@sonderr/core/schema"
 import { location } from "../fixture/location"
 import { tmpdir } from "../fixture/tmpdir"
 import { testEffect } from "../lib/effect"
 
 const describeWatcher =
-  Watcher.hasNativeBinding() && (!process.env.CI || process.env.KILO_TEST_PROFILE === "darwin") // kilocode_change
+  Watcher.hasNativeBinding() && (!process.env.CI || process.env.SONDERR_TEST_PROFILE === "darwin") // sonderr_change
     ? describe
     : describe.skip
 
@@ -33,8 +33,8 @@ const configLayer = Layer.succeed(
 
 const flagsLayer = ConfigProvider.layer(
   ConfigProvider.fromUnknown({
-    KILO_EXPERIMENTAL_FILEWATCHER: "true",
-    KILO_EXPERIMENTAL_DISABLE_FILEWATCHER: "false",
+    SONDERR_EXPERIMENTAL_FILEWATCHER: "true",
+    SONDERR_EXPERIMENTAL_DISABLE_FILEWATCHER: "false",
   }),
 )
 
@@ -62,7 +62,7 @@ function withTmp<A, E, R>(
       await $`git init`.cwd(tmp.path).quiet()
       await $`git config core.fsmonitor false`.cwd(tmp.path).quiet()
       await $`git config commit.gpgsign false`.cwd(tmp.path).quiet()
-      await $`git config user.email test@opencode.test`.cwd(tmp.path).quiet()
+      await $`git config user.email test@sonderr.test`.cwd(tmp.path).quiet()
       await $`git config user.name Test`.cwd(tmp.path).quiet()
       await $`git commit --allow-empty -m root`.cwd(tmp.path).quiet()
       await options.init?.(tmp.path)
@@ -227,11 +227,11 @@ describeWatcher("Watcher", () => {
           const branch = `watch-${Math.random().toString(36).slice(2)}`
           yield* ready(directory)
           yield* Effect.promise(() => $`git branch ${branch}`.cwd(directory).quiet())
-          // kilocode_change start - FSEvents may classify this overwrite as an add.
+          // sonderr_change start - FSEvents may classify this overwrite as an add.
           const event = yield* nextUpdate((event) => event.file === head, fs.writeFileString(head, `ref: refs/heads/${branch}\n`))
           expect(event.file).toBe(head)
           expect(["add", "change"]).toContain(event.event)
-          // kilocode_change end
+          // sonderr_change end
         }),
       { git: true },
     ),

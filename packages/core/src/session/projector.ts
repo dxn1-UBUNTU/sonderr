@@ -1,6 +1,6 @@
 export * as SessionProjector from "./projector"
 
-import { and, desc, eq, isNotNull, gt, or, sql } from "drizzle-orm" // kilocode_change
+import { and, desc, eq, isNotNull, gt, or, sql } from "drizzle-orm" // sonderr_change
 import { DateTime, Effect, Layer, Schema } from "effect"
 import { Database } from "../database/database"
 import { EventV2 } from "../event"
@@ -10,21 +10,21 @@ import { SessionV1 } from "../v1/session"
 import { WorkspaceTable } from "../control-plane/workspace.sql"
 import { SessionMessage } from "./message"
 import { SessionMessageUpdater } from "./message-updater"
-import * as StoredMessage from "../kilocode/session-message" // kilocode_change
+import * as StoredMessage from "../sonderr/session-message" // sonderr_change
 import { SessionInput } from "./input"
 import { WorkspaceV2 } from "../workspace"
 import { SessionContextEpoch } from "./context-epoch"
 import { MessageTable, PartTable, SessionInputTable, SessionMessageTable, SessionTable } from "./sql"
 import type { DeepMutable } from "../schema"
-import * as PromptCompat from "../kilocode/session/prompt-promoted" // kilocode_change - released replay key
+import * as PromptCompat from "../sonderr/session/prompt-promoted" // sonderr_change - released replay key
 
 type DatabaseService = Database.Interface["db"]
 
 const decodeMessage = Schema.decodeUnknownSync(SessionMessage.Message)
-// kilocode_change start
+// sonderr_change start
 const encodeMessage = (message: SessionMessage.Message) =>
   StoredMessage.encode(Schema.encodeSync(SessionMessage.Message)(message)) as (typeof SessionMessage.Message)["Encoded"]
-// kilocode_change end
+// sonderr_change end
 
 export class SessionAlreadyProjected extends Error {}
 
@@ -59,7 +59,7 @@ function sessionRow(info: SessionV1.SessionInfo): typeof SessionTable.$inferInse
     agent: info.agent,
     model: info.model,
     version: info.version,
-    share_url: info.share?.url ?? null, // kilocode_change - full session updates must clear removed shares
+    share_url: info.share?.url ?? null, // sonderr_change - full session updates must clear removed shares
     summary_additions: info.summary?.additions,
     summary_deletions: info.summary?.deletions,
     summary_files: info.summary?.files,
@@ -117,7 +117,7 @@ function applyUsage(
 function run(db: DatabaseService, event: SessionEvent.Event) {
   return Effect.gen(function* () {
     const decodeRow = (row: typeof SessionMessageTable.$inferSelect) =>
-      decodeMessage(StoredMessage.normalize({ ...row.data, id: row.id, type: row.type })) // kilocode_change
+      decodeMessage(StoredMessage.normalize({ ...row.data, id: row.id, type: row.type })) // sonderr_change
     const updateMessage = (message: SessionMessage.Message) => {
       if (event.durable === undefined) return Effect.die("Durable Session event is missing aggregate sequence")
       const encoded = encodeMessage(message)
@@ -143,13 +143,13 @@ function run(db: DatabaseService, event: SessionEvent.Event) {
             .select()
             .from(SessionMessageTable)
             .where(
-              // kilocode_change start
+              // sonderr_change start
               and(
                 eq(SessionMessageTable.session_id, event.data.sessionID),
                 eq(SessionMessageTable.type, "assistant"),
                 isNotNull(SessionMessageTable.seq),
               ),
-              // kilocode_change end
+              // sonderr_change end
             )
             .orderBy(desc(SessionMessageTable.seq))
             .limit(1)
@@ -170,7 +170,7 @@ function run(db: DatabaseService, event: SessionEvent.Event) {
                 eq(SessionMessageTable.id, messageID),
                 eq(SessionMessageTable.session_id, event.data.sessionID),
                 eq(SessionMessageTable.type, "assistant"),
-                isNotNull(SessionMessageTable.seq), // kilocode_change
+                isNotNull(SessionMessageTable.seq), // sonderr_change
               ),
             )
             .get()
@@ -185,7 +185,7 @@ function run(db: DatabaseService, event: SessionEvent.Event) {
           const rows = yield* db
             .select()
             .from(SessionMessageTable)
-            // kilocode_change start
+            // sonderr_change start
             .where(
               and(
                 eq(SessionMessageTable.session_id, event.data.sessionID),
@@ -193,7 +193,7 @@ function run(db: DatabaseService, event: SessionEvent.Event) {
                 isNotNull(SessionMessageTable.seq),
               ),
             )
-            // kilocode_change end
+            // sonderr_change end
             .orderBy(desc(SessionMessageTable.seq))
             .all()
             .pipe(Effect.orDie)
@@ -394,7 +394,7 @@ const layer = Layer.effectDiscard(
         })
       }),
     )
-    yield* events.project(PromptCompat.definition, (event) => PromptCompat.project(db, event, (next) => run(db, next))) // kilocode_change - replay released two-step promotions
+    yield* events.project(PromptCompat.definition, (event) => PromptCompat.project(db, event, (next) => run(db, next))) // sonderr_change - replay released two-step promotions
     yield* events.project(SessionEvent.ContextUpdated, (event) => run(db, event))
     yield* events.project(SessionEvent.Synthetic, (event) => run(db, event))
     yield* events.project(SessionEvent.Shell.Started, (event) => run(db, event))
@@ -446,7 +446,7 @@ const layer = Layer.effectDiscard(
           )
           .get()
           .pipe(Effect.orDie)
-        // kilocode_change - Kilo keeps session_message.seq nullable for released-data compatibility
+        // sonderr_change - Sonderr keeps session_message.seq nullable for released-data compatibility
         if (!boundary || boundary.seq === null)
           return yield* Effect.die(`Revert boundary message not found: ${event.data.messageID}`)
         yield* db

@@ -1,14 +1,14 @@
 import { WorkerPoolManager } from "@pierre/diffs/worker"
 import ShikiWorkerUrl from "@pierre/diffs/worker/worker.js?worker&url"
-import { ensureKiloDiffTheme, KILO_DIFF_THEME } from "./kilo-diff-theme" // kilocode_change
+import { ensureSonderrDiffTheme, SONDERR_DIFF_THEME } from "./sonderr-diff-theme" // sonderr_change
 
-// kilocode_change start: register the "Kilo" theme as a precondition of creating
+// sonderr_change start: register the "Sonderr" theme as a precondition of creating
 // any diff worker pool. resolveThemes([theme]) runs on the main thread during
 // initialize(); without the theme registered it throws "resolveTheme: No valid
-// loader for Kilo". Doing it here means every diff component (which imports this
+// loader for Sonderr". Doing it here means every diff component (which imports this
 // factory) is covered, instead of relying on the markdown context being imported.
-ensureKiloDiffTheme()
-// kilocode_change end
+ensureSonderrDiffTheme()
+// sonderr_change end
 
 export type WorkerPoolStyle = "unified" | "split"
 
@@ -22,13 +22,13 @@ function createPool(lineDiffType: "none" | "word-alt") {
       workerFactory,
       // poolSize defaults to 8. More workers = more parallelism but
       // also more memory. Too many can actually slow things down.
-      // NOTE: 2 is probably better for Kilo, as I think 8 might be
+      // NOTE: 2 is probably better for Sonderr, as I think 8 might be
       // a bit overkill, especially because Safari has a significantly slower
       // boot up time for workers
       poolSize: 2,
     },
     {
-      theme: KILO_DIFF_THEME, // kilocode_change
+      theme: SONDERR_DIFF_THEME, // sonderr_change
       lineDiffType,
       preferredHighlighter: "shiki-wasm",
     },

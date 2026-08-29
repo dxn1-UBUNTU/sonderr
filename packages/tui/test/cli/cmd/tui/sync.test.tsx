@@ -2,7 +2,7 @@
 import { describe, expect, test } from "bun:test"
 import { tmpdir } from "../../../fixture/fixture"
 import { json, mount, wait } from "./sync-fixture"
-import type { GlobalEvent } from "@kilocode/sdk/v2"
+import type { GlobalEvent } from "@sonderr/sdk/v2"
 
 function branchEvent(branch: string, workspace?: string): GlobalEvent {
   return {
@@ -46,7 +46,7 @@ describe("tui sync", () => {
     const { app, emit, project, sync } = await mount(
       (url) => (url.pathname === "/experimental/workspace" ? json([{ id: "ws_a" }]) : undefined),
       tmp.path,
-    ) // kilocode_change - workspace re-bootstrap retains the selected test workspace
+    ) // sonderr_change - workspace re-bootstrap retains the selected test workspace
 
     try {
       expect(sync.data.vcs?.branch).toBe("main")

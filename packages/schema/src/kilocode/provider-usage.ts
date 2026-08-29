@@ -35,7 +35,7 @@ export interface UsageSnapshot extends Schema.Schema.Type<typeof UsageSnapshot> 
 export const UsageSnapshot = Schema.Struct({
   id: Schema.String,
   providerID: Schema.String,
-  sourceKind: Schema.Literals(["kilo_managed", "direct"]),
+  sourceKind: Schema.Literals(["sonderr_managed", "direct"]),
   providerLabel: Schema.String,
   planLabel: Schema.String,
   sourceLabel: Schema.String,

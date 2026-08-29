@@ -3,18 +3,18 @@ import fs from "fs/promises"
 import { describe, expect } from "bun:test"
 import { Effect, Layer, Schema } from "effect"
 import { FastCheck } from "effect/testing"
-import { Config } from "@opencode-ai/core/config"
-import { ConfigProvider } from "@opencode-ai/core/config/provider"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { ConfigMigrateV1 } from "@opencode-ai/core/v1/config/migrate"
-import { ConfigV1 } from "@opencode-ai/core/v1/config/config"
-import { FSUtil } from "@opencode-ai/core/fs-util"
-import { Global } from "@opencode-ai/core/global"
-import { Location } from "@opencode-ai/core/location"
-import { Policy } from "@opencode-ai/core/policy"
-import { Project } from "@opencode-ai/core/project"
-import { AbsolutePath } from "@opencode-ai/core/schema"
+import { Config } from "@sonderr/core/config"
+import { ConfigProvider } from "@sonderr/core/config/provider"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { ConfigMigrateV1 } from "@sonderr/core/v1/config/migrate"
+import { ConfigV1 } from "@sonderr/core/v1/config/config"
+import { FSUtil } from "@sonderr/core/fs-util"
+import { Global } from "@sonderr/core/global"
+import { Location } from "@sonderr/core/location"
+import { Policy } from "@sonderr/core/policy"
+import { Project } from "@sonderr/core/project"
+import { AbsolutePath } from "@sonderr/core/schema"
 import { location } from "../fixture/location"
 import { tmpdir } from "../fixture/tmpdir"
 import { testEffect } from "../lib/effect"
@@ -161,7 +161,7 @@ describe("Config", () => {
     ),
   )
 
-  // kilocode_change start
+  // sonderr_change start
   it.live("skips project configuration when project discovery is disabled", () =>
     Effect.acquireRelease(
       Effect.promise(() => tmpdir()),
@@ -174,17 +174,17 @@ describe("Config", () => {
           yield* Effect.promise(async () => {
             await Promise.all([fs.mkdir(project, { recursive: true }), fs.mkdir(global, { recursive: true })])
             await Promise.all([
-              fs.writeFile(path.join(project, "kilo.json"), JSON.stringify({ model: "project/model" })),
-              fs.writeFile(path.join(global, "kilo.json"), JSON.stringify({ model: "global/model" })),
+              fs.writeFile(path.join(project, "sonderr.json"), JSON.stringify({ model: "project/model" })),
+              fs.writeFile(path.join(global, "sonderr.json"), JSON.stringify({ model: "global/model" })),
             ])
           })
 
-          const prior = process.env.KILO_DISABLE_PROJECT_CONFIG
-          process.env.KILO_DISABLE_PROJECT_CONFIG = "1"
+          const prior = process.env.SONDERR_DISABLE_PROJECT_CONFIG
+          process.env.SONDERR_DISABLE_PROJECT_CONFIG = "1"
           yield* Effect.addFinalizer(() =>
             Effect.sync(() => {
-              if (prior === undefined) delete process.env.KILO_DISABLE_PROJECT_CONFIG
-              else process.env.KILO_DISABLE_PROJECT_CONFIG = prior
+              if (prior === undefined) delete process.env.SONDERR_DISABLE_PROJECT_CONFIG
+              else process.env.SONDERR_DISABLE_PROJECT_CONFIG = prior
             }),
           )
 
@@ -198,9 +198,9 @@ describe("Config", () => {
       ),
     ),
   )
-            // kilocode_change end
+            // sonderr_change end
 
-  it.live("loads opencode JSON and JSONC files from lowest to highest priority", () =>
+  it.live("loads sonderr JSON and JSONC files from lowest to highest priority", () =>
     Effect.acquireRelease(
       Effect.promise(() => tmpdir()),
       (tmp) => Effect.promise(() => tmp[Symbol.asyncDispose]()),
@@ -210,11 +210,11 @@ describe("Config", () => {
           yield* Effect.promise(() =>
             Promise.all([
               fs.writeFile(
-                path.join(tmp.path, "opencode.json"),
+                path.join(tmp.path, "sonderr.json"),
                 JSON.stringify({ $schema: "base", providers: { base: provider } }),
               ),
               fs.writeFile(
-                path.join(tmp.path, "opencode.jsonc"),
+                path.join(tmp.path, "sonderr.jsonc"),
                 `{
                   // Later global files override scalar fields while retaining providers.
                   "$schema": "last",
@@ -231,11 +231,11 @@ describe("Config", () => {
             expect(documents.map((document) => document.type)).toEqual(["document", "document"])
             expect(documents.map((document) => document.info.$schema)).toEqual(["base", "last"])
             expect(documents[0]).toBeInstanceOf(Config.Document)
-            expect(documents[0]?.path).toBe(path.join(tmp.path, "opencode.json"))
+            expect(documents[0]?.path).toBe(path.join(tmp.path, "sonderr.json"))
             expect(documents[1]?.info.providers?.last).toBeInstanceOf(ConfigProvider.Info)
 
             yield* Effect.promise(() =>
-              fs.writeFile(path.join(tmp.path, "opencode.jsonc"), JSON.stringify({ $schema: "changed" })),
+              fs.writeFile(path.join(tmp.path, "sonderr.jsonc"), JSON.stringify({ $schema: "changed" })),
             )
             expect(
               (yield* config.entries())
@@ -248,7 +248,7 @@ describe("Config", () => {
     ),
   )
 
-  // kilocode_change - Kilo keeps loading config.json for released installs (see the names list in config.ts)
+  // sonderr_change - Sonderr keeps loading config.json for released installs (see the names list in config.ts)
   it.live("still loads legacy config.json files", () =>
     Effect.acquireRelease(
       Effect.promise(() => tmpdir()),
@@ -264,7 +264,7 @@ describe("Config", () => {
             const config = yield* Config.Service
             const documents = (yield* config.entries()).filter((entry) => entry.type === "document")
 
-            expect(documents).toHaveLength(1) // kilocode_change
+            expect(documents).toHaveLength(1) // sonderr_change
           }).pipe(Effect.provide(testLayer(tmp.path)))
         }),
       ),
@@ -278,7 +278,7 @@ describe("Config", () => {
     ).pipe(
       Effect.flatMap((tmp) =>
         Effect.gen(function* () {
-          const file = path.join(tmp.path, "opencode.json")
+          const file = path.join(tmp.path, "sonderr.json")
           const contents = JSON.stringify({
             shell: "/bin/zsh",
             experimental: { policies: [{ effect: "deny", action: "provider.use", resource: "openai" }] },
@@ -313,7 +313,7 @@ describe("Config", () => {
         Effect.gen(function* () {
           yield* Effect.promise(() =>
             fs.writeFile(
-              path.join(tmp.path, "opencode.json"),
+              path.join(tmp.path, "sonderr.json"),
               JSON.stringify({
                 shell: "/bin/bash",
                 model: "anthropic/claude",
@@ -389,7 +389,7 @@ describe("Config", () => {
                   shorthand: "github.com/example/docs",
                 },
                 plugins: [
-                  "opencode-helicone-session",
+                  "sonderr-helicone-session",
                   { package: "@my-org/audit-plugin", options: { endpoint: "https://audit.example.com" } },
                 ],
               }),
@@ -483,7 +483,7 @@ describe("Config", () => {
               shorthand: "github.com/example/docs",
             })
             expect(documents[0]?.info.plugins).toEqual([
-              "opencode-helicone-session",
+              "sonderr-helicone-session",
               { package: "@my-org/audit-plugin", options: { endpoint: "https://audit.example.com" } },
             ])
           }).pipe(Effect.provide(testLayer(tmp.path)))
@@ -501,7 +501,7 @@ describe("Config", () => {
         Effect.gen(function* () {
           yield* Effect.promise(() =>
             fs.writeFile(
-              path.join(tmp.path, "opencode.json"),
+              path.join(tmp.path, "sonderr.json"),
               JSON.stringify({
                 reference: {
                   local: { path: "../library" },
@@ -537,7 +537,7 @@ describe("Config", () => {
         Effect.gen(function* () {
           yield* Effect.promise(() =>
             fs.writeFile(
-              path.join(tmp.path, "opencode.json"),
+              path.join(tmp.path, "sonderr.json"),
               JSON.stringify({
                 shell: "/bin/zsh",
                 default_agent: "reviewer",
@@ -557,7 +557,7 @@ describe("Config", () => {
                   },
                 },
                 plugin: [
-                  "opencode-helicone-session",
+                  "sonderr-helicone-session",
                   ["@my-org/audit-plugin", { endpoint: "https://audit.example.com" }],
                 ],
                 skills: { paths: ["./skills"], urls: ["https://example.com/.well-known/skills/"] },
@@ -636,7 +636,7 @@ describe("Config", () => {
               permissions: [{ action: "read", resource: "*", effect: "allow" }],
             })
             expect(documents[0]?.info.plugins).toEqual([
-              "opencode-helicone-session",
+              "sonderr-helicone-session",
               { package: "@my-org/audit-plugin", options: { endpoint: "https://audit.example.com" } },
             ])
             expect(documents[0]?.info.skills).toEqual(["./skills", "https://example.com/.well-known/skills/"])
@@ -715,8 +715,8 @@ describe("Config", () => {
         Effect.gen(function* () {
           yield* Effect.promise(() =>
             Promise.all([
-              fs.writeFile(path.join(tmp.path, "opencode.json"), JSON.stringify({ $schema: "base" })),
-              fs.writeFile(path.join(tmp.path, "opencode.jsonc"), "{ invalid"),
+              fs.writeFile(path.join(tmp.path, "sonderr.json"), JSON.stringify({ $schema: "base" })),
+              fs.writeFile(path.join(tmp.path, "sonderr.jsonc"), "{ invalid"),
             ]),
           )
           return yield* Effect.gen(function* () {
@@ -741,13 +741,13 @@ describe("Config", () => {
           yield* Effect.promise(async () => {
             await fs.mkdir(global, { recursive: true })
             await fs.writeFile(
-              path.join(global, "opencode.json"),
+              path.join(global, "sonderr.json"),
               JSON.stringify({
                 experimental: { policies: [{ effect: "deny", action: "provider.use", resource: "openai" }] },
               }),
             )
             await fs.writeFile(
-              path.join(tmp.path, "opencode.json"),
+              path.join(tmp.path, "sonderr.json"),
               JSON.stringify({
                 experimental: { policies: [{ effect: "allow", action: "provider.use", resource: "openai" }] },
               }),
@@ -764,8 +764,8 @@ describe("Config", () => {
     ),
   )
 
-  // kilocode_change start - V2 config discovery follows Kilo roots and precedence
-  it.live("loads Kilo configuration roots up to the project boundary", () =>
+  // sonderr_change start - V2 config discovery follows Sonderr roots and precedence
+  it.live("loads Sonderr configuration roots up to the project boundary", () =>
     Effect.acquireRelease(
       Effect.promise(() => tmpdir()),
       (tmp) => Effect.promise(() => tmp[Symbol.asyncDispose]()),
@@ -781,23 +781,23 @@ describe("Config", () => {
             await fs.mkdir(directory, { recursive: true })
             await Promise.all(
               [root, directory].flatMap((dir) =>
-                [".kilocode", ".kilo", ".opencode"].map((name) => fs.mkdir(path.join(dir, name), { recursive: true })),
+                [".sonderr", ".sonderr", ".sonderr"].map((name) => fs.mkdir(path.join(dir, name), { recursive: true })),
               ),
             )
             await Promise.all([
-              fs.writeFile(path.join(tmp.path, "opencode.json"), JSON.stringify({ $schema: "outside" })),
-              fs.writeFile(path.join(global, "kilo.json"), JSON.stringify({ $schema: "global" })),
-              fs.writeFile(path.join(root, "kilo.json"), JSON.stringify({ $schema: "root" })),
-              fs.writeFile(path.join(parent, "opencode.jsonc"), JSON.stringify({ $schema: "parent" })),
-              fs.writeFile(path.join(directory, "opencode.json"), JSON.stringify({ $schema: "directory" })),
-              fs.writeFile(path.join(root, ".kilocode", "opencode.json"), JSON.stringify({ $schema: "root-kilocode" })),
-              fs.writeFile(path.join(root, ".kilo", "kilo.json"), JSON.stringify({ $schema: "root-kilo" })),
+              fs.writeFile(path.join(tmp.path, "sonderr.json"), JSON.stringify({ $schema: "outside" })),
+              fs.writeFile(path.join(global, "sonderr.json"), JSON.stringify({ $schema: "global" })),
+              fs.writeFile(path.join(root, "sonderr.json"), JSON.stringify({ $schema: "root" })),
+              fs.writeFile(path.join(parent, "sonderr.jsonc"), JSON.stringify({ $schema: "parent" })),
+              fs.writeFile(path.join(directory, "sonderr.json"), JSON.stringify({ $schema: "directory" })),
+              fs.writeFile(path.join(root, ".sonderr", "sonderr.json"), JSON.stringify({ $schema: "root-sonderr" })),
+              fs.writeFile(path.join(root, ".sonderr", "sonderr.json"), JSON.stringify({ $schema: "root-sonderr" })),
               fs.writeFile(
-                path.join(directory, ".kilocode", "opencode.jsonc"),
-                JSON.stringify({ $schema: "directory-kilocode" }),
+                path.join(directory, ".sonderr", "sonderr.jsonc"),
+                JSON.stringify({ $schema: "directory-sonderr" }),
               ),
-              fs.writeFile(path.join(directory, ".kilo", "kilo.jsonc"), JSON.stringify({ $schema: "directory-kilo" })),
-              fs.writeFile(path.join(root, ".opencode", "opencode.json"), JSON.stringify({ $schema: "ignored" })),
+              fs.writeFile(path.join(directory, ".sonderr", "sonderr.jsonc"), JSON.stringify({ $schema: "directory-sonderr" })),
+              fs.writeFile(path.join(root, ".sonderr", "sonderr.json"), JSON.stringify({ $schema: "ignored" })),
             ])
           })
 
@@ -808,36 +808,36 @@ describe("Config", () => {
 
             expect(entries.filter((entry) => entry.type === "directory").map((entry) => entry.path)).toEqual([
               AbsolutePath.make(global),
-              AbsolutePath.make(path.join(root, ".kilocode")),
-              AbsolutePath.make(path.join(root, ".kilo")),
-              AbsolutePath.make(path.join(directory, ".kilocode")),
-              AbsolutePath.make(path.join(directory, ".kilo")),
+              AbsolutePath.make(path.join(root, ".sonderr")),
+              AbsolutePath.make(path.join(root, ".sonderr")),
+              AbsolutePath.make(path.join(directory, ".sonderr")),
+              AbsolutePath.make(path.join(directory, ".sonderr")),
             ])
             expect(documents.map((document) => document.info.$schema)).toEqual([
               "global",
               "root",
               "parent",
               "directory",
-              "root-kilocode",
-              "root-kilo",
-              "directory-kilocode",
-              "directory-kilo",
+              "root-sonderr",
+              "root-sonderr",
+              "directory-sonderr",
+              "directory-sonderr",
             ])
-            expect(Config.latest(entries, "$schema")).toBe("directory-kilo")
+            expect(Config.latest(entries, "$schema")).toBe("directory-sonderr")
             expect(entries.map((entry) => (entry.type === "document" ? entry.info.$schema : entry.path))).toEqual([
               "global",
               AbsolutePath.make(global),
               "root",
               "parent",
               "directory",
-              "root-kilocode",
-              AbsolutePath.make(path.join(root, ".kilocode")),
-              "root-kilo",
-              AbsolutePath.make(path.join(root, ".kilo")),
-              "directory-kilocode",
-              AbsolutePath.make(path.join(directory, ".kilocode")),
-              "directory-kilo",
-              AbsolutePath.make(path.join(directory, ".kilo")),
+              "root-sonderr",
+              AbsolutePath.make(path.join(root, ".sonderr")),
+              "root-sonderr",
+              AbsolutePath.make(path.join(root, ".sonderr")),
+              "directory-sonderr",
+              AbsolutePath.make(path.join(directory, ".sonderr")),
+              "directory-sonderr",
+              AbsolutePath.make(path.join(directory, ".sonderr")),
             ])
           }).pipe(
             Effect.provide(
@@ -851,5 +851,5 @@ describe("Config", () => {
       }),
     ),
   )
-  // kilocode_change end
+  // sonderr_change end
 })

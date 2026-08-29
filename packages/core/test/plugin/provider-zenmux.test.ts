@@ -1,11 +1,11 @@
 import { describe, expect } from "bun:test"
 import { Effect } from "effect"
-import { Catalog } from "@opencode-ai/core/catalog"
-import { PluginV2 } from "@opencode-ai/core/plugin"
-import { PluginHost } from "@opencode-ai/core/plugin/host"
-import { ProviderPlugins } from "@opencode-ai/core/plugin/provider"
-import { ZenmuxPlugin } from "@opencode-ai/core/plugin/provider/zenmux"
-import { ProviderV2 } from "@opencode-ai/core/provider"
+import { Catalog } from "@sonderr/core/catalog"
+import { PluginV2 } from "@sonderr/core/plugin"
+import { PluginHost } from "@sonderr/core/plugin/host"
+import { ProviderPlugins } from "@sonderr/core/plugin/provider"
+import { ZenmuxPlugin } from "@sonderr/core/plugin/provider/zenmux"
+import { ProviderV2 } from "@sonderr/core/provider"
 import { testEffect } from "../lib/effect"
 import { PluginTestLayer } from "./fixture"
 
@@ -41,7 +41,7 @@ describe("ZenmuxPlugin", () => {
       })
       yield* addPlugin()
       const result = required(yield* catalog.provider.get(ProviderV2.ID.make("zenmux")))
-      expect(result.request.headers).toEqual({ "HTTP-Referer": "https://kilo.ai/", "X-Title": "Kilo Code" })
+      expect(result.request.headers).toEqual({ "HTTP-Referer": "https://kilo.ai/", "X-Title": "Sonderr" })
       expect(Object.keys(result.request.headers).sort()).toEqual(["HTTP-Referer", "X-Title"])
     }),
   )
@@ -64,7 +64,7 @@ describe("ZenmuxPlugin", () => {
       expect(required(yield* catalog.provider.get(ProviderV2.ID.make("zenmux"))).request.headers).toEqual({
         Existing: "value",
         "HTTP-Referer": "https://kilo.ai/",
-        "X-Title": "Kilo Code",
+        "X-Title": "Sonderr",
       })
     }),
   )

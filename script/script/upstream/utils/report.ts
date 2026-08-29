@@ -104,7 +104,7 @@ function shouldSkipFile(path: string, skipPatterns: string[]): boolean {
 
 /**
  * Get recommendation for a conflicted file.
- * Pass currentContent (our version of the file) to detect kilocode_change markers
+ * Pass currentContent (our version of the file) to detect sonderr_change markers
  * in files that would otherwise be auto-transformed.
  */
 export function getRecommendation(
@@ -113,11 +113,11 @@ export function getRecommendation(
   skipFiles: string[] = [],
   currentContent?: string,
 ): { recommendation: ConflictFile["recommendation"]; reason: string } {
-  // Check if file should be skipped entirely (doesn't exist in Kilo, shouldn't be added)
+  // Check if file should be skipped entirely (doesn't exist in Sonderr, shouldn't be added)
   if (shouldSkipFile(path, skipFiles)) {
     return {
       recommendation: "skip",
-      reason: "File should be skipped (does not exist in Kilo fork)",
+      reason: "File should be skipped (does not exist in Sonderr fork)",
     }
   }
 
@@ -125,20 +125,20 @@ export function getRecommendation(
   if (keepOurs.some((pattern) => path.includes(pattern) || path === pattern)) {
     return {
       recommendation: "keep-ours",
-      reason: "File is Kilo-specific and should not be overwritten",
+      reason: "File is Sonderr-specific and should not be overwritten",
     }
   }
 
-  // Kilo directories should always keep ours
+  // Sonderr directories should always keep ours
   if (
     matches(
       path,
-      defaultConfig.kiloDirectories.map((dir) => `${dir}/**`),
+      defaultConfig.sonderrDirectories.map((dir) => `${dir}/**`),
     )
   ) {
     return {
       recommendation: "keep-ours",
-      reason: "File is in a Kilo-specific directory",
+      reason: "File is in a Sonderr-specific directory",
     }
   }
 
@@ -146,37 +146,37 @@ export function getRecommendation(
 
   // Check for specific auto-transform strategies
   if (shouldTakeTheirsTransform(path)) {
-    // If our version has kilocode_change markers, flag for manual review
-    if (currentContent?.includes("kilocode_change")) {
+    // If our version has sonderr_change markers, flag for manual review
+    if (currentContent?.includes("sonderr_change")) {
       return {
         recommendation: "manual",
-        reason: "File has kilocode_change markers — auto-transform skipped, needs manual review",
+        reason: "File has sonderr_change markers — auto-transform skipped, needs manual review",
       }
     }
     return {
       recommendation: "take-theirs-transform",
-      reason: "Branding-only file: take upstream and apply Kilo branding transforms",
+      reason: "Branding-only file: take upstream and apply Sonderr branding transforms",
     }
   }
 
   switch (type) {
     case "i18n":
-      // i18n files that have kilocode_change markers need manual review
-      if (currentContent?.includes("kilocode_change")) {
+      // i18n files that have sonderr_change markers need manual review
+      if (currentContent?.includes("sonderr_change")) {
         return {
           recommendation: "manual",
-          reason: "i18n file has kilocode_change markers — auto-transform skipped, needs manual review",
+          reason: "i18n file has sonderr_change markers — auto-transform skipped, needs manual review",
         }
       }
       return {
         recommendation: "i18n-transform",
-        reason: "i18n file: take upstream translations and apply Kilo branding",
+        reason: "i18n file: take upstream translations and apply Sonderr branding",
       }
     case "script":
-      if (currentContent?.includes("kilocode_change")) {
+      if (currentContent?.includes("sonderr_change")) {
         return {
           recommendation: "manual",
-          reason: "Script file has kilocode_change markers — auto-transform skipped, needs manual review",
+          reason: "Script file has sonderr_change markers — auto-transform skipped, needs manual review",
         }
       }
       return {
@@ -184,52 +184,52 @@ export function getRecommendation(
         reason: "Script file: take upstream and transform GitHub references",
       }
     case "extension":
-      if (currentContent?.includes("kilocode_change")) {
+      if (currentContent?.includes("sonderr_change")) {
         return {
           recommendation: "manual",
-          reason: "Extension file has kilocode_change markers — auto-transform skipped, needs manual review",
+          reason: "Extension file has sonderr_change markers — auto-transform skipped, needs manual review",
         }
       }
       return {
         recommendation: "extension-transform",
-        reason: "Extension file: take upstream and apply Kilo branding",
+        reason: "Extension file: take upstream and apply Sonderr branding",
       }
     case "web":
-      if (currentContent?.includes("kilocode_change")) {
+      if (currentContent?.includes("sonderr_change")) {
         return {
           recommendation: "manual",
-          reason: "Web/docs file has kilocode_change markers — auto-transform skipped, needs manual review",
+          reason: "Web/docs file has sonderr_change markers — auto-transform skipped, needs manual review",
         }
       }
       return {
         recommendation: "web-transform",
-        reason: "Web/docs file: take upstream and apply Kilo branding",
+        reason: "Web/docs file: take upstream and apply Sonderr branding",
       }
     case "markdown":
       return {
         recommendation: "keep-ours",
-        reason: "Markdown files are typically Kilo-specific documentation",
+        reason: "Markdown files are typically Sonderr-specific documentation",
       }
     case "package":
-      if (currentContent?.includes("kilocode_change")) {
+      if (currentContent?.includes("sonderr_change")) {
         return {
           recommendation: "manual",
-          reason: "package.json has kilocode_change markers — auto-transform skipped, needs manual review",
+          reason: "package.json has sonderr_change markers — auto-transform skipped, needs manual review",
         }
       }
       return {
         recommendation: "package-transform",
-        reason: "Package.json: take upstream, transform names, inject Kilo deps, preserve version",
+        reason: "Package.json: take upstream, transform names, inject Sonderr deps, preserve version",
       }
     case "code":
       return {
         recommendation: "manual",
-        reason: "Code files need manual review for kilocode_change markers",
+        reason: "Code files need manual review for sonderr_change markers",
       }
     case "config":
       return {
         recommendation: "manual",
-        reason: "Config files may have Kilo-specific settings",
+        reason: "Config files may have Sonderr-specific settings",
       }
     default:
       return {
@@ -266,7 +266,7 @@ export async function analyzeConflicts(
 
   for (const path of files) {
     const type = classifyFile(path)
-    // Read current file content (our version) to detect kilocode_change markers
+    // Read current file content (our version) to detect sonderr_change markers
     const content = await Bun.file(path)
       .text()
       .catch(() => "")
@@ -331,13 +331,13 @@ export function generateMarkdownReport(report: ConflictReport): string {
 
     const titleMap: Record<ConflictFile["recommendation"], string> = {
       skip: "Skip (Auto-Remove)",
-      "i18n-transform": "i18n Transform (Auto-Apply Kilo Branding)",
-      "take-theirs-transform": "Take Upstream + Kilo Branding (Auto)",
+      "i18n-transform": "i18n Transform (Auto-Apply Sonderr Branding)",
+      "take-theirs-transform": "Take Upstream + Sonderr Branding (Auto)",
       "package-transform": "Package.json Transform (Auto)",
       "script-transform": "Script Transform (Auto)",
       "extension-transform": "Extension Transform (Auto)",
       "web-transform": "Web/Docs Transform (Auto)",
-      "keep-ours": "Keep Kilo Version (Ours)",
+      "keep-ours": "Keep Sonderr Version (Ours)",
       "keep-theirs": "Take Upstream Version (Theirs)",
       codemod: "Apply Codemod",
       manual: "Manual Review Required",

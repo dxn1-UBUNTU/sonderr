@@ -205,4 +205,4 @@ async function verify(proc: Process, exited: boolean, input: Runtime) {
   if (live.length > 0) throw new Error(`PTY process tree is still alive: ${live.join(", ")}`)
 }
 
-export * as KiloPtyTermination from "./termination"
+export * as SonderrPtyTermination from "./termination"

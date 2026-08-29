@@ -2,9 +2,9 @@ import { describe, expect } from "bun:test"
 import fs from "fs/promises"
 import path from "path"
 import { Effect } from "effect"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { Ripgrep } from "@opencode-ai/core/ripgrep"
-import { RelativePath } from "@opencode-ai/core/schema"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { Ripgrep } from "@sonderr/core/ripgrep"
+import { RelativePath } from "@sonderr/core/schema"
 import { tmpdir } from "./fixture/tmpdir"
 import { testEffect } from "./lib/effect"
 
@@ -36,14 +36,14 @@ describe("Ripgrep", () => {
       Effect.promise(() => tmpdir()),
       (tmp) =>
         Effect.gen(function* () {
-          yield* Effect.promise(() => fs.mkdir(path.join(tmp.path, ".opencode")))
-          yield* Effect.promise(() => fs.writeFile(path.join(tmp.path, ".opencode", "config"), "needle\n"))
+          yield* Effect.promise(() => fs.mkdir(path.join(tmp.path, ".sonderr")))
+          yield* Effect.promise(() => fs.writeFile(path.join(tmp.path, ".sonderr", "config"), "needle\n"))
           yield* Effect.promise(() => fs.mkdir(path.join(tmp.path, ".git")))
           yield* Effect.promise(() => fs.writeFile(path.join(tmp.path, ".git", "config"), "needle\n"))
           const ripgrep = yield* Ripgrep.Service
 
           const files = yield* ripgrep.find({ cwd: tmp.path, pattern: "**/*", limit: 10 })
-          expect(files.map((item) => item.path)).toContain(RelativePath.make(".opencode/config"))
+          expect(files.map((item) => item.path)).toContain(RelativePath.make(".sonderr/config"))
           expect(files.map((item) => item.path)).not.toContain(RelativePath.make(".git/config"))
 
           const observed: string[] = []
@@ -56,14 +56,14 @@ describe("Ripgrep", () => {
           expect(observed).toEqual(limited.map((item) => item.path))
 
           const matches = yield* ripgrep.grep({ cwd: tmp.path, pattern: "needle", include: "config", limit: 10 })
-          expect(matches.items.map((item) => item.entry.path)).toContain(RelativePath.make(".opencode/config")) // kilocode_change
-          expect(matches.items.map((item) => item.entry.path)).not.toContain(RelativePath.make(".git/config")) // kilocode_change
+          expect(matches.items.map((item) => item.entry.path)).toContain(RelativePath.make(".sonderr/config")) // sonderr_change
+          expect(matches.items.map((item) => item.entry.path)).not.toContain(RelativePath.make(".git/config")) // sonderr_change
         }),
       (tmp) => Effect.promise(() => tmp[Symbol.asyncDispose]()),
     ),
   )
 
-  // kilocode_change start - surfaced error keeps the underlying reason
+  // sonderr_change start - surfaced error keeps the underlying reason
   it.live("includes the underlying reason in execution failures", () =>
     Effect.gen(function* () {
       const ripgrep = yield* Ripgrep.Service
@@ -75,5 +75,5 @@ describe("Ripgrep", () => {
       expect(error.message).toMatch(/^ripgrep execution failed: .+/)
     }),
   )
-  // kilocode_change end
+  // sonderr_change end
 })

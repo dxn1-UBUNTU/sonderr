@@ -1,18 +1,18 @@
 import { describe, expect } from "bun:test"
 import { DateTime, Effect } from "effect"
-import { Credential } from "@opencode-ai/core/credential"
-import { Integration } from "@opencode-ai/core/integration"
-import { ModelV2 } from "@opencode-ai/core/model"
-import { ProviderV2 } from "@opencode-ai/core/provider"
-import { SessionRunnerModel } from "@opencode-ai/core/session/runner/model"
+import { Credential } from "@sonderr/core/credential"
+import { Integration } from "@sonderr/core/integration"
+import { ModelV2 } from "@sonderr/core/model"
+import { ProviderV2 } from "@sonderr/core/provider"
+import { SessionRunnerModel } from "@sonderr/core/session/runner/model"
 import { it } from "../lib/effect"
 
-describe("SessionRunnerModel Kilo credentials", () => {
-  it.effect("maps OAuth account IDs to Kilo organization routing", () =>
+describe("SessionRunnerModel Sonderr credentials", () => {
+  it.effect("maps OAuth account IDs to Sonderr organization routing", () =>
     Effect.gen(function* () {
       const model = ModelV2.Info.make({
         id: ModelV2.ID.make("test-model"),
-        providerID: ProviderV2.ID.make("kilo"),
+        providerID: ProviderV2.ID.make("sonderr"),
         name: "Test model",
         api: {
           id: ModelV2.ID.make("api-test-model"),
@@ -31,7 +31,7 @@ describe("SessionRunnerModel Kilo credentials", () => {
       })
       const credential = Credential.Info.make({
         id: Credential.ID.create(),
-        integrationID: Integration.ID.make("kilo"),
+        integrationID: Integration.ID.make("sonderr"),
         label: "Work",
         value: Credential.OAuth.make({
           type: "oauth",
@@ -45,7 +45,7 @@ describe("SessionRunnerModel Kilo credentials", () => {
 
       const resolved = yield* SessionRunnerModel.fromCatalogModel(model, credential.value)
 
-      expect(resolved.route.defaults.http?.body).toMatchObject({ kilocodeOrganizationId: "org-enterprise" })
+      expect(resolved.route.defaults.http?.body).toMatchObject({ sonderrOrganizationId: "org-enterprise" })
       expect(resolved.route.defaults.http?.body).not.toHaveProperty("accountID")
     }),
   )

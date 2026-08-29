@@ -5,8 +5,8 @@
   aspect-ratio: 1;
 }
 
-/* kilocode_change start */
+/* sonderr_change start */
 [data-component="spinner"][data-paused] > rect {
   animation: none !important;
 }
-/* kilocode_change end */
+/* sonderr_change end */

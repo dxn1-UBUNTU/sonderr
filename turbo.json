@@ -1,7 +1,7 @@
 {
   "$schema": "https://v2-8-13.turborepo.dev/schema.json",
-  "globalEnv": ["CI", "KILO_DISABLE_SHARE"],
-  "globalPassThroughEnv": ["CI", "KILO_DISABLE_SHARE"],
+  "globalEnv": ["CI", "SONDERR_DISABLE_SHARE"],
+  "globalPassThroughEnv": ["CI", "SONDERR_DISABLE_SHARE"],
   "tasks": {
     "typecheck": {
       "dependsOn": ["^typecheck"]
@@ -10,11 +10,11 @@
       "dependsOn": [],
       "outputs": ["dist/**"]
     },
-    "@kilocode/cli#build": {
-      "dependsOn": ["@kilocode/sdk#build"],
+    "@sonderr/cli#build": {
+      "dependsOn": ["@sonderr/sdk#build"],
       "outputs": ["dist/**"]
     },
-    "@kilocode/cli#test": {
+    "@sonderr/cli#test": {
       "dependsOn": ["^build"],
       "outputs": [],
       "passThroughEnv": ["*"]
@@ -23,50 +23,50 @@
       "outputs": [".artifacts/unit/junit.xml"],
       "passThroughEnv": ["*"]
     },
-    "@opencode-ai/core#test": {
+    "@sonderr/core#test": {
       "dependsOn": ["^build"],
       "outputs": []
     },
-    "@kilocode/cli#test:ci": {
+    "@sonderr/cli#test:ci": {
       "dependsOn": ["^build"],
-      "env": ["KILO_TEST_PROFILE", "KILO_TEST_SHARD"],
+      "env": ["SONDERR_TEST_PROFILE", "SONDERR_TEST_SHARD"],
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.github/workflows/test.yml"],
       "outputs": [".artifacts/unit/junit.xml"],
       "passThroughEnv": ["*"]
     },
-    "@kilocode/cli#test:httpapi": {
+    "@sonderr/cli#test:httpapi": {
       "dependsOn": ["^build"],
       "cache": false,
       "outputs": [],
       "passThroughEnv": ["*"]
     },
-    "@kilocode/kilo-gateway#test:ci": {
+    "@sonderr/sonderr-gateway#test:ci": {
       "outputs": [".artifacts/unit/junit.xml"]
     },
-    "@kilocode/kilo-docs#build": {
+    "@sonderr/sonderr-docs#build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**"],
       "env": ["POSTHOG_API_KEY", "FREE_TIER_AMOUNT", "NEXT_PUBLIC_POSTHOG_KEY", "NEXT_PUBLIC_POSTHOG_HOST"]
     },
-    "@kilocode/kilo-jetbrains#build": {
-      "dependsOn": ["@kilocode/cli#build"],
+    "@sonderr/sonderr-jetbrains#build": {
+      "dependsOn": ["@sonderr/cli#build"],
       "outputs": ["build/distributions/**"]
     },
-    "@kilocode/kilo-jetbrains#typecheck": {
+    "@sonderr/sonderr-jetbrains#typecheck": {
       "outputs": []
     },
-    "@kilocode/kilo-jetbrains#test:ci": {
+    "@sonderr/sonderr-jetbrains#test:ci": {
       "outputs": [".artifacts/unit/junit.xml"]
     },
-    "@opencode-ai/ui#test": {
+    "@sonderr/ui#test": {
       "dependsOn": ["^build"],
       "outputs": []
     },
-    "@opencode-ai/session-ui#test": {
+    "@sonderr/session-ui#test": {
       "dependsOn": ["^build"],
       "outputs": []
     },
-    "@opencode-ai/ui#test:ci": {
+    "@sonderr/ui#test:ci": {
       "dependsOn": ["^build"],
       "outputs": [".artifacts/unit/junit.xml"],
       "passThroughEnv": ["*"]

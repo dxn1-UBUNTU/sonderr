@@ -2,7 +2,7 @@ export * as PluginInternal from "./internal"
 
 import { makeLocationNode } from "../effect/app-node"
 import { httpClient } from "../effect/app-node-platform"
-import type { PluginContext } from "@kilocode/plugin/v2/effect"
+import type { PluginContext } from "@sonderr/plugin/v2/effect"
 import { Effect, Layer, Scope } from "effect"
 import { AgentV2 } from "../agent"
 import { Catalog } from "../catalog"
@@ -109,7 +109,7 @@ const layer = Layer.effectDiscard(
         yield* add(ConfigReferencePlugin.Plugin)
         yield* add(AgentPlugin.Plugin)
         yield* add(CommandPlugin.Plugin)
-        // kilocode_change - Kilo's CLI registry supplies `kilo-config`; do not register the redundant opencode skill.
+        // sonderr_change - Sonderr's CLI registry supplies `sonderr-config`; do not register the redundant sonderr skill.
         yield* add(ModelsDevPlugin)
         yield* add(ConfigAgentPlugin.Plugin)
         yield* add(ConfigCommandPlugin.Plugin)

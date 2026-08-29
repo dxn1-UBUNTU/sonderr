@@ -3,21 +3,21 @@ import { useRouteData } from "../../context/route"
 import { useSync } from "../../context/sync"
 import { useTheme } from "../../context/theme"
 import { SplitBorder } from "../../ui/border"
-import { Spinner } from "@tui/component/spinner" // kilocode_change
-import { useLocal } from "@tui/context/local" // kilocode_change
-import type { AssistantMessage } from "@kilocode/sdk/v2"
+import { Spinner } from "@tui/component/spinner" // sonderr_change
+import { useLocal } from "@tui/context/local" // sonderr_change
+import type { AssistantMessage } from "@sonderr/sdk/v2"
 import { Locale } from "../../util/locale"
 import { useTerminalDimensions } from "@opentui/solid"
-import { useCommandShortcut, useOpencodeKeymap } from "../../keymap"
+import { useCommandShortcut, useSonderrKeymap } from "../../keymap"
 
 export function SubagentFooter() {
   const route = useRouteData("session")
   const sync = useSync()
-  const local = useLocal() // kilocode_change
+  const local = useLocal() // sonderr_change
   const messages = createMemo(() => sync.data.message[route.sessionID] ?? [])
   const session = createMemo(() => sync.session.get(route.sessionID))
 
-  // kilocode_change start
+  // sonderr_change start
   const lastAssistant = createMemo(() => messages().findLast((m) => m.role === "assistant"))
 
   const isRunning = createMemo(() => {
@@ -29,7 +29,7 @@ export function SubagentFooter() {
   })
 
   const agentColor = createMemo(() => local.agent.color(lastAssistant()?.agent ?? ""))
-  // kilocode_change end
+  // sonderr_change end
 
   const subagentInfo = createMemo(() => {
     const s = session()
@@ -72,7 +72,7 @@ export function SubagentFooter() {
   })
 
   const { theme } = useTheme()
-  const keymap = useOpencodeKeymap()
+  const keymap = useSonderrKeymap()
   const parentShortcut = useCommandShortcut("session.parent")
   const previousShortcut = useCommandShortcut("session.child.previous")
   const nextShortcut = useCommandShortcut("session.child.next")
@@ -102,11 +102,11 @@ export function SubagentFooter() {
                 ({subagentInfo().index} of {subagentInfo().total})
               </text>
             </Show>
-            {/* kilocode_change start */}
+            {/* sonderr_change start */}
             <Show when={isRunning()}>
               <Spinner color={agentColor()} />
             </Show>
-            {/* kilocode_change end */}
+            {/* sonderr_change end */}
             <Show when={usage()}>
               {(item) => (
                 <text fg={theme.textMuted} wrapMode="none">

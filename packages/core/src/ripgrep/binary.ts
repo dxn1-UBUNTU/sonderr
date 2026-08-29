@@ -26,7 +26,7 @@ export namespace RipgrepBinary {
     readonly filepath: Effect.Effect<string, Error>
   }
 
-  export class Service extends Context.Service<Service, Interface>()("@opencode/RipgrepBinary") {}
+  export class Service extends Context.Service<Service, Interface>()("@sonderr/RipgrepBinary") {}
 
   const layer = Layer.effect(
     Service,
@@ -91,7 +91,7 @@ export namespace RipgrepBinary {
       return Service.of({
         filepath: yield* Effect.cached(
           Effect.gen(function* () {
-            // kilocode_change - Git for Windows may expose an incompatible MSYS rg.exe
+            // sonderr_change - Git for Windows may expose an incompatible MSYS rg.exe
             const system = yield* Effect.sync(() => (process.platform === "win32" ? undefined : which("rg")))
             if (system && (yield* fs.isFile(system).pipe(Effect.orDie))) return system
 

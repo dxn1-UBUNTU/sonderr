@@ -1,4 +1,4 @@
-import { StoredToolContent } from "@opencode-ai/llm"
+import { StoredToolContent } from "@sonderr/llm"
 import { Schema } from "effect"
 
 const decode = Schema.decodeUnknownSync(StoredToolContent)
@@ -11,8 +11,8 @@ function record(value: unknown): value is Record<string, unknown> {
 export function normalize(value: unknown): unknown {
   if (!record(value)) return value
   // New readers recover the canonical summary while old readers receive recent context inline.
-  if (value.type === "compaction" && typeof value.kilo_summary === "string") {
-    return { ...value, summary: value.kilo_summary }
+  if (value.type === "compaction" && typeof value.sonderr_summary === "string") {
+    return { ...value, summary: value.sonderr_summary }
   }
   if (value.type !== "assistant" || !Array.isArray(value.content)) return value
   return {
@@ -34,7 +34,7 @@ export function encode(value: unknown): unknown {
     return {
       ...value,
       summary: [value.summary, value.recent ? `Recent context:\n${value.recent}` : ""].filter(Boolean).join("\n\n"),
-      kilo_summary: value.summary,
+      sonderr_summary: value.summary,
     }
   }
   if (value.type !== "assistant" || !Array.isArray(value.content)) return value

@@ -1,0 +1,29 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run IDE (Backend)" type="GradleRunConfiguration" factoryName="Gradle">
+    <log_file alias="Backend Sonderr" path="$PROJECT_DIR$/packages/sonderr-jetbrains/.intellijPlatform/sandbox/sonderr.jetbrains/sonderr-backend/sonderr.log" show_all="true" />
+    <ExternalSystemSettings>
+      <option name="executionName" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$/packages/sonderr-jetbrains" />
+      <option name="externalSystemIdString" value="GRADLE" />
+      <option name="scriptParameters" value="--no-configuration-cache -Psonderr.dev.log.level=debug -Psonderr.dev.log.chat.content=off -Psonderr.dev.log.chat.preview.max=160 -Psonderr.splitModeServerPort=0 -Psonderr.dev.storage.isolated=true" />
+      <option name="taskDescriptions">
+        <list />
+      </option>
+      <option name="taskNames">
+        <list>
+          <option value=":runIdeBackend" />
+          <option value="--purge-old-log-directories" />
+        </list>
+      </option>
+      <option name="vmOptions" value="" />
+    </ExternalSystemSettings>
+    <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+    <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+    <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
+    <DebugAllEnabled>false</DebugAllEnabled>
+    <RunAsTest>false</RunAsTest>
+    <GradleProfilingDisabled>false</GradleProfilingDisabled>
+    <GradleCoverageDisabled>false</GradleCoverageDisabled>
+    <method v="2" />
+  </configuration>
+</component>

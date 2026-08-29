@@ -1,6 +1,6 @@
 import { Effect } from "effect"
 import { define } from "../internal"
-import { ProviderV2 } from "../../provider" // kilocode_change
+import { ProviderV2 } from "../../provider" // sonderr_change
 
 export const VercelPlugin = define({
   id: "vercel",
@@ -10,10 +10,10 @@ export const VercelPlugin = define({
         for (const item of evt.provider.list()) {
           if (item.provider.api.type !== "aisdk") continue
           if (item.provider.api.package !== "@ai-sdk/vercel") continue
-          if (item.provider.id !== ProviderV2.ID.make("vercel")) continue // kilocode_change
+          if (item.provider.id !== ProviderV2.ID.make("vercel")) continue // sonderr_change
           evt.provider.update(item.provider.id, (provider) => {
-            provider.request.headers["http-referer"] = "https://kilo.ai/" // kilocode_change
-            provider.request.headers["x-title"] = "Kilo Code" // kilocode_change
+            provider.request.headers["http-referer"] = "https://kilo.ai/" // sonderr_change
+            provider.request.headers["x-title"] = "Sonderr" // sonderr_change
           })
         }
       }),

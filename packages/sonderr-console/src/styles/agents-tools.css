@@ -1,0 +1,394 @@
+.sonderr-console .agents {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sonderr-console .tools {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sonderr-console .tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.sonderr-console .tools [data-component="config-row"] {
+  align-items: flex-start;
+}
+
+.sonderr-console .agent-tags {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sonderr-console .agents [data-component="config-row"] {
+  align-items: flex-start;
+}
+
+.sonderr-console .agents [data-slot="config-row-subtitle"] {
+  overflow: visible;
+  white-space: normal;
+}
+
+.sonderr-console .agent-subtitle {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.sonderr-console .agent-id {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sonderr-console .agent-description {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.sonderr-console .agent-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sonderr-console .agent-section [data-component="section-title"] {
+  margin: 0.75rem 0 0.25rem;
+}
+
+.sonderr-console .agent-mode-dot {
+  margin-top: 0.45rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--muted-foreground);
+}
+
+.sonderr-console .agent-mode-dot[data-mode="primary"] {
+  background: var(--primary);
+}
+
+.sonderr-console .agent-mode-dot[data-mode="all"] {
+  background: var(--info);
+}
+
+.sonderr-console .tools [data-slot="config-row-subtitle"] {
+  overflow: visible;
+  white-space: normal;
+}
+
+.sonderr-console .tool-subtitle {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.sonderr-console .tool-id {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sonderr-console .tool-description {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.sonderr-console .tool-section {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.sonderr-console .provider-drawer[aria-label="Agent tool access selector"] .drawer-header span,
+.sonderr-console .provider-drawer[aria-label="Agent tool access selector"] .tool-capabilities {
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+}
+
+.sonderr-console .provider-drawer[aria-label="Agent tool access selector"] .tool-capabilities {
+  margin: 0;
+  padding-left: 0;
+}
+
+@media (max-width: 980px) {
+  .sonderr-console .tool-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.sonderr-console .advanced {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.sonderr-console .advanced section {
+  display: grid;
+  gap: 0.75rem;
+  border: 1px solid var(--border-weak-base);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+}
+
+.sonderr-console .advanced h3 {
+  margin: 0;
+  color: var(--text-strong);
+}
+
+.sonderr-console .builder {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.sonderr-console .agent-builder-stack {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.sonderr-console .agent-builder-card {
+  border-color: var(--border);
+  background: var(--card);
+}
+
+.sonderr-console .agent-builder-form {
+  grid-template-columns: 1fr;
+  gap: 0.625rem;
+}
+
+.sonderr-console .agent-builder-field {
+  background: color-mix(in oklab, var(--card) 72%, transparent);
+}
+
+.sonderr-console .agent-builder-field-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.sonderr-console .agent-builder-field-head > div:not(.agent-builder-field-actions) {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.sonderr-console .agent-builder-field-head span:not([data-component="tag"]),
+.sonderr-console .agent-builder-field > span:not([data-component="tag"]) {
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.sonderr-console .agent-builder-field-head small {
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+}
+
+.sonderr-console .agent-builder-field-head > .agent-builder-field-actions {
+  display: flex;
+  gap: 0.375rem;
+  align-items: center;
+  flex: 0 0 auto;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.sonderr-console .agent-builder-control {
+  display: grid;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.sonderr-console .agent-builder-control input,
+.sonderr-console .agent-builder-control select,
+.sonderr-console .agent-builder-control textarea,
+.sonderr-console .agent-builder-field input,
+.sonderr-console .agent-builder-field select {
+  width: 100%;
+}
+
+.sonderr-console .agent-builder-control > strong,
+.sonderr-console .agent-builder-control > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sonderr-console .agent-builder-control > strong {
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.sonderr-console .agent-builder-control > span {
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+}
+
+.sonderr-console .agent-prompt-input {
+  min-height: 16rem;
+  resize: vertical;
+}
+
+.sonderr-console .agent-builder-field input[readonly],
+.sonderr-console .agent-builder-field textarea[readonly] {
+  border-color: var(--border);
+  background: color-mix(in oklab, var(--muted) 45%, transparent);
+  color: var(--muted-foreground);
+  cursor: default;
+}
+
+.sonderr-console .agent-builder-control .tag-cloud {
+  justify-content: flex-start;
+}
+
+.sonderr-console .agent-tool-summary {
+  margin-top: 0.15rem;
+}
+
+.sonderr-console .wide {
+  grid-column: 1 / -1;
+}
+
+.sonderr-console .agent-color-control {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.sonderr-console .agent-color-swatches {
+  display: flex;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.sonderr-console .agent-color-swatch {
+  width: 1.375rem;
+  height: 1.375rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.sonderr-console .agent-color-swatch.selected {
+  outline: 2px solid var(--foreground);
+  outline-offset: 1px;
+}
+
+.sonderr-console .agent-color-swatch:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.sonderr-console .agent-snippets {
+  display: grid;
+  gap: 0.625rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+}
+
+.sonderr-console .block-title {
+  display: grid;
+  gap: 0.125rem;
+}
+
+.sonderr-console .block-title strong {
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.sonderr-console .block-title span {
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sonderr-console .snippet-list {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sonderr-console .snippet-list button {
+  max-width: 100%;
+  white-space: normal;
+}
+
+.sonderr-console .markdown-preview {
+  margin: 0;
+  overflow: auto;
+  border: 1px solid var(--border-weak-base);
+  border-radius: var(--radius-lg);
+  background: var(--background-stronger);
+  color: var(--text-strong);
+  font-size: var(--font-size-small);
+  line-height: 1.5;
+  padding: 1rem;
+  white-space: pre-wrap;
+}
+
+.sonderr-console .markdown-picker .markdown-preview {
+  min-height: 100%;
+}
+
+.sonderr-console .compact {
+  grid-template-columns: repeat(3, minmax(8rem, 1fr)) auto;
+  margin-bottom: 0;
+}
+
+.sonderr-console .mini-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.sonderr-console .mini-list.columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.sonderr-console .mini-list.spaced {
+  margin-top: 0.75rem;
+}
+
+.sonderr-console .mini-item {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1fr) auto auto;
+  gap: 0.75rem;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.65rem;
+}
+
+.sonderr-console .mini-item.simple {
+  grid-template-columns: minmax(8rem, 1fr) minmax(8rem, 1.4fr) auto;
+}
+
+.sonderr-console .mini-item span {
+  overflow: hidden;
+  color: var(--text-weaker);
+  font-size: var(--font-size-small);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sonderr-console .tag-cloud {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}

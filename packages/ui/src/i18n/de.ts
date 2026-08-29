@@ -78,7 +78,7 @@ export const dict = {
 
   "dialog.usageExceeded.freeTier.title": "Kostenloses Limit erreicht",
   "dialog.usageExceeded.freeTier.description":
-    "Kilo Go abonnieren und zuverlässigen Zugriff auf die besten Open-Source-Modelle erhalten, ab 5 $ pro Monat.", // kilocode_change
+    "Sonderr Go abonnieren und zuverlässigen Zugriff auf die besten Open-Source-Modelle erhalten, ab 5 $ pro Monat.", // sonderr_change
   "dialog.usageExceeded.freeTier.actionLabel": "Abonnieren",
   "dialog.usageExceeded.accountRateLimit.title": "Go-Limit erreicht",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -181,7 +181,7 @@ export const dict = {
   "ui.patch.action.created": "Erstellt",
   "ui.patch.action.moved": "Verschoben",
   "ui.patch.action.patched": "Gepatched",
-  "ui.patch.action.plan": "Plan", // kilocode_change
+  "ui.patch.action.plan": "Plan", // sonderr_change
 
   "ui.question.subtitle.answered": "{{count}} beantwortet",
   "ui.question.answer.none": "(keine Antwort)",
@@ -219,7 +219,7 @@ export const dict = {
   "ui.promptInput.send": "Senden",
   "ui.promptInput.stop": "Stoppen",
   "ui.tabs.close": "Tab schließen",
-  // kilocode_change start - preserve Kilo UI translations across the upstream dictionary refresh
+  // sonderr_change start - preserve Sonderr UI translations across the upstream dictionary refresh
   "ui.sessionTurn.status.delegatingWaitingPermission": "Subagent waiting for permission",
   "ui.sessionTurn.status.delegatingWaitingQuestion": "Subagent waiting for response",
   "ui.messagePart.mcp.input": "Eingabe",
@@ -237,5 +237,5 @@ export const dict = {
   "ui.message.deleteQueued": "Nachricht in Warteschlange löschen",
   "ui.question.subtitle.dismissed": "{{count}} dismissed",
   "ui.question.answer.dismissed": "Dismissed",
-  // kilocode_change end
+  // sonderr_change end
 } satisfies Partial<Record<Keys, string>>

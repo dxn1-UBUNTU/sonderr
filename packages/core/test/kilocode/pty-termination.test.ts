@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test"
-import { KiloPtyTermination } from "../../src/kilocode/pty/termination"
+import { SonderrPtyTermination } from "../../src/sonderr/pty/termination"
 
 function fake(pid = 123) {
   const calls: Array<string | undefined> = []
-  const proc: KiloPtyTermination.Process = {
+  const proc: SonderrPtyTermination.Process = {
     pid,
     onExit: () => ({ dispose() {} }),
     kill: (signal) => calls.push(signal),
@@ -30,7 +30,7 @@ function runtime(
   const signals: Array<{ pid: number; signal: "SIGTERM" | "SIGKILL" }> = []
   const sleeps: number[] = []
   let alive = true
-  const value: KiloPtyTermination.Runtime = {
+  const value: SonderrPtyTermination.Runtime = {
     platform,
     taskkill: async (file, args, opts) => {
       tasks.push({ file, args, opts })
@@ -61,7 +61,7 @@ describe("pty process-tree termination", () => {
     const item = fake(42)
     const input = runtime("win32")
 
-    await KiloPtyTermination.terminate(item.proc, input.value)
+    await SonderrPtyTermination.terminate(item.proc, input.value)
 
     expect(input.tasks).toEqual([
       {
@@ -83,7 +83,7 @@ describe("pty process-tree termination", () => {
       input.dead()
     }
 
-    await KiloPtyTermination.terminate(item.proc, input.value)
+    await SonderrPtyTermination.terminate(item.proc, input.value)
 
     expect(item.calls).toEqual([undefined])
     expect(input.sleeps).toEqual([200])
@@ -94,7 +94,7 @@ describe("pty process-tree termination", () => {
     const input = runtime("win32", { treeError: true, treeCalls })
     const item = fake(42)
 
-    await KiloPtyTermination.terminate(item.proc, input.value)
+    await SonderrPtyTermination.terminate(item.proc, input.value)
 
     expect(item.calls).toEqual([])
     expect(input.sleeps).toEqual([200])
@@ -105,7 +105,7 @@ describe("pty process-tree termination", () => {
     const item = fake(42)
     const input = runtime("linux")
 
-    await KiloPtyTermination.terminate(item.proc, input.value)
+    await SonderrPtyTermination.terminate(item.proc, input.value)
 
     expect(input.signals).toEqual([
       { pid: -42, signal: "SIGTERM" },
@@ -121,7 +121,7 @@ describe("pty process-tree termination", () => {
     const item = fake(42)
     const input = runtime("darwin", { signal: "throw" })
 
-    await KiloPtyTermination.terminate(item.proc, input.value)
+    await SonderrPtyTermination.terminate(item.proc, input.value)
 
     expect(item.calls).toEqual(["SIGTERM", "SIGKILL"])
   })
@@ -135,7 +135,7 @@ describe("pty process-tree termination", () => {
       ],
     })
 
-    await KiloPtyTermination.terminate(item.proc, input.value)
+    await SonderrPtyTermination.terminate(item.proc, input.value)
 
     expect(input.signals).toContainEqual({ pid: -44, signal: "SIGTERM" })
     expect(input.signals).toContainEqual({ pid: 44, signal: "SIGKILL" })

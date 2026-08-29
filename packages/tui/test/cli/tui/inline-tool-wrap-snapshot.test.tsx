@@ -30,25 +30,25 @@ const tools: readonly ToolFixture[] = [
   {
     icon: "✱",
     label:
-      'Grep "OPENCODE.*DB|database|sqlite|drizzle|dev.*db|data.*dir|xdg|APPDATA" in packages/opencode/src (151 matches)',
+      'Grep "SONDERR.*DB|database|sqlite|drizzle|dev.*db|data.*dir|xdg|APPDATA" in packages/cli/src (151 matches)',
   },
   {
     icon: "✱",
-    label: 'Glob "**/*db*" in packages/opencode (6 matches)',
+    label: 'Glob "**/*db*" in packages/cli (6 matches)',
   },
   {
     icon: "→",
-    label: "Read packages/opencode/src/storage/db.ts [offset=1, limit=130]",
+    label: "Read packages/cli/src/storage/db.ts [offset=1, limit=130]",
   },
   {
     icon: "→",
-    label: "Read packages/opencode/src/index.ts [offset=1, limit=100]",
+    label: "Read packages/cli/src/index.ts [offset=1, limit=100]",
     error: "No LSP server available for this file type.",
   },
   {
     icon: "✱",
     label:
-      'Grep "export const KILO_DB|KILO_DB|KILO_DEV|Global\\.Path\\.data|data =" in packages/opencode/src (115 matches)',
+      'Grep "export const SONDERR_DB|SONDERR_DB|SONDERR_DEV|Global\\.Path\\.data|data =" in packages/cli/src (115 matches)',
   },
 ] as const
 
@@ -225,11 +225,11 @@ async function renderFrame(component: () => JSX.Element, options: { width: numbe
 describe("TUI inline tool wrapping", () => {
   test("falls back for unknown tool names", () => {
     expect(toolDisplay("bash")).toBe("bash")
-    // kilocode_change start - Kilo tools keep their dedicated renderers
+    // sonderr_change start - Sonderr tools keep their dedicated renderers
     expect(toolDisplay("background_process")).toBe("background_process")
     expect(toolDisplay("interactive_terminal")).toBe("interactive_terminal")
     expect(toolDisplay("semantic_search")).toBe("semantic_search")
-    // kilocode_change end
+    // sonderr_change end
     expect(toolDisplay("plugin_tool")).toBe("generic")
   })
 

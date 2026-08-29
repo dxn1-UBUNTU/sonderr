@@ -1,4 +1,4 @@
-// kilocode_change - new file
+// sonderr_change - new file
 import { describe, expect, it } from "bun:test"
 import {
   extractSuffix,
@@ -276,7 +276,7 @@ describe("looksLikeCandidate", () => {
     // downstream decides which are real.
     expect(looksLikeCandidate("install")).toBe(true)
     expect(looksLikeCandidate("run-script")).toBe(true)
-    expect(looksLikeCandidate(".kilo/run-script")).toBe(true)
+    expect(looksLikeCandidate(".sonderr/run-script")).toBe(true)
     expect(looksLikeCandidate("src/foo")).toBe(true)
     expect(looksLikeCandidate("README")).toBe(true)
     expect(looksLikeCandidate("src/foo.ts")).toBe(true)

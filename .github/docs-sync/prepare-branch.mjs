@@ -1,4 +1,4 @@
-// kilocode_change - new file
+// sonderr_change - new file
 
 /**
  * Prepares the rolling docs-sync branch before the edit pass:

@@ -1,17 +1,17 @@
 import { describe, expect } from "bun:test"
 import { Cause, DateTime, Deferred, Effect, Exit, Fiber, Layer, Option, Schema, Stream } from "effect"
-import { EventV2 } from "@opencode-ai/core/event"
-import { Event } from "@opencode-ai/schema/event"
-import { Session } from "@opencode-ai/schema/session"
-import { SessionEvent } from "@opencode-ai/schema/session-event"
-import { SessionV1 } from "@opencode-ai/schema/session-v1"
-import { Database } from "@opencode-ai/core/database/database"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { EventSequenceTable, EventTable } from "@opencode-ai/core/event/sql"
-import { Location } from "@opencode-ai/core/location"
-import { AbsolutePath } from "@opencode-ai/core/schema"
-import { WorkspaceV2 } from "@opencode-ai/core/workspace"
+import { EventV2 } from "@sonderr/core/event"
+import { Event } from "@sonderr/schema/event"
+import { Session } from "@sonderr/schema/session"
+import { SessionEvent } from "@sonderr/schema/session-event"
+import { SessionV1 } from "@sonderr/schema/session-v1"
+import { Database } from "@sonderr/core/database/database"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { EventSequenceTable, EventTable } from "@sonderr/core/event/sql"
+import { Location } from "@sonderr/core/location"
+import { AbsolutePath } from "@sonderr/core/schema"
+import { WorkspaceV2 } from "@sonderr/core/workspace"
 import { eq } from "drizzle-orm"
 import { location } from "./fixture/location"
 import { testEffect } from "./lib/effect"
@@ -22,9 +22,9 @@ const locationLayer = Layer.succeed(
     location({ directory: AbsolutePath.make("project"), workspaceID: WorkspaceV2.ID.make("wrk_test") }),
   ),
 )
-// kilocode_change start - keep concurrent tests isolated from process database migrations
+// sonderr_change start - keep concurrent tests isolated from process database migrations
 const database = Database.layerFromPath(":memory:")
-// kilocode_change end
+// sonderr_change end
 const Message = EventV2.define({
   type: "test.message",
   schema: {
@@ -83,13 +83,13 @@ const durableData = (sessionID: Session.ID, text: string) => ({
 
 const it = testEffect(
   AppNodeBuilder.build(LayerNode.group([Database.node, EventV2.node, Location.node]), [
-    [Database.node, database], // kilocode_change - isolate concurrent event tests
+    [Database.node, database], // sonderr_change - isolate concurrent event tests
     [Location.node, locationLayer],
   ]),
 )
 const itWithoutLocation = testEffect(
   AppNodeBuilder.build(LayerNode.group([Database.node, EventV2.node]), [
-    [Database.node, database], // kilocode_change - isolate concurrent event tests
+    [Database.node, database], // sonderr_change - isolate concurrent event tests
   ]),
 )
 

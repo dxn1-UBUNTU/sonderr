@@ -152,7 +152,7 @@ interface ParserState {
 // 1. Sanitize — fix common authoring mistakes Gemini rejects: integer/number
 //    enums (must be strings), `required` entries that don't match a property,
 //    untyped arrays (`items` must be present), and `properties`/`required`
-//    keys on non-object scalars. Mirrors OpenCode's historical Gemini rules.
+//    keys on non-object scalars. Mirrors Sonderr's historical Gemini rules.
 //
 // 2. Project — lossy mapping from JSON Schema to Gemini's schema dialect:
 //    drop empty objects, derive `nullable: true` from `type: [..., "null"]`,
@@ -208,7 +208,7 @@ const lowerMessages = Effect.fn("Gemini.lowerMessages")(function* (request: LLMR
   for (const message of request.messages) {
     if (message.role === "system") {
       const part = yield* ProviderShared.wrappedSystemUpdate("Gemini", message)
-      ProviderShared.appendUserMessage(contents, { role: "user", parts: [{ text: part.text }] }, "parts") // kilocode_change
+      ProviderShared.appendUserMessage(contents, { role: "user", parts: [{ text: part.text }] }, "parts") // sonderr_change
       continue
     }
 
@@ -219,7 +219,7 @@ const lowerMessages = Effect.fn("Gemini.lowerMessages")(function* (request: LLMR
           return yield* ProviderShared.unsupportedContent("Gemini", "user", ["text", "media"])
         parts.push(yield* lowerUserPart(part))
       }
-      ProviderShared.appendUserMessage(contents, { role: "user", parts }, "parts") // kilocode_change
+      ProviderShared.appendUserMessage(contents, { role: "user", parts }, "parts") // sonderr_change
       continue
     }
 
@@ -278,7 +278,7 @@ const lowerMessages = Effect.fn("Gemini.lowerMessages")(function* (request: LLMR
         parts.push({ inlineData: { mimeType: media.mime, data: media.base64 } })
       }
     }
-    ProviderShared.appendUserMessage(contents, { role: "user", parts }, "parts") // kilocode_change
+    ProviderShared.appendUserMessage(contents, { role: "user", parts }, "parts") // sonderr_change
   }
 
   return contents

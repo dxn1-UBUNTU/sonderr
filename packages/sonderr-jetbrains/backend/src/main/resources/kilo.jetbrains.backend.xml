@@ -1,0 +1,26 @@
+<idea-plugin>
+    <dependencies>
+        <module name="intellij.platform.backend"/>
+        <module name="intellij.platform.kernel.backend"/>
+        <module name="sonderr.jetbrains.shared"/>
+    </dependencies>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <platform.rpc.backend.remoteApiProvider implementation="ai.sonderr.backend.rpc.SonderrAppRpcApiProvider"/>
+        <platform.rpc.backend.remoteApiProvider implementation="ai.sonderr.backend.rpc.SonderrAgentBehaviorRpcApiProvider"/>
+        <platform.rpc.backend.remoteApiProvider implementation="ai.sonderr.backend.rpc.SonderrProviderRpcApiProvider"/>
+        <platform.rpc.backend.remoteApiProvider implementation="ai.sonderr.backend.rpc.SonderrProjectRpcApiProvider"/>
+        <platform.rpc.backend.remoteApiProvider implementation="ai.sonderr.backend.rpc.SonderrSessionRpcApiProvider"/>
+        <platform.rpc.backend.remoteApiProvider implementation="ai.sonderr.backend.rpc.SonderrMigrationRpcApiProvider"/>
+        <platform.rpc.backend.remoteApiProvider implementation="ai.sonderr.backend.rpc.SonderrWorktreeRpcApiProvider"/>
+        <platform.rpc.backend.remoteApiProvider implementation="ai.sonderr.backend.rpc.SonderrRunRpcApiProvider"/>
+        <applicationService serviceImplementation="ai.sonderr.backend.migration.SonderrBackendLegacyMigrationStoreService"/>
+    </extensions>
+
+    <applicationListeners>
+        <listener class="ai.sonderr.backend.plugin.SonderrBackendAppLifecycleListener"
+                  topic="com.intellij.ide.AppLifecycleListener"/>
+        <listener class="ai.sonderr.backend.plugin.SonderrBackendDynamicPluginListener"
+                  topic="com.intellij.ide.plugins.DynamicPluginListener"/>
+    </applicationListeners>
+</idea-plugin>

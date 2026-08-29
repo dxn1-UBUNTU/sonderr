@@ -1,17 +1,17 @@
-import { Location } from "@opencode-ai/core/location"
-import { LocationServiceMap } from "@opencode-ai/core/location-services"
-import { AbsolutePath } from "@opencode-ai/core/schema"
-import { WorkspaceV2 } from "@opencode-ai/core/workspace"
+import { Location } from "@sonderr/core/location"
+import { LocationServiceMap } from "@sonderr/core/location-services"
+import { AbsolutePath } from "@sonderr/core/schema"
+import { WorkspaceV2 } from "@sonderr/core/workspace"
 import { Effect, Layer } from "effect"
 import { HttpServerRequest } from "effect/unstable/http"
 import { HttpApiMiddleware } from "effect/unstable/httpapi"
-import { InvalidRequestError } from "@opencode-ai/protocol/errors" // kilocode_change
+import { InvalidRequestError } from "@sonderr/protocol/errors" // sonderr_change
 
 export type LocationServices = Layer.Success<ReturnType<(typeof LocationServiceMap.Service)["get"]>>
 
 export class LocationMiddleware extends HttpApiMiddleware.Service<LocationMiddleware, { provides: LocationServices }>()(
-  "@opencode/HttpApiLocation",
-  { error: InvalidRequestError }, // kilocode_change - surface malformed headers as 400s
+  "@sonderr/HttpApiLocation",
+  { error: InvalidRequestError }, // sonderr_change - surface malformed headers as 400s
 ) {}
 
 export function response<A, E, R>(data: Effect.Effect<A, E, R>) {
@@ -30,12 +30,12 @@ export function response<A, E, R>(data: Effect.Effect<A, E, R>) {
 
 function ref(request: HttpServerRequest.HttpServerRequest) {
   const query = new URL(request.url, "http://localhost").searchParams
-  const workspaceID = query.get("location[workspace]") || request.headers["x-kilo-workspace"]
-  const header = request.headers["x-kilo-directory"]
-  // kilocode_change start - reject malformed encoded directory headers as client errors
+  const workspaceID = query.get("location[workspace]") || request.headers["x-sonderr-workspace"]
+  const header = request.headers["x-sonderr-directory"]
+  // sonderr_change start - reject malformed encoded directory headers as client errors
   return Effect.try({
     try: () => query.get("location[directory]") || (header ? decodeURIComponent(header) : process.cwd()),
-    catch: () => new InvalidRequestError({ message: "Invalid encoded directory header", field: "x-kilo-directory" }),
+    catch: () => new InvalidRequestError({ message: "Invalid encoded directory header", field: "x-sonderr-directory" }),
   }).pipe(
     Effect.map((directory) =>
       Location.Ref.make({
@@ -44,7 +44,7 @@ function ref(request: HttpServerRequest.HttpServerRequest) {
       }),
     ),
   )
-  // kilocode_change end
+  // sonderr_change end
 }
 
 export const layer = Layer.effect(
@@ -54,7 +54,7 @@ export const layer = Layer.effect(
     return LocationMiddleware.of((effect) =>
       Effect.gen(function* () {
         const request = yield* HttpServerRequest.HttpServerRequest
-        const location = yield* ref(request) // kilocode_change - reject malformed encoded directory headers as 400s
+        const location = yield* ref(request) // sonderr_change - reject malformed encoded directory headers as 400s
         return yield* effect.pipe(Effect.provide(locations.get(location)))
       }),
     )

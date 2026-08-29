@@ -3,18 +3,18 @@ import path from "path"
 import { fileURLToPath } from "url"
 import { describe, expect, test } from "bun:test"
 import { Effect, Layer } from "effect"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { FileMutation } from "@opencode-ai/core/file-mutation"
-import { FSUtil } from "@opencode-ai/core/fs-util"
-import { Location } from "@opencode-ai/core/location"
-import { LocationMutation } from "@opencode-ai/core/location-mutation"
-import { PermissionV2 } from "@opencode-ai/core/permission"
-import { AbsolutePath } from "@opencode-ai/core/schema"
-import { SessionV2 } from "@opencode-ai/core/session"
-import { ToolRegistry } from "@opencode-ai/core/tool/registry"
-import { ToolOutputStore } from "@opencode-ai/core/tool-output-store"
-import { EditTool } from "@opencode-ai/core/tool/edit"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { FileMutation } from "@sonderr/core/file-mutation"
+import { FSUtil } from "@sonderr/core/fs-util"
+import { Location } from "@sonderr/core/location"
+import { LocationMutation } from "@sonderr/core/location-mutation"
+import { PermissionV2 } from "@sonderr/core/permission"
+import { AbsolutePath } from "@sonderr/core/schema"
+import { SessionV2 } from "@sonderr/core/session"
+import { ToolRegistry } from "@sonderr/core/tool/registry"
+import { ToolOutputStore } from "@sonderr/core/tool-output-store"
+import { EditTool } from "@sonderr/core/tool/edit"
 import { location } from "./fixture/location"
 import { tmpdir } from "./fixture/tmpdir"
 import { testEffect } from "./lib/effect"
@@ -159,7 +159,7 @@ describe("EditTool", () => {
     ),
   )
 
-  // kilocode_change start
+  // sonderr_change start
   it.live("omits an oversized patch from durable structured output", () =>
     Effect.acquireUseRelease(
       Effect.promise(() => tmpdir()),
@@ -190,7 +190,7 @@ describe("EditTool", () => {
       (tmp) => Effect.promise(() => tmp[Symbol.asyncDispose]()),
     ),
   )
-  // kilocode_change end
+  // sonderr_change end
 
   it.live("accepts an absolute file path inside the active Location", () =>
     Effect.acquireUseRelease(

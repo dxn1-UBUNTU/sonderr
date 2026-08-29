@@ -2,9 +2,9 @@
 /**
  * jscodeshift codemod: Transform string literals
  *
- * Transforms string literals containing opencode references to kilo:
- * - "opencode-ai" -> "@kilocode/cli"
- * - "npx opencode" -> "npx @kilocode/cli"
+ * Transforms string literals containing sonderr references to sonderr:
+ * - "sonderr-ai" -> "@sonderr/cli"
+ * - "npx sonderr" -> "npx @sonderr/cli"
  * - etc.
  *
  * Usage:
@@ -22,31 +22,31 @@ interface StringReplacement {
 }
 
 const STRING_REPLACEMENTS: StringReplacement[] = [
-  // Package names in strings (no trailing \b to allow subpath matching like @opencode-ai/sdk/v2)
-  { pattern: /\bopencode-ai\b/g, replacement: "@kilocode/cli" },
-  { pattern: /@opencode-ai\/cli(?=\/|"|'|`|$)/g, replacement: "@kilocode/cli" },
-  { pattern: /@opencode-ai\/sdk(?=\/|"|'|`|$)/g, replacement: "@kilocode/sdk" },
-  { pattern: /@opencode-ai\/plugin(?=\/|"|'|`|$)/g, replacement: "@kilocode/plugin" },
+  // Package names in strings (no trailing \b to allow subpath matching like @sonderr/sdk/v2)
+  { pattern: /\bsonderr-ai\b/g, replacement: "@sonderr/cli" },
+  { pattern: /@sonderr-ai\/cli(?=\/|"|'|`|$)/g, replacement: "@sonderr/cli" },
+  { pattern: /@sonderr-ai\/sdk(?=\/|"|'|`|$)/g, replacement: "@sonderr/sdk" },
+  { pattern: /@sonderr-ai\/plugin(?=\/|"|'|`|$)/g, replacement: "@sonderr/plugin" },
 
   // CLI commands
-  { pattern: /\bnpx opencode\b/g, replacement: "npx @kilocode/cli" },
-  { pattern: /\bbun add opencode\b/g, replacement: "bun add @kilocode/cli" },
-  { pattern: /\bnpm install opencode\b/g, replacement: "npm install @kilocode/cli" },
-  { pattern: /\bnpm i opencode\b/g, replacement: "npm i @kilocode/cli" },
+  { pattern: /\bnpx sonderr\b/g, replacement: "npx @sonderr/cli" },
+  { pattern: /\bbun add sonderr\b/g, replacement: "bun add @sonderr/cli" },
+  { pattern: /\bnpm install sonderr\b/g, replacement: "npm install @sonderr/cli" },
+  { pattern: /\bnpm i sonderr\b/g, replacement: "npm i @sonderr/cli" },
 
   // Database filename
-  { pattern: /\bopencode\.db\b/g, replacement: "kilo.db" },
+  { pattern: /\bsonderr\.db\b/g, replacement: "sonderr.db" },
 
   // Binary name references (be careful with these)
-  { pattern: /\bopencode upgrade\b/g, replacement: "kilo upgrade" },
+  { pattern: /\bsonderr upgrade\b/g, replacement: "sonderr upgrade" },
 
   // HTTP header prefix
-  { pattern: /x-opencode-/g, replacement: "x-kilo-" },
+  { pattern: /x-sonderr-/g, replacement: "x-sonderr-" },
 
-  // Environment variables (exclude OPENCODE_API_KEY - upstream Zen SaaS key)
-  { pattern: /\bOPENCODE_(?!API_KEY\b)([A-Z_]+)\b/g, replacement: "KILO_$1" },
-  { pattern: /\bVITE_OPENCODE_/g, replacement: "VITE_KILO_" },
-  { pattern: /\b_EXTENSION_OPENCODE_/g, replacement: "_EXTENSION_KILO_" },
+  // Environment variables (exclude SONDERR_API_KEY - upstream Zen SaaS key)
+  { pattern: /\bSONDERR_(?!API_KEY\b)([A-Z_]+)\b/g, replacement: "SONDERR_$1" },
+  { pattern: /\bVITE_SONDERR_/g, replacement: "VITE_SONDERR_" },
+  { pattern: /\b_EXTENSION_SONDERR_/g, replacement: "_EXTENSION_SONDERR_" },
 ]
 
 export interface TransformResult {

@@ -1,5 +1,5 @@
 import { marked, type MarkedExtension, type Tokens, type TokenizerAndRendererExtension } from "marked"
-// kilocode_change: marked-shiki highlighted code blocks synchronously during
+// sonderr_change: marked-shiki highlighted code blocks synchronously during
 // parse, freezing the main thread on session switches with many code blocks
 // (issue #6221 / PR #7102). We render plain <pre><code data-lang="..."> here
 // and hand off to deferredHighlight() in markdown.tsx for progressive Shiki.
@@ -13,27 +13,27 @@ import {
   extractFilePathFromHref,
   looksLikeCandidate,
   escapeAttribute,
-} from "../file-path" // kilocode_change
+} from "../file-path" // sonderr_change
 import { createSimpleContext } from "./helper"
 import { markedCodeSpanBoundary } from "./marked-code-span"
-import { getSharedHighlighter, type ThemeRegistrationResolved } from "@pierre/diffs" // kilocode_change
-import { ensureKiloDiffTheme, KILO_DIFF_THEME } from "../pierre/kilo-diff-theme" // kilocode_change
+import { getSharedHighlighter, type ThemeRegistrationResolved } from "@pierre/diffs" // sonderr_change
+import { ensureSonderrDiffTheme, SONDERR_DIFF_THEME } from "../pierre/sonderr-diff-theme" // sonderr_change
 
-// kilocode_change start: the "Kilo" diff/highlight theme registration moved to
-// ../pierre/kilo-diff-theme so the diff worker pool can register it without
+// sonderr_change start: the "Sonderr" diff/highlight theme registration moved to
+// ../pierre/sonderr-diff-theme so the diff worker pool can register it without
 // importing this module's katex/marked dependencies. This call keeps the markdown
 // highlighter (getSharedHighlighter, below) working. Upstream keeps an inline
-// registerCustomTheme("OpenCode", …) block here — do not restore it on merges;
-// route registration through ensureKiloDiffTheme() instead.
-ensureKiloDiffTheme()
-// kilocode_change end
+// registerCustomTheme("Sonderr", …) block here — do not restore it on merges;
+// route registration through ensureSonderrDiffTheme() instead.
+ensureSonderrDiffTheme()
+// sonderr_change end
 
-// kilocode_change start: theme object consumed by the streaming Shiki worker
+// sonderr_change start: theme object consumed by the streaming Shiki worker
 // (markdown-worker.ts sends it via postMessage on worker init). Registration
-// with Pierre is handled by ensureKiloDiffTheme() above; this export only
+// with Pierre is handled by ensureSonderrDiffTheme() above; this export only
 // provides the raw theme data to the worker.
-export const KiloTheme = {
-  name: KILO_DIFF_THEME,
+export const SonderrTheme = {
+  name: SONDERR_DIFF_THEME,
   bg: "var(--color-background-stronger)",
   fg: "var(--text-base)",
   colors: {
@@ -402,19 +402,19 @@ export const KiloTheme = {
     "variable.defaultLibrary": "var(--syntax-unknown)",
   },
 } as unknown as ThemeRegistrationResolved
-// kilocode_change end
+// sonderr_change end
 
-// kilocode_change start: double-dollar-only math rules for marked.
+// sonderr_change start: double-dollar-only math rules for marked.
 const BLOCK = /^\$\$\n((?:\\[^]|[^\\])+?)\n\$\$(?:\n|$)/
 const INLINE = /^\$\$(?!\$)((?:\\.|[^\\\n])*?(?:\\.|[^\\\n$]))\$\$/
-// kilocode_change end
+// sonderr_change end
 
-// kilocode_change start: isolate KaTeX from the markdown root dir=auto.
+// sonderr_change start: isolate KaTeX from the markdown root dir=auto.
 function renderKatex(text: string, options: katex.KatexOptions): string {
   const html = katex.renderToString(text, options)
   return `<span dir="auto">${html}</span>`
 }
-// kilocode_change end
+// sonderr_change end
 
 function renderMathInText(text: string): string {
   let result = text
@@ -423,18 +423,18 @@ function renderMathInText(text: string): string {
   const displayMathRegex = /\$\$([\s\S]*?)\$\$/g
   result = result.replace(displayMathRegex, (_, math) => {
     try {
-      // kilocode_change start
+      // sonderr_change start
       return renderKatex(math, {
         displayMode: true,
         throwOnError: false,
       })
-      // kilocode_change end
+      // sonderr_change end
     } catch {
       return `$$${math}$$`
     }
   })
 
-  // kilocode_change: removed single-dollar inline math ($...$) rendering.
+  // sonderr_change: removed single-dollar inline math ($...$) rendering.
   // Single $ is far more common as a currency symbol in agent responses
   // (e.g. $93K, $307K) than as a LaTeX delimiter. Upstream's \(...\)
   // delimiter remains supported because it is unambiguous.
@@ -510,7 +510,7 @@ async function highlightCodeBlocks(html: string): Promise<string> {
   if (matches.length === 0) return html
 
   const highlighter = await getSharedHighlighter({
-    themes: ["Kilo"],
+    themes: ["Sonderr"],
     langs: [],
     preferredHighlighter: "shiki-wasm",
   })
@@ -535,7 +535,7 @@ async function highlightCodeBlocks(html: string): Promise<string> {
 
     const highlighted = highlighter.codeToHtml(code, {
       lang: language,
-      theme: "Kilo",
+      theme: "Sonderr",
       tabindex: false,
     })
     result = result.replace(fullMatch, () => highlighted)
@@ -546,7 +546,7 @@ async function highlightCodeBlocks(html: string): Promise<string> {
 
 export type NativeMarkdownParser = (markdown: string) => Promise<string>
 
-// kilocode_change start: highlight cache for deferred highlighting
+// sonderr_change start: highlight cache for deferred highlighting
 
 /** FNV-1a hash — lightweight alternative to storing full source code in DOM attributes. */
 export function fnv1a(s: string): string {
@@ -586,8 +586,8 @@ function replaceWithHighlighted(block: Element, html: string, sourceHash: string
   temp.innerHTML = html
   const highlighted = temp.firstElementChild
   if (!highlighted) return
-  const dir = pre.getAttribute("dir") // kilocode_change
-  if (dir) highlighted.setAttribute("dir", dir) // kilocode_change
+  const dir = pre.getAttribute("dir") // sonderr_change
+  if (dir) highlighted.setAttribute("dir", dir) // sonderr_change
   // Store a hash of the source code so the morphdom guard in Markdown can detect
   // mid-stream content changes without keeping the full source in the DOM.
   highlighted.setAttribute("data-source-hash", sourceHash)
@@ -624,7 +624,7 @@ export async function deferredHighlight(
     return
   }
 
-  const highlighter = await getSharedHighlighter({ themes: ["Kilo"], langs: [] })
+  const highlighter = await getSharedHighlighter({ themes: ["Sonderr"], langs: [] })
 
   for (const block of blocks) {
     // Short-circuit if the container is unmounted or the caller cancelled this run
@@ -661,7 +661,7 @@ export async function deferredHighlight(
               resolve()
               return
             }
-            const html = highlighter.codeToHtml(code, { lang: language, theme: "Kilo", tabindex: false })
+            const html = highlighter.codeToHtml(code, { lang: language, theme: "Sonderr", tabindex: false })
             touchHighlightCache(cacheKey, html)
             // Note: data-highlighted is NOT set on `block` here because
             // replaceWithHighlighted replaces the parent <pre> entirely — the
@@ -697,11 +697,11 @@ export async function deferredHighlight(
     onComplete?.()
   }
 }
-// kilocode_change end
+// sonderr_change end
 
-// kilocode_change start: expose the parser setup for Kilo markdown tests.
+// sonderr_change start: expose the parser setup for Sonderr markdown tests.
 export const createMarkedParser = (props: { nativeParser?: NativeMarkdownParser }) => {
-  // kilocode_change start: two-pass parser — first pass skips Shiki highlighting
+  // sonderr_change start: two-pass parser — first pass skips Shiki highlighting
   // to avoid blocking the main thread with Oniguruma WASM regex (issue #6221).
   // Code blocks render as plain <pre><code data-lang="..."> immediately.
   // The Markdown component calls deferredHighlight() after DOM paint.
@@ -710,7 +710,7 @@ export const createMarkedParser = (props: { nativeParser?: NativeMarkdownParser 
     {
       renderer: {
         link({ href, title, text }) {
-          // kilocode_change start: escape href/title for the attribute context —
+          // sonderr_change start: escape href/title for the attribute context —
           // both come from raw model output, so a stray `"` must not break out of
           // the attribute (defense-in-depth alongside the DOMPurify pass). The
           // browser decodes the entities back, so the click handler still reads
@@ -718,17 +718,17 @@ export const createMarkedParser = (props: { nativeParser?: NativeMarkdownParser 
           const safeHref = href ? escapeAttribute(href) : ""
           const titleAttr = title ? ` title="${escapeAttribute(title)}"` : ""
           // file-path links get a distinct class for styling. Keep target/rel so
-          // the shared (opencode) consumer's navigation and security behavior is
-          // unchanged — Kilo's click handler intercepts these via preventDefault
+          // the shared (sonderr) consumer's navigation and security behavior is
+          // unchanged — Sonderr's click handler intercepts these via preventDefault
           // and opens the file instead.
           const isFile = href ? extractFilePathFromHref(href) : undefined
           if (isFile) {
             return `<a href="${safeHref}"${titleAttr} class="external-link file-path-link" target="_blank" rel="noopener noreferrer">${text}</a>`
           }
           return `<a href="${safeHref}"${titleAttr} class="external-link" target="_blank" rel="noopener noreferrer">${text}</a>`
-          // kilocode_change end
+          // sonderr_change end
         },
-        // kilocode_change start — every code span is a file-link candidate.
+        // sonderr_change start — every code span is a file-link candidate.
         // Post-render validation (via filesystem stat) will strip the class
         // from candidates that don't correspond to real files.
         codespan({ text }) {
@@ -772,9 +772,9 @@ export const createMarkedParser = (props: { nativeParser?: NativeMarkdownParser 
           const attr = data ? ` class="language-${data}" data-lang="${data}"` : ' data-lang="text"'
           return `<pre dir="auto"><code${attr}>${escaped}</code></pre>`
         },
-        // kilocode_change end
+        // sonderr_change end
       },
-      // kilocode_change start: Marked accepts a tilde preceded by an opening
+      // sonderr_change start: Marked accepts a tilde preceded by an opening
       // parenthesis as the closing delimiter. It is left-flanking there, so
       // preserve it literally instead of corrupting text such as "(~1 GB)".
       tokenizer: {
@@ -784,10 +784,10 @@ export const createMarkedParser = (props: { nativeParser?: NativeMarkdownParser 
           return false
         },
       },
-      // kilocode_change end
+      // sonderr_change end
     },
     inlineKatexExtension,
-    // kilocode_change start: enable double-dollar math without single-dollar math.
+    // sonderr_change start: enable double-dollar math without single-dollar math.
     // Single $ is far more common as a currency symbol in agent responses
     // (e.g. $93K, $307K) than as a LaTeX delimiter. Avoid registering the
     // marked-katex-extension's single-dollar tokenizer because Marked falls
@@ -835,13 +835,13 @@ export const createMarkedParser = (props: { nativeParser?: NativeMarkdownParser 
         } satisfies TokenizerAndRendererExtension,
       ],
     } satisfies MarkedExtension,
-    // kilocode_change end
-    // kilocode_change: markedShiki removed — the custom `code` renderer
+    // sonderr_change end
+    // sonderr_change: markedShiki removed — the custom `code` renderer
     // above returns plain <pre><code data-lang="..."> and markdown.tsx
     // calls deferredHighlight() after paint. Running Shiki inside parse
     // blocks the main thread on session switches (issue #6221).
   )
-  // kilocode_change end
+  // sonderr_change end
 
   if (props.nativeParser) {
     const nativeParser = props.nativeParser
@@ -861,4 +861,4 @@ export const { use: useMarked, provider: MarkedProvider } = createSimpleContext(
   name: "Marked",
   init: createMarkedParser,
 })
-// kilocode_change end
+// sonderr_change end

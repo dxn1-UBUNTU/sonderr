@@ -1,15 +1,15 @@
 #!/usr/bin/env bun
 /**
- * Transform web/docs files with Kilo branding
+ * Transform web/docs files with Sonderr branding
  *
  * This script handles documentation and web content files (.mdx, etc.)
- * by transforming OpenCode references to Kilo.
+ * by transforming Sonderr references to Sonderr.
  */
 
 import { $ } from "bun"
 import { info, success, warn, debug } from "../utils/logger"
 import { defaultConfig } from "../utils/config"
-import { oursHasKilocodeChanges } from "../utils/git"
+import { oursHasSonderrChanges } from "../utils/git"
 
 export interface WebTransformResult {
   file: string
@@ -33,75 +33,75 @@ interface WebReplacement {
 const WEB_REPLACEMENTS: WebReplacement[] = [
   // GitHub references
   {
-    pattern: /github\.com\/anomalyco\/opencode/g,
-    replacement: "github.com/Kilo-Org/kilocode",
+    pattern: /github\.com\/anomalyco\/sonderr/g,
+    replacement: "github.com/Sonderr-Org/sonderr",
     description: "GitHub URL",
   },
   {
-    pattern: /anomalyco\/opencode/g,
-    replacement: "Kilo-Org/kilocode",
+    pattern: /anomalyco\/sonderr/g,
+    replacement: "Sonderr-Org/sonderr",
     description: "GitHub repo",
   },
 
   // Domains
   {
-    pattern: /app\.opencode\.ai/g,
+    pattern: /app\.sonderr\.ai/g,
     replacement: "app.kilo.ai",
     description: "App domain",
   },
   {
-    pattern: /opencode\.ai(?!\/zen)/g,
+    pattern: /sonderr\.ai(?!\/zen)/g,
     replacement: "kilo.ai",
     description: "Main domain (excluding zen)",
   },
 
   // Product names
   {
-    pattern: /\bOpenCode\b(?!\.json|\/| Zen)/g,
-    replacement: "Kilo",
+    pattern: /\bSonderr\b(?!\.json|\/| Zen)/g,
+    replacement: "Sonderr",
     description: "Product name",
   },
 
   // CLI commands
   {
-    pattern: /npx opencode(?!\w)/g,
-    replacement: "npx kilo",
+    pattern: /npx sonderr(?!\w)/g,
+    replacement: "npx sonderr",
     description: "npx command",
   },
   {
-    pattern: /bun add opencode(?!\w)/g,
-    replacement: "bun add kilo",
+    pattern: /bun add sonderr(?!\w)/g,
+    replacement: "bun add sonderr",
     description: "bun add command",
   },
   {
-    pattern: /npm install opencode(?!\w)/g,
-    replacement: "npm install kilo",
+    pattern: /npm install sonderr(?!\w)/g,
+    replacement: "npm install sonderr",
     description: "npm install command",
   },
   {
-    pattern: /opencode upgrade/g,
-    replacement: "kilo upgrade",
+    pattern: /sonderr upgrade/g,
+    replacement: "sonderr upgrade",
     description: "upgrade command",
   },
   {
-    pattern: /opencode dev/g,
-    replacement: "kilo dev",
+    pattern: /sonderr dev/g,
+    replacement: "sonderr dev",
     description: "dev command",
   },
   {
-    pattern: /opencode serve/g,
-    replacement: "kilo serve",
+    pattern: /sonderr serve/g,
+    replacement: "sonderr serve",
     description: "serve command",
   },
   {
-    pattern: /opencode auth/g,
-    replacement: "kilo auth",
+    pattern: /sonderr auth/g,
+    replacement: "sonderr auth",
     description: "auth command",
   },
 ]
 
 // Patterns to preserve
-const PRESERVE_PATTERNS = [/opencode\.json/g, /\.opencode\//g, /`\.opencode`/g]
+const PRESERVE_PATTERNS = [/sonderr\.json/g, /\.sonderr\//g, /`\.sonderr`/g]
 
 /**
  * Check if file is a web/docs file
@@ -174,9 +174,9 @@ export async function transformWebFile(file: string, options: WebTransformOption
     return { file, action: "transformed", replacements: 0, dryRun: true }
   }
 
-  // If our version has kilocode_change markers, flag for manual resolution
-  if (await oursHasKilocodeChanges(file)) {
-    warn(`${file} has kilocode_change markers — skipping auto-transform, needs manual resolution`)
+  // If our version has sonderr_change markers, flag for manual resolution
+  if (await oursHasSonderrChanges(file)) {
+    warn(`${file} has sonderr_change markers — skipping auto-transform, needs manual resolution`)
     return { file, action: "flagged", replacements: 0, dryRun: false }
   }
 
@@ -229,7 +229,7 @@ export async function transformConflictedWeb(
 }
 
 /**
- * Transform all web/docs files (pre-merge, on opencode branch)
+ * Transform all web/docs files (pre-merge, on sonderr branch)
  */
 export async function transformAllWeb(options: WebTransformOptions = {}): Promise<WebTransformResult[]> {
   const { Glob } = await import("bun")

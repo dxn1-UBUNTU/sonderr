@@ -4,16 +4,16 @@ import fs from "fs/promises"
 import path from "path"
 import { eq } from "drizzle-orm"
 import { Effect, Fiber, Stream } from "effect"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { AbsolutePath } from "@opencode-ai/core/schema"
-import { Git } from "@opencode-ai/core/git"
-import { Database } from "@opencode-ai/core/database/database"
-import { EventV2 } from "@opencode-ai/core/event"
-import { Project } from "@opencode-ai/core/project"
-import { ProjectDirectoryTable, ProjectTable } from "@opencode-ai/core/project/sql"
-import { ProjectCopy } from "@opencode-ai/core/project/copy"
-import { ProjectDirectories } from "@opencode-ai/core/project/directories"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { AbsolutePath } from "@sonderr/core/schema"
+import { Git } from "@sonderr/core/git"
+import { Database } from "@sonderr/core/database/database"
+import { EventV2 } from "@sonderr/core/event"
+import { Project } from "@sonderr/core/project"
+import { ProjectDirectoryTable, ProjectTable } from "@sonderr/core/project/sql"
+import { ProjectCopy } from "@sonderr/core/project/copy"
+import { ProjectDirectories } from "@sonderr/core/project/directories"
 import { tmpdir } from "./fixture/tmpdir"
 import { testEffect } from "./lib/effect"
 
@@ -31,7 +31,7 @@ async function initRepo(directory: string) {
   await $`git init`.cwd(directory).quiet()
   await $`git config core.fsmonitor false`.cwd(directory).quiet()
   await $`git config commit.gpgsign false`.cwd(directory).quiet()
-  await $`git config user.email test@opencode.test`.cwd(directory).quiet()
+  await $`git config user.email test@sonderr.test`.cwd(directory).quiet()
   await $`git config user.name Test`.cwd(directory).quiet()
   await $`git commit --allow-empty -m root`.cwd(directory).quiet()
 }
@@ -361,7 +361,7 @@ describe("ProjectCopy", () => {
   it.live("refresh ignores existing directories that are no longer git checkouts", () =>
     Effect.gen(function* () {
       const input = yield* setup()
-      yield* Effect.promise(() => fs.rm(path.join(input.sourceDirectory, ".git"), { recursive: true, force: true })) // kilocode_change
+      yield* Effect.promise(() => fs.rm(path.join(input.sourceDirectory, ".git"), { recursive: true, force: true })) // sonderr_change
       const copy = yield* ProjectCopy.Service
 
       yield* copy.refresh({ projectID: input.projectID })

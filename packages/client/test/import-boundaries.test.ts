@@ -10,17 +10,17 @@ const server = resolve(import.meta.dir, "../../server")
 
 describe("public import boundaries", () => {
   test("isolates each public entrypoint", async () => {
-    const root = await bundleInputs("@opencode-ai/client", "browser")
+    const root = await bundleInputs("@sonderr/client", "browser")
 
-    expect(dependency(root, "effect")).toEqual([]) // kilocode_change
+    expect(dependency(root, "effect")).toEqual([]) // sonderr_change
     expect(within(root, schema)).toEqual([])
     expect(within(root, protocol)).toEqual([])
     expect(within(root, core)).toEqual([])
     expect(within(root, server)).toEqual([])
 
-    const network = await bundleInputs("@opencode-ai/client/effect", "browser")
+    const network = await bundleInputs("@sonderr/client/effect", "browser")
 
-    expect(dependency(network, "effect").length).toBeGreaterThan(0) // kilocode_change
+    expect(dependency(network, "effect").length).toBeGreaterThan(0) // sonderr_change
     expect(within(network, schema).length).toBeGreaterThan(0)
     expect(within(network, protocol).length).toBeGreaterThan(0)
     expect(within(network, core)).toEqual([])
@@ -65,8 +65,8 @@ function within(inputs: ReadonlyArray<string>, directory: string) {
   return inputs.filter((input) => input === directory || input.startsWith(prefix))
 }
 
-// kilocode_change start - support hoisted dependencies in Windows workspace installs
+// sonderr_change start - support hoisted dependencies in Windows workspace installs
 function dependency(inputs: ReadonlyArray<string>, name: string) {
   return inputs.filter((input) => input.replaceAll("\\", "/").includes(`/node_modules/${name}/`))
 }
-// kilocode_change end
+// sonderr_change end

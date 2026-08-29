@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Kilo CLI is an open source AI coding agent that generates code from natural language, automates tasks, and supports 500+ AI models.
+Sonderr CLI is an open source AI coding agent that generates code from natural language, automates tasks, and supports 500+ AI models.
 
 - ALWAYS USE PARALLEL TOOLS WHEN APPLICABLE.
 - The default branch in this repo is `main`.
@@ -9,21 +9,21 @@ Kilo CLI is an open source AI coding agent that generates code from natural lang
 
 ## Build and Dev
 
-- **Dev**: `bun run dev` (runs from root) or `bun run --cwd packages/opencode --conditions=browser src/index.ts`
+- **Dev**: `bun run dev` (runs from root) or `bun run --cwd packages/cli --conditions=browser src/index.ts`
 - **Dev with params**: `bun dev -- help`
-- **Extension**: `bun run extension` (build + launch VS Code with the extension in dev mode). Pass `--no-build` to skip the build. When asked to run an isolated VS Code/Kilo environment, use the CLI scripts instead of interactive launch configs: `bun run extension:isolated` reuses `.kilo-dev/`, and `bun run extension:isolated:clean` clears `.kilo-dev/` first. Pass an optional workspace path after `--`, for example `bun run extension:isolated -- ../sample-project`.
+- **Extension**: `bun run extension` (build + launch VS Code with the extension in dev mode). Pass `--no-build` to skip the build. When asked to run an isolated VS Code/Sonderr environment, use the CLI scripts instead of interactive launch configs: `bun run extension:isolated` reuses `.sonderr-dev/`, and `bun run extension:isolated:clean` clears `.sonderr-dev/` first. Pass an optional workspace path after `--`, for example `bun run extension:isolated -- ../sample-project`.
 - **Typecheck**: `bun turbo typecheck` (uses `tsgo`, not `tsc`). Includes the JetBrains plugin and requires Java 21; do not run `java -version` as a routine preflight. Only check Java when a Gradle/Java command fails with a Java-version or missing-Java error. If missing, install via SDKMAN: `sdk install java 21-tem && sdk use java 21-tem`. If SDKMAN is not installed, see https://sdkman.io/install.
-- **Test**: `bun test` from `packages/opencode/` (NOT from root -- root blocks tests)
-- **Single test**: `bun test ./test/tool/tool-define.test.ts` from `packages/opencode/`
-- **CLI build artifact size check**: after `bun run script/build.ts --single --skip-install` in `packages/opencode/`, use `du -h dist/*/*/bin/kilo` (scoped package output lives under `dist/@kilocode/`)
-- **SDK regen**: After changing server endpoints in `packages/opencode/src/server/`, run `./script/generate.ts` from root to regenerate `packages/sdk/js/`
-- **Knip** (unused exports): `bun run knip` from `packages/kilo-vscode/`. CI runs this — all exported types/functions must be imported somewhere. Remove or unexport unused exports before pushing.
-- **Source links**: After adding or changing URLs in `packages/kilo-vscode/`, `packages/kilo-vscode/webview-ui/`, or `packages/opencode/src/`, run `bun run script/extract-source-links.ts` from the repo root and commit the updated `packages/kilo-docs/source-links.md`. CI runs this check — the build fails if the file is stale.
-- **kilocode_change check**: `bun run check-kilocode-change` from `packages/kilo-vscode/`. CI runs this — `kilocode_change` is a marker for upstream merge conflicts and must not appear in `packages/kilo-vscode/` or `packages/kilo-ui/` (these are entirely Kilo Code additions). Remove the markers before pushing.
-- **opencode annotation check**: `bun run script/check-opencode-annotations.ts --worktree` from repo root when verifying local agent changes. CI runs `bun run script/check-opencode-annotations.ts` on PRs touching `packages/opencode/` — every Kilo-specific change in shared opencode files must be annotated with `kilocode_change` markers. Exempt paths (no markers needed): `packages/opencode/src/kilocode/`, `packages/opencode/test/kilocode/`, and any path containing `kilocode` in the name.
-- **Effect facade ratchet**: Do not add runtime-backed Promise facades to shared `packages/opencode/src` Effect services; use service dependencies, `AppRuntime`, or Kilo-owned boundaries. Run `bun run script/check-opencode-promise-facades.ts` when touching service adapters.
+- **Test**: `bun test` from `packages/cli/` (NOT from root -- root blocks tests)
+- **Single test**: `bun test ./test/tool/tool-define.test.ts` from `packages/cli/`
+- **CLI build artifact size check**: after `bun run script/build.ts --single --skip-install` in `packages/cli/`, use `du -h dist/*/*/bin/sonderr` (scoped package output lives under `dist/@sonderr/`)
+- **SDK regen**: After changing server endpoints in `packages/cli/src/server/`, run `./script/generate.ts` from root to regenerate `packages/sdk/js/`
+- **Knip** (unused exports): `bun run knip` from `packages/sonderr-vscode/`. CI runs this — all exported types/functions must be imported somewhere. Remove or unexport unused exports before pushing.
+- **Source links**: After adding or changing URLs in `packages/sonderr-vscode/`, `packages/sonderr-vscode/webview-ui/`, or `packages/cli/src/`, run `bun run script/extract-source-links.ts` from the repo root and commit the updated `packages/sonderr-docs/source-links.md`. CI runs this check — the build fails if the file is stale.
+- **sonderr_change check**: `bun run check-sonderr-change` from `packages/sonderr-vscode/`. CI runs this — `sonderr_change` is a marker for upstream merge conflicts and must not appear in `packages/sonderr-vscode/` or `packages/sonderr-ui/` (these are entirely Sonderr additions). Remove the markers before pushing.
+- **sonderr annotation check**: `bun run script/check-sonderr-annotations.ts --worktree` from repo root when verifying local agent changes. CI runs `bun run script/check-sonderr-annotations.ts` on PRs touching `packages/cli/` — every Sonderr-specific change in shared sonderr files must be annotated with `sonderr_change` markers. Exempt paths (no markers needed): `packages/cli/src/sonderr/`, `packages/cli/test/sonderr/`, and any path containing `sonderr` in the name.
+- **Effect facade ratchet**: Do not add runtime-backed Promise facades to shared `packages/cli/src` Effect services; use service dependencies, `AppRuntime`, or Sonderr-owned boundaries. Run `bun run script/check-sonderr-promise-facades.ts` when touching service adapters.
 - **workflow allowlist**: `bun run script/check-workflows.ts` from repo root. CI runs this as part of the annotations workflow — any `.yml` / `.yaml` file added to or removed from `.github/workflows/` must be reflected in the hardcoded list in `script/check-workflows.ts`. Prevents upstream-merged workflows from silently starting to run in our CI.
-- **Backend/SDK programmatic testing**: see [TESTING.md](./TESTING.md) for spawning the local main-branch backend (`bun dev serve`) and driving it via `curl` — use this instead of `kilo serve` (prod binary) when testing backend fixes.
+- **Backend/SDK programmatic testing**: see [TESTING.md](./TESTING.md) for spawning the local main-branch backend (`bun dev serve`) and driving it via `curl` — use this instead of `sonderr serve` (prod binary) when testing backend fixes.
 
 ## Quality Checks
 
@@ -32,32 +32,32 @@ Before saying an implementation is ready, run the smallest relevant checks that 
 | Area | Checks |
 |---|---|
 | Root / cross-package | `bun run lint`, `bun run typecheck` |
-| CLI | From `packages/opencode/`: `bun run typecheck`, `bun test` or targeted `bun test ./path/to/file.test.ts` |
-| VS Code extension | From `packages/kilo-vscode/`: `bun run typecheck`, `bun run lint`, `bun run test:unit` or `bun run test` |
-| Extension build/package | From `packages/kilo-vscode/`: `bun run compile` or `bun run package` when touching build, packaging, SDK, or webview integration paths |
-| JetBrains plugin | From `packages/kilo-jetbrains/`: `./gradlew typecheck`, `./gradlew test`. Requires Java 21; do not run `java -version` as a routine preflight. Check Java only after a Java-version or missing-Java failure. |
-| CI/local guards | Run affected guards documented above, such as `bun run knip`, `bun run check-kilocode-change`, `bun run script/check-opencode-annotations.ts --worktree`, or source link extraction |
+| CLI | From `packages/cli/`: `bun run typecheck`, `bun test` or targeted `bun test ./path/to/file.test.ts` |
+| VS Code extension | From `packages/sonderr-vscode/`: `bun run typecheck`, `bun run lint`, `bun run test:unit` or `bun run test` |
+| Extension build/package | From `packages/sonderr-vscode/`: `bun run compile` or `bun run package` when touching build, packaging, SDK, or webview integration paths |
+| JetBrains plugin | From `packages/sonderr-jetbrains/`: `./gradlew typecheck`, `./gradlew test`. Requires Java 21; do not run `java -version` as a routine preflight. Check Java only after a Java-version or missing-Java failure. |
+| CI/local guards | Run affected guards documented above, such as `bun run knip`, `bun run check-sonderr-change`, `bun run script/check-sonderr-annotations.ts --worktree`, or source link extraction |
 
 Never run root `bun test`; the root script prints `do not run tests from root` and exits with code 1. Use package-level tests instead.
 
 ## Products
 
-All products are clients of the **CLI** (`packages/opencode/`), which contains the AI agent runtime, HTTP server, and session management. Each client spawns or connects to a `kilo serve` process and communicates via HTTP + SSE using `@kilocode/sdk`.
+All products are clients of the **CLI** (`packages/cli/`), which contains the AI agent runtime, HTTP server, and session management. Each client spawns or connects to a `sonderr serve` process and communicates via HTTP + SSE using `@sonderr/sdk`.
 
 | Product | Package | Description |
 |---|---|---|
-| Kilo CLI | `packages/opencode/` | Core engine. TUI, `kilo run`, `kilo serve`. Fork of upstream OpenCode. |
-| Kilo VS Code Extension | `packages/kilo-vscode/` | VS Code extension. Bundles the CLI binary, spawns `kilo serve` as a child process. Includes the **Agent Manager** — a multi-session orchestration panel with git worktree isolation. |
+| Sonderr CLI | `packages/cli/` | Core engine. TUI, `sonderr run`, `sonderr serve`. Fork of upstream Sonderr. |
+| Sonderr VS Code Extension | `packages/sonderr-vscode/` | VS Code extension. Bundles the CLI binary, spawns `sonderr serve` as a child process. Includes the **Agent Manager** — a multi-session orchestration panel with git worktree isolation. |
 
-**Agent Manager** refers to a feature inside `packages/kilo-vscode/` (extension code in `src/agent-manager/`, webview in `webview-ui/agent-manager/`). It is not a standalone product. See the extension's `AGENTS.md` for details.
+**Agent Manager** refers to a feature inside `packages/sonderr-vscode/` (extension code in `src/agent-manager/`, webview in `webview-ui/agent-manager/`). It is not a standalone product. See the extension's `AGENTS.md` for details.
 
-In each VS Code extension host, one `KiloConnectionService` is created for the sidebar, every Kilo editor tab, and Agent Manager; it lazily starts and reuses one current `kilo serve` backend at a time. Agent Manager worktree sessions pass a directory context to this shared backend rather than starting one per worktree. State captured by the active service layer, such as Snapshot `trackState`, is shared across those requests; only directory-keyed `InstanceState` data is isolated.
+In each VS Code extension host, one `SonderrConnectionService` is created for the sidebar, every Sonderr editor tab, and Agent Manager; it lazily starts and reuses one current `sonderr serve` backend at a time. Agent Manager worktree sessions pass a directory context to this shared backend rather than starting one per worktree. State captured by the active service layer, such as Snapshot `trackState`, is shared across those requests; only directory-keyed `InstanceState` data is isolated.
 
-Extension-specific settings should live in the Kilo extension settings, not default VS Code settings, unless they are intentionally VS Code-wide. Experimental flags should follow existing flag patterns, not VS Code settings; they usually belong in the Kilo Experimental settings section.
+Extension-specific settings should live in the Sonderr extension settings, not default VS Code settings, unless they are intentionally VS Code-wide. Experimental flags should follow existing flag patterns, not VS Code settings; they usually belong in the Sonderr Experimental settings section.
 
 ## Package Instructions
 
-- When a task primarily touches `packages/kilo-jetbrains/`, read `packages/kilo-jetbrains/AGENTS.md` before planning or editing. It covers split-mode architecture, IntelliJ source lookup, threading fundamentals, UI guidelines, and session component architecture.
+- When a task primarily touches `packages/sonderr-jetbrains/`, read `packages/sonderr-jetbrains/AGENTS.md` before planning or editing. It covers split-mode architecture, IntelliJ source lookup, threading fundamentals, UI guidelines, and session component architecture.
 
 ## Monorepo Structure
 
@@ -65,21 +65,21 @@ Turborepo + Bun workspaces. The packages you'll work with most:
 
 | Package | Name | Purpose |
 |---|---|---|
-| `packages/opencode/` | `@kilocode/cli` | Core CLI -- agents, tools, sessions, server, TUI. This is where most work happens. |
-| `packages/sdk/js/` | `@kilocode/sdk` | Auto-generated TypeScript SDK (client for the server API). Do not edit `src/gen/` by hand. |
-| `packages/kilo-vscode/` | `kilo-code` | VS Code extension with sidebar chat + Agent Manager. See its own `AGENTS.md` for details. |
-| `packages/kilo-gateway/` | `@kilocode/kilo-gateway` | Kilo auth, provider routing, API integration |
-| `packages/kilo-telemetry/` | `@kilocode/kilo-telemetry` | PostHog analytics + OpenTelemetry |
-| `packages/kilo-i18n/` | `@kilocode/kilo-i18n` | Internationalization / translations |
-| `packages/kilo-ui/` | `@kilocode/kilo-ui` | SolidJS component library shared by the extension webview and docs screenshot stories |
-| `packages/util/` | `@opencode-ai/util` | Shared utilities (error, path, retry, slug, etc.) |
-| `packages/plugin/` | `@kilocode/plugin` | Plugin/tool interface definitions |
+| `packages/cli/` | `@sonderr/cli` | Core CLI -- agents, tools, sessions, server, TUI. This is where most work happens. |
+| `packages/sdk/js/` | `@sonderr/sdk` | Auto-generated TypeScript SDK (client for the server API). Do not edit `src/gen/` by hand. |
+| `packages/sonderr-vscode/` | `sonderr-code` | VS Code extension with sidebar chat + Agent Manager. See its own `AGENTS.md` for details. |
+| `packages/sonderr-gateway/` | `@sonderr/sonderr-gateway` | Sonderr auth, provider routing, API integration |
+| `packages/sonderr-telemetry/` | `@sonderr/sonderr-telemetry` | PostHog analytics + OpenTelemetry |
+| `packages/sonderr-i18n/` | `@sonderr/sonderr-i18n` | Internationalization / translations |
+| `packages/sonderr-ui/` | `@sonderr/sonderr-ui` | SolidJS component library shared by the extension webview and docs screenshot stories |
+| `packages/util/` | `@sonderr/util` | Shared utilities (error, path, retry, slug, etc.) |
+| `packages/plugin/` | `@sonderr/plugin` | Plugin/tool interface definitions |
 
 ## Commits and PR Titles
 
 Use conventional commit-style messages and PR titles: `type(scope): summary`.
 
-Valid types are `feat`, `fix`, `docs`, `chore`, `refactor`, and `test`. Scopes are optional; use the affected package or area when helpful, e.g. `core`, `opencode`, `tui`, `app`, `desktop`, `sdk`, or `plugin`.
+Valid types are `feat`, `fix`, `docs`, `chore`, `refactor`, and `test`. Scopes are optional; use the affected package or area when helpful, e.g. `core`, `sonderr`, `tui`, `app`, `desktop`, `sdk`, or `plugin`.
 
 Examples: `fix(tui): simplify thinking toggle styling`, `docs: update contributing guide`, `chore(sdk): regenerate types`.
 
@@ -138,7 +138,7 @@ Do not pad markdown table cells for column alignment. Use the compact form with 
 ```
 | Command | What it runs |
 |---|---|
-| `kilo serve` | The prod CLI on `$PATH`. |
+| `sonderr serve` | The prod CLI on `$PATH`. |
 ```
 
 Do **not** right-pad cells to line up columns:
@@ -146,14 +146,14 @@ Do **not** right-pad cells to line up columns:
 ```
 | Command                       | What it runs             |
 | ----------------------------- | ------------------------ |
-| `kilo serve`                  | The prod CLI on `$PATH`. |
+| `sonderr serve`                  | The prod CLI on `$PATH`. |
 ```
 
 Padding makes every content change rewrite the entire table, which blows up diffs on untouched rows. Markdown files are excluded from prettier (see `.prettierignore`) so running the formatter won't re-pad them, and `script/check-md-table-padding.ts` enforces the rule in CI. Run `bun run script/check-md-table-padding.ts --fix` to auto-rewrite padded tables.
 
 ## Commit Conventions
 
-[Conventional Commits](https://www.conventionalcommits.org/) with scopes matching packages: `vscode`, `cli`, `agent-manager`, `sdk`, `ui`, `i18n`, `kilo-docs`, `gateway`, `telemetry`, `desktop`. Omit scope when spanning multiple packages.
+[Conventional Commits](https://www.conventionalcommits.org/) with scopes matching packages: `vscode`, `cli`, `agent-manager`, `sdk`, `ui`, `i18n`, `sonderr-docs`, `gateway`, `telemetry`, `desktop`. Omit scope when spanning multiple packages.
 
 ## Changesets
 
@@ -167,47 +167,47 @@ PR descriptions should explain **what** changed, **why** the change is needed, a
 
 ## GitHub Issues
 
-When creating or managing GitHub issues for the VS Code extension or JetBrains plugin via `gh`, load `.kilo/skills/gh-issues/SKILL.md`. It covers templates, project boards (`VS Code Extension`, `Jetbrains Plugin`), title conventions, and the `gh auth refresh -s project` recovery path.
+When creating or managing GitHub issues for the VS Code extension or JetBrains plugin via `gh`, load `.sonderr/skills/gh-issues/SKILL.md`. It covers templates, project boards (`VS Code Extension`, `Jetbrains Plugin`), title conventions, and the `gh auth refresh -s project` recovery path.
 
 ## Fork Merge Process
 
-Kilo CLI is a fork of [opencode](https://github.com/anomalyco/opencode).
+Sonderr CLI is a fork of [sonderr](https://github.com/anomalyco/sonderr).
 
-**Very important**: when planning or coding, update shared files with OpenCode as last resort! Everything is shared code from OpenCode, except folders that contain `kilo` in the name or have a parent directory that contains `kilo` in the name. Example of kilo specific folders: `packages/opencode/src/kilocode/` and `packages/kilo-docs/`. Always look for ways to implement your feature or fix in a way that minimizes changes to shared code.
+**Very important**: when planning or coding, update shared files with Sonderr as last resort! Everything is shared code from Sonderr, except folders that contain `sonderr` in the name or have a parent directory that contains `sonderr` in the name. Example of sonderr specific folders: `packages/cli/src/sonderr/` and `packages/sonderr-docs/`. Always look for ways to implement your feature or fix in a way that minimizes changes to shared code.
 
 ### Minimizing Merge Conflicts
 
-We regularly merge upstream changes from opencode. To minimize merge conflicts and keep the sync process smooth:
+We regularly merge upstream changes from sonderr. To minimize merge conflicts and keep the sync process smooth:
 
-1. **Prefer `kilocode` directories** - Place Kilo-specific code in dedicated directories whenever possible:
-   - `packages/opencode/src/kilocode/` - Kilo-specific source code
-   - `packages/opencode/test/kilocode/` - Kilo-specific tests
-   - `packages/kilo-gateway/` - The Kilo Gateway package
+1. **Prefer `sonderr` directories** - Place Sonderr-specific code in dedicated directories whenever possible:
+   - `packages/cli/src/sonderr/` - Sonderr-specific source code
+   - `packages/cli/test/sonderr/` - Sonderr-specific tests
+   - `packages/sonderr-gateway/` - The Sonderr Gateway package
 
-2. **Minimize changes to shared files** - When you must modify files that exist in upstream opencode, keep changes as small and isolated as possible.
+2. **Minimize changes to shared files** - When you must modify files that exist in upstream sonderr, keep changes as small and isolated as possible.
 
-3. **Use `kilocode_change` markers** - When modifying shared code, mark your changes with `kilocode_change` comments so they can be easily identified during merges.
-   Do not use these markers in files within directories with kilo in the name
+3. **Use `sonderr_change` markers** - When modifying shared code, mark your changes with `sonderr_change` comments so they can be easily identified during merges.
+   Do not use these markers in files within directories with sonderr in the name
 
-4. **Avoid restructuring upstream code** - Don't refactor or reorganize code that comes from opencode unless absolutely necessary.
+4. **Avoid restructuring upstream code** - Don't refactor or reorganize code that comes from sonderr unless absolutely necessary.
 
-5. **Mirror new config keys to the cloud schema** - When adding a `kilocode_change` key to `Config.Info` in `packages/opencode/src/config/config.ts`, also add the matching JSON Schema entry in `apps/web/src/app/config.json/extras.ts` in the [cloud repo](https://github.com/Kilo-Org/cloud). See [CLI Config Schema](packages/kilo-docs/pages/contributing/architecture/config-schema.md) for the step-by-step.
+5. **Mirror new config keys to the cloud schema** - When adding a `sonderr_change` key to `Config.Info` in `packages/cli/src/config/config.ts`, also add the matching JSON Schema entry in `apps/web/src/app/config.json/extras.ts` in the [cloud repo](https://github.com/Sonderr-Org/cloud). See [CLI Config Schema](packages/sonderr-docs/pages/contributing/architecture/config-schema.md) for the step-by-step.
 
 The goal is to keep our diff from upstream as small as possible, making regular merges straightforward and reducing the risk of conflicts.
 
 ### Git conflict style
 
-`bun install` sets `merge.conflictStyle=zdiff3` repo-locally via `script/setup-git.ts` (wired into `postinstall`). Conflicts include the common ancestor between `|||||||` and `=======`, which is what `script/upstream/` and `mergiraf` rely on for structural resolution and what makes manual resolution on shared opencode files tractable. If you've overridden it in your user config, the repo-local setting takes precedence — don't override it back.
+`bun install` sets `merge.conflictStyle=zdiff3` repo-locally via `script/setup-git.ts` (wired into `postinstall`). Conflicts include the common ancestor between `|||||||` and `=======`, which is what `script/upstream/` and `mergiraf` rely on for structural resolution and what makes manual resolution on shared sonderr files tractable. If you've overridden it in your user config, the repo-local setting takes precedence — don't override it back.
 
-### Kilocode Change Markers
+### Sonderr Change Markers
 
-When editing shared upstream files, mark Kilo-specific lines with `kilocode_change` comments so future merges can find them. The basic forms are:
+When editing shared upstream files, mark Sonderr-specific lines with `sonderr_change` comments so future merges can find them. The basic forms are:
 
-- Single line: `const value = 42 // kilocode_change`
-- Multi-line block: wrap with `// kilocode_change start` / `// kilocode_change end`
-- New file in a shared path: `// kilocode_change - new file` at the top
-- JSX/TSX: use `{/* kilocode_change */}` (and `{/* kilocode_change start */}` / `end`)
+- Single line: `const value = 42 // sonderr_change`
+- Multi-line block: wrap with `// sonderr_change start` / `// sonderr_change end`
+- New file in a shared path: `// sonderr_change - new file` at the top
+- JSX/TSX: use `{/* sonderr_change */}` (and `{/* sonderr_change start */}` / `end`)
 
-Markers are NOT needed in paths that contain `kilocode` in the name (e.g. `packages/opencode/src/kilocode/`, `packages/opencode/test/kilocode/`) — these are entirely Kilo Code additions and won't conflict with upstream.
+Markers are NOT needed in paths that contain `sonderr` in the name (e.g. `packages/cli/src/sonderr/`, `packages/cli/test/sonderr/`) — these are entirely Sonderr additions and won't conflict with upstream.
 
-For decision rules on when to keep changes inline vs. extract Kilo logic, marker placement guidance, and verification commands, load `.kilo/skills/kilocode-merge-minimizer/SKILL.md`.
+For decision rules on when to keep changes inline vs. extract Sonderr logic, marker placement guidance, and verification commands, load `.sonderr/skills/sonderr-merge-minimizer/SKILL.md`.

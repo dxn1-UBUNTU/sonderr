@@ -1,8 +1,8 @@
-// kilocode_change - new file
+// sonderr_change - new file
 import { RGBA } from "@opentui/core"
 import { For, type JSX } from "solid-js"
 import { useTheme, tint } from "@tui/context/theme"
-import { tui } from "@/kilocode/cli/logo"
+import { tui } from "@/sonderr/cli/logo"
 
 // Shadow markers (rendered chars in parens):
 // _ = full shadow cell (space with bg=shadow)
@@ -10,7 +10,7 @@ import { tui } from "@/kilocode/cli/logo"
 // ~ = shadow top only (▀ with fg=shadow)
 const SHADOW_MARKER = /[_^~]/
 
-export function KiloLogo() {
+export function SonderrLogo() {
   const { theme } = useTheme()
   const yellow = RGBA.fromHex("#F8F675")
   const logo = tui()

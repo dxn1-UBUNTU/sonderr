@@ -1,11 +1,11 @@
 import { describe, expect } from "bun:test"
 import { Effect } from "effect"
-import { Catalog } from "@opencode-ai/core/catalog"
-import { PluginV2 } from "@opencode-ai/core/plugin"
-import { PluginHost } from "@opencode-ai/core/plugin/host"
-import { ProviderPlugins } from "@opencode-ai/core/plugin/provider"
-import { NvidiaPlugin } from "@opencode-ai/core/plugin/provider/nvidia"
-import { ProviderV2 } from "@opencode-ai/core/provider"
+import { Catalog } from "@sonderr/core/catalog"
+import { PluginV2 } from "@sonderr/core/plugin"
+import { PluginHost } from "@sonderr/core/plugin/host"
+import { ProviderPlugins } from "@sonderr/core/plugin/provider"
+import { NvidiaPlugin } from "@sonderr/core/plugin/provider/nvidia"
+import { ProviderV2 } from "@sonderr/core/provider"
 import { testEffect } from "../lib/effect"
 import { PluginTestLayer } from "./fixture"
 
@@ -40,8 +40,8 @@ describe("NvidiaPlugin", () => {
       expect((yield* catalog.provider.get(ProviderV2.ID.make("nvidia")))?.request.headers).toEqual({
         Existing: "value",
         "HTTP-Referer": "https://kilo.ai/",
-        "X-Title": "Kilo Code",
-        "X-BILLING-INVOKE-ORIGIN": "KiloCode",
+        "X-Title": "Sonderr",
+        "X-BILLING-INVOKE-ORIGIN": "Sonderr",
       })
       expect((yield* catalog.provider.get(ProviderV2.ID.openrouter))?.request.headers).toEqual({})
     }),
@@ -63,8 +63,8 @@ describe("NvidiaPlugin", () => {
 
       expect((yield* catalog.provider.get(ProviderV2.ID.make("nvidia")))?.request.headers).toEqual({
         "HTTP-Referer": "https://kilo.ai/",
-        "X-Title": "Kilo Code",
-        "X-BILLING-INVOKE-ORIGIN": "KiloCode",
+        "X-Title": "Sonderr",
+        "X-BILLING-INVOKE-ORIGIN": "Sonderr",
       })
     }),
   )
@@ -89,7 +89,7 @@ describe("NvidiaPlugin", () => {
 
       expect((yield* catalog.provider.get(ProviderV2.ID.make("nvidia")))?.request.headers).toEqual({
         "HTTP-Referer": "https://kilo.ai/",
-        "X-Title": "Kilo Code",
+        "X-Title": "Sonderr",
         "X-BILLING-INVOKE-ORIGIN": "CustomOrigin",
       })
     }),

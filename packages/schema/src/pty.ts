@@ -4,7 +4,7 @@ import { Schema } from "effect"
 import { optional } from "./schema"
 import { define, inventory } from "./event"
 import { ascending } from "./identifier"
-import { SessionID } from "./session-id" // kilocode_change
+import { SessionID } from "./session-id" // sonderr_change
 import { NonNegativeInt, PositiveInt, statics } from "./schema"
 
 const IDSchema = Schema.String.check(Schema.isStartsWith("pty")).pipe(Schema.brand("PtyID"))
@@ -29,7 +29,7 @@ export const Info = Schema.Struct({
   status: Schema.Literals(["running", "exited"]),
   pid: NonNegativeInt,
   exitCode: optional(NonNegativeInt),
-  sessionID: optional(Schema.NullOr(SessionID)), // kilocode_change - Kilo associates PTYs with sessions
+  sessionID: optional(Schema.NullOr(SessionID)), // sonderr_change - Sonderr associates PTYs with sessions
 }).annotate({ identifier: "Pty" })
 export interface Info extends Schema.Schema.Type<typeof Info> {}
 
@@ -45,14 +45,14 @@ export const CreateInput = Schema.Struct({
   cwd: optional(Schema.String),
   title: optional(Schema.String),
   env: optional(Schema.Record(Schema.String, Schema.String)),
-  // kilocode_change start - spawn with initial terminal dimensions
+  // sonderr_change start - spawn with initial terminal dimensions
   size: optional(
     Schema.Struct({
       rows: PositiveInt,
       cols: PositiveInt,
     }),
   ),
-  // kilocode_change end
+  // sonderr_change end
 })
 export interface CreateInput extends Schema.Schema.Type<typeof CreateInput> {}
 

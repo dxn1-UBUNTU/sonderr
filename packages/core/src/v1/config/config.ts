@@ -16,14 +16,14 @@ import { ConfigPluginV1 } from "./plugin"
 import { ConfigProviderV1 } from "./provider"
 import { ConfigServerV1 } from "./server"
 import { ConfigSkillsV1 } from "./skills"
-// kilocode_change start
+// sonderr_change start
 import { ZodOverride } from "../../effect-zod"
 import {
-  IndexingConfig as KiloIndexingConfig,
-  IndexingSchema as KiloIndexingSchema,
-} from "@kilocode/kilo-indexing/config"
+  IndexingConfig as SonderrIndexingConfig,
+  IndexingSchema as SonderrIndexingSchema,
+} from "@sonderr/sonderr-indexing/config"
 import z from "zod"
-// kilocode_change end
+// sonderr_change end
 
 export type Layout = ConfigLayoutV1.Layout
 
@@ -32,20 +32,20 @@ export const WellKnown = Schema.Struct({
   remote_config: Schema.optional(Schema.Json),
 })
 
-// kilocode_change start - indexing configuration
-export const Indexing = KiloIndexingConfig
+// sonderr_change start - indexing configuration
+export const Indexing = SonderrIndexingConfig
 export type Indexing = z.infer<typeof Indexing>
-// kilocode_change end
+// sonderr_change end
 
 const LogLevelRef = Schema.Literals(["DEBUG", "INFO", "WARN", "ERROR"]).annotate({
   identifier: "LogLevel",
   description: "Log level",
 })
-const Percent = Schema.Number.check(Schema.isGreaterThan(0), Schema.isLessThanOrEqualTo(100)) // kilocode_change
+const Percent = Schema.Number.check(Schema.isGreaterThan(0), Schema.isLessThanOrEqualTo(100)) // sonderr_change
 
-const IndexingRef = KiloIndexingSchema.annotate({ [ZodOverride]: KiloIndexingConfig }) // kilocode_change
+const IndexingRef = SonderrIndexingSchema.annotate({ [ZodOverride]: SonderrIndexingConfig }) // sonderr_change
 
-// kilocode_change start
+// sonderr_change start
 /** Schema for AI-generated commit message configuration. */
 const CommitMessageSchema = Schema.optional(
   Schema.Struct({
@@ -55,7 +55,7 @@ const CommitMessageSchema = Schema.optional(
     }),
   }),
 ).annotate({ description: "Configuration for AI-generated commit messages" })
-// kilocode_change end
+// sonderr_change end
 
 export const Info = Schema.Struct({
   $schema: Schema.optional(Schema.String).annotate({
@@ -64,10 +64,10 @@ export const Info = Schema.Struct({
   shell: Schema.optional(Schema.String).annotate({ description: "Default shell to use for terminal and bash tool" }),
   logLevel: Schema.optional(LogLevelRef).annotate({ description: "Log level" }),
   server: Schema.optional(ConfigServerV1.Server).annotate({
-    description: "Server configuration for the kilo serve command", // kilocode_change
+    description: "Server configuration for the sonderr serve command", // sonderr_change
   }),
   command: Schema.optional(Schema.Record(Schema.String, ConfigCommandV1.Info)).annotate({
-    description: "Command configuration, see https://kilo.ai/docs/customize/workflows", // kilocode_change
+    description: "Command configuration, see https://kilo.ai/docs/customize/workflows", // sonderr_change
   }),
   skills: Schema.optional(ConfigSkillsV1.Info).annotate({ description: "Additional skill folder paths" }),
   references: Schema.optional(ConfigReference.Info).annotate({
@@ -99,12 +99,12 @@ export const Info = Schema.Struct({
   enabled_providers: Schema.optional(Schema.mutable(Schema.Array(Schema.String))).annotate({
     description: "When set, ONLY these providers will be enabled. All other providers will be ignored",
   }),
-  // kilocode_change start
-  // NOTE: Any new kilocode_change key added to Config.Info must also be mirrored in
+  // sonderr_change start
+  // NOTE: Any new sonderr_change key added to Config.Info must also be mirrored in
   // apps/web/src/app/config.json/extras.ts in the cloud repo, otherwise
   // $schema: https://app.kilo.ai/config.json will not recognize it.
   remote_control: Schema.optional(Schema.Boolean).annotate({
-    description: "Enable remote control of sessions via Kilo Cloud. Equivalent to running /remote on startup.",
+    description: "Enable remote control of sessions via Sonderr Cloud. Equivalent to running /remote on startup.",
   }),
   auto_collapse_reasoning: Schema.optional(Schema.Boolean).annotate({
     description: "Automatically collapse reasoning blocks after the agent finishes writing them",
@@ -114,14 +114,14 @@ export const Info = Schema.Struct({
     Schema.Struct({
       context_sidebar_width: Schema.optional(
         Schema.Int.check(Schema.isBetween({ minimum: 250, maximum: 800 })).annotate({
-          description: "Width of the Kilo Console project context sidebar in pixels",
+          description: "Width of the Sonderr Console project context sidebar in pixels",
         }),
       ),
       diff_style: Schema.optional(Schema.Literals(["unified", "split"])).annotate({
-        description: "Default diff layout in Kilo Console project reviews",
+        description: "Default diff layout in Sonderr Console project reviews",
       }),
     }),
-  ).annotate({ description: "Kilo Console user interface configuration" }),
+  ).annotate({ description: "Sonderr Console user interface configuration" }),
   terminal_command_display: Schema.optional(Schema.Literals(["expanded", "collapsed"])).annotate({
     description: "Controls whether terminal command blocks are expanded or collapsed by default in the VS Code chat UI",
   }),
@@ -134,7 +134,7 @@ export const Info = Schema.Struct({
       "Controls whether MCP and generic tool blocks are expanded or collapsed by default in the VS Code chat UI",
   }),
   hide_prompt_training_models: Schema.optional(Schema.Boolean).annotate({
-    description: "Hide Kilo Gateway models that may train on your prompts from model listings",
+    description: "Hide Sonderr Gateway models that may train on your prompts from model listings",
   }),
   privacy_mode: Schema.optional(Schema.Boolean).annotate({
     description:
@@ -185,7 +185,7 @@ export const Info = Schema.Struct({
     description:
       "Default agent to use when none is specified. Must be a primary agent. Falls back to 'code' if not set or if the specified agent is invalid.",
   }),
-  // kilocode_change end
+  // sonderr_change end
   subagent_depth: Schema.optional(NonNegativeInt).annotate({
     description: "Maximum subagent nesting depth. Defaults to 1, which prevents subagents from launching subagents.",
   }),
@@ -204,11 +204,11 @@ export const Info = Schema.Struct({
         // primary
         plan: Schema.optional(ConfigAgentV1.Info),
         build: Schema.optional(ConfigAgentV1.Info),
-        // kilocode_change start
+        // sonderr_change start
         debug: Schema.optional(ConfigAgentV1.Info),
         orchestrator: Schema.optional(ConfigAgentV1.Info),
         ask: Schema.optional(ConfigAgentV1.Info),
-        // kilocode_change end
+        // sonderr_change end
         // subagent
         general: Schema.optional(ConfigAgentV1.Info),
         explore: Schema.optional(ConfigAgentV1.Info),
@@ -220,10 +220,10 @@ export const Info = Schema.Struct({
       }),
       [Schema.Record(Schema.String, ConfigAgentV1.Info)],
     ),
-    // kilocode_change start
-  ).annotate({ description: "Agent configuration, see https://kilo.ai/docs/customize/custom-subagents" }), // kilocode_change
+    // sonderr_change start
+  ).annotate({ description: "Agent configuration, see https://kilo.ai/docs/customize/custom-subagents" }), // sonderr_change
   provider: Schema.optional(Schema.Record(Schema.String, Schema.NullOr(ConfigProviderV1.Info))).annotate({
-    // kilocode_change end
+    // sonderr_change end
     description: "Custom provider configurations and model overrides",
   }),
   mcp: Schema.optional(
@@ -245,14 +245,14 @@ export const Info = Schema.Struct({
   tools: Schema.optional(Schema.Record(Schema.String, Schema.Boolean)),
   web_search: Schema.optional(Schema.Boolean).annotate({
     description: "Make web search available to models from all providers (default: false)",
-  }), // kilocode_change
+  }), // sonderr_change
   attachment: Schema.optional(ConfigAttachmentV1.Info).annotate({
     description: "Attachment processing configuration, including image size limits and resizing behavior",
   }),
   enterprise: Schema.optional(
     Schema.Struct({ url: Schema.optional(Schema.String).annotate({ description: "Enterprise URL" }) }),
   ),
-  commit_message: CommitMessageSchema, // kilocode_change
+  commit_message: CommitMessageSchema, // sonderr_change
   tool_output: Schema.optional(
     Schema.Struct({
       max_lines: Schema.optional(PositiveInt).annotate({
@@ -271,12 +271,12 @@ export const Info = Schema.Struct({
       auto: Schema.optional(Schema.Boolean).annotate({
         description: "Enable automatic compaction when context is full (default: true)",
       }),
-      // kilocode_change start
+      // sonderr_change start
       threshold_percent: Schema.optional(Schema.NullOr(Percent)).annotate({
         description:
           "Percentage of the model input/context window that triggers automatic compaction. The reserved safety buffer still applies if it would compact sooner.",
       }),
-      // kilocode_change end
+      // sonderr_change end
       prune: Schema.optional(Schema.Boolean).annotate({
         description: "Enable pruning of old tool outputs (default: true)",
       }),
@@ -296,7 +296,7 @@ export const Info = Schema.Struct({
     Schema.Struct({
       disable_paste_summary: Schema.optional(Schema.Boolean),
       batch_tool: Schema.optional(Schema.Boolean).annotate({ description: "Enable the batch tool" }),
-      // kilocode_change start
+      // sonderr_change start
       image_generation: Schema.optional(Schema.Boolean).annotate({ description: "Enable AI image generation" }),
       image_generation_model: Schema.optional(Schema.String).annotate({
         description: "Model ID to use for image generation (default: openrouter/auto)",
@@ -310,17 +310,17 @@ export const Info = Schema.Struct({
       openTelemetry: Schema.Boolean.pipe(Schema.optional, Schema.withDecodingDefault(Effect.succeed(true))).annotate({
         description: "Enable telemetry. Set to false to opt-out.",
       }),
-      // kilocode_change end
+      // sonderr_change end
       primary_tools: Schema.optional(Schema.mutable(Schema.Array(Schema.String))).annotate({
         description: "Tools that should only be available to primary agents.",
       }),
       continue_loop_on_deny: Schema.optional(Schema.Boolean).annotate({
         description: "Continue the agent loop when a tool call is denied",
       }),
-      // kilocode_change start
+      // sonderr_change start
       sandbox: Schema.optional(Schema.Boolean).annotate({
         description:
-          "Run agent tools inside a sandbox that restricts writes to project and Kilo state directories and can restrict outbound network access",
+          "Run agent tools inside a sandbox that restricts writes to project and Sonderr state directories and can restrict outbound network access",
       }),
       sandbox_restrict_network: Schema.optional(Schema.Boolean).annotate({
         description:
@@ -330,7 +330,7 @@ export const Info = Schema.Struct({
         description:
           "Additional filesystem paths the sandbox allows writes to (e.g. ['/tmp', '/var/log']). These are merged with the default writable paths when the sandbox is active.",
       }),
-      // kilocode_change end
+      // sonderr_change end
       mcp_timeout: Schema.optional(PositiveInt).annotate({
         description: "Timeout in milliseconds for model context protocol (MCP) requests",
       }),

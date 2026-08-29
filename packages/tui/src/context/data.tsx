@@ -18,13 +18,13 @@ import type {
   SessionV2Info,
   SkillV2Info,
   V2Event,
-} from "@kilocode/sdk/v2"
-import { createStore, produce, reconcile } from "solid-js/store" // kilocode_change
+} from "@sonderr/sdk/v2"
+import { createStore, produce, reconcile } from "solid-js/store" // sonderr_change
 import { createSimpleContext } from "./helper"
 import { useSDK } from "./sdk"
 import { useEvent } from "./event"
 import { createSignal, onCleanup, onMount } from "solid-js"
-import { hydrate } from "../kilocode/hydration" // kilocode_change
+import { hydrate } from "../sonderr/hydration" // sonderr_change
 
 type LocationData = {
   agent?: AgentV2Info[]
@@ -57,14 +57,14 @@ function locationQuery(ref?: LocationRef) {
   return ref ? { directory: ref.directory, workspace: ref.workspaceID } : undefined
 }
 
-// kilocode_change start - "global" is an event-routing sentinel, not a filesystem location.
+// sonderr_change start - "global" is an event-routing sentinel, not a filesystem location.
 export function eventLocation(metadata: { directory: string; workspace?: string }): LocationRef | undefined {
   if (metadata.directory === "global") return
   return { directory: metadata.directory, workspaceID: metadata.workspace }
 }
-// kilocode_change end
+// sonderr_change end
 
-// kilocode_change start - suppress only refreshes canceled by normal TUI disposal
+// sonderr_change start - suppress only refreshes canceled by normal TUI disposal
 export function shouldReportDefaultLocationFailure(reason: unknown, disposed: boolean) {
   if (!disposed) return true
   return !(typeof reason === "object" && reason !== null && "name" in reason && reason.name === "AbortError")
@@ -79,7 +79,7 @@ export async function reportDefaultLocationFailure(
     if (shouldReportDefaultLocationFailure(reason, disposed())) report(reason)
   })
 }
-// kilocode_change end
+// sonderr_change end
 
 export const { use: useData, provider: DataProvider } = createSimpleContext({
   name: "Data",
@@ -99,7 +99,7 @@ export const { use: useData, provider: DataProvider } = createSimpleContext({
 
     const sdk = useSDK()
     const events = useEvent()
-    const syncing = new Map<string, Promise<void>>() // kilocode_change
+    const syncing = new Map<string, Promise<void>>() // sonderr_change
     const [defaultLocation, setDefaultLocation] = createSignal<LocationRef>({
       directory: sdk.directory ?? process.cwd(),
     })
@@ -405,7 +405,7 @@ export const { use: useData, provider: DataProvider } = createSimpleContext({
         case "session.next.compaction.delta":
           break
         case "session.next.compaction.ended": {
-          // kilocode_change start - legacy v1 compaction events do not carry a projectable message identity.
+          // sonderr_change start - legacy v1 compaction events do not carry a projectable message identity.
           if (!event.data.messageID || !event.data.reason) break
           const id = event.data.messageID
           const reason = event.data.reason
@@ -419,7 +419,7 @@ export const { use: useData, provider: DataProvider } = createSimpleContext({
               time: { created: event.data.timestamp },
             })
           })
-          // kilocode_change end
+          // sonderr_change end
           break
         }
         case "reference.updated":
@@ -440,7 +440,7 @@ export const { use: useData, provider: DataProvider } = createSimpleContext({
         handleEvent({
           ...event,
           data: event.properties,
-          location: eventLocation({ directory: metadata.directory, workspace: metadata.workspace }), // kilocode_change
+          location: eventLocation({ directory: metadata.directory, workspace: metadata.workspace }), // sonderr_change
         } as V2Event)
       })
       onCleanup(unsub)
@@ -460,7 +460,7 @@ export const { use: useData, provider: DataProvider } = createSimpleContext({
             return store.session.message[sessionID]
           },
           async refresh(sessionID: string) {
-            // kilocode_change start - reconcile the snapshot without losing live updates received while it was loading
+            // sonderr_change start - reconcile the snapshot without losing live updates received while it was loading
             const current = syncing.get(sessionID)
             if (current) return current
             const next = (async () => {
@@ -472,7 +472,7 @@ export const { use: useData, provider: DataProvider } = createSimpleContext({
             })().finally(() => syncing.delete(sessionID))
             syncing.set(sessionID, next)
             return next
-            // kilocode_change end
+            // sonderr_change end
           },
         },
         permission: {
@@ -592,13 +592,13 @@ export const { use: useData, provider: DataProvider } = createSimpleContext({
       },
     }
 
-    // kilocode_change start - classify each rejection when it occurs so later disposal cannot hide earlier failures
+    // sonderr_change start - classify each rejection when it occurs so later disposal cannot hide earlier failures
     let disposed = false
     onCleanup(() => {
       disposed = true
     })
-    // kilocode_change end
-    // kilocode_change start
+    // sonderr_change end
+    // sonderr_change start
     onMount(() => {
       void Promise.all([
         reportDefaultLocationFailure(result.location.refresh(), () => disposed),
@@ -611,7 +611,7 @@ export const { use: useData, provider: DataProvider } = createSimpleContext({
         reportDefaultLocationFailure(result.location.skill.refresh(), () => disposed),
       ])
     })
-    // kilocode_change end
+    // sonderr_change end
 
     return result
   },

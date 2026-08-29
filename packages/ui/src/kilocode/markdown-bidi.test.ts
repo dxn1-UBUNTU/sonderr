@@ -33,9 +33,9 @@ describe("Markdown bidirectional rendering contract", () => {
         useMarked: () => ({ parse: async () => "" }),
         deferredHighlight: async () => {},
         fnv1a: (text) => text,
-        KiloTheme: { name: "Kilo" },
+        SonderrTheme: { name: "Sonderr" },
       }))
-      mock.module("./src/kilocode/markdown-mermaid", () => ({
+      mock.module("./src/sonderr/markdown-mermaid", () => ({
         hasMermaid: () => false,
         preserveMermaid: () => false,
         renderMermaid: async () => {},

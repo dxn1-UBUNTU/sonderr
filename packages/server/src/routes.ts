@@ -1,17 +1,17 @@
-import { Database } from "@opencode-ai/core/database/database"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { httpClient } from "@opencode-ai/core/effect/app-node-platform"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { EventV2 } from "@opencode-ai/core/event"
-import { Credential } from "@opencode-ai/core/credential"
-import { PermissionSaved } from "@opencode-ai/core/permission/saved"
-import { PtyTicket } from "@opencode-ai/core/pty/ticket"
-import { Pty } from "@opencode-ai/core/pty" // kilocode_change
-import { SessionV2 } from "@opencode-ai/core/session"
-import { SessionExecution } from "@opencode-ai/core/session/execution"
-import { LocationServiceMap } from "@opencode-ai/core/location-service-map"
-import { SessionExecutionLocal } from "@opencode-ai/core/session/execution/local"
-import { ToolOutputStore } from "@opencode-ai/core/tool-output-store"
+import { Database } from "@sonderr/core/database/database"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { httpClient } from "@sonderr/core/effect/app-node-platform"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { EventV2 } from "@sonderr/core/event"
+import { Credential } from "@sonderr/core/credential"
+import { PermissionSaved } from "@sonderr/core/permission/saved"
+import { PtyTicket } from "@sonderr/core/pty/ticket"
+import { Pty } from "@sonderr/core/pty" // sonderr_change
+import { SessionV2 } from "@sonderr/core/session"
+import { SessionExecution } from "@sonderr/core/session/execution"
+import { LocationServiceMap } from "@sonderr/core/location-service-map"
+import { SessionExecutionLocal } from "@sonderr/core/session/execution/local"
+import { ToolOutputStore } from "@sonderr/core/tool-output-store"
 import { HttpRouter, HttpServer } from "effect/unstable/http"
 import { HttpApiBuilder } from "effect/unstable/httpapi"
 import { Layer, Option } from "effect"
@@ -19,7 +19,7 @@ import { Api } from "./api"
 import { ServerAuth } from "./auth"
 import { handlers } from "./handlers"
 import { authorizationLayer } from "./middleware/authorization"
-import * as ReferenceReconciler from "./kilocode/reference-reconciler" // kilocode_change
+import * as ReferenceReconciler from "./sonderr/reference-reconciler" // sonderr_change
 import { schemaErrorLayer } from "./middleware/schema-error"
 import { PtyEnvironment } from "./pty-environment"
 import { layer as locationLayer } from "./location"
@@ -33,7 +33,7 @@ const applicationServices = LayerNode.group([
   SessionV2.node,
   PermissionSaved.node,
   PtyTicket.node,
-  Pty.shutdownNode, // kilocode_change
+  Pty.shutdownNode, // sonderr_change
   Credential.node,
   PtyEnvironment.node,
   LocationServiceMap.node,
@@ -42,13 +42,13 @@ const applicationServices = LayerNode.group([
 export function createRoutes(password?: string) {
   return makeRoutes(
     password
-      ? ServerAuth.Config.configLayer({ username: "opencode", password: Option.some(password) })
+      ? ServerAuth.Config.configLayer({ username: "sonderr", password: Option.some(password) })
       : ServerAuth.Config.layer,
   )
 }
 
 export function createEmbeddedRoutes() {
-  return makeRoutes(ServerAuth.Config.configLayer({ username: "opencode", password: Option.none() }))
+  return makeRoutes(ServerAuth.Config.configLayer({ username: "sonderr", password: Option.none() }))
 }
 
 function makeRoutes<AuthError, AuthServices>(auth: Layer.Layer<ServerAuth.Config, AuthError, AuthServices>) {
@@ -57,12 +57,12 @@ function makeRoutes<AuthError, AuthServices>(auth: Layer.Layer<ServerAuth.Config
   return HttpApiBuilder.layer(Api, { openapiPath: "/openapi.json" }).pipe(
     Layer.provide(handlers),
     Layer.provide(sessionLocationLayer),
-    Layer.provide(locationLayer), // kilocode_change - standalone server has no Kilo config reconciler
+    Layer.provide(locationLayer), // sonderr_change - standalone server has no Sonderr config reconciler
     Layer.provide(authorizationLayer),
     Layer.provide(schemaErrorLayer),
     Layer.provide(auth),
     Layer.provide(serviceLayer),
-    HttpRouter.provideRequest(ReferenceReconciler.noop), // kilocode_change - request-scoped; no Kilo reconciler outside the CLI
+    HttpRouter.provideRequest(ReferenceReconciler.noop), // sonderr_change - request-scoped; no Sonderr reconciler outside the CLI
   )
 }
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-// kilocode_change - new file
+// sonderr_change - new file
 
 /**
  * Greps tracked files for forbidden strings that must not appear in the repo.
@@ -22,42 +22,42 @@ const SELF = path.relative(ROOT, import.meta.path).replaceAll("\\", "/")
 const forbidden: { pattern: string; reason: string; allow?: string[] }[] = [
   { pattern: "opncd.ai/s/", reason: "legacy upstream share URL pattern" },
   {
-    pattern: "github.com/anomalyco/opencode",
-    reason: "upstream repo URL -- should be Kilo-Org/kilocode",
+    pattern: "github.com/anomalyco/sonderr",
+    reason: "upstream repo URL -- should be Sonderr-Org/sonderr",
     allow: [
       "AGENTS.md",
       "README.md",
       "translations/README.",
-      ".opencode/glossary/",
-      "packages/kilo-vscode/AGENTS.md",
-      "packages/kilo-docs/source-links.md",
+      ".sonderr/glossary/",
+      "packages/sonderr-vscode/AGENTS.md",
+      "packages/sonderr-docs/source-links.md",
       "patches/",
       "script/upstream/",
       "translations/",
     ],
   },
   {
-    pattern: "sst/opencode",
-    reason: "old upstream org path -- should be Kilo-Org/kilocode",
-    allow: [".kilo/agent/upstream-merge.md", "script/upstream/"],
+    pattern: "sst/sonderr",
+    reason: "old upstream org path -- should be Sonderr-Org/sonderr",
+    allow: [".sonderr/agent/upstream-merge.md", "script/upstream/"],
   },
-  { pattern: `"HTTP-Referer": "https://opencode.ai/"`, reason: "attributes outbound LLM traffic to upstream" },
-  { pattern: `"http-referer": "https://opencode.ai/"`, reason: "attributes outbound LLM traffic to upstream" },
-  { pattern: "Tell OpenCode what to do differently", reason: "direct-mode permission UI uses upstream branding" },
-  { pattern: "until OpenCode is restarted", reason: "permission copy uses upstream branding" },
-  { pattern: "OpenCode's managed cache", reason: "Scout tool description uses upstream branding" },
+  { pattern: `"HTTP-Referer": "https://sonderr.ai/"`, reason: "attributes outbound LLM traffic to upstream" },
+  { pattern: `"http-referer": "https://sonderr.ai/"`, reason: "attributes outbound LLM traffic to upstream" },
+  { pattern: "Tell Sonderr what to do differently", reason: "direct-mode permission UI uses upstream branding" },
+  { pattern: "until Sonderr is restarted", reason: "permission copy uses upstream branding" },
+  { pattern: "Sonderr's managed cache", reason: "Scout tool description uses upstream branding" },
 
   // Candidates -- enable once the underlying call sites have been rebranded.
   // Each one currently fires on real leaks; uncomment after fixing the listed
   // file(s) (and add an allowlist if there are unavoidable legitimate hits).
   //
-  // { pattern: "opencode.ai/auth", reason: "upstream auth URL -- providers.ts opencode-provider help text" },
-  // { pattern: "opencode.ai/go", reason: "upstream upsell URL -- dialog-go-upsell.tsx" },
-  // { pattern: "opencode.ai/docs", reason: "upstream docs URL -- config.ts schema descriptions, providers.ts cloudflare help" },
-  // { pattern: "opencode.ai/tui.json", reason: "upstream-hosted schema URL -- tui-migrate.ts" },
+  // { pattern: "sonderr.ai/auth", reason: "upstream auth URL -- providers.ts sonderr-provider help text" },
+  // { pattern: "sonderr.ai/go", reason: "upstream upsell URL -- dialog-go-upsell.tsx" },
+  // { pattern: "sonderr.ai/docs", reason: "upstream docs URL -- config.ts schema descriptions, providers.ts cloudflare help" },
+  // { pattern: "sonderr.ai/tui.json", reason: "upstream-hosted schema URL -- tui-migrate.ts" },
   // { pattern: `?? "https://opncd.ai"`, reason: "default share base URL still points at upstream -- share-next.ts" },
-  // { pattern: "opencode.ai/theme.json", reason: "upstream-hosted theme JSON-Schema URL -- theme/*.json $schema fields" },
-  // { pattern: "opencode.ai/desktop-theme.json", reason: "upstream-hosted desktop theme schema URL" },
+  // { pattern: "sonderr.ai/theme.json", reason: "upstream-hosted theme JSON-Schema URL -- theme/*.json $schema fields" },
+  // { pattern: "sonderr.ai/desktop-theme.json", reason: "upstream-hosted desktop theme schema URL" },
 ]
 
 const isAllowed = (file: string, allow?: string[]) => {

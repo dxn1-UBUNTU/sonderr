@@ -5,11 +5,11 @@
  * external_directory approval before edit approval. Named project references
  * are read-oriented and deliberately are not accepted by mutation tools.
  */
-// kilocode_change - preserve named-reference mutation constraint documentation
+// sonderr_change - preserve named-reference mutation constraint documentation
 export * as EditTool from "./edit"
 
-import { ToolFailure } from "@opencode-ai/llm"
-import { FileDiff } from "@opencode-ai/schema/file-diff"
+import { ToolFailure } from "@sonderr/llm"
+import { FileDiff } from "@sonderr/schema/file-diff"
 import { createTwoFilesPatch, diffLines } from "diff"
 import { Effect, Layer, Schema } from "effect"
 import { makeLocationNode } from "../effect/app-node"
@@ -17,7 +17,7 @@ import { FileMutation } from "../file-mutation"
 import { FSUtil } from "../fs-util"
 import { LocationMutation } from "../location-mutation"
 import { PermissionV2 } from "../permission"
-import { ToolOutputStore } from "../tool-output-store" // kilocode_change
+import { ToolOutputStore } from "../tool-output-store" // sonderr_change
 import { ToolRegistry } from "./registry"
 import { Tool } from "./tool"
 import { Tools } from "./tools"
@@ -42,7 +42,7 @@ export const Output = Schema.Struct({
 })
 export type Output = typeof Output.Type
 
-// kilocode_change start - keep durable/SSE tool records bounded without hiding normal-sized diff previews
+// sonderr_change start - keep durable/SSE tool records bounded without hiding normal-sized diff previews
 const compact = (output: Output): Output => {
   if (Buffer.byteLength(JSON.stringify(output), "utf-8") <= ToolOutputStore.MAX_BYTES) return output
   return {
@@ -55,7 +55,7 @@ const compact = (output: Output): Output => {
     })),
   }
 }
-// kilocode_change end
+// sonderr_change end
 
 const normalizeLineEndings = (text: string) => text.replaceAll("\r\n", "\n")
 const detectLineEnding = (text: string): "\n" | "\r\n" => (text.includes("\r\n") ? "\r\n" : "\n")
@@ -121,8 +121,8 @@ const layer = Layer.effectDiscard(
               "Replace exact text in one file. Relative paths resolve within the active Location. Absolute paths inside the Location are accepted. Explicit external absolute paths require external_directory approval before edit approval.",
             input: Input,
             output: Output,
-            structured: Output, // kilocode_change
-            toStructuredOutput: ({ output }) => compact(output), // kilocode_change
+            structured: Output, // sonderr_change
+            toStructuredOutput: ({ output }) => compact(output), // sonderr_change
             toModelOutput: ({ input, output }) => [
               { type: "text", text: toModelOutput(output, input.oldString, input.newString) },
             ],

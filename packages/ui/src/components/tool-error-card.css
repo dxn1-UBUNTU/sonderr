@@ -1,7 +1,7 @@
 [data-component="card"][data-kind="tool-error-card"],
 [data-component="card"][data-kind="tool-error-card"][data-variant="error"] {
-  background-color: transparent; /* kilocode_change — override restored card background */
-  border: none; /* kilocode_change — override restored card border */
+  background-color: transparent; /* sonderr_change — override restored card background */
+  border: none; /* sonderr_change — override restored card border */
   --card-pad-y: 8px;
   --card-line-pad: 12px;
 

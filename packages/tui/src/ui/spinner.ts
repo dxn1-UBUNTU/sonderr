@@ -1,9 +1,9 @@
 import type { ColorInput } from "@opentui/core"
 import { RGBA } from "@opentui/core"
 
-// kilocode_change start - local spinner renderable stays on Kilo's active OpenTUI runtime
+// sonderr_change start - local spinner renderable stays on Sonderr's active OpenTUI runtime
 export type ColorGenerator = (frame: number, char: number, frames: number, chars: number) => ColorInput
-// kilocode_change end
+// sonderr_change end
 
 interface AdvancedGradientOptions {
   colors: ColorInput[]

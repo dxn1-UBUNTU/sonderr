@@ -1,5 +1,5 @@
 import { describe, expect } from "bun:test"
-import { join } from "node:path" // kilocode_change - use native separators in cross-platform tests
+import { join } from "node:path" // sonderr_change - use native separators in cross-platform tests
 import { Effect, FileSystem, Option } from "effect"
 import { write, type Output } from "../src"
 import { it } from "./effect"
@@ -16,8 +16,8 @@ describe("HttpApiCodegen.write", () => {
       yield* write(output, "/generated")
 
       expect(writes).toEqual([
-        { path: join("/generated", "session.ts"), content: "export const session = {}\n" }, // kilocode_change
-        { path: join("/generated", ".httpapi-codegen.json"), content: '[\n  "session.ts"\n]\n' }, // kilocode_change
+        { path: join("/generated", "session.ts"), content: "export const session = {}\n" }, // sonderr_change
+        { path: join("/generated", ".httpapi-codegen.json"), content: '[\n  "session.ts"\n]\n' }, // sonderr_change
       ])
     }).pipe(
       Effect.provideService(
@@ -56,7 +56,7 @@ describe("HttpApiCodegen.write", () => {
           writeFileString: () => Effect.void,
         }),
       ),
-      Effect.tap(() => Effect.sync(() => expect(removed).toEqual([join("/generated", "old.ts")]))), // kilocode_change
+      Effect.tap(() => Effect.sync(() => expect(removed).toEqual([join("/generated", "old.ts")]))), // sonderr_change
     )
   })
 

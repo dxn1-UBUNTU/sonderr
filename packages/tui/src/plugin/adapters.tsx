@@ -1,4 +1,4 @@
-import type { TuiDialogSelectOption, TuiPluginApi, TuiSlotProps } from "@kilocode/plugin/tui"
+import type { TuiDialogSelectOption, TuiPluginApi, TuiSlotProps } from "@sonderr/plugin/tui"
 import type { TuiConfig } from "../config"
 import type { useEvent } from "../context/event"
 import type { useRoute } from "../context/route"
@@ -6,7 +6,7 @@ import type { useSDK } from "../context/sdk"
 import type { useSync } from "../context/sync"
 import type { useTheme } from "../context/theme"
 import { Dialog as DialogUI, type useDialog } from "../ui/dialog"
-import type { useOpencodeKeymap } from "../keymap"
+import type { useSonderrKeymap } from "../keymap"
 import type { useKV } from "../context/kv"
 import { DialogAlert } from "../ui/dialog-alert"
 import { DialogConfirm } from "../ui/dialog-confirm"
@@ -24,7 +24,7 @@ type Input = {
   version: string
   tuiConfig: TuiConfig.Resolved
   dialog: ReturnType<typeof useDialog>
-  keymap: ReturnType<typeof useOpencodeKeymap>
+  keymap: ReturnType<typeof useSonderrKeymap>
   kv: ReturnType<typeof useKV>
   route: ReturnType<typeof useRoute>
   routes: PluginRoutes
@@ -66,9 +66,9 @@ function routeCurrent(route: ReturnType<typeof useRoute>): TuiPluginApi["route"]
     }
   }
 
-  // kilocode_change start
-  if (route.data.type === "kiloclaw") return { name: "kiloclaw" }
-  // kilocode_change end
+  // sonderr_change start
+  if (route.data.type === "sonderrclaw") return { name: "sonderrclaw" }
+  // sonderr_change end
 
   return {
     name: route.data.id,
@@ -107,11 +107,11 @@ function stateApi(sync: ReturnType<typeof useSync>): TuiPluginApi["state"] {
     get config() {
       return sync.data.config
     },
-    // kilocode_change start
+    // sonderr_change start
     get globalConfig() {
       return sync.data.globalConfig
     },
-    // kilocode_change end
+    // sonderr_change end
     get provider() {
       return sync.data.provider
     },
@@ -140,7 +140,7 @@ function stateApi(sync: ReturnType<typeof useSync>): TuiPluginApi["state"] {
       todo(sessionID) {
         return sync.data.todo[sessionID] ?? []
       },
-      // kilocode_change start
+      // sonderr_change start
       processes(sessionID) {
         const own = sync.data.background_process[sessionID] ?? []
         const persistent = Object.values(sync.data.background_process)
@@ -148,7 +148,7 @@ function stateApi(sync: ReturnType<typeof useSync>): TuiPluginApi["state"] {
           .filter((item) => item.lifetime === "persistent" && item.sessionID !== sessionID)
         return [...own, ...persistent].toSorted((a, b) => a.id.localeCompare(b.id))
       },
-      // kilocode_change end
+      // sonderr_change end
       messages(sessionID) {
         return sync.data.message[sessionID] ?? []
       },
@@ -205,10 +205,10 @@ export function createTuiApiAdapters(input: Input): Omit<TuiPluginApi, "lifecycl
     keymap: input.keymap,
     mode: {
       current() {
-        return Keymap.getOpencodeModeStack(input.keymap).current()
+        return Keymap.getSonderrModeStack(input.keymap).current()
       },
       push(mode) {
-        return Keymap.getOpencodeModeStack(input.keymap).push(mode)
+        return Keymap.getSonderrModeStack(input.keymap).push(mode)
       },
     },
     route: {

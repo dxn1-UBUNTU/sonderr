@@ -1,23 +1,23 @@
 import { describe, expect } from "bun:test"
 import { DateTime, Effect, Fiber, Layer, Stream } from "effect"
 import { eq } from "drizzle-orm"
-import { Database } from "@opencode-ai/core/database/database"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { EventV2 } from "@opencode-ai/core/event"
-import { EventTable } from "@opencode-ai/core/event/sql"
-import { SessionEvent } from "@opencode-ai/core/session/event"
-import { Project } from "@opencode-ai/core/project"
-import { ProjectTable } from "@opencode-ai/core/project/sql"
-import { AbsolutePath } from "@opencode-ai/core/schema"
-import { SessionV2 } from "@opencode-ai/core/session"
-import { Prompt } from "@opencode-ai/core/session/prompt"
-import { SessionMessage } from "@opencode-ai/core/session/message"
-import { SessionProjector } from "@opencode-ai/core/session/projector"
-import { SessionExecution } from "@opencode-ai/core/session/execution"
-import { SessionInput } from "@opencode-ai/core/session/input"
-import { SessionInputTable, SessionMessageTable, SessionTable } from "@opencode-ai/core/session/sql"
-import { SessionStore } from "@opencode-ai/core/session/store"
+import { Database } from "@sonderr/core/database/database"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { EventV2 } from "@sonderr/core/event"
+import { EventTable } from "@sonderr/core/event/sql"
+import { SessionEvent } from "@sonderr/core/session/event"
+import { Project } from "@sonderr/core/project"
+import { ProjectTable } from "@sonderr/core/project/sql"
+import { AbsolutePath } from "@sonderr/core/schema"
+import { SessionV2 } from "@sonderr/core/session"
+import { Prompt } from "@sonderr/core/session/prompt"
+import { SessionMessage } from "@sonderr/core/session/message"
+import { SessionProjector } from "@sonderr/core/session/projector"
+import { SessionExecution } from "@sonderr/core/session/execution"
+import { SessionInput } from "@sonderr/core/session/input"
+import { SessionInputTable, SessionMessageTable, SessionTable } from "@sonderr/core/session/sql"
+import { SessionStore } from "@sonderr/core/session/store"
 import { testEffect } from "./lib/effect"
 
 const executionCalls: SessionV2.ID[] = []
@@ -98,7 +98,7 @@ const eventCount = (type: string) =>
       ),
   )
 
-// kilocode_change - no durable interrupt lookup: released database readers cannot decode that event type.
+// sonderr_change - no durable interrupt lookup: released database readers cannot decode that event type.
 describe("SessionV2.prompt", () => {
   it.effect("exposes the execution registry", () =>
     Effect.gen(function* () {

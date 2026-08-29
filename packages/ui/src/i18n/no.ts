@@ -52,7 +52,7 @@ export const dict: Record<Keys, string> = {
 
   "dialog.usageExceeded.freeTier.title": "Gratisgrensen er nådd",
   "dialog.usageExceeded.freeTier.description":
-    "Abonner på Kilo Go for pålitelig tilgang til de beste modellene med åpen kildekode, fra $5/måned.", // kilocode_change
+    "Abonner på Sonderr Go for pålitelig tilgang til de beste modellene med åpen kildekode, fra $5/måned.", // sonderr_change
   "dialog.usageExceeded.freeTier.actionLabel": "Abonner",
   "dialog.usageExceeded.accountRateLimit.title": "Go-grensen er nådd",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -174,7 +174,7 @@ export const dict: Record<Keys, string> = {
   "ui.patch.action.created": "Opprettet",
   "ui.patch.action.moved": "Flyttet",
   "ui.patch.action.patched": "Oppdatert",
-  "ui.patch.action.plan": "Plan", // kilocode_change
+  "ui.patch.action.plan": "Plan", // sonderr_change
 
   "ui.question.subtitle.answered": "{{count}} besvart",
   "ui.question.answer.none": "(ingen svar)",
@@ -220,7 +220,7 @@ export const dict: Record<Keys, string> = {
   "ui.sessionTurn.diffs.showLess": "Vis færre",
   "ui.sessionTurn.diffs.more": "+{{count}} filer til",
 
-  // kilocode_change start - Kilo UI compatibility
+  // sonderr_change start - Sonderr UI compatibility
   "ui.mermaid.copyPng": "Kopier PNG",
   "ui.mermaid.copySource": "Kopier Mermaid-kilde",
   "ui.mermaid.copySvg": "Kopier SVG",
@@ -239,5 +239,5 @@ export const dict: Record<Keys, string> = {
   "ui.sessionTurn.diffs.changed": "Endret",
   "ui.sessionTurn.status.delegatingWaitingPermission": "Subagent waiting for permission",
   "ui.sessionTurn.status.delegatingWaitingQuestion": "Subagent waiting for response",
-  // kilocode_change end
+  // sonderr_change end
 }

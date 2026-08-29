@@ -1,20 +1,20 @@
 export * as EventV2 from "./event"
 
 import { Cause, Context, Effect, Layer, Option, PubSub, Queue, Schema, Stream } from "effect"
-import { Event } from "@opencode-ai/schema/event"
-import type { Data, Definition, Payload } from "@opencode-ai/schema/event"
+import { Event } from "@sonderr/schema/event"
+import type { Data, Definition, Payload } from "@sonderr/schema/event"
 import { and, asc, eq, gt, inArray } from "drizzle-orm"
 import { Database } from "./database/database"
 import { EventSequenceTable, EventTable } from "./event/sql"
-import * as EventStorage from "./kilocode/event-storage" // kilocode_change - released tool content shapes
+import * as EventStorage from "./sonderr/event-storage" // sonderr_change - released tool content shapes
 import { Location } from "./location"
 import { makeGlobalNode } from "./effect/app-node"
 import { isDeepStrictEqual } from "node:util"
-import { Durable } from "@opencode-ai/schema/durable-event-manifest"
+import { Durable } from "@sonderr/schema/durable-event-manifest"
 
 export const ID = Event.ID
-export type ID = import("@opencode-ai/schema/event").ID
-export type { Data, Definition, Payload } from "@opencode-ai/schema/event"
+export type ID = import("@sonderr/schema/event").ID
+export type { Data, Definition, Payload } from "@sonderr/schema/event"
 
 export type Subscriber<D extends Definition = Definition> = (event: Payload<D>) => Effect.Effect<void>
 export type Unsubscribe = Effect.Effect<void>
@@ -57,7 +57,7 @@ const decodeSerializedEvent = (event: SerializedEvent): Payload => {
     id: event.id,
     type: definition.type,
     durable: { aggregateID: event.aggregateID, seq: event.seq, version: definition.durable.version },
-    data: Schema.decodeUnknownSync(definition.data)(EventStorage.decode(definition.type, event.data)), // kilocode_change
+    data: Schema.decodeUnknownSync(definition.data)(EventStorage.decode(definition.type, event.data)), // sonderr_change
   }
 }
 
@@ -100,7 +100,7 @@ export const readAggregate = Effect.fn("EventV2.readAggregate")(function* <A>(
         seq: event.seq,
         version: input.manifest.definitions.get(event.type)?.durable?.version,
       },
-      data: EventStorage.decode(type, event.data), // kilocode_change
+      data: EventStorage.decode(type, event.data), // sonderr_change
     })
   })
   return {
@@ -149,7 +149,7 @@ export interface Interface {
   readonly claim: (aggregateID: string, ownerID: string) => Effect.Effect<void>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Event") {}
+export class Service extends Context.Service<Service, Interface>()("@sonderr/Event") {}
 
 export const allBounded = (events: Interface, capacity: number) =>
   Effect.gen(function* () {
@@ -249,7 +249,7 @@ export const layerWith = (options?: LayerOptions) =>
                             .get()
                             .pipe(Effect.orDie)
                           const latest = row?.seq ?? -1
-                          // kilocode_change - persist tool content in the released shape
+                          // sonderr_change - persist tool content in the released shape
                           const encoded = EventStorage.encode(
                             definition.type,
                             Schema.encodeUnknownSync(definition.data)(event.data),
@@ -455,7 +455,7 @@ export const layerWith = (options?: LayerOptions) =>
             const payload = {
               id: event.id,
               type: definition.type,
-              data: Schema.decodeUnknownSync(definition.data)(EventStorage.decode(definition.type, event.data)), // kilocode_change
+              data: Schema.decodeUnknownSync(definition.data)(EventStorage.decode(definition.type, event.data)), // sonderr_change
             } as Payload
             const committed = yield* commitDurableEvent(definition, payload, {
               seq: event.seq,

@@ -1,6 +1,6 @@
 export * as SessionStore from "./store"
 
-import { and, eq, isNotNull } from "drizzle-orm" // kilocode_change
+import { and, eq, isNotNull } from "drizzle-orm" // sonderr_change
 import { Context, Effect, Layer, Schema } from "effect"
 import { Database } from "../database/database"
 import { makeGlobalNode } from "../effect/app-node"
@@ -10,7 +10,7 @@ import { SessionMessage } from "./message"
 import { SessionSchema } from "./schema"
 import { SessionMessageTable, SessionTable } from "./sql"
 import { fromRow } from "./info"
-import { normalize } from "../kilocode/session-message" // kilocode_change
+import { normalize } from "../sonderr/session-message" // sonderr_change
 
 export interface Interface {
   readonly get: (sessionID: SessionSchema.ID) => Effect.Effect<SessionSchema.Info | undefined>
@@ -24,7 +24,7 @@ export interface Interface {
   ) => Effect.Effect<{ readonly sessionID: SessionSchema.ID; readonly message: SessionMessage.Message } | undefined>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/v2/SessionStore") {}
+export class Service extends Context.Service<Service, Interface>()("@sonderr/v2/SessionStore") {}
 
 const layer = Layer.effect(
   Service,
@@ -47,13 +47,13 @@ const layer = Layer.effect(
         const row = yield* db
           .select()
           .from(SessionMessageTable)
-          .where(and(eq(SessionMessageTable.id, messageID), isNotNull(SessionMessageTable.seq))) // kilocode_change
+          .where(and(eq(SessionMessageTable.id, messageID), isNotNull(SessionMessageTable.seq))) // sonderr_change
           .get()
           .pipe(Effect.orDie)
         return row
           ? {
               sessionID: SessionSchema.ID.make(row.session_id),
-              message: yield* decodeMessage(normalize({ ...row.data, id: row.id, type: row.type })).pipe(Effect.orDie), // kilocode_change - normalize legacy tool content at the database boundary
+              message: yield* decodeMessage(normalize({ ...row.data, id: row.id, type: row.type })).pipe(Effect.orDie), // sonderr_change - normalize legacy tool content at the database boundary
             }
           : undefined
       }),

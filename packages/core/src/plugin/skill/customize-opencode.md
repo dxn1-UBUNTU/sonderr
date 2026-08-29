@@ -1,13 +1,13 @@
 <!--
   Built-in skill. Name and description are registered in code at
   packages/core/src/plugin/skill.ts
-  and CUSTOMIZE_OPENCODE_SKILL_DESCRIPTION). The body below becomes the
+  and CUSTOMIZE_SONDERR_SKILL_DESCRIPTION). The body below becomes the
   skill's content.
 -->
 
-# Customizing opencode
+# Customizing sonderr
 
-opencode validates its own config strictly and refuses to start when a field
+sonderr validates its own config strictly and refuses to start when a field
 is wrong. The shapes below cover the common surface area, but they are a
 **summary, not the source of truth**.
 
@@ -16,22 +16,22 @@ is wrong. The shapes below cover the common surface area, but they are a
 The authoritative list of every config option — with field types, enums,
 defaults, and descriptions — lives in the published JSON Schema:
 
-**<https://opencode.ai/config.json>**
+**<https://sonderr.ai/config.json>**
 
 If a field is not documented in this skill, or you need to confirm an exact
 shape before writing config, **fetch that URL and read the schema directly**
-rather than guessing. opencode hard-fails on invalid config, so the cost of a
+rather than guessing. sonderr hard-fails on invalid config, so the cost of a
 wrong shape is a broken startup.
 
-Independently, every `opencode.json` should declare
-`"$schema": "https://opencode.ai/config.json"` so the user's editor catches
+Independently, every `sonderr.json` should declare
+`"$schema": "https://sonderr.ai/config.json"` so the user's editor catches
 mistakes as they type.
 
 ## Applying changes
 
-Config is loaded once when opencode starts and is not hot-reloaded. After
-saving changes to `opencode.json`, an agent file, a skill, a plugin, or any
-other config-time file, **tell the user to quit and restart opencode** for
+Config is loaded once when sonderr starts and is not hot-reloaded. After
+saving changes to `sonderr.json`, an agent file, a skill, a plugin, or any
+other config-time file, **tell the user to quit and restart sonderr** for
 the changes to take effect. The running session will keep using the
 already-loaded config until then.
 
@@ -39,26 +39,26 @@ already-loaded config until then.
 
 | Scope                         | Path                                                                                                                      |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| Project config                | `./opencode.json`, `./opencode.jsonc`, or `.opencode/opencode.json` (opencode walks up from the cwd to the worktree root) |
-| Global config                 | `~/.config/opencode/opencode.json` (NOT `~/.opencode/`)                                                                   |
-| Project agents                | `.opencode/agent/<name>.md` or `.opencode/agents/<name>.md`                                                               |
-| Global agents                 | `~/.config/opencode/agent(s)/<name>.md`                                                                                   |
-| Project commands              | `.opencode/command/<name>.md` or `.opencode/commands/<name>.md`                                                           |
-| Global commands               | `~/.config/opencode/command(s)/<name>.md`                                                                                 |
-| Project skills                | `.opencode/skill(s)/<name>/SKILL.md`                                                                                      |
-| Global skills                 | `~/.config/opencode/skill(s)/<name>/SKILL.md`                                                                             |
+| Project config                | `./sonderr.json`, `./sonderr.jsonc`, or `.sonderr/sonderr.json` (sonderr walks up from the cwd to the worktree root) |
+| Global config                 | `~/.config/sonderr/sonderr.json` (NOT `~/.sonderr/`)                                                                   |
+| Project agents                | `.sonderr/agent/<name>.md` or `.sonderr/agents/<name>.md`                                                               |
+| Global agents                 | `~/.config/sonderr/agent(s)/<name>.md`                                                                                   |
+| Project commands              | `.sonderr/command/<name>.md` or `.sonderr/commands/<name>.md`                                                           |
+| Global commands               | `~/.config/sonderr/command(s)/<name>.md`                                                                                 |
+| Project skills                | `.sonderr/skill(s)/<name>/SKILL.md`                                                                                      |
+| Global skills                 | `~/.config/sonderr/skill(s)/<name>/SKILL.md`                                                                             |
 | External skills (auto-loaded) | `~/.claude/skills/<name>/SKILL.md`, `~/.agents/skills/<name>/SKILL.md`                                                    |
 
 Configs from each scope are deep-merged. Project overrides global. Unknown
-top-level keys in `opencode.json` are rejected with `ConfigInvalidError`.
+top-level keys in `sonderr.json` are rejected with `ConfigInvalidError`.
 
-## opencode.json
+## sonderr.json
 
 Every field is optional.
 
 ```json
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://sonderr.ai/config.json",
   "username": "string",
   "model": "provider/model-id",
   "small_model": "provider/model-id",
@@ -71,7 +71,7 @@ Every field is optional.
   "instructions": ["AGENTS.md", "docs/style.md"],
 
   "skills": {
-    "paths": [".opencode/skills", "/abs/path/to/skills"],
+    "paths": [".sonderr/skills", "/abs/path/to/skills"],
     "urls": ["https://example.com/.well-known/skills/"]
   },
 
@@ -122,10 +122,10 @@ Every field is optional.
   },
 
   "plugin": [
-    "opencode-gemini-auth",
-    "opencode-foo@1.2.3",
+    "sonderr-gemini-auth",
+    "sonderr-foo@1.2.3",
     "./local-plugin.ts",
-    ["opencode-bar", { "option": "value" }]
+    ["sonderr-bar", { "option": "value" }]
   ],
 
   "permission": {
@@ -160,12 +160,12 @@ Shape notes worth being explicit about:
 
 ## Skills
 
-opencode's skill loader scans for `**/SKILL.md` inside skill directories. The
+sonderr's skill loader scans for `**/SKILL.md` inside skill directories. The
 file is named `SKILL.md` exactly, and lives in its own folder named after the
 skill:
 
 ```
-.opencode/skills/my-skill/SKILL.md
+.sonderr/skills/my-skill/SKILL.md
 ```
 
 Frontmatter:
@@ -225,7 +225,7 @@ Local `path` values may be relative to the declaring config, absolute, or use
 
 Two ways to define an agent. Use the file form for anything non-trivial.
 
-### Inline (in `opencode.json`)
+### Inline (in `sonderr.json`)
 
 ```json
 {
@@ -244,7 +244,7 @@ Two ways to define an agent. Use the file form for anything non-trivial.
 ### File
 
 ```
-.opencode/agent/my-reviewer.md      OR     .opencode/agents/my-reviewer.md
+.sonderr/agent/my-reviewer.md      OR     .sonderr/agents/my-reviewer.md
 ```
 
 ```markdown
@@ -276,17 +276,17 @@ file, `disable: true` in frontmatter.
 
 ### Built-in agents
 
-opencode ships with `build`, `plan`, `general`, `explore`. Hidden internal agents:
+sonderr ships with `build`, `plan`, `general`, `explore`. Hidden internal agents:
 `compaction`, `title`, `summary`. To override a built-in's fields, define the
 same key in `agent: { <name>: { ... } }`.
 
 ## Commands
 
-opencode's command loader scans for `**/*.md` inside command directories. The
+sonderr's command loader scans for `**/*.md` inside command directories. The
 file is named after the command, and lives directly inside the `command` folder:
 
 ```
-.opencode/command/deploy.md
+.sonderr/command/deploy.md
 ```
 
 Frontmatter:
@@ -298,10 +298,10 @@ agent: build
 model: anthropic/claude-sonnet-4-6
 ---
 
-(command body in markdown: the prompt opencode runs, with $ARGUMENTS for the user's input)
+(command body in markdown: the prompt sonderr runs, with $ARGUMENTS for the user's input)
 ```
 
-- `template` is the command body — everything below the frontmatter — and is required: it is the prompt opencode runs when the command is invoked. Do not also put a `template:` key in the frontmatter.
+- `template` is the command body — everything below the frontmatter — and is required: it is the prompt sonderr runs when the command is invoked. Do not also put a `template:` key in the frontmatter.
 - `$ARGUMENTS` is replaced with everything the user typed after the command; `$1`, `$2`, … pull individual positional arguments.
 - Optional: `description`, `agent`, `model`, `variant`, `subtask`.
 
@@ -311,16 +311,16 @@ model: anthropic/claude-sonnet-4-6
 
 ```json
 "plugin": [
-  "opencode-gemini-auth",            // npm spec, latest
-  "opencode-foo@1.2.3",              // npm spec, pinned
+  "sonderr-gemini-auth",            // npm spec, latest
+  "sonderr-foo@1.2.3",              // npm spec, pinned
   "./local-plugin.ts",               // file path, relative to the declaring config
   "file:///abs/path/plugin.js",      // file URL
-  ["opencode-bar", { "key": "val" }] // tuple form with options
+  ["sonderr-bar", { "key": "val" }] // tuple form with options
 ]
 ```
 
 Auto-discovered plugins (no config entry needed): any `*.ts` or `*.js` file in
-`.opencode/plugin/` or `.opencode/plugins/`.
+`.sonderr/plugin/` or `.sonderr/plugins/`.
 
 A plugin module exports `default` (or any named export) of type
 `Plugin = (input: PluginInput, options?) => Promise<Hooks>`. The export is a
@@ -328,7 +328,7 @@ function, not a plain object literal, and the function returns an object
 (return `{}` if there is nothing to register).
 
 ```ts
-import type { Plugin } from "@kilocode/plugin"
+import type { Plugin } from "@sonderr/plugin"
 
 export default (async ({ client, project, directory, $ }) => {
   return {
@@ -404,7 +404,7 @@ Actions: `"allow"`, `"ask"`, `"deny"`.
 
 Per-tool value forms: `"allow"` shorthand (treated as `{"*": "allow"}`), or an
 object `{ pattern: action }`. Within an object, **insertion order matters**.
-opencode evaluates the LAST matching rule, so put broad rules first and narrow
+sonderr evaluates the LAST matching rule, so put broad rules first and narrow
 rules last.
 
 `permission: "allow"` (a string at the top level) is shorthand for "allow
@@ -424,30 +424,30 @@ the `plan` agent's permission ruleset (`edit: deny *`).
 
 ## Escape hatches
 
-When a user's config is broken and opencode won't start, these env vars help:
+When a user's config is broken and sonderr won't start, these env vars help:
 
-- `KILO_DISABLE_PROJECT_CONFIG=1`: skip the project's local `opencode.json`
-  and start from globals only. Run from the project directory, opencode loads,
+- `SONDERR_DISABLE_PROJECT_CONFIG=1`: skip the project's local `sonderr.json`
+  and start from globals only. Run from the project directory, sonderr loads,
   the user edits the broken file, then they restart without the flag.
-- `KILO_CONFIG=/path/to/file.json`: load an additional explicit config.
-- `KILO_CONFIG_CONTENT='{"$schema":"https://opencode.ai/config.json"}'`:
+- `SONDERR_CONFIG=/path/to/file.json`: load an additional explicit config.
+- `SONDERR_CONFIG_CONTENT='{"$schema":"https://sonderr.ai/config.json"}'`:
   inject inline JSON as a final local-scope merge.
-- `KILO_DISABLE_DEFAULT_PLUGINS=1`: skip default plugins.
-- `KILO_PURE=1`: skip external plugins entirely.
-- `KILO_DISABLE_EXTERNAL_SKILLS=1`,
-  `KILO_DISABLE_CLAUDE_CODE_SKILLS=1`: skip the external skill scans under
+- `SONDERR_DISABLE_DEFAULT_PLUGINS=1`: skip default plugins.
+- `SONDERR_PURE=1`: skip external plugins entirely.
+- `SONDERR_DISABLE_EXTERNAL_SKILLS=1`,
+  `SONDERR_DISABLE_CLAUDE_CODE_SKILLS=1`: skip the external skill scans under
   `~/.claude/` and `~/.agents/`.
 
 ## When proposing edits
 
 - Validate against the schema before writing. If you are unsure of a field's
   exact shape, or the field is not covered in this skill, fetch
-  `https://opencode.ai/config.json` and read the schema rather than guessing.
+  `https://sonderr.ai/config.json` and read the schema rather than guessing.
 - Preserve `$schema` and any existing fields the user did not ask to change.
 - For agent, command, skill, and plugin definitions, prefer creating new files
-  in the correct location over inlining everything in `opencode.json`.
+  in the correct location over inlining everything in `sonderr.json`.
 - If the user's existing config is malformed, point them at the env-var escape
-  hatches above so they can edit from inside opencode without breaking their
+  hatches above so they can edit from inside sonderr without breaking their
   session.
-- After saving any config change, remind the user to quit and restart opencode
+- After saving any config change, remind the user to quit and restart sonderr
   — running sessions keep using the already-loaded config.

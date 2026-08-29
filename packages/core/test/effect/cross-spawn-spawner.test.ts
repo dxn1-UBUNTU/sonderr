@@ -5,8 +5,8 @@ import path from "node:path"
 import { Effect, Exit, Stream } from "effect"
 import type * as PlatformError from "effect/PlatformError"
 import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process"
-import { CrossSpawnSpawner } from "@opencode-ai/core/cross-spawn-spawner"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
+import { CrossSpawnSpawner } from "@sonderr/core/cross-spawn-spawner"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
 import { testEffect } from "../lib/effect"
 
 const live = LayerNode.compile(CrossSpawnSpawner.node)
@@ -41,7 +41,7 @@ function alive(pid: number) {
 }
 
 async function tmpdir() {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "opencode-core-test-"))
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "sonderr-core-test-"))
   return {
     path: dir,
     async [Symbol.asyncDispose]() {
@@ -384,14 +384,14 @@ describe("cross-spawn spawner", () => {
 
         const out = yield* ChildProcessSpawner.ChildProcessSpawner.use((svc) =>
           svc.string(
-            ChildProcess.make("set", ["KILO_TEST_SHELL"], {
+            ChildProcess.make("set", ["SONDERR_TEST_SHELL"], {
               shell: true,
               extendEnv: true,
-              env: { KILO_TEST_SHELL: "ok" },
+              env: { SONDERR_TEST_SHELL: "ok" },
             }),
           ),
         )
-        expect(out).toContain("KILO_TEST_SHELL=ok")
+        expect(out).toContain("SONDERR_TEST_SHELL=ok")
       }),
     )
 

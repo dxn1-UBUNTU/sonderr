@@ -19,9 +19,9 @@
  *   - Content row cells have more than one space of padding between the
  *     content and the enclosing pipes.
  *
- * Enforcement scope (Kilo-owned paths only, to avoid upstream-sync churn):
+ * Enforcement scope (Sonderr-owned paths only, to avoid upstream-sync churn):
  *   - Any top-level markdown file (TESTING.md, AGENTS.md, README.md, …)
- *   - Any path segment containing "kilocode" or starting with "kilo-"
+ *   - Any path segment containing "sonderr" or starting with "sonderr-"
  *   - Everything else under packages/ is treated as upstream and skipped.
  *   - .changeset/** and CHANGELOG.md are skipped (auto-generated).
  */
@@ -48,11 +48,11 @@ function skip(file: string) {
   if (norm.startsWith(".changeset/")) return true
   // Glossary tables are maintained as aligned prose tables for translator
   // readability; the churn cost is low since they're rarely edited.
-  if (norm.startsWith(".opencode/glossary/")) return true
+  if (norm.startsWith(".sonderr/glossary/")) return true
   if (norm === "changelog.md" || norm.endsWith("/changelog.md")) return true
   if (norm.includes("node_modules/")) return true
   const parts = norm.split("/")
-  if (parts.some((p) => p.includes("kilocode") || p.startsWith("kilo-"))) return false
+  if (parts.some((p) => p.includes("sonderr") || p.startsWith("sonderr-"))) return false
   if (parts.length === 1) return false
   if (parts[0] === "packages") return true
   return false

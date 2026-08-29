@@ -4,7 +4,7 @@ import { Log } from "../../util/log"
 import type { Location } from "../../location"
 import type { Info } from "../../pty"
 import type { PtyID } from "../../pty/schema"
-import { KiloPtyTermination } from "./termination"
+import { SonderrPtyTermination } from "./termination"
 
 const log = Log.create({ service: "pty.registry" })
 
@@ -168,7 +168,7 @@ export function teardown(session: Active) {
     session.stopping = true
     try {
       if (!session.terminated && session.info.status !== "exited") {
-        await KiloPtyTermination.terminate(session.process)
+        await SonderrPtyTermination.terminate(session.process)
       }
       session.terminated = true
       for (const listener of session.listeners) listener.dispose()

@@ -6,12 +6,12 @@
     "jsxImportSource": "@opentui/solid",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "noUncheckedIndexedAccess": false,
-    // kilocode_change - resolve Kilo integrations retained during upstream's standalone TUI extraction
+    // sonderr_change - resolve Sonderr integrations retained during upstream's standalone TUI extraction
     "paths": {
-      "@/*": ["../opencode/src/*"],
+      "@/*": ["../sonderr/src/*"],
       "@tui/*": ["./src/*"]
     }
   },
-  // kilocode_change - include ambient declarations used by retained Kilo imports from opencode
-  "include": ["src", "test", "../opencode/src/*.d.ts"]
+  // sonderr_change - include ambient declarations used by retained Sonderr imports from sonderr
+  "include": ["src", "test", "../sonderr/src/*.d.ts"]
 }

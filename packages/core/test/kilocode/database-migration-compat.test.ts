@@ -1,19 +1,19 @@
 import { describe, expect, test } from "bun:test"
 import { Database as SQLite } from "bun:sqlite"
 import { SqliteClient } from "@effect/sql-sqlite-bun"
-import { EffectDrizzleSqlite } from "@opencode-ai/effect-drizzle-sqlite"
-import { DatabaseMigration } from "@opencode-ai/core/database/migration"
-import { migrations } from "@opencode-ai/core/database/migration.gen"
-import legacyWriterMigration from "@opencode-ai/core/database/migration/20260714141136_session-message-legacy-writer-compat"
+import { EffectDrizzleSqlite } from "@sonderr/effect-drizzle-sqlite"
+import { DatabaseMigration } from "@sonderr/core/database/migration"
+import { migrations } from "@sonderr/core/database/migration.gen"
+import legacyWriterMigration from "@sonderr/core/database/migration/20260714141136_session-message-legacy-writer-compat"
 import { Effect } from "effect"
 import type { SqlClient as SqlClientService } from "effect/unstable/sql/SqlClient"
 import { sql } from "drizzle-orm"
 import path from "path"
 import { tmpdir } from "../fixture/tmpdir"
-import { SessionHistory } from "@opencode-ai/core/session/history"
-import { SessionV2 } from "@opencode-ai/core/session"
-import { ensure } from "@opencode-ai/core/kilocode/database-compat"
-import { Database } from "@opencode-ai/core/database/database"
+import { SessionHistory } from "@sonderr/core/session/history"
+import { SessionV2 } from "@sonderr/core/session"
+import { ensure } from "@sonderr/core/sonderr/database-compat"
+import { Database } from "@sonderr/core/database/database"
 
 const make = EffectDrizzleSqlite.makeWithDefaults()
 const run = <A, E>(effect: Effect.Effect<A, E, SqlClientService>) =>
@@ -136,7 +136,7 @@ describe("database migration compatibility", () => {
 
   test("keeps released context epoch writes compatible on fresh current databases", async () => {
     await using tmp = await tmpdir()
-    const filename = path.join(tmp.path, "kilo.db")
+    const filename = path.join(tmp.path, "sonderr.db")
     await Effect.runPromise(
       Database.Service.use((service) =>
         Effect.gen(function* () {
@@ -210,7 +210,7 @@ describe("database migration compatibility", () => {
 
   test("repairs a WAL database while preserving foreign keys and sequence uniqueness", async () => {
     await using tmp = await tmpdir()
-    const filename = path.join(tmp.path, "kilo.db")
+    const filename = path.join(tmp.path, "sonderr.db")
     await Effect.runPromise(
       Effect.gen(function* () {
         const db = yield* make
@@ -250,7 +250,7 @@ describe("database migration compatibility", () => {
       Effect.gen(function* () {
         const db = yield* make
         yield* db.run(sql`CREATE TABLE session (id text PRIMARY KEY)`)
-        // stands in for a second kilo process committing the later migration's journal row
+        // stands in for a second sonderr process committing the later migration's journal row
         // while this process is already partway through applyOnly
         const first = {
           id: "20260622170816_first",
@@ -279,7 +279,7 @@ describe("database migration compatibility", () => {
 
   test("holds the write lock before re-checking the migration journal", async () => {
     await using tmp = await tmpdir()
-    const filename = path.join(tmp.path, "kilo.db")
+    const filename = path.join(tmp.path, "sonderr.db")
     let error: unknown
     // opens a second, independent connection to the same file from inside the
     // migration's own transaction: if the write reservation isn't already held

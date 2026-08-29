@@ -49,7 +49,7 @@ export const dict = {
 
   "dialog.usageExceeded.freeTier.title": "무료 한도에 도달했습니다",
   "dialog.usageExceeded.freeTier.description":
-    "Kilo Go를 구독하여 최고의 오픈 소스 모델에 안정적으로 액세스하세요. 월 $5부터 시작합니다.", // kilocode_change
+    "Sonderr Go를 구독하여 최고의 오픈 소스 모델에 안정적으로 액세스하세요. 월 $5부터 시작합니다.", // sonderr_change
   "dialog.usageExceeded.freeTier.actionLabel": "구독",
   "dialog.usageExceeded.accountRateLimit.title": "Go 한도에 도달했습니다",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -171,7 +171,7 @@ export const dict = {
   "ui.patch.action.created": "생성됨",
   "ui.patch.action.moved": "이동됨",
   "ui.patch.action.patched": "패치됨",
-  "ui.patch.action.plan": "계획", // kilocode_change
+  "ui.patch.action.plan": "계획", // sonderr_change
 
   "ui.question.subtitle.answered": "{{count}}개 답변됨",
   "ui.question.answer.none": "(답변 없음)",
@@ -217,7 +217,7 @@ export const dict = {
   "ui.sessionTurn.diffs.showLess": "간략히 표시",
   "ui.sessionTurn.diffs.more": "+{{count}}개 더 보기",
 
-  // kilocode_change start - Kilo UI compatibility
+  // sonderr_change start - Sonderr UI compatibility
   "ui.mermaid.copyPng": "PNG 복사",
   "ui.mermaid.copySource": "Mermaid 소스 복사",
   "ui.mermaid.copySvg": "SVG 복사",
@@ -236,5 +236,5 @@ export const dict = {
   "ui.sessionTurn.diffs.changed": "변경됨",
   "ui.sessionTurn.status.delegatingWaitingPermission": "Subagent waiting for permission",
   "ui.sessionTurn.status.delegatingWaitingQuestion": "Subagent waiting for response",
-  // kilocode_change end
+  // sonderr_change end
 }

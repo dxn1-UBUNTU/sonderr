@@ -1,5 +1,5 @@
-import type { Event } from "@kilocode/sdk/v2"
-import type { TuiAttentionSoundName, TuiPlugin, TuiPluginApi } from "@kilocode/plugin/tui"
+import type { Event } from "@sonderr/sdk/v2"
+import type { TuiAttentionSoundName, TuiPlugin, TuiPluginApi } from "@sonderr/plugin/tui"
 import type { BuiltinTuiPlugin } from "../builtins"
 
 const id = "internal:notifications"
@@ -56,7 +56,7 @@ const tui: TuiPlugin = async (api) => {
     permissions.delete(event.properties.requestID)
   })
 
-  // kilocode_change start - only completed turns need completion attention
+  // sonderr_change start - only completed turns need completion attention
   api.event.on("session.status", (event) => {
     const sessionID = event.properties.sessionID
     if (event.properties.status.type !== "busy" && event.properties.status.type !== "retry") return
@@ -72,14 +72,14 @@ const tui: TuiPlugin = async (api) => {
     if (event.properties.parentID !== undefined) return
     notify(api, sessionID, "Session done", "done")
   })
-  // kilocode_change end
+  // sonderr_change end
 
   api.event.on("session.error", (event) => {
     const sessionID = event.properties.sessionID
     if (!sessionID) return
     if (!active.has(sessionID)) return
     errored.add(sessionID)
-    if (event.properties.error?.name === "MessageAbortedError") return // kilocode_change - manual stops do not need attention
+    if (event.properties.error?.name === "MessageAbortedError") return // sonderr_change - manual stops do not need attention
     notify(api, sessionID, sessionErrorMessage(event.properties.error), "error")
   })
 }

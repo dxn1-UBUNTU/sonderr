@@ -1,17 +1,17 @@
 import path from "path"
-import { Database as SQLite } from "bun:sqlite" // kilocode_change
+import { Database as SQLite } from "bun:sqlite" // sonderr_change
 import { describe, expect } from "bun:test"
-import { eq } from "drizzle-orm" // kilocode_change
+import { eq } from "drizzle-orm" // sonderr_change
 import { Effect, Layer } from "effect"
-import { Credential } from "@opencode-ai/core/credential"
-import { CredentialTable } from "@opencode-ai/core/credential/sql" // kilocode_change
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { Integration } from "@opencode-ai/core/integration"
-// kilocode_change start
-import { Database } from "@opencode-ai/core/database/database"
-import { FSUtil } from "@opencode-ai/core/fs-util"
-import { Global } from "@opencode-ai/core/global"
-// kilocode_change end
+import { Credential } from "@sonderr/core/credential"
+import { CredentialTable } from "@sonderr/core/credential/sql" // sonderr_change
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { Integration } from "@sonderr/core/integration"
+// sonderr_change start
+import { Database } from "@sonderr/core/database/database"
+import { FSUtil } from "@sonderr/core/fs-util"
+import { Global } from "@sonderr/core/global"
+// sonderr_change end
 import { tmpdir } from "./fixture/tmpdir"
 import { it } from "./lib/effect"
 
@@ -20,11 +20,11 @@ function localLayer(directory: string) {
     [Database.node, Database.layerFromPath(path.join(directory, "credential.db")).pipe(Layer.fresh)],
     [Global.node, Global.layerWith({ data: directory })],
   ]).pipe(
-    Layer.fresh, // kilocode_change - rebuild so process-local credentials are re-read
+    Layer.fresh, // sonderr_change - rebuild so process-local credentials are re-read
   )
 }
 
-// kilocode_change start
+// sonderr_change start
 function importer(dir: string, store: Database.Interface) {
   return Credential.legacyImportLayer.pipe(
     Layer.provide(Layer.succeed(Database.Service, store)),
@@ -32,7 +32,7 @@ function importer(dir: string, store: Database.Interface) {
     Layer.provide(Global.layerWith({ data: dir })),
   )
 }
-// kilocode_change end
+// sonderr_change end
 
 describe("Credential", () => {
   it.live("stores, updates, lists, and removes credentials", () =>
@@ -66,13 +66,13 @@ describe("Credential", () => {
     ),
   )
 
-  // kilocode_change start - process-provided credentials remain isolated from durable storage
-  it.live("keeps valid KILO_AUTH_CONTENT credentials and isolated mutations process-local", () =>
+  // sonderr_change start - process-provided credentials remain isolated from durable storage
+  it.live("keeps valid SONDERR_AUTH_CONTENT credentials and isolated mutations process-local", () =>
     Effect.acquireUseRelease(
       Effect.sync(() => {
-        const previous = process.env.KILO_AUTH_CONTENT
-        process.env.KILO_AUTH_CONTENT = JSON.stringify({
-          kilocode: {
+        const previous = process.env.SONDERR_AUTH_CONTENT
+        process.env.SONDERR_AUTH_CONTENT = JSON.stringify({
+          sonderr: {
             type: "oauth",
             refresh: "refresh",
             access: "access",
@@ -95,11 +95,11 @@ describe("Credential", () => {
               const service = yield* Credential.Service
               const all = yield* service.all()
               expect(all).toHaveLength(2)
-              const kilocode = Integration.ID.make("kilocode")
-              const listed = yield* service.list(kilocode)
+              const sonderr = Integration.ID.make("sonderr")
+              const listed = yield* service.list(sonderr)
               expect(listed).toHaveLength(1)
               expect(listed[0]).toMatchObject({
-                integrationID: kilocode,
+                integrationID: sonderr,
                 label: "Environment",
                 value: {
                   type: "oauth",
@@ -111,17 +111,17 @@ describe("Credential", () => {
               })
 
               const created = yield* service.create({
-                integrationID: kilocode,
+                integrationID: sonderr,
                 label: "Temporary",
                 value: Credential.Key.make({ type: "key", key: "temporary" }),
               })
-              expect(yield* service.list(kilocode)).toEqual([created])
+              expect(yield* service.list(sonderr)).toEqual([created])
               yield* service.update(created.id, { label: "Updated" })
-              expect((yield* service.list(kilocode))[0]?.label).toBe("Updated")
+              expect((yield* service.list(sonderr))[0]?.label).toBe("Updated")
               yield* service.remove(created.id)
-              expect(yield* service.list(kilocode)).toEqual([])
+              expect(yield* service.list(sonderr)).toEqual([])
 
-              delete process.env.KILO_AUTH_CONTENT
+              delete process.env.SONDERR_AUTH_CONTENT
               const stored = yield* Effect.gen(function* () {
                 return yield* (yield* Credential.Service).all()
               }).pipe(Effect.provide(localLayer(tmp.path)), Effect.scoped)
@@ -131,8 +131,8 @@ describe("Credential", () => {
         ),
       (previous) =>
         Effect.sync(() => {
-          if (previous === undefined) delete process.env.KILO_AUTH_CONTENT
-          else process.env.KILO_AUTH_CONTENT = previous
+          if (previous === undefined) delete process.env.SONDERR_AUTH_CONTENT
+          else process.env.SONDERR_AUTH_CONTENT = previous
         }),
     ),
   )
@@ -217,7 +217,7 @@ describe("Credential", () => {
         const file = path.join(tmp.path, "credential.db")
         const auth = path.join(tmp.path, "auth.json")
         const write = (key: string) =>
-          Effect.promise(() => Bun.write(auth, JSON.stringify({ kilo: { type: "api", key } })))
+          Effect.promise(() => Bun.write(auth, JSON.stringify({ sonderr: { type: "api", key } })))
         return Effect.gen(function* () {
           yield* write("first")
           const store = yield* Database.Service
@@ -227,13 +227,13 @@ describe("Credential", () => {
           const before = yield* store.db
             .select()
             .from(CredentialTable)
-            .where(eq(CredentialTable.integration_id, Integration.ID.make("kilo")))
+            .where(eq(CredentialTable.integration_id, Integration.ID.make("sonderr")))
             .get()
           yield* Layer.build(Layer.fresh(layer))
           const unchanged = yield* store.db
             .select()
             .from(CredentialTable)
-            .where(eq(CredentialTable.integration_id, Integration.ID.make("kilo")))
+            .where(eq(CredentialTable.integration_id, Integration.ID.make("sonderr")))
             .get()
           expect(unchanged?.time_updated).toBe(before?.time_updated)
 
@@ -257,7 +257,7 @@ describe("Credential", () => {
           const stale = yield* store.db
             .select()
             .from(CredentialTable)
-            .where(eq(CredentialTable.integration_id, Integration.ID.make("kilo")))
+            .where(eq(CredentialTable.integration_id, Integration.ID.make("sonderr")))
             .get()
           expect(stale?.value).toMatchObject({ type: "key", key: "first" })
 
@@ -265,7 +265,7 @@ describe("Credential", () => {
           const reconciled = yield* store.db
             .select()
             .from(CredentialTable)
-            .where(eq(CredentialTable.integration_id, Integration.ID.make("kilo")))
+            .where(eq(CredentialTable.integration_id, Integration.ID.make("sonderr")))
             .get()
           expect(reconciled?.value).toMatchObject({ type: "key", key: "second" })
         }).pipe(Effect.provide(Database.layerFromPath(file)), Effect.scoped)
@@ -335,5 +335,5 @@ describe("Credential", () => {
       ),
     ),
   )
-  // kilocode_change end
+  // sonderr_change end
 })

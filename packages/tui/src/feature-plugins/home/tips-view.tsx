@@ -1,7 +1,7 @@
-import type { TuiPluginApi } from "@kilocode/plugin/tui"
+import type { TuiPluginApi } from "@sonderr/plugin/tui"
 import { createMemo, For, type Accessor } from "solid-js"
 import { DEFAULT_THEMES, useTheme } from "../../context/theme"
-import { KILO_TIPS } from "@/kilocode/cli/cmd/tui/feature-plugins/home/tips" // kilocode_change
+import { SONDERR_TIPS } from "@/sonderr/cli/cmd/tui/feature-plugins/home/tips" // sonderr_change
 import { useCommandShortcut } from "../../keymap"
 
 type TipPart = { text: string; highlight: boolean }
@@ -127,20 +127,20 @@ export function Tips(props: { api: TuiPluginApi; connected?: boolean }) {
     sessionQuickSwitch9: useCommandShortcut("session.quick_switch.9"),
     sessionSidebarToggle: configShortcut(props.api, "session.sidebar.toggle"),
     sessionTimeline: configShortcut(props.api, "session.timeline"),
-    statusView: useCommandShortcut("opencode.status"),
+    statusView: useCommandShortcut("sonderr.status"),
     terminalSuspend: useCommandShortcut("terminal.suspend"),
     themeList: useCommandShortcut("theme.switch"),
   }
   const tip = createMemo(() => {
     if (props.connected === false) return NO_MODELS_TIP
-    // kilocode_change start
-    const tips = [...KILO_TIPS, ...TIPS, process.platform !== "win32" ? TERMINAL_SUSPEND_TIP : INPUT_UNDO_TIP].flatMap(
+    // sonderr_change start
+    const tips = [...SONDERR_TIPS, ...TIPS, process.platform !== "win32" ? TERMINAL_SUSPEND_TIP : INPUT_UNDO_TIP].flatMap(
       (item) => {
         const value = typeof item === "string" ? item : item(shortcuts)
         return value ? [value] : []
       },
     )
-    // kilocode_change end
+    // sonderr_change end
     return tips[Math.floor(tipOffset * tips.length)] ?? NO_MODELS_TIP
   }, NO_MODELS_TIP)
   // Solid can expose a memo's initial value while a pure computation is pending.
@@ -165,13 +165,13 @@ export function Tips(props: { api: TuiPluginApi; connected?: boolean }) {
 }
 
 const TIPS: Tip[] = [
-  /* kilocode_change hide the entire list for if it is accidentally used
+  /* sonderr_change hide the entire list for if it is accidentally used
   "Type {highlight}@{/highlight} followed by a filename to fuzzy search and attach files",
   "Start a message with {highlight}!{/highlight} to run shell commands (e.g., {highlight}!ls -la{/highlight})",
   (shortcuts) => press(shortcuts.agentCycle(), "to cycle between Build and Plan agents"),
   "Use {highlight}/undo{/highlight} to revert the last message and file changes",
   "Use {highlight}/redo{/highlight} to restore previously undone messages and file changes",
-  "Run {highlight}/share{/highlight} to create a public opencode.ai link",
+  "Run {highlight}/share{/highlight} to create a public sonderr.ai link",
   "Drag and drop images or PDFs into the terminal as context",
   (shortcuts) => press(shortcuts.inputPaste(), "to paste images from your clipboard into the prompt"),
   (shortcuts) => `Use ${commandText("/editor", shortcuts.editorOpen())} to compose messages in your external editor`,
@@ -214,17 +214,17 @@ const TIPS: Tip[] = [
     if (!items.length) return undefined
     return `Use ${items.map(shortcutText).join(" / ")} for parent/child sessions`
   },
-  "Create {highlight}opencode.json{/highlight} for server settings, and {highlight}tui.json{/highlight} for TUI",
-  "Place TUI settings in {highlight}~/.config/opencode/tui.json{/highlight} for global config",
+  "Create {highlight}sonderr.json{/highlight} for server settings, and {highlight}tui.json{/highlight} for TUI",
+  "Place TUI settings in {highlight}~/.config/sonderr/tui.json{/highlight} for global config",
   "Add {highlight}$schema{/highlight} to your config for autocomplete in your editor",
   "Configure {highlight}model{/highlight} in config to set your default model",
   "Override any keybind in {highlight}tui.json{/highlight} via the {highlight}keybinds{/highlight} section",
   "Set any keybind to {highlight}none{/highlight} to disable it completely",
   "Configure local or remote MCP servers in the {highlight}mcp{/highlight} config section",
-  "Add {highlight}.md{/highlight} files to {highlight}.kilo/commands/{/highlight} to define reusable custom prompts", // kilocode_change
+  "Add {highlight}.md{/highlight} files to {highlight}.sonderr/commands/{/highlight} to define reusable custom prompts", // sonderr_change
   "Use {highlight}$ARGUMENTS{/highlight}, {highlight}$1{/highlight}, {highlight}$2{/highlight} in custom commands for dynamic input",
   "Use backticks to inject shell output (e.g., {highlight}`git status`{/highlight})",
-  "Add {highlight}.md{/highlight} files to {highlight}.kilo/agents/{/highlight} for specialized AI personas", // kilocode_change
+  "Add {highlight}.md{/highlight} files to {highlight}.sonderr/agents/{/highlight} for specialized AI personas", // sonderr_change
   "Configure per-agent permissions for {highlight}edit{/highlight}, {highlight}bash{/highlight}, and {highlight}webfetch{/highlight} tools",
   'Use patterns like {highlight}"git *": "allow"{/highlight} for granular bash permissions',
   'Set {highlight}"rm -rf *": "deny"{/highlight} to block destructive commands',
@@ -233,26 +233,26 @@ const TIPS: Tip[] = [
   'Set {highlight}"formatter": false{/highlight} to disable inherited formatters',
   "Define custom formatter commands with file extensions in config",
   'Set {highlight}"lsp": true{/highlight} to enable built-in LSP code analysis',
-  "Create {highlight}.ts{/highlight} files in {highlight}.kilo/tools/{/highlight} to define new LLM tools", // kilocode_change
+  "Create {highlight}.ts{/highlight} files in {highlight}.sonderr/tools/{/highlight} to define new LLM tools", // sonderr_change
   "Tool definitions can invoke scripts written in Python, Go, etc",
-  "Add {highlight}.ts{/highlight} files to {highlight}.kilo/plugins/{/highlight} for event hooks", // kilocode_change
+  "Add {highlight}.ts{/highlight} files to {highlight}.sonderr/plugins/{/highlight} for event hooks", // sonderr_change
   "Use plugins to send OS notifications when sessions complete",
-  "Create a plugin to prevent OpenCode from reading sensitive files",
-  "Use {highlight}opencode run{/highlight} for non-interactive scripting",
-  "Use {highlight}opencode --continue{/highlight} to resume the last session",
-  "Use {highlight}opencode run -f file.ts{/highlight} to attach files via CLI",
+  "Create a plugin to prevent Sonderr from reading sensitive files",
+  "Use {highlight}sonderr run{/highlight} for non-interactive scripting",
+  "Use {highlight}sonderr --continue{/highlight} to resume the last session",
+  "Use {highlight}sonderr run -f file.ts{/highlight} to attach files via CLI",
   "Use {highlight}--format json{/highlight} for machine-readable output in scripts",
-  "Run {highlight}opencode serve{/highlight} for headless API access to OpenCode",
-  "Use {highlight}opencode run --attach{/highlight} to connect to a running server",
-  "Run {highlight}opencode upgrade{/highlight} to update to the latest version",
-  "Run {highlight}opencode auth list{/highlight} to see all configured providers",
-  "Run {highlight}opencode agent create{/highlight} for guided agent creation",
-  "Use {highlight}/opencode{/highlight} in GitHub issues/PRs to trigger AI actions",
-  "Run {highlight}opencode github install{/highlight} to set up the GitHub workflow",
-  "Comment {highlight}/opencode fix this{/highlight} on issues to auto-create PRs",
+  "Run {highlight}sonderr serve{/highlight} for headless API access to Sonderr",
+  "Use {highlight}sonderr run --attach{/highlight} to connect to a running server",
+  "Run {highlight}sonderr upgrade{/highlight} to update to the latest version",
+  "Run {highlight}sonderr auth list{/highlight} to see all configured providers",
+  "Run {highlight}sonderr agent create{/highlight} for guided agent creation",
+  "Use {highlight}/sonderr{/highlight} in GitHub issues/PRs to trigger AI actions",
+  "Run {highlight}sonderr github install{/highlight} to set up the GitHub workflow",
+  "Comment {highlight}/sonderr fix this{/highlight} on issues to auto-create PRs",
   "Comment {highlight}/oc{/highlight} on PR code lines for targeted code reviews",
   'Use {highlight}"theme": "system"{/highlight} to match your terminal\'s colors',
-  "Create JSON theme files in {highlight}.kilo/themes/{/highlight} directory", // kilocode_change
+  "Create JSON theme files in {highlight}.sonderr/themes/{/highlight} directory", // sonderr_change
   "Themes support dark/light variants for both modes",
   "Use numeric xterm color codes 0-255 in custom theme JSON",
   "Use {highlight}{env:VAR_NAME}{/highlight} for environment variables in config",
@@ -268,7 +268,7 @@ const TIPS: Tip[] = [
   "Run {highlight}/unshare{/highlight} to remove a session from public access",
   "Permission {highlight}doom_loop{/highlight} prevents infinite tool call loops",
   "Permission {highlight}external_directory{/highlight} protects files outside project",
-  "Run {highlight}opencode debug config{/highlight} to troubleshoot configuration",
+  "Run {highlight}sonderr debug config{/highlight} to troubleshoot configuration",
   "Use {highlight}--print-logs{/highlight} flag to see detailed logs in stderr",
   (shortcuts) => `Use ${commandText("/timeline", shortcuts.sessionTimeline())} to jump to specific messages`,
   (shortcuts) => press(shortcuts.messagesToggleConceal(), "to toggle code block visibility in messages"),
@@ -278,8 +278,8 @@ const TIPS: Tip[] = [
     shortcuts.commandList()
       ? `Toggle username display in chat via the command palette (${shortcutText(shortcuts.commandList())})`
       : "Toggle username display in chat via the command palette",
-  "Run {highlight}docker run -it --rm ghcr.io/anomalyco/opencode{/highlight} in a container",
-  "Use {highlight}/connect{/highlight} with OpenCode Zen for curated, tested models",
+  "Run {highlight}docker run -it --rm ghcr.io/anomalyco/sonderr{/highlight} in a container",
+  "Use {highlight}/connect{/highlight} with Sonderr Zen for curated, tested models",
   "Commit your project's {highlight}AGENTS.md{/highlight} file to Git for team sharing",
   "Use {highlight}/review{/highlight} to review uncommitted changes, branches, or PRs",
   (shortcuts) => `Use ${commandText("/help", shortcuts.helpShow())} to show the help dialog`,

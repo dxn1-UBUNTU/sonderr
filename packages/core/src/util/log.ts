@@ -1,13 +1,13 @@
 export * as Log from "./log"
 
 import path from "path"
-import { existsSync, writeFileSync } from "fs" // kilocode_change
+import { existsSync, writeFileSync } from "fs" // sonderr_change
 import fs from "fs/promises"
 import * as Global from "../global"
 import { Schema } from "effect"
 import { Glob } from "./glob"
-import { createStream } from "rotating-file-stream" // kilocode_change
-import { KILO_RUN_ID } from "./opencode-process" // kilocode_change
+import { createStream } from "rotating-file-stream" // sonderr_change
+import { SONDERR_RUN_ID } from "./sonderr-process" // sonderr_change
 
 export const Level = Schema.Literals(["DEBUG", "INFO", "WARN", "ERROR"]).annotate({
   identifier: "LogLevel",
@@ -22,7 +22,7 @@ const levelPriority: Record<Level, number> = {
   ERROR: 3,
 }
 const keep = 10
-const initializedRunID = "KILO_LOG_INITIALIZED_RUN_ID"
+const initializedRunID = "SONDERR_LOG_INITIALIZED_RUN_ID"
 
 let level: Level = "INFO"
 
@@ -65,12 +65,12 @@ const stderr = (msg: any) => {
   return msg.length
 }
 let write = stderr
-let stream: ReturnType<typeof createStream> | undefined // kilocode_change
+let stream: ReturnType<typeof createStream> | undefined // sonderr_change
 
 export async function init(options: Options) {
   if (options.level) level = options.level
   void cleanup(Global.Path.log)
-  // kilocode_change start - initialize one rotating stream and truncate dev.log once per Kilo run
+  // sonderr_change start - initialize one rotating stream and truncate dev.log once per Sonderr run
   if (stream) {
     const active = stream
     stream = undefined
@@ -84,7 +84,7 @@ export async function init(options: Options) {
     Global.Path.log,
     options.dev ? "dev.log" : new Date().toISOString().split(".")[0].replace(/:/g, "") + ".log",
   )
-  const run = process.env[KILO_RUN_ID]
+  const run = process.env[SONDERR_RUN_ID]
   if (!options.dev || !run || process.env[initializedRunID] !== run) {
     await fs.truncate(logpath).catch(() => {})
     if (options.dev && run) process.env[initializedRunID] = run
@@ -121,7 +121,7 @@ export async function init(options: Options) {
     active.write(msg)
     return msg.length
   }
-  // kilocode_change end
+  // sonderr_change end
 }
 
 async function cleanup(dir: string) {

@@ -1,6 +1,6 @@
 import { describe, expect } from "bun:test"
-import { BackgroundJob } from "@opencode-ai/core/background-job"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
+import { BackgroundJob } from "@sonderr/core/background-job"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
 import { Deferred, Effect, Exit, Scope } from "effect"
 import { it } from "./lib/effect"
 
@@ -86,7 +86,7 @@ describe("BackgroundJob", () => {
     }).pipe(Effect.provide(jobsLayer)),
   )
 
-  // kilocode_change start - regression for #13469: an empty extended run must not clobber an earlier non-empty result
+  // sonderr_change start - regression for #13469: an empty extended run must not clobber an earlier non-empty result
   it.live("keeps the earlier non-empty output when an extended run returns empty", () =>
     Effect.gen(function* () {
       const jobs = yield* BackgroundJob.Service
@@ -105,7 +105,7 @@ describe("BackgroundJob", () => {
       })
     }).pipe(Effect.provide(jobsLayer)),
   )
-  // kilocode_change end
+  // sonderr_change end
 
   it.live("interrupts live work without promising settlement after the owning process-local scope closes", () =>
     Effect.gen(function* () {

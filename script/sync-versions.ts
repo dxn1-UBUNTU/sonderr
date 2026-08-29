@@ -1,16 +1,16 @@
 #!/usr/bin/env bun
-// kilocode_change - new file
-// Sync every Kilo version string across the monorepo to a single target.
+// sonderr_change - new file
+// Sync every Sonderr version string across the monorepo to a single target.
 //
-// Why this exists: upstream opencode stamps its own version into shared files
+// Why this exists: upstream sonderr stamps its own version into shared files
 // during each release (notably `packages/extensions/zed/extension.toml`). When
 // we merge upstream, that churn either produces conflicts or silently leaves
 // our packages pointing at upstream's version — and upstream's version tag
 // doesn't exist on our release pipeline, so the resulting download URLs 404.
 //
 // Run this in a dedicated commit after resolving an upstream merge (see
-// `.kilo/command/upstream-manual-merge.md`). It's also handy mid-merge to
-// rebase our version bumps onto any new Kilo main releases.
+// `.sonderr/command/upstream-manual-merge.md`). It's also handy mid-merge to
+// rebase our version bumps onto any new Sonderr main releases.
 //
 // Usage:
 //   bun run script/sync-versions.ts            # use root package.json version
@@ -21,10 +21,10 @@
 //   - every `package.json` top-level `"version": "..."` field in the repo
 //     (excluding node_modules and hidden directories)
 //   - `packages/extensions/zed/extension.toml` top-level `version = "..."`
-//   - the five Kilo-Org download URLs inside that toml
+//   - the five Sonderr-Org download URLs inside that toml
 //
 // Intentionally NOT touched:
-//   - `packages/kilo-jetbrains/**` — the JetBrains plugin has its own release
+//   - `packages/sonderr-jetbrains/**` — the JetBrains plugin has its own release
 //     cadence and version number.
 //   - dependency version strings inside `package.json` — internal deps use
 //     `workspace:*` so they don't need bumping.
@@ -56,7 +56,7 @@ for await (const rel of glob.scan({ cwd: root, onlyFiles: true })) {
   if (rel.startsWith(".")) continue
   if (rel.includes("/.")) continue
   // JetBrains plugin tracks its own version.
-  if (rel.startsWith("packages/kilo-jetbrains/")) continue
+  if (rel.startsWith("packages/sonderr-jetbrains/")) continue
 
   const path = join(root, rel)
   const text = await Bun.file(path).text()
@@ -85,8 +85,8 @@ if (await Bun.file(zed).exists()) {
   const next = text
     .replace(/^version\s*=\s*"[^"]+"/m, `version = "${target}"`)
     .replace(
-      /https:\/\/github\.com\/Kilo-Org\/kilocode\/releases\/download\/v[^/]+\//g,
-      `https://github.com/Kilo-Org/kilocode/releases/download/v${target}/`,
+      /https:\/\/github\.com\/Sonderr-Org\/sonderr\/releases\/download\/v[^/]+\//g,
+      `https://github.com/Sonderr-Org/sonderr/releases/download/v${target}/`,
     )
   if (next !== text) {
     await Bun.write(zed, next)

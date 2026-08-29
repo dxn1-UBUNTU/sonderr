@@ -1,4 +1,4 @@
-// kilocode_change start — the previous implementation used a createEffect that
+// sonderr_change start — the previous implementation used a createEffect that
 // ran clearTimeout + setTimeout on every `active` prop change to gate a
 // `data-run` attribute. During LLM token streaming in long sessions, tool
 // state thrash fired this effect thousands of times per second (CPU profile
@@ -48,4 +48,4 @@ export const TextShimmer = <T extends ValidComponent = "span">(props: {
     </Dynamic>
   )
 }
-// kilocode_change end
+// sonderr_change end

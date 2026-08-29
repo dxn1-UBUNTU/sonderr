@@ -1,7 +1,7 @@
 /** @jsxImportSource @opentui/solid */
 import { describe, expect, test } from "bun:test"
 import { testRender } from "@opentui/solid"
-import type { Event, GlobalEvent } from "@kilocode/sdk/v2"
+import type { Event, GlobalEvent } from "@sonderr/sdk/v2"
 import { onMount } from "solid-js"
 import { ProjectProvider, useProject } from "../../../src/context/project"
 import { SDKProvider } from "../../../src/context/sdk"
@@ -116,7 +116,7 @@ describe("useEvent", () => {
     }
   })
 
-  // kilocode_change start - the compatibility stream contains events from every loaded project
+  // sonderr_change start - the compatibility stream contains events from every loaded project
   test("ignores events for other projects", async () => {
     const { app, emit, seen } = await mount()
 
@@ -131,7 +131,7 @@ describe("useEvent", () => {
       app.renderer.destroy()
     }
   })
-  // kilocode_change end
+  // sonderr_change end
 
   test("delivers current project events regardless of active workspace", async () => {
     const { app, emit, project, seen } = await mount()

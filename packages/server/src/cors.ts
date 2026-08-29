@@ -1,11 +1,11 @@
 import { Context } from "effect"
-import { corsOrigin } from "./kilocode/cors" // kilocode_change
+import { corsOrigin } from "./sonderr/cors" // sonderr_change
 
-const opencodeOrigin = /^https:\/\/([a-z0-9-]+\.)*opencode\.ai$/
+const sonderrOrigin = /^https:\/\/([a-z0-9-]+\.)*sonderr\.ai$/
 
 export type CorsOptions = { readonly cors?: ReadonlyArray<string> }
 
-export const CorsConfig = Context.Reference<CorsOptions | undefined>("@opencode/ServerCorsConfig", {
+export const CorsConfig = Context.Reference<CorsOptions | undefined>("@sonderr/ServerCorsConfig", {
   defaultValue: () => undefined,
 })
 
@@ -16,8 +16,8 @@ export function isAllowedCorsOrigin(input: string | undefined, opts?: CorsOption
   if (input.startsWith("oc://renderer")) return true
   if (input === "tauri://localhost" || input === "http://tauri.localhost" || input === "https://tauri.localhost")
     return true
-  if (opencodeOrigin.test(input)) return true
-  if (corsOrigin(input)) return true // kilocode_change
+  if (sonderrOrigin.test(input)) return true
+  if (corsOrigin(input)) return true // sonderr_change
   return opts?.cors?.includes(input) ?? false
 }
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env bun
-// kilocode_change - new file
+// sonderr_change - new file
 
 /**
  * Configures repo-local git settings for all contributors.
  *
  * `merge.conflictStyle=zdiff3` makes conflict markers include the common
  * ancestor (|||||||) alongside ours/theirs. That base section is what
- * mergiraf's syntax-aware resolution feeds on during upstream opencode
+ * mergiraf's syntax-aware resolution feeds on during upstream sonderr
  * merges (see script/upstream/merge.ts) and it makes manual resolution
  * dramatically easier than the default 2-way `merge` markers.
  *

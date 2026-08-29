@@ -1,14 +1,14 @@
 import { describe, expect } from "bun:test"
 import { Effect } from "effect"
-import { Catalog } from "@opencode-ai/core/catalog"
-import { Credential } from "@opencode-ai/core/credential"
-import { EventV2 } from "@opencode-ai/core/event"
-import { Integration } from "@opencode-ai/core/integration"
-import { ModelV2 } from "@opencode-ai/core/model"
-import { PluginV2 } from "@opencode-ai/core/plugin"
-import { PluginHost } from "@opencode-ai/core/plugin/host"
-import { OpencodePlugin } from "@opencode-ai/core/plugin/provider/opencode"
-import { ProviderV2 } from "@opencode-ai/core/provider"
+import { Catalog } from "@sonderr/core/catalog"
+import { Credential } from "@sonderr/core/credential"
+import { EventV2 } from "@sonderr/core/event"
+import { Integration } from "@sonderr/core/integration"
+import { ModelV2 } from "@sonderr/core/model"
+import { PluginV2 } from "@sonderr/core/plugin"
+import { PluginHost } from "@sonderr/core/plugin/host"
+import { SonderrPlugin } from "@sonderr/core/plugin/provider/sonderr"
+import { ProviderV2 } from "@sonderr/core/provider"
 import { testEffect } from "../lib/effect"
 import { PluginTestLayer } from "./fixture"
 
@@ -19,7 +19,7 @@ const addPlugin = Effect.fn(function* () {
   const host = yield* PluginHost.make(plugin)
   const events = yield* EventV2.Service
   const integration = yield* Integration.Service
-  yield* OpencodePlugin.effect(host).pipe(
+  yield* SonderrPlugin.effect(host).pipe(
     Effect.provideService(EventV2.Service, events),
     Effect.provideService(Integration.Service, integration),
   )
@@ -67,19 +67,19 @@ function withEnv<A, E, R>(vars: Record<string, string | undefined>, effect: () =
 
 const cost = (input: number, output = 0) => [{ input, output, cache: { read: 0, write: 0 } }]
 
-describe("OpencodePlugin", () => {
-  // kilocode_change - Kilo does not register the OpenCode Console device/OAuth flow and does not let
-  // console.opencode.ai drive the catalog, so upstream's "registers account and service account
-  // methods" and "loads providers and models from the connected OpenCode server" tests are
-  // intentionally absent. See the note in src/plugin/provider/opencode.ts.
+describe("SonderrPlugin", () => {
+  // sonderr_change - Sonderr does not register the Sonderr Console device/OAuth flow and does not let
+  // console.sonderr.ai drive the catalog, so upstream's "registers account and service account
+  // methods" and "loads providers and models from the connected Sonderr server" tests are
+  // intentionally absent. See the note in src/plugin/provider/sonderr.ts.
 
   it.effect("uses a public key and disables paid models without credentials", () =>
-    withEnv({ OPENCODE_API_KEY: undefined }, () =>
+    withEnv({ SONDERR_API_KEY: undefined }, () =>
       Effect.gen(function* () {
         const catalog = yield* Catalog.Service
         yield* catalog.transform((catalog) => {
           const provider = ProviderV2.Info.make({
-            ...ProviderV2.Info.empty(ProviderV2.ID.opencode),
+            ...ProviderV2.Info.empty(ProviderV2.ID.sonderr),
             api: { type: "aisdk", package: "test-provider" },
           })
           const model = ModelV2.Info.make({
@@ -93,19 +93,19 @@ describe("OpencodePlugin", () => {
           })
         })
         yield* addPlugin()
-        expect(required(yield* catalog.provider.get(ProviderV2.ID.opencode)).request.body.apiKey).toBe("public")
-        expect(required(yield* catalog.model.get(ProviderV2.ID.opencode, ModelV2.ID.make("paid"))).enabled).toBe(false)
+        expect(required(yield* catalog.provider.get(ProviderV2.ID.sonderr)).request.body.apiKey).toBe("public")
+        expect(required(yield* catalog.model.get(ProviderV2.ID.sonderr, ModelV2.ID.make("paid"))).enabled).toBe(false)
       }),
     ),
   )
 
   it.effect("keeps free models without credentials", () =>
-    withEnv({ OPENCODE_API_KEY: undefined }, () =>
+    withEnv({ SONDERR_API_KEY: undefined }, () =>
       Effect.gen(function* () {
         const catalog = yield* Catalog.Service
         yield* catalog.transform((catalog) => {
           const provider = ProviderV2.Info.make({
-            ...ProviderV2.Info.empty(ProviderV2.ID.opencode),
+            ...ProviderV2.Info.empty(ProviderV2.ID.sonderr),
             api: { type: "aisdk", package: "test-provider" },
           })
           const model = ModelV2.Info.make({
@@ -119,19 +119,19 @@ describe("OpencodePlugin", () => {
           })
         })
         yield* addPlugin()
-        expect(required(yield* catalog.provider.get(ProviderV2.ID.opencode)).request.body.apiKey).toBe("public")
-        expect(required(yield* catalog.model.get(ProviderV2.ID.opencode, ModelV2.ID.make("free"))).enabled).toBe(true)
+        expect(required(yield* catalog.provider.get(ProviderV2.ID.sonderr)).request.body.apiKey).toBe("public")
+        expect(required(yield* catalog.model.get(ProviderV2.ID.sonderr, ModelV2.ID.make("free"))).enabled).toBe(true)
       }),
     ),
   )
 
   it.effect("treats output-only cost as free without credentials", () =>
-    withEnv({ OPENCODE_API_KEY: undefined }, () =>
+    withEnv({ SONDERR_API_KEY: undefined }, () =>
       Effect.gen(function* () {
         const catalog = yield* Catalog.Service
         yield* catalog.transform((catalog) => {
           const provider = ProviderV2.Info.make({
-            ...ProviderV2.Info.empty(ProviderV2.ID.opencode),
+            ...ProviderV2.Info.empty(ProviderV2.ID.sonderr),
             api: { type: "aisdk", package: "test-provider" },
           })
           const model = ModelV2.Info.make({
@@ -145,21 +145,21 @@ describe("OpencodePlugin", () => {
           })
         })
         yield* addPlugin()
-        expect(required(yield* catalog.provider.get(ProviderV2.ID.opencode)).request.body.apiKey).toBe("public")
-        expect(required(yield* catalog.model.get(ProviderV2.ID.opencode, ModelV2.ID.make("output-only"))).enabled).toBe(
+        expect(required(yield* catalog.provider.get(ProviderV2.ID.sonderr)).request.body.apiKey).toBe("public")
+        expect(required(yield* catalog.model.get(ProviderV2.ID.sonderr, ModelV2.ID.make("output-only"))).enabled).toBe(
           true,
         )
       }),
     ),
   )
 
-  it.effect("uses OPENCODE_API_KEY as credentials", () =>
-    withEnv({ OPENCODE_API_KEY: "secret" }, () =>
+  it.effect("uses SONDERR_API_KEY as credentials", () =>
+    withEnv({ SONDERR_API_KEY: "secret" }, () =>
       Effect.gen(function* () {
         const catalog = yield* Catalog.Service
         yield* catalog.transform((catalog) => {
           const provider = ProviderV2.Info.make({
-            ...ProviderV2.Info.empty(ProviderV2.ID.opencode),
+            ...ProviderV2.Info.empty(ProviderV2.ID.sonderr),
             api: { type: "aisdk", package: "test-provider" },
           })
           const model = ModelV2.Info.make({
@@ -173,26 +173,26 @@ describe("OpencodePlugin", () => {
           })
         })
         yield* addPlugin()
-        expect(required(yield* catalog.provider.get(ProviderV2.ID.opencode)).request.body.apiKey).toBeUndefined()
-        expect(required(yield* catalog.model.get(ProviderV2.ID.opencode, ModelV2.ID.make("paid"))).enabled).toBe(true)
+        expect(required(yield* catalog.provider.get(ProviderV2.ID.sonderr)).request.body.apiKey).toBeUndefined()
+        expect(required(yield* catalog.model.get(ProviderV2.ID.sonderr, ModelV2.ID.make("paid"))).enabled).toBe(true)
       }),
     ),
   )
 
   it.effect("uses configured provider env vars as credentials", () =>
-    withEnv({ OPENCODE_API_KEY: undefined, CUSTOM_OPENCODE_API_KEY: "secret" }, () =>
+    withEnv({ SONDERR_API_KEY: undefined, CUSTOM_SONDERR_API_KEY: "secret" }, () =>
       Effect.gen(function* () {
         const catalog = yield* Catalog.Service
         const integrations = yield* Integration.Service
         yield* integrations.transform((editor) => {
           editor.method.update({
-            integrationID: Integration.ID.make("opencode"),
-            method: { type: "env", names: ["CUSTOM_OPENCODE_API_KEY"] },
+            integrationID: Integration.ID.make("sonderr"),
+            method: { type: "env", names: ["CUSTOM_SONDERR_API_KEY"] },
           })
         })
         yield* catalog.transform((catalog) => {
           const provider = ProviderV2.Info.make({
-            ...ProviderV2.Info.empty(ProviderV2.ID.opencode),
+            ...ProviderV2.Info.empty(ProviderV2.ID.sonderr),
             api: { type: "aisdk", package: "test-provider" },
           })
           const model = ModelV2.Info.make({
@@ -206,19 +206,19 @@ describe("OpencodePlugin", () => {
           })
         })
         yield* addPlugin()
-        expect(required(yield* catalog.provider.get(ProviderV2.ID.opencode)).request.body.apiKey).toBeUndefined()
-        expect(required(yield* catalog.model.get(ProviderV2.ID.opencode, ModelV2.ID.make("paid"))).enabled).toBe(true)
+        expect(required(yield* catalog.provider.get(ProviderV2.ID.sonderr)).request.body.apiKey).toBeUndefined()
+        expect(required(yield* catalog.model.get(ProviderV2.ID.sonderr, ModelV2.ID.make("paid"))).enabled).toBe(true)
       }),
     ),
   )
 
   it.effect("uses configured apiKey as credentials", () =>
-    withEnv({ OPENCODE_API_KEY: undefined }, () =>
+    withEnv({ SONDERR_API_KEY: undefined }, () =>
       Effect.gen(function* () {
         const catalog = yield* Catalog.Service
         yield* catalog.transform((catalog) => {
           const provider = ProviderV2.Info.make({
-            ...ProviderV2.Info.empty(ProviderV2.ID.opencode),
+            ...ProviderV2.Info.empty(ProviderV2.ID.sonderr),
             api: { type: "aisdk", package: "test-provider" },
             request: {
               headers: {},
@@ -238,14 +238,14 @@ describe("OpencodePlugin", () => {
           })
         })
         yield* addPlugin()
-        expect(required(yield* catalog.provider.get(ProviderV2.ID.opencode)).request.body.apiKey).toBe("configured")
-        expect(required(yield* catalog.model.get(ProviderV2.ID.opencode, ModelV2.ID.make("paid"))).enabled).toBe(true)
+        expect(required(yield* catalog.provider.get(ProviderV2.ID.sonderr)).request.body.apiKey).toBe("configured")
+        expect(required(yield* catalog.model.get(ProviderV2.ID.sonderr, ModelV2.ID.make("paid"))).enabled).toBe(true)
       }),
     ),
   )
 
-  it.effect("ignores non-opencode providers and models", () =>
-    withEnv({ OPENCODE_API_KEY: undefined }, () =>
+  it.effect("ignores non-sonderr providers and models", () =>
+    withEnv({ SONDERR_API_KEY: undefined }, () =>
       Effect.gen(function* () {
         const catalog = yield* Catalog.Service
         yield* catalog.transform((catalog) => {
@@ -270,10 +270,10 @@ describe("OpencodePlugin", () => {
     ),
   )
 
-  it.effect("prefers gpt-5-nano as the opencode small model", () =>
+  it.effect("prefers gpt-5-nano as the sonderr small model", () =>
     Effect.gen(function* () {
       const catalog = yield* Catalog.Service
-      const providerID = ProviderV2.ID.opencode
+      const providerID = ProviderV2.ID.sonderr
 
       yield* catalog.transform((catalog) => {
         catalog.provider.update(providerID, () => {})

@@ -71,7 +71,7 @@ export const dict: Record<string, string> = {
   "ui.sessionTurn.error.addCredits": "Aggiungi crediti",
   "dialog.usageExceeded.freeTier.title": "Limite gratuito raggiunto",
   "dialog.usageExceeded.freeTier.description":
-    "Abbonati a Kilo Go per un accesso affidabile ai migliori modelli open source, a partire da 5 $ al mese.", // kilocode_change
+    "Abbonati a Sonderr Go per un accesso affidabile ai migliori modelli open source, a partire da 5 $ al mese.", // sonderr_change
   "dialog.usageExceeded.freeTier.actionLabel": "Iscriviti",
   "dialog.usageExceeded.accountRateLimit.title": "Limite Go raggiunto",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -193,7 +193,7 @@ export const dict: Record<string, string> = {
   "ui.patch.action.created": "Creato",
   "ui.patch.action.moved": "Spostato",
   "ui.patch.action.patched": "Modificato",
-  "ui.patch.action.plan": "Piano", // kilocode_change
+  "ui.patch.action.plan": "Piano", // sonderr_change
   "ui.question.subtitle.answered": "{{count}} risposte",
   "ui.question.answer.none": "(nessuna risposta)",
   "ui.question.review.notAnswered": "(senza risposta)",
@@ -201,7 +201,7 @@ export const dict: Record<string, string> = {
   "ui.question.singleHint": "Seleziona una risposta",
   "ui.question.custom.placeholder": "Digita la tua risposta...",
 
-  // kilocode_change start - Kilo UI compatibility
+  // sonderr_change start - Sonderr UI compatibility
   "ui.mermaid.copyPng": "Copia PNG",
   "ui.mermaid.copySource": "Copia sorgente Mermaid",
   "ui.mermaid.copySvg": "Copia SVG",
@@ -221,5 +221,5 @@ export const dict: Record<string, string> = {
   "ui.sessionTurn.status.delegatingWaitingPermission": "Subagent in attesa di autorizzazione",
   "ui.sessionTurn.status.delegatingWaitingQuestion": "Subagent in attesa di risposta",
   "ui.tool.codesearch": "Ricerca codice",
-  // kilocode_change end
+  // sonderr_change end
 }

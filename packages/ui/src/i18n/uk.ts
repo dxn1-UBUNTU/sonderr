@@ -77,7 +77,7 @@ export const dict: Record<string, string> = {
 
   "dialog.usageExceeded.freeTier.title": "Безкоштовний ліміт вичерпано",
   "dialog.usageExceeded.freeTier.description":
-    "Підпишіться на Kilo Go для надійного доступу до найкращих моделей із відкритим кодом від $5 на місяць.", // kilocode_change
+    "Підпишіться на Sonderr Go для надійного доступу до найкращих моделей із відкритим кодом від $5 на місяць.", // sonderr_change
   "dialog.usageExceeded.freeTier.actionLabel": "Підписатися",
   "dialog.usageExceeded.accountRateLimit.title": "Ліміт Go вичерпано",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -218,7 +218,7 @@ export const dict: Record<string, string> = {
   "ui.patch.action.created": "Створено",
   "ui.patch.action.moved": "Переміщено",
   "ui.patch.action.patched": "Застосовано патч",
-  "ui.patch.action.plan": "План", // kilocode_change
+  "ui.patch.action.plan": "План", // sonderr_change
 
   "ui.question.subtitle.answered": "{{count}} відповідей",
   "ui.question.answer.none": "(немає відповіді)",
@@ -227,7 +227,7 @@ export const dict: Record<string, string> = {
   "ui.question.singleHint": "Виберіть одну відповідь",
   "ui.question.custom.placeholder": "Введіть свою відповідь...",
 
-  // kilocode_change start - Kilo UI compatibility
+  // sonderr_change start - Sonderr UI compatibility
   "ui.mermaid.copyPng": "Копіювати PNG",
   "ui.mermaid.copySource": "Копіювати вихідний код Mermaid",
   "ui.mermaid.copySvg": "Копіювати SVG",
@@ -246,5 +246,5 @@ export const dict: Record<string, string> = {
   "ui.sessionTurn.status.delegatingWaitingPermission": "Subagent waiting for permission",
   "ui.sessionTurn.status.delegatingWaitingQuestion": "Subagent waiting for response",
   "ui.tool.codesearch": "Пошук коду",
-  // kilocode_change end
+  // sonderr_change end
 }

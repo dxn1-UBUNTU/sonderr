@@ -1,11 +1,11 @@
 import type * as Arr from "effect/Array"
 import { NodeFileSystem, NodeSink, NodeStream } from "@effect/platform-node"
 import * as NodePath from "@effect/platform-node/NodePath"
-import { prepareCommand as prepareSandbox } from "@kilocode/sandbox" // kilocode_change
-import { tap as tapStdio, tapped } from "./kilocode/stdio-tap" // kilocode_change - Bun drops buffered stdio on close
-import * as SpawnExit from "./kilocode/spawn-exit" // kilocode_change
-import * as SpawnValidation from "./kilocode/spawn-validation" // kilocode_change
-import { settle } from "./kilocode/exit-code" // kilocode_change - settle signal termination as 128 + signum
+import { prepareCommand as prepareSandbox } from "@sonderr/sandbox" // sonderr_change
+import { tap as tapStdio, tapped } from "./sonderr/stdio-tap" // sonderr_change - Bun drops buffered stdio on close
+import * as SpawnExit from "./sonderr/spawn-exit" // sonderr_change
+import * as SpawnValidation from "./sonderr/spawn-validation" // sonderr_change
+import { settle } from "./sonderr/exit-code" // sonderr_change - settle signal termination as 128 + signum
 import * as Deferred from "effect/Deferred"
 import * as Effect from "effect/Effect"
 import * as Exit from "effect/Exit"
@@ -252,13 +252,13 @@ export const make = Effect.gen(function* () {
   ) => {
     let stdout = proc.stdout
       ? NodeStream.fromReadable({
-          evaluate: () => tapped(proc, "stdout"), // kilocode_change - read the spawn-time tap
+          evaluate: () => tapped(proc, "stdout"), // sonderr_change - read the spawn-time tap
           onError: (cause) => toPlatformError("fromReadable(stdout)", toError(cause), command),
         })
       : Stream.empty
     let stderr = proc.stderr
       ? NodeStream.fromReadable({
-          evaluate: () => tapped(proc, "stderr"), // kilocode_change - read the spawn-time tap
+          evaluate: () => tapped(proc, "stderr"), // sonderr_change - read the spawn-time tap
           onError: (cause) => toPlatformError("fromReadable(stderr)", toError(cause), command),
         })
       : Stream.empty
@@ -272,12 +272,12 @@ export const make = Effect.gen(function* () {
   const spawn = (
     command: ChildProcess.StandardCommand,
     opts: NodeChildProcess.SpawnOptions,
-    direct: boolean, // kilocode_change - avoid shadowing settle
+    direct: boolean, // sonderr_change - avoid shadowing settle
   ) =>
     Effect.callback<readonly [NodeChildProcess.ChildProcess, ExitSignal], PlatformError.PlatformError>((resume) => {
       const signal = Deferred.makeUnsafe<readonly [code: number | null, signal: NodeJS.Signals | null]>()
       const proc = launch(command.command, command.args, opts)
-      tapStdio(proc) // kilocode_change - must run in the same tick as spawn
+      tapStdio(proc) // sonderr_change - must run in the same tick as spawn
       let end = false
       let exit: readonly [code: number | null, signal: NodeJS.Signals | null] | undefined
       proc.on("error", (err) => {
@@ -285,7 +285,7 @@ export const make = Effect.gen(function* () {
       })
       proc.on("exit", (...args) => {
         exit = args
-        if (direct) Deferred.doneUnsafe(signal, Exit.succeed(args)) // kilocode_change - bounded grep must not await inherited pipes
+        if (direct) Deferred.doneUnsafe(signal, Exit.succeed(args)) // sonderr_change - bounded grep must not await inherited pipes
       })
       proc.on("close", (...args) => {
         if (end) return
@@ -332,7 +332,7 @@ export const make = Effect.gen(function* () {
       return Effect.fail(toPlatformError("kill", new Error("Failed to kill child process"), command))
     })
 
-  // kilocode_change start - inspect descendants owned by commands that settle on direct exit
+  // sonderr_change start - inspect descendants owned by commands that settle on direct exit
   const groupAlive = (proc: NodeChildProcess.ChildProcess) => {
     if (process.platform === "win32") return false
     try {
@@ -342,7 +342,7 @@ export const make = Effect.gen(function* () {
       return false
     }
   }
-  // kilocode_change end
+  // sonderr_change end
 
   const timeout =
     (
@@ -387,18 +387,18 @@ export const make = Effect.gen(function* () {
     function* (command) {
       switch (command._tag) {
         case "StandardCommand": {
-          const validation = SpawnValidation.take(command) // kilocode_change - retain target validation through preparation
-          const direct = SpawnExit.take(command) // kilocode_change - opt selected commands into direct-exit settlement
+          const validation = SpawnValidation.take(command) // sonderr_change - retain target validation through preparation
+          const direct = SpawnExit.take(command) // sonderr_change - opt selected commands into direct-exit settlement
           const dir = yield* cwd(command.options)
-          // kilocode_change start - prepare agent-scoped commands through the selected sandbox backend
+          // sonderr_change start - prepare agent-scoped commands through the selected sandbox backend
           const target = yield* prepareSandbox(command, dir, env(command.options))
           const sin = stdin(target.options)
           const sout = stdio(target.options, "stdout")
           const serr = stdio(target.options, "stderr")
           const extra = fds(target.options)
-          // kilocode_change end
+          // sonderr_change end
 
-          // kilocode_change start - close target-swap races at the raw spawn boundary
+          // sonderr_change start - close target-swap races at the raw spawn boundary
           if (validation)
             yield* validation.pipe(
               Effect.mapError((cause) =>
@@ -411,10 +411,10 @@ export const make = Effect.gen(function* () {
                 }),
               ),
             )
-          // kilocode_change end
+          // sonderr_change end
 
           const [proc, signal] = yield* Effect.acquireRelease(
-            // kilocode_change start - spawn the prepared command and options
+            // sonderr_change start - spawn the prepared command and options
             spawn(
               target,
               {
@@ -423,31 +423,31 @@ export const make = Effect.gen(function* () {
                 stdio: stdios(sin, sout, serr, extra),
                 detached: target.options.detached ?? process.platform !== "win32",
                 shell: target.options.shell,
-                // kilocode_change end
+                // sonderr_change end
                 windowsHide: process.platform === "win32",
               },
-              direct, // kilocode_change
+              direct, // sonderr_change
             ),
             Effect.fnUntraced(function* ([proc, signal]) {
               const done = yield* Deferred.isDone(signal)
-              const kill = timeout(proc, command, target.options) // kilocode_change
+              const kill = timeout(proc, command, target.options) // sonderr_change
               if (done) {
                 const [code] = yield* Deferred.await(signal)
                 if (process.platform === "win32") return yield* Effect.void
-                // kilocode_change start - clean up only descendants owned by direct-settling commands
+                // sonderr_change start - clean up only descendants owned by direct-settling commands
                 if (direct && groupAlive(proc)) {
                   yield* Effect.ignore(killGroup(command, proc, target.options.killSignal ?? "SIGTERM"))
                   yield* Effect.sleep("100 millis")
                   if (groupAlive(proc)) yield* Effect.ignore(killGroup(command, proc, "SIGKILL"))
                   return yield* Effect.void
                 }
-                // kilocode_change end
+                // sonderr_change end
                 if (code !== 0 && Predicate.isNotNull(code)) return yield* Effect.ignore(kill(killGroup))
                 return yield* Effect.void
               }
               const send = (s: NodeJS.Signals) =>
                 Effect.catch(killGroup(command, proc, s), () => killOne(command, proc, s))
-              // kilocode_change start - preserve kill options from the prepared command
+              // sonderr_change start - preserve kill options from the prepared command
               const sig = target.options.killSignal ?? "SIGTERM"
               const attempt = send(sig).pipe(Effect.andThen(Deferred.await(signal)), Effect.asVoid)
               const escalated = target.options.forceKillAfter
@@ -456,7 +456,7 @@ export const make = Effect.gen(function* () {
                     orElse: () => send("SIGKILL").pipe(Effect.andThen(Deferred.await(signal)), Effect.asVoid),
                   })
                 : attempt
-              // kilocode_change end
+              // sonderr_change end
               return yield* Effect.ignore(escalated)
             }),
           )
@@ -473,7 +473,7 @@ export const make = Effect.gen(function* () {
             getInputFd: fd.getInputFd,
             getOutputFd: fd.getOutputFd,
             isRunning: Effect.map(Deferred.isDone(signal), (done) => !done),
-            exitCode: Effect.flatMap(Deferred.await(signal), settle), // kilocode_change - signal termination settles as 128 + signum
+            exitCode: Effect.flatMap(Deferred.await(signal), settle), // sonderr_change - signal termination settles as 128 + signum
             kill: (opts?: ChildProcess.KillOptions) => {
               const sig = opts?.killSignal ?? "SIGTERM"
               const send = (s: NodeJS.Signals) =>

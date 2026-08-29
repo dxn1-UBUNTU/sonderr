@@ -1,19 +1,19 @@
 import { describe, expect } from "bun:test"
 import { Cause, Deferred, Effect, Exit, Layer, Queue } from "effect"
-import { Config } from "@opencode-ai/core/config"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { EventV2 } from "@opencode-ai/core/event"
-import { Location } from "@opencode-ai/core/location"
-import { Pty } from "@opencode-ai/core/pty"
-import type { PtyID } from "@opencode-ai/core/pty/schema"
-import { AbsolutePath } from "@opencode-ai/core/schema"
+import { Config } from "@sonderr/core/config"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { EventV2 } from "@sonderr/core/event"
+import { Location } from "@sonderr/core/location"
+import { Pty } from "@sonderr/core/pty"
+import type { PtyID } from "@sonderr/core/pty/schema"
+import { AbsolutePath } from "@sonderr/core/schema"
 import { location } from "../fixture/location"
 import { testEffect } from "../lib/effect"
 
 type PtyEvent = { type: "created" | "exited" | "deleted"; id: PtyID }
 
-const PTY_TEST_TIMEOUT = "15 seconds" // kilocode_change - PTY startup can exceed the default test timeout on macOS CI
+const PTY_TEST_TIMEOUT = "15 seconds" // sonderr_change - PTY startup can exceed the default test timeout on macOS CI
 
 const locationLayer = Layer.succeed(
   Location.Service,
@@ -47,7 +47,7 @@ const subscribePtyEvents = Effect.fn("PtySessionTest.subscribePtyEvents")(functi
 const createPty = Effect.fn("PtySessionTest.createPty")(function* (command: string, args: string[] = []) {
   const pty = yield* Pty.Service
   return yield* Effect.acquireRelease(
-    pty.create({ command, args, cwd: "/tmp", env: { TERM: "xterm-256color", KILO_TERMINAL: "1" } }),
+    pty.create({ command, args, cwd: "/tmp", env: { TERM: "xterm-256color", SONDERR_TERMINAL: "1" } }),
     (info) => pty.remove(info.id).pipe(Effect.ignore),
   )
 })
@@ -62,7 +62,7 @@ const waitForEvents = (events: Queue.Queue<PtyEvent>, id: PtyID, count: number) 
     return picked
   }).pipe(
     Effect.timeoutOrElse({
-      duration: PTY_TEST_TIMEOUT, // kilocode_change
+      duration: PTY_TEST_TIMEOUT, // sonderr_change
       orElse: () => Effect.fail(new Error("timeout waiting for pty events")),
     }),
   )
@@ -81,7 +81,7 @@ const attachCollecting = Effect.fn("PtySessionTest.attachCollecting")(function* 
   return { attachment, output, ended }
 })
 
-// kilocode_change start - preserve collected PTY output in timeout diagnostics
+// sonderr_change start - preserve collected PTY output in timeout diagnostics
 const waitForOutput = (output: Queue.Queue<string>, text: string) => {
   let received = ""
   const pull = Effect.gen(function* () {
@@ -90,12 +90,12 @@ const waitForOutput = (output: Queue.Queue<string>, text: string) => {
   })
   return pull.pipe(
     Effect.timeoutOrElse({
-      duration: PTY_TEST_TIMEOUT, // kilocode_change
+      duration: PTY_TEST_TIMEOUT, // sonderr_change
       orElse: () => Effect.fail(new Error(`timeout waiting for output containing ${JSON.stringify(text)}, received ${JSON.stringify(received)}`)),
     }),
   )
 }
-// kilocode_change end
+// sonderr_change end
 
 describe("pty", () => {
   it.live("returns typed not found errors for missing sessions", () =>
@@ -135,7 +135,7 @@ describe("pty", () => {
     }),
   )
 
-  // kilocode_change start - explicit commands must not acquire implicit login-shell arguments.
+  // sonderr_change start - explicit commands must not acquire implicit login-shell arguments.
   ptyTest("preserves explicit command arguments", () =>
     Effect.gen(function* () {
       const args = ["-c", 'printf "<%s>" "$0"; sleep 5']
@@ -182,7 +182,7 @@ describe("pty", () => {
       expect(alive).toBe(false)
     }),
   )
-  // kilocode_change end
+  // sonderr_change end
 
   ptyTest("replays buffered output and streams live output to attachments", () =>
     Effect.gen(function* () {
@@ -259,7 +259,7 @@ describe("pty", () => {
     }),
   )
 
-  // kilocode_change start - canonical attachments replay retained exited output, then end without accepting input.
+  // sonderr_change start - canonical attachments replay retained exited output, then end without accepting input.
   ptyTest("replays exited output and ends when enabled", () =>
     Effect.gen(function* () {
       const pty = yield* Pty.Service
@@ -282,7 +282,7 @@ describe("pty", () => {
       attachment.detach()
     }),
   )
-  // kilocode_change end
+  // sonderr_change end
 })
 
 const configuredShell = process.platform === "win32" ? undefined : Bun.which("bash")

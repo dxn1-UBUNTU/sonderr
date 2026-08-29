@@ -36,18 +36,18 @@ function providerIconsPlugin() {
   return {
     name: "provider-icons-plugin",
     configureServer() {
-      if (!process.env.KILO_FETCH_PROVIDER_ICONS) return // kilocode_change
+      if (!process.env.SONDERR_FETCH_PROVIDER_ICONS) return // sonderr_change
       void fetchProviderIcons()
     },
     buildStart() {
-      if (!process.env.KILO_FETCH_PROVIDER_ICONS) return // kilocode_change
+      if (!process.env.SONDERR_FETCH_PROVIDER_ICONS) return // sonderr_change
       void fetchProviderIcons()
     },
   }
 }
 
 async function fetchProviderIcons() {
-  const url = process.env.KILO_MODELS_URL || "https://models.dev" // kilocode_change
+  const url = process.env.SONDERR_MODELS_URL || "https://models.dev" // sonderr_change
   const providers = await fetch(`${url}/api.json`)
     .then((res) => res.json())
     .then((json) => Object.keys(json))

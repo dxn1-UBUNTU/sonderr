@@ -180,7 +180,7 @@ export function generateAutoFixSuggestions(errorCategory: ModelValidationError):
           "1. Open Atomic Chat",
           "2. Download or select a model and load it",
           "3. Run curl http://127.0.0.1:1337/v1/models to verify the model id",
-          "4. Retry in Kilo Code",
+          "4. Retry in Sonderr",
         ],
         automated: false,
       })

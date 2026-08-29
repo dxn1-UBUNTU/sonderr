@@ -36,7 +36,7 @@ export interface DialogSelectProps<T> {
   renderFilter?: boolean
   locked?: boolean
   preserveSelection?: boolean
-  actions?: DialogSelectAction<T>[] // kilocode_change - supports actions without a selected option
+  actions?: DialogSelectAction<T>[] // sonderr_change - supports actions without a selected option
   footerHints?: {
     title: string
     label: string
@@ -46,7 +46,7 @@ export interface DialogSelectProps<T> {
   current?: T
 }
 
-// kilocode_change start - support list-level actions when no option is selected
+// sonderr_change start - support list-level actions when no option is selected
 type DialogSelectActionBase<T> = {
   command: string
   title: string
@@ -66,7 +66,7 @@ type DialogSelectAction<T> = DialogSelectActionBase<T> &
         onTrigger: () => void
       }
   )
-// kilocode_change end
+// sonderr_change end
 
 export interface DialogSelectOption<T = any> {
   title: string
@@ -350,7 +350,7 @@ export function DialogSelect<T>(props: DialogSelectProps<T>) {
       if (y < 0) {
         scroll.scrollBy(y)
         if (flat()[0] === selected()) {
-          // kilocode_change - reference identity; duplicate values are legal (see `active`)
+          // sonderr_change - reference identity; duplicate values are legal (see `active`)
           scroll.scrollTo(0)
         }
       }
@@ -457,12 +457,12 @@ export function DialogSelect<T>(props: DialogSelectProps<T>) {
             if (props.locked) return
             if (isActionDisabled(item)) return
             setStore("input", "keyboard")
-            // kilocode_change start - allow actions such as scope toggles on empty lists
+            // sonderr_change start - allow actions such as scope toggles on empty lists
             if (item.requiresSelection === false) {
               item.onTrigger()
               return
             }
-            // kilocode_change end
+            // sonderr_change end
             const option = selected()
             if (!option) return
             item.onTrigger(option)
@@ -655,11 +655,11 @@ export function DialogSelect<T>(props: DialogSelectProps<T>) {
                   </Show>
                   <For each={options}>
                     {(option) => {
-                      // kilocode_change start - match the selected row by reference, not by value: the
+                      // sonderr_change start - match the selected row by reference, not by value: the
                       // model picker legitimately lists the same model twice (Recent + its provider
                       // section), and value equality would light up / target both rows
                       const active = createMemo(() => !props.locked && option === selected())
-                      // kilocode_change end
+                      // sonderr_change end
                       const current = createMemo(() => isDeepEqual(option.value, props.current))
                       return (
                         <box
@@ -678,13 +678,13 @@ export function DialogSelect<T>(props: DialogSelectProps<T>) {
                           onMouseOver={() => {
                             if (props.locked) return
                             if (store.input !== "mouse") return
-                            const index = flat().indexOf(option) // kilocode_change - see `active` above
+                            const index = flat().indexOf(option) // sonderr_change - see `active` above
                             if (index === -1) return
                             moveTo(index)
                           }}
                           onMouseDown={() => {
                             if (props.locked) return
-                            const index = flat().indexOf(option) // kilocode_change - see `active` above
+                            const index = flat().indexOf(option) // sonderr_change - see `active` above
                             if (index === -1) return
                             moveTo(index)
                           }}

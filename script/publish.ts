@@ -1,22 +1,22 @@
 #!/usr/bin/env bun
 
-import { Script } from "@opencode-ai/script"
+import { Script } from "@sonderr/script"
 import { $ } from "bun"
 import { fileURLToPath } from "url"
 
 console.log("=== publishing ===\n")
 
-// kilocode_change start - keep JetBrains CLI pin reviewable outside CLI release commits
-const jetbrainsPkg = fileURLToPath(new URL("../packages/kilo-jetbrains/package.json", import.meta.url))
+// sonderr_change start - keep JetBrains CLI pin reviewable outside CLI release commits
+const jetbrainsPkg = fileURLToPath(new URL("../packages/sonderr-jetbrains/package.json", import.meta.url))
 const jetbrainsPin = await Bun.file(jetbrainsPkg).text()
-// kilocode_change end
+// sonderr_change end
 
-// kilocode_change start - consume changesets on the publish runner so changelog
+// sonderr_change start - consume changesets on the publish runner so changelog
 // changes are included in the release commit. Previously this ran in the
 // version job on a separate runner whose workspace was discarded.
 {
   await $`bun install`
-  const paths = ["packages/kilo-vscode/CHANGELOG.md", "packages/opencode/CHANGELOG.md"]
+  const paths = ["packages/sonderr-vscode/CHANGELOG.md", "packages/cli/CHANGELOG.md"]
   const before = new Map<string, string>()
   for (const p of paths) {
     before.set(
@@ -38,7 +38,7 @@ const jetbrainsPin = await Bun.file(jetbrainsPkg).text()
     }
   }
 }
-// kilocode_change end
+// sonderr_change end
 
 const pkgjsons = await Array.fromAsync(
   new Bun.Glob("**/package.json").scan({
@@ -47,13 +47,13 @@ const pkgjsons = await Array.fromAsync(
 ).then((arr) => arr.filter((x) => !x.includes("node_modules") && !x.includes("dist")))
 
 for (const file of pkgjsons) {
-  // kilocode_change start - create a follow-up PR for JetBrains CLI pin bumps
+  // sonderr_change start - create a follow-up PR for JetBrains CLI pin bumps
   if (file === jetbrainsPkg) {
     console.log("preserved JetBrains CLI pin:", file)
     await Bun.file(file).write(jetbrainsPin)
     continue
   }
-  // kilocode_change end
+  // sonderr_change end
   let pkg = await Bun.file(file).text()
   pkg = pkg.replaceAll(/"version": "[^"]+"/g, `"version": "${Script.version}"`)
   console.log("updated:", file)
@@ -71,7 +71,7 @@ await $`bun install`
 await import(`../packages/sdk/js/script/build.ts`)
 
 if (Script.release) {
-  // kilocode_change start - commit, tag, and push with rebase + retry to handle
+  // sonderr_change start - commit, tag, and push with rebase + retry to handle
   // concurrent merges to main. Rebase (instead of cherry-pick) handles
   // overlapping file changes cleanly, and the retry loop covers the narrow
   // window between fetch and push where another commit could land.
@@ -98,23 +98,23 @@ if (Script.release) {
     if (i === retries) throw new Error("failed to push release commit after " + retries + " attempts")
     await new Promise((r) => setTimeout(r, 3_000))
   }
-  // kilocode_change end
+  // sonderr_change end
 
-  // kilocode_change start - publish channel-aware GitHub release notes
-  const { publishNotes } = await import("./kilocode/release-notes")
+  // sonderr_change start - publish channel-aware GitHub release notes
+  const { publishNotes } = await import("./sonderr/release-notes")
   await publishNotes({
     version: Script.version,
     prerelease: Script.preview,
     repo: process.env.GH_REPO,
     temp: process.env.RUNNER_TEMP,
   })
-  // kilocode_change end
+  // sonderr_change end
 }
 
 console.log("\n=== cli ===\n")
-await import(`../packages/opencode/script/publish.ts`)
+await import(`../packages/cli/script/publish.ts`)
 
-// kilocode_change - Kilo does not ship the upstream preview CLI package
+// sonderr_change - Sonderr does not ship the upstream preview CLI package
 
 console.log("\n=== sdk ===\n")
 await import(`../packages/sdk/js/script/publish.ts`)
@@ -122,28 +122,28 @@ await import(`../packages/sdk/js/script/publish.ts`)
 console.log("\n=== plugin ===\n")
 await import(`../packages/plugin/script/publish.ts`)
 
-// kilocode_change - Kilo does not publish the upstream-owned @opencode-ai/ui package
+// sonderr_change - Sonderr does not publish the upstream-owned @sonderr/ui package
 
-// kilocode_change start
+// sonderr_change start
 console.log("\n=== vscode ===\n")
-await import(`../packages/kilo-vscode/script/publish.ts`)
-// kilocode_change end
+await import(`../packages/sonderr-vscode/script/publish.ts`)
+// sonderr_change end
 
-// kilocode_change start - Kilo does not ship the opencode desktop app
+// sonderr_change start - Sonderr does not ship the sonderr desktop app
 // if (Script.release) {
 //   await $`bun ./packages/desktop/scripts/finalize-latest-json.ts`
 //   await $`bun ./packages/desktop/scripts/finalize-latest-yml.ts`
 // }
-// kilocode_change end
+// sonderr_change end
 
 const dir = fileURLToPath(new URL("..", import.meta.url))
 process.chdir(dir)
 
-// kilocode_change start - non-blocking JetBrains CLI pin bump PR after stable CLI release
+// sonderr_change start - non-blocking JetBrains CLI pin bump PR after stable CLI release
 await createJetbrainsPinPr()
-// kilocode_change end
+// sonderr_change end
 
-// kilocode_change start
+// sonderr_change start
 async function createJetbrainsPinPr() {
   console.log("\n=== jetbrains cli pin bump pr ===\n")
   if (!Script.release) {
@@ -155,7 +155,7 @@ async function createJetbrainsPinPr() {
     return
   }
   const result =
-    await $`bun .kilo/skills/release-jetbrains/script/set-pin.ts --version ${Script.version} --pr`.nothrow()
+    await $`bun .sonderr/skills/release-jetbrains/script/set-pin.ts --version ${Script.version} --pr`.nothrow()
   const out = result.stdout.toString().trim()
   const err = result.stderr.toString().trim()
   if (result.exitCode === 0) {
@@ -171,4 +171,4 @@ async function createJetbrainsPinPr() {
     "::warning title=JetBrains CLI pin bump PR failed::Release completed, but the JetBrains CLI pin bump PR was not created. Check the logs above and create it manually if needed.",
   )
 }
-// kilocode_change end
+// sonderr_change end

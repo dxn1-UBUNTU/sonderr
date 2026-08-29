@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import * as Cloud from "../src/kilocode/provider-usage/cloud"
+import * as Cloud from "../src/sonderr/provider-usage/cloud"
 
 const subscription = {
   id: "byteplus-plan",
@@ -76,7 +76,7 @@ describe("managed provider usage", () => {
       providerID: "byteplus-coding",
       providerLabel: "BytePlus",
       planLabel: "BytePlus Coding Plan Lite",
-      sourceKind: "kilo_managed",
+      sourceKind: "sonderr_managed",
       windows: [
         {
           id: "byteplus-plan:monthly",

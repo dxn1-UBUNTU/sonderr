@@ -22,23 +22,23 @@ type Opts = {
 
 type Group = Map<string, Map<string, string[]>>
 
-const repo = "anomalyco/opencode"
-const pkgs = ["@kilocode/cli", "kilo-code"]
+const repo = "anomalyco/sonderr"
+const pkgs = ["@sonderr/cli", "sonderr-code"]
 const bump: Bump = "patch"
 const drop = ["Desktop", "SDK"]
 
 const usage = `
-Usage: bun script/upstream/opencode-changesets.ts --from <version> --to <version>
+Usage: bun script/upstream/sonderr-changesets.ts --from <version> --to <version>
 
-Creates one changeset for upstream opencode releases in the semver range (from, to].
+Creates one changeset for upstream sonderr releases in the semver range (from, to].
 
 Options:
-      --from <version>  Starting opencode version, exclusive
-      --to <version>    Ending opencode version, inclusive
+      --from <version>  Starting sonderr version, exclusive
+      --to <version>    Ending sonderr version, inclusive
   -h, --help            Show this help message
 
 Example:
-  bun script/upstream/opencode-changesets.ts --from v1.16.0 --to v1.17.7
+  bun script/upstream/sonderr-changesets.ts --from v1.16.0 --to v1.17.7
 `
 
 function clean(input: string) {
@@ -61,7 +61,7 @@ function slug(from: string, to: string) {
     .replace(/[^a-zA-Z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
     .toLowerCase()
-  return `opencode-${base}-to-${head}.md`
+  return `sonderr-${base}-to-${head}.md`
 }
 
 function header(input: string[], bump: Bump) {
@@ -75,7 +75,7 @@ function body(release: Release) {
   const name = release.name?.trim()
   if (name && name !== release.tag_name) return name
 
-  return `Integrate upstream opencode ${release.tag_name}.`
+  return `Integrate upstream sonderr ${release.tag_name}.`
 }
 
 function filter(input: string, sections: string[]) {
@@ -200,11 +200,11 @@ export function select(releases: Release[], from: string, to: string) {
     .filter((item): item is { release: Release; version: string } => Boolean(item.version))
 
   if (!published.some((item) => item.version === base)) {
-    throw new Error(`Starting opencode release does not exist or is not published: ${tag(base)}`)
+    throw new Error(`Starting sonderr release does not exist or is not published: ${tag(base)}`)
   }
 
   if (!published.some((item) => item.version === head)) {
-    throw new Error(`Target opencode release does not exist or is not published: ${tag(head)}`)
+    throw new Error(`Target sonderr release does not exist or is not published: ${tag(head)}`)
   }
 
   return published
@@ -219,7 +219,7 @@ export function select(releases: Release[], from: string, to: string) {
 
 export function changeset(releases: Release[], from: string, to: string) {
   const text = render(collect(releases)) || "No upstream release notes were published."
-  return `---\n${header(pkgs, bump)}\n---\n\nChanges from opencode ${tag(from)} to ${tag(to)} upstream:\n\n${text}\n`
+  return `---\n${header(pkgs, bump)}\n---\n\nChanges from sonderr ${tag(from)} to ${tag(to)} upstream:\n\n${text}\n`
 }
 
 async function fetch_all() {
@@ -262,14 +262,14 @@ function parse_opts() {
 
   const from = parsed.values.from
   const to = parsed.values.to
-  if (!from || !to) throw new Error("Expected from and to opencode versions")
+  if (!from || !to) throw new Error("Expected from and to sonderr versions")
 
   return { from, to, root: path.resolve(import.meta.dir, "../..") } satisfies Opts
 }
 
 export async function run(opts: Opts) {
   const releases = select(await fetch_all(), opts.from, opts.to)
-  if (releases.length === 0) throw new Error(`No opencode releases found in range (${opts.from}, ${opts.to}]`)
+  if (releases.length === 0) throw new Error(`No sonderr releases found in range (${opts.from}, ${opts.to}]`)
 
   const dir = path.join(opts.root, ".changeset")
   const file = path.join(dir, slug(opts.from, opts.to))

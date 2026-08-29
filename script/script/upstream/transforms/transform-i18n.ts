@@ -1,31 +1,31 @@
 #!/usr/bin/env bun
 /**
- * Transform i18n translation files with Kilo branding
+ * Transform i18n translation files with Sonderr branding
  *
  * This script handles i18n files by:
  * 1. Taking upstream's version as the base (to get new translation keys)
- * 2. Applying intelligent string replacements for Kilo branding
- * 3. Preserving lines marked with `// kilocode_change`
+ * 2. Applying intelligent string replacements for Sonderr branding
+ * 3. Preserving lines marked with `// sonderr_change`
  *
  * String replacement rules:
- * - opencode.ai -> kilo.ai (domain)
- * - app.opencode.ai -> app.kilo.ai (app domain)
- * - OpenCode -> Kilo (product name in user-visible text)
- * - opencode upgrade -> kilo upgrade (CLI commands)
- * - npx opencode -> npx kilo (CLI invocation)
- * - anomalyco/opencode -> Kilo-Org/kilocode (GitHub repo)
+ * - sonderr.ai -> kilo.ai (domain)
+ * - app.sonderr.ai -> app.kilo.ai (app domain)
+ * - Sonderr -> Sonderr (product name in user-visible text)
+ * - sonderr upgrade -> sonderr upgrade (CLI commands)
+ * - npx sonderr -> npx sonderr (CLI invocation)
+ * - anomalyco/sonderr -> Sonderr-Org/sonderr (GitHub repo)
  *
  * Preserved (not replaced):
- * - opencode.json (actual config filename)
- * - .opencode/ (actual directory name)
- * - Lines with `// kilocode_change`
+ * - sonderr.json (actual config filename)
+ * - .sonderr/ (actual directory name)
+ * - Lines with `// sonderr_change`
  */
 
 import { $ } from "bun"
 import { Glob } from "bun"
 import { info, success, warn, debug } from "../utils/logger"
 import { defaultConfig } from "../utils/config"
-import { oursHasKilocodeChanges } from "../utils/git"
+import { oursHasSonderrChanges } from "../utils/git"
 
 export interface I18nTransformResult {
   file: string
@@ -51,99 +51,99 @@ interface StringReplacement {
 const I18N_REPLACEMENTS: StringReplacement[] = [
   // GitHub repo references
   {
-    pattern: /github\.com\/anomalyco\/opencode/g,
-    replacement: "github.com/Kilo-Org/kilocode",
+    pattern: /github\.com\/anomalyco\/sonderr/g,
+    replacement: "github.com/Sonderr-Org/sonderr",
     description: "GitHub URL",
   },
   {
-    pattern: /anomalyco\/opencode/g,
-    replacement: "Kilo-Org/kilocode",
+    pattern: /anomalyco\/sonderr/g,
+    replacement: "Sonderr-Org/sonderr",
     description: "GitHub repo reference",
   },
 
   // Domain replacements (specific first)
   {
-    pattern: /app\.opencode\.ai/g,
+    pattern: /app\.sonderr\.ai/g,
     replacement: "app.kilo.ai",
     description: "App domain",
   },
   {
-    pattern: /opencode\.ai(?!\/zen)/g,
+    pattern: /sonderr\.ai(?!\/zen)/g,
     replacement: "kilo.ai",
     description: "Main domain (excluding zen)",
   },
 
   // CLI commands (be careful with order)
   {
-    pattern: /npx opencode(?!\w)/g,
-    replacement: "npx kilo",
+    pattern: /npx sonderr(?!\w)/g,
+    replacement: "npx sonderr",
     description: "npx command",
   },
   {
-    pattern: /bun add opencode(?!\w)/g,
-    replacement: "bun add kilo",
+    pattern: /bun add sonderr(?!\w)/g,
+    replacement: "bun add sonderr",
     description: "bun add command",
   },
   {
-    pattern: /npm install opencode(?!\w)/g,
-    replacement: "npm install kilo",
+    pattern: /npm install sonderr(?!\w)/g,
+    replacement: "npm install sonderr",
     description: "npm install command",
   },
   {
-    pattern: /opencode upgrade(?!\w)/g,
-    replacement: "kilo upgrade",
+    pattern: /sonderr upgrade(?!\w)/g,
+    replacement: "sonderr upgrade",
     description: "upgrade command",
   },
   {
-    pattern: /opencode dev(?!\w)/g,
-    replacement: "kilo dev",
+    pattern: /sonderr dev(?!\w)/g,
+    replacement: "sonderr dev",
     description: "dev command",
   },
   {
-    pattern: /opencode serve(?!\w)/g,
-    replacement: "kilo serve",
+    pattern: /sonderr serve(?!\w)/g,
+    replacement: "sonderr serve",
     description: "serve command",
   },
   {
-    pattern: /opencode auth(?!\w)/g,
-    replacement: "kilo auth",
+    pattern: /sonderr auth(?!\w)/g,
+    replacement: "sonderr auth",
     description: "auth command",
   },
 
   // Generic product name replacement (must come after specific patterns)
-  // Only replace "OpenCode" when it's a standalone word (not part of opencode.json, etc.)
+  // Only replace "Sonderr" when it's a standalone word (not part of sonderr.json, etc.)
   {
-    pattern: /\bOpenCode\b(?!\.json|\/| Zen)/g,
-    replacement: "Kilo",
+    pattern: /\bSonderr\b(?!\.json|\/| Zen)/g,
+    replacement: "Sonderr",
     description: "Product name",
   },
 
-  // Environment variables (exclude OPENCODE_API_KEY)
+  // Environment variables (exclude SONDERR_API_KEY)
   {
-    pattern: /\bOPENCODE_(?!API_KEY\b)([A-Z_]+)\b/g,
-    replacement: "KILO_$1",
+    pattern: /\bSONDERR_(?!API_KEY\b)([A-Z_]+)\b/g,
+    replacement: "SONDERR_$1",
     description: "Environment variable",
   },
 ]
 
 // Patterns that should NOT be replaced (preserved as-is)
 const PRESERVE_PATTERNS = [
-  /opencode\.json/g, // Config filename
-  /\.opencode\//g, // Directory name
-  /\.opencode`/g, // Directory name in template strings
-  /"\.opencode"/g, // Directory name in quotes
-  /'\.opencode'/g, // Directory name in single quotes
+  /sonderr\.json/g, // Config filename
+  /\.sonderr\//g, // Directory name
+  /\.sonderr`/g, // Directory name in template strings
+  /"\.sonderr"/g, // Directory name in quotes
+  /'\.sonderr'/g, // Directory name in single quotes
 ]
 
 /**
- * Check if a line should be preserved (has kilocode_change marker)
+ * Check if a line should be preserved (has sonderr_change marker)
  */
 function shouldPreserveLine(line: string): boolean {
-  return line.includes("// kilocode_change")
+  return line.includes("// sonderr_change")
 }
 
 /**
- * Apply string replacements to content, preserving kilocode_change lines
+ * Apply string replacements to content, preserving sonderr_change lines
  */
 export function transformI18nContent(
   content: string,
@@ -156,7 +156,7 @@ export function transformI18nContent(
   let preservedCount = 0
 
   for (const line of lines) {
-    // Skip lines marked with kilocode_change
+    // Skip lines marked with sonderr_change
     if (shouldPreserveLine(line)) {
       transformedLines.push(line)
       preservedCount++
@@ -201,8 +201,8 @@ export function transformI18nContent(
       }
     }
 
-    // Kilo branding produced by this transform remains a Kilo-owned delta in shared locale files.
-    transformedLines.push(markers && lineReplacements > 0 ? `${transformedLine} // kilocode_change` : transformedLine)
+    // Sonderr branding produced by this transform remains a Sonderr-owned delta in shared locale files.
+    transformedLines.push(markers && lineReplacements > 0 ? `${transformedLine} // sonderr_change` : transformedLine)
     totalReplacements += lineReplacements
   }
 
@@ -285,7 +285,7 @@ export async function transformAllI18n(options: I18nTransformOptions = {}): Prom
 
 /**
  * Transform i18n files that are in conflict during merge
- * Takes upstream version (theirs) and applies Kilo branding
+ * Takes upstream version (theirs) and applies Sonderr branding
  */
 export async function transformConflictedI18n(
   files: string[],
@@ -299,9 +299,9 @@ export async function transformConflictedI18n(
       continue
     }
 
-    // If our version has kilocode_change markers, flag for manual resolution
-    if (!options.dryRun && (await oursHasKilocodeChanges(file))) {
-      warn(`${file} has kilocode_change markers — skipping auto-transform, needs manual resolution`)
+    // If our version has sonderr_change markers, flag for manual resolution
+    if (!options.dryRun && (await oursHasSonderrChanges(file))) {
+      warn(`${file} has sonderr_change markers — skipping auto-transform, needs manual resolution`)
       results.push({ file, replacements: 0, preserved: 0, dryRun: false, flagged: true })
       continue
     }
@@ -312,14 +312,14 @@ export async function transformConflictedI18n(
       await $`git add ${file}`.quiet().nothrow()
     }
 
-    // Then apply Kilo branding transformations
+    // Then apply Sonderr branding transformations
     const result = await transformI18nFile(file, options)
     results.push(result)
 
     if (options.dryRun) {
       info(`[DRY-RUN] Would take upstream and transform ${file}: ${result.replacements} replacements`)
     } else if (result.replacements > 0) {
-      success(`Transformed ${file}: took upstream + ${result.replacements} Kilo branding replacements`)
+      success(`Transformed ${file}: took upstream + ${result.replacements} Sonderr branding replacements`)
     }
   }
 

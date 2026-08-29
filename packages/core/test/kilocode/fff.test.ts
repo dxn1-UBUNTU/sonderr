@@ -1,17 +1,17 @@
 import { describe, expect, test } from "bun:test"
 import { FileFinder, type InitOptions } from "@ff-labs/fff-bun"
-import "@opencode-ai/core/filesystem"
-import { Fff } from "@opencode-ai/core/filesystem/fff.bun"
-import { FSUtil } from "@opencode-ai/core/fs-util"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { Flag } from "@opencode-ai/core/flag/flag"
-import { Ripgrep } from "@opencode-ai/core/ripgrep"
+import "@sonderr/core/filesystem"
+import { Fff } from "@sonderr/core/filesystem/fff.bun"
+import { FSUtil } from "@sonderr/core/fs-util"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { Flag } from "@sonderr/core/flag/flag"
+import { Ripgrep } from "@sonderr/core/ripgrep"
 import fs from "node:fs/promises"
 import path from "path"
 import { Cause, Context, Effect, Layer, Scope } from "effect"
-import { allowed, message, notices } from "@opencode-ai/core/kilocode/fff"
-import { Location } from "@opencode-ai/core/location"
-import { AbsolutePath, RelativePath } from "@opencode-ai/core/schema"
+import { allowed, message, notices } from "@sonderr/core/sonderr/fff"
+import { Location } from "@sonderr/core/location"
+import { AbsolutePath, RelativePath } from "@sonderr/core/schema"
 import { location } from "../fixture/location"
 import { tmpdir } from "../fixture/tmpdir"
 
@@ -23,8 +23,8 @@ describe("FFF scanning boundaries", () => {
 
   test("blocks broad scans and warns for home/root aliases without blocking scoped file tools", async () => {
     await using tmp = await tmpdir()
-    const home = process.env.KILO_TEST_HOME
-    const disabled = Flag.KILO_DISABLE_FFF
+    const home = process.env.SONDERR_TEST_HOME
+    const disabled = Flag.SONDERR_DISABLE_FFF
     const create = FileFinder.create
     const calls = { native: 0, walk: 0 }
     const root = path.parse(tmp.path).root
@@ -36,7 +36,7 @@ describe("FFF scanning boundaries", () => {
     await fs.writeFile(path.join(project, "file.ts"), "needle\n")
     await fs.symlink(tmp.path, alias, kind)
     await fs.symlink(root, link, kind)
-    process.env.KILO_TEST_HOME = tmp.path
+    process.env.SONDERR_TEST_HOME = tmp.path
     FileFinder.create = () => {
       calls.native++
       return { ok: false, error: "unexpected native index" }
@@ -46,7 +46,7 @@ describe("FFF scanning boundaries", () => {
       expect(notices(project)).toEqual([])
       await Effect.runPromise(
         Effect.gen(function* () {
-          const { FileSystemSearch } = yield* Effect.promise(() => import("@opencode-ai/core/filesystem/search"))
+          const { FileSystemSearch } = yield* Effect.promise(() => import("@sonderr/core/filesystem/search"))
           const native = yield* Ripgrep.Service
           const source = FileSystemSearch.locationLayer.pipe(
             Layer.provide(
@@ -58,7 +58,7 @@ describe("FFF scanning boundaries", () => {
             Layer.provide(FSUtil.defaultLayer),
           )
           for (const value of [false, true]) {
-            Flag.KILO_DISABLE_FFF = value
+            Flag.SONDERR_DISABLE_FFF = value
             for (const directory of [root, tmp.path, alias, link]) {
               expect(allowed(directory)).toBe(false)
               expect(notices(directory)).toEqual([{ path: directory, message }])
@@ -110,9 +110,9 @@ describe("FFF scanning boundaries", () => {
       )
     } finally {
       FileFinder.create = create
-      Flag.KILO_DISABLE_FFF = disabled
-      if (home === undefined) delete process.env.KILO_TEST_HOME
-      if (home !== undefined) process.env.KILO_TEST_HOME = home
+      Flag.SONDERR_DISABLE_FFF = disabled
+      if (home === undefined) delete process.env.SONDERR_TEST_HOME
+      if (home !== undefined) process.env.SONDERR_TEST_HOME = home
     }
   })
 })
@@ -144,7 +144,7 @@ describe("FFF lifecycle", () => {
           Scope.make(),
           (scope) =>
             Effect.gen(function* () {
-              const { FileSystemSearch } = yield* Effect.promise(() => import("@opencode-ai/core/filesystem/search"))
+              const { FileSystemSearch } = yield* Effect.promise(() => import("@sonderr/core/filesystem/search"))
               const layer = FileSystemSearch.fffLayer.pipe(
                 Layer.provide(FSUtil.defaultLayer),
                 Layer.provide(

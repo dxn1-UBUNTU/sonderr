@@ -1,4 +1,4 @@
-import type { TuiPluginApi } from "@kilocode/plugin/tui"
+import type { TuiPluginApi } from "@sonderr/plugin/tui"
 import { RGBA } from "@opentui/core"
 import { createTuiResolvedConfig } from "./tui-runtime"
 

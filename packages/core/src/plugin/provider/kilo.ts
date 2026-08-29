@@ -1,47 +1,47 @@
-import { createKilo, KILO_OPENROUTER_BASE } from "@kilocode/kilo-gateway" // kilocode_change
+import { createSonderr, SONDERR_OPENROUTER_BASE } from "@sonderr/sonderr-gateway" // sonderr_change
 import { Effect } from "effect"
-import { ProviderV2 } from "../../provider" // kilocode_change
+import { ProviderV2 } from "../../provider" // sonderr_change
 import { define } from "../internal"
 
-const id = ProviderV2.ID.kilo // kilocode_change
+const id = ProviderV2.ID.sonderr // sonderr_change
 
-export const KiloPlugin = define({
-  id: "kilo",
+export const SonderrPlugin = define({
+  id: "sonderr",
   effect: Effect.fn(function* (ctx) {
     yield* ctx.catalog.transform(
       Effect.fn(function* (evt) {
         for (const item of evt.provider.list()) {
-          if (item.provider.id !== id) continue // kilocode_change
+          if (item.provider.id !== id) continue // sonderr_change
           evt.provider.update(item.provider.id, (provider) => {
-            // kilocode_change start
+            // sonderr_change start
             const options = provider.request.body
-            const token = options.kilocodeToken ?? options.apiKey ?? process.env.KILO_API_KEY
-            const org = process.env.KILO_ORG_ID ?? options.kilocodeOrganizationId
+            const token = options.sonderrToken ?? options.apiKey ?? process.env.SONDERR_API_KEY
+            const org = process.env.SONDERR_ORG_ID ?? options.sonderrOrganizationId
 
             provider.api = {
               type: "aisdk",
-              package: "@kilocode/kilo-gateway",
-              url: KILO_OPENROUTER_BASE,
+              package: "@sonderr/sonderr-gateway",
+              url: SONDERR_OPENROUTER_BASE,
             }
-            // kilocode_change end
+            // sonderr_change end
             provider.request.headers["HTTP-Referer"] = "https://kilo.ai/"
-            // kilocode_change start
-            provider.request.headers["X-Title"] = "Kilo Code"
+            // sonderr_change start
+            provider.request.headers["X-Title"] = "Sonderr"
             options.apiKey = token ?? "anonymous"
-            options.kilocodeToken = options.apiKey
-            if (org) options.kilocodeOrganizationId = org
-            // kilocode_change end
+            options.sonderrToken = options.apiKey
+            if (org) options.sonderrOrganizationId = org
+            // sonderr_change end
           })
         }
       }),
     )
-    // kilocode_change start
+    // sonderr_change start
     yield* ctx.aisdk.sdk(
       Effect.fn(function* (evt) {
         if (evt.model.providerID !== id) return
-        evt.sdk = createKilo(evt.options)
+        evt.sdk = createSonderr(evt.options)
       }),
     )
-    // kilocode_change end
+    // sonderr_change end
   }),
 })

@@ -12,8 +12,8 @@ import type { MessageID, PartID, SessionV1 } from "../v1/session"
 import { WorkspaceV2 } from "../workspace"
 import { Timestamps } from "../database/schema.sql"
 import type { SystemContext } from "../system-context/index"
-import type { Revert } from "@opencode-ai/schema/revert"
-import { RecallPartIndex } from "../kilocode/session/recall-part-index" // kilocode_change
+import type { Revert } from "@sonderr/schema/revert"
+import { RecallPartIndex } from "../sonderr/session/recall-part-index" // sonderr_change
 
 type SessionMessageData = Omit<(typeof SessionMessage.Message)["Encoded"], "type" | "id">
 type V1MessageData = Omit<SessionV1.Info, "id" | "sessionID">
@@ -46,7 +46,7 @@ export const SessionTable = sqliteTable(
     tokens_reasoning: integer().notNull().default(0),
     tokens_cache_read: integer().notNull().default(0),
     tokens_cache_write: integer().notNull().default(0),
-    // kilocode_change - Kilo also persists a workspace restore status on the revert record
+    // sonderr_change - Sonderr also persists a workspace restore status on the revert record
     revert: text({ mode: "json" }).$type<
       Revert.State & { workspace?: "restored" | "snapshots-disabled" | "unavailable" }
     >(),
@@ -97,7 +97,7 @@ export const PartTable = sqliteTable(
   (table) => [
     index("part_message_id_id_idx").on(table.message_id, table.id),
     index("part_session_idx").on(table.session_id),
-    RecallPartIndex.make(table), // kilocode_change
+    RecallPartIndex.make(table), // sonderr_change
   ],
 )
 
@@ -129,7 +129,7 @@ export const SessionMessageTable = sqliteTable(
       .notNull()
       .references(() => SessionTable.id, { onDelete: "cascade" }),
     type: text().$type<SessionMessage.Type>().notNull(),
-    seq: integer(), // kilocode_change - allow released clients to share databases with newer schemas
+    seq: integer(), // sonderr_change - allow released clients to share databases with newer schemas
     ...Timestamps,
     data: text({ mode: "json" }).notNull().$type<SessionMessageData>(),
   },

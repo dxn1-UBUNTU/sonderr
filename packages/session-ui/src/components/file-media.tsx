@@ -1,7 +1,7 @@
-import type { FileContent } from "@kilocode/sdk/v2"
+import type { FileContent } from "@sonderr/sdk/v2"
 import { createEffect, createMemo, Match, on, onCleanup, Show, Switch, untrack, type JSX } from "solid-js"
 import { createStore } from "solid-js/store"
-import { useI18n } from "@opencode-ai/ui/context/i18n"
+import { useI18n } from "@sonderr/ui/context/i18n"
 import {
   dataUrlFromMediaValue,
   hasMediaValue,

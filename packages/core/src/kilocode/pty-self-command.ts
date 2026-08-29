@@ -12,7 +12,7 @@ type Command = {
   cwd?: string
 }
 
-const names = new Set(["kilo", "kilocode"])
+const names = new Set(["sonderr", "sonderr"])
 const self = command()
 
 function clean(input: string[]) {
@@ -55,7 +55,7 @@ export function resolve(input: Input, cmd = self): Input {
   }
 }
 
-export const KiloPtySelfCommand = {
+export const SonderrPtySelfCommand = {
   command,
   resolve,
 }

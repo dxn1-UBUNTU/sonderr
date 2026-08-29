@@ -1,8 +1,8 @@
 #!/usr/bin/env bun
 /**
- * Keep Kilo's version of specific files during merge
+ * Keep Sonderr's version of specific files during merge
  *
- * This script handles files that should always keep Kilo's version
+ * This script handles files that should always keep Sonderr's version
  * and not be overwritten by upstream changes.
  */
 
@@ -28,12 +28,12 @@ export interface KeepOursOptions {
  * Check if a file matches any keep-ours patterns
  */
 export function shouldKeepOurs(filePath: string, patterns: string[]): boolean {
-  const dirs = defaultConfig.kiloDirectories.map((dir) => `${dir}/**`)
+  const dirs = defaultConfig.sonderrDirectories.map((dir) => `${dir}/**`)
   return matches(filePath, [...patterns, ...dirs]) || patterns.some((pattern) => filePath.includes(pattern))
 }
 
 /**
- * Keep Kilo's version of conflicted files
+ * Keep Sonderr's version of conflicted files
  */
 export async function keepOursFiles(options: KeepOursOptions = {}): Promise<KeepOursResult[]> {
   const results: KeepOursResult[] = []
@@ -76,7 +76,7 @@ export async function keepOursFiles(options: KeepOursOptions = {}): Promise<Keep
 }
 
 /**
- * Reset specific files to Kilo's version (even if not conflicted)
+ * Reset specific files to Sonderr's version (even if not conflicted)
  */
 export async function resetToOurs(files: string[], options: KeepOursOptions = {}): Promise<KeepOursResult[]> {
   const results: KeepOursResult[] = []
@@ -87,7 +87,7 @@ export async function resetToOurs(files: string[], options: KeepOursOptions = {}
       results.push({ file, action: "kept", dryRun: true })
     } else {
       try {
-        // Get the file from HEAD (Kilo's version)
+        // Get the file from HEAD (Sonderr's version)
         await $`git checkout HEAD -- ${file}`
         success(`Reset to ours: ${file}`)
         results.push({ file, action: "kept", dryRun: false })
@@ -119,7 +119,7 @@ if (import.meta.main) {
 
   const kept = results.filter((r) => r.action === "kept")
   console.log()
-  success(`Kept Kilo's version for ${kept.length} files`)
+  success(`Kept Sonderr's version for ${kept.length} files`)
 
   if (dryRun) {
     info("Run without --dry-run to apply changes")

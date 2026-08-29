@@ -426,7 +426,7 @@ export namespace Compaction {
       reason: Started.data.fields.reason,
       text: Schema.String,
       recent: Schema.String,
-      include: Schema.String.pipe(Schema.optional), // kilocode_change - released v1 readers recognize this compatibility field
+      include: Schema.String.pipe(Schema.optional), // sonderr_change - released v1 readers recognize this compatibility field
     },
   })
   export type Ended = typeof Ended.Type

@@ -1,13 +1,13 @@
 import { Database as SQLite } from "bun:sqlite"
 import path from "path"
-import { Database } from "@opencode-ai/core/database/database"
+import { Database } from "@sonderr/core/database/database"
 import { Effect, Layer } from "effect"
 
 const mode = process.argv[2]
 const dir = process.argv[3]
 if (!mode || !dir) throw new Error("Expected mode and data directory")
 
-const file = path.join(dir, "kilo.db")
+const file = path.join(dir, "sonderr.db")
 
 if (mode === "seed") {
   const sqlite = new SQLite(file)

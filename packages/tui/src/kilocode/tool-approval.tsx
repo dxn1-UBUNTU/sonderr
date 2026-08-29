@@ -1,7 +1,7 @@
 import type { RGBA } from "@opentui/core"
 import { Show } from "solid-js"
-import type { PermissionProvenance } from "@/kilocode/permission/provenance"
-import type { ToolState } from "@kilocode/sdk/v2"
+import type { PermissionProvenance } from "@/sonderr/permission/provenance"
+import type { ToolState } from "@sonderr/sdk/v2"
 
 /** `state.metadata` off any tool state, including the pending variant that lacks the field. */
 export function stateMetadata(state: ToolState | undefined) {

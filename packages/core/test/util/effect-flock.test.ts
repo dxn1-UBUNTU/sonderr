@@ -5,11 +5,11 @@ import path from "path"
 import os from "os"
 import { Cause, Effect, Exit } from "effect"
 import { testEffect } from "../lib/effect"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { EffectFlock } from "@opencode-ai/core/util/effect-flock"
-import { Global } from "@opencode-ai/core/global"
-import { Hash } from "@opencode-ai/core/util/hash"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { EffectFlock } from "@sonderr/core/util/effect-flock"
+import { Global } from "@sonderr/core/global"
+import { Hash } from "@sonderr/core/util/hash"
 
 function lock(dir: string, key: string) {
   return path.join(dir, Hash.fast(key) + ".lock")
@@ -59,7 +59,7 @@ function run(msg: Msg) {
   })
 }
 
-// kilocode_change start - make worker finalization await the process close event without a Windows race
+// sonderr_change start - make worker finalization await the process close event without a Windows race
 const closed = new WeakMap<ReturnType<typeof spawn>, Promise<void>>()
 
 function spawnWorker(msg: Msg) {
@@ -86,7 +86,7 @@ async function stopWorker(proc: ReturnType<typeof spawnWorker>) {
   proc.kill()
   return close
 }
-// kilocode_change end
+// sonderr_change end
 
 async function waitForFile(file: string, timeout = 3_000) {
   const stop = Date.now() + timeout
@@ -369,8 +369,8 @@ describe("util.effect-flock", () => {
         const proc = spawnWorker({ key: "eflock:crash", dir, ready, holdMs: 120_000 })
 
         try {
-          await waitForFile(ready, 20_000) // kilocode_change - hosted macOS can start this worker slowly after stress tests
-          await stopWorker(proc) // kilocode_change - stopWorker now awaits close before returning
+          await waitForFile(ready, 20_000) // sonderr_change - hosted macOS can start this worker slowly after stress tests
+          await stopWorker(proc) // sonderr_change - stopWorker now awaits close before returning
 
           // Backdate lock files so they're past STALE_MS (60s)
           const lockDir = lock(dir, "eflock:crash")
@@ -388,6 +388,6 @@ describe("util.effect-flock", () => {
           await fs.rm(tmp, { recursive: true, force: true })
         }
       }),
-    60_000, // kilocode_change - match the wider worker readiness window
+    60_000, // sonderr_change - match the wider worker readiness window
   )
 })

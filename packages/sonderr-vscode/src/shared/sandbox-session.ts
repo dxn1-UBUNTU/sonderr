@@ -1,0 +1,31 @@
+import type { SonderrClient } from "@sonderr/sdk/v2/client"
+import type { SandboxPreference } from "../services/sandbox-preference"
+
+export const SANDBOX_METADATA_KEY = "sonderr.sandbox"
+
+export function sandboxMetadata(enabled: boolean, metadata?: Record<string, unknown>) {
+  return {
+    ...metadata,
+    [SANDBOX_METADATA_KEY]: {
+      enabled,
+      version: 0,
+    },
+  }
+}
+
+export async function sandboxDefault(preference: SandboxPreference | undefined, client: SonderrClient, directory: string) {
+  await preference?.wait()
+  const explicit = preference?.explicit()
+  if (explicit !== undefined) return explicit
+  const { data } = await client.config.get({ directory }, { throwOnError: true })
+  return data.sandbox?.enabled === true
+}
+
+export async function sandboxSessionMetadata(
+  preference: SandboxPreference | undefined,
+  client: SonderrClient,
+  directory: string,
+  metadata?: Record<string, unknown>,
+) {
+  return sandboxMetadata(await sandboxDefault(preference, client, directory), metadata)
+}

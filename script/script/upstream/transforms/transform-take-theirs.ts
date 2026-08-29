@@ -1,20 +1,20 @@
 #!/usr/bin/env bun
 /**
- * Transform files by taking upstream version and applying Kilo branding
+ * Transform files by taking upstream version and applying Sonderr branding
  *
  * This script handles files that have only branding differences (no logic changes).
- * It takes the upstream version and applies Kilo branding transforms.
+ * It takes the upstream version and applies Sonderr branding transforms.
  *
  * Use this for:
- * - UI components with OpenCode -> Kilo branding
+ * - UI components with Sonderr -> Sonderr branding
  * - Config files with predictable patterns
- * - Files without kilocode_change logic blocks
+ * - Files without sonderr_change logic blocks
  */
 
 import { $ } from "bun"
 import { info, success, warn, debug } from "../utils/logger"
 import { defaultConfig } from "../utils/config"
-import { oursHasKilocodeChanges } from "../utils/git"
+import { oursHasSonderrChanges } from "../utils/git"
 
 export interface TakeTheirsResult {
   file: string
@@ -39,89 +39,89 @@ interface BrandingReplacement {
 const BRANDING_REPLACEMENTS: BrandingReplacement[] = [
   // GitHub repo references
   {
-    pattern: /github\.com\/anomalyco\/opencode/g,
-    replacement: "github.com/Kilo-Org/kilocode",
+    pattern: /github\.com\/anomalyco\/sonderr/g,
+    replacement: "github.com/Sonderr-Org/sonderr",
     description: "GitHub URL",
   },
   {
-    pattern: /anomalyco\/opencode/g,
-    replacement: "Kilo-Org/kilocode",
+    pattern: /anomalyco\/sonderr/g,
+    replacement: "Sonderr-Org/sonderr",
     description: "GitHub repo reference",
   },
 
   // Domain replacements (specific first)
   {
-    pattern: /app\.opencode\.ai/g,
+    pattern: /app\.sonderr\.ai/g,
     replacement: "app.kilo.ai",
     description: "App domain",
   },
   {
-    pattern: /opencode\.ai(?!\/zen)/g,
+    pattern: /sonderr\.ai(?!\/zen)/g,
     replacement: "kilo.ai",
     description: "Main domain (excluding zen)",
   },
 
   // CLI commands
   {
-    pattern: /npx opencode(?!\w)/g,
-    replacement: "npx kilo",
+    pattern: /npx sonderr(?!\w)/g,
+    replacement: "npx sonderr",
     description: "npx command",
   },
   {
-    pattern: /bun add opencode(?!\w)/g,
-    replacement: "bun add kilo",
+    pattern: /bun add sonderr(?!\w)/g,
+    replacement: "bun add sonderr",
     description: "bun add command",
   },
   {
-    pattern: /npm install opencode(?!\w)/g,
-    replacement: "npm install kilo",
+    pattern: /npm install sonderr(?!\w)/g,
+    replacement: "npm install sonderr",
     description: "npm install command",
   },
   {
-    pattern: /opencode upgrade(?!\w)/g,
-    replacement: "kilo upgrade",
+    pattern: /sonderr upgrade(?!\w)/g,
+    replacement: "sonderr upgrade",
     description: "upgrade command",
   },
 
   // Database filename
   {
-    pattern: /opencode\.db/g,
-    replacement: "kilo.db",
+    pattern: /sonderr\.db/g,
+    replacement: "sonderr.db",
     description: "Database filename",
   },
 
   // Generic product name replacement (must come after specific patterns)
-  // Only replace "OpenCode" when it's a standalone word
+  // Only replace "Sonderr" when it's a standalone word
   {
-    pattern: /\bOpenCode\b(?!\.json|\/| Zen)/g,
-    replacement: "Kilo",
+    pattern: /\bSonderr\b(?!\.json|\/| Zen)/g,
+    replacement: "Sonderr",
     description: "Product name",
   },
 
-  // Environment variables (exclude OPENCODE_API_KEY)
+  // Environment variables (exclude SONDERR_API_KEY)
   {
-    pattern: /\bOPENCODE_(?!API_KEY\b)([A-Z_]+)\b/g,
-    replacement: "KILO_$1",
+    pattern: /\bSONDERR_(?!API_KEY\b)([A-Z_]+)\b/g,
+    replacement: "SONDERR_$1",
     description: "Environment variable",
   },
   {
-    pattern: /VITE_OPENCODE_/g,
-    replacement: "VITE_KILO_",
+    pattern: /VITE_SONDERR_/g,
+    replacement: "VITE_SONDERR_",
     description: "Vite env var",
   },
   {
-    pattern: /window\.__OPENCODE__/g,
-    replacement: "window.__KILO__",
+    pattern: /window\.__SONDERR__/g,
+    replacement: "window.__SONDERR__",
     description: "Window global",
   },
   {
-    pattern: /x-opencode-/g,
-    replacement: "x-kilo-",
+    pattern: /x-sonderr-/g,
+    replacement: "x-sonderr-",
     description: "HTTP header prefix",
   },
   {
-    pattern: /_EXTENSION_OPENCODE_/g,
-    replacement: "_EXTENSION_KILO_",
+    pattern: /_EXTENSION_SONDERR_/g,
+    replacement: "_EXTENSION_SONDERR_",
     description: "Extension env var",
   },
 ]
@@ -146,8 +146,8 @@ export function applyBrandingTransforms(content: string, verbose = false): { res
   let total = 0
 
   for (const line of lines) {
-    // Skip lines with kilocode_change marker (already customized)
-    if (line.includes("// kilocode_change")) {
+    // Skip lines with sonderr_change marker (already customized)
+    if (line.includes("// sonderr_change")) {
       transformed.push(line)
       continue
     }
@@ -187,9 +187,9 @@ export async function transformTakeTheirs(file: string, options: TakeTheirsOptio
     return { file, action: "transformed", replacements: 0, dryRun: true }
   }
 
-  // If our version has kilocode_change markers, flag for manual resolution
-  if (await oursHasKilocodeChanges(file)) {
-    warn(`${file} has kilocode_change markers — skipping auto-transform, needs manual resolution`)
+  // If our version has sonderr_change markers, flag for manual resolution
+  if (await oursHasSonderrChanges(file)) {
+    warn(`${file} has sonderr_change markers — skipping auto-transform, needs manual resolution`)
     return { file, action: "flagged", replacements: 0, dryRun: false }
   }
 
@@ -251,7 +251,7 @@ export function shouldTakeTheirs(file: string, patterns?: string[]): boolean {
 }
 
 /**
- * Transform all files matching take-theirs patterns (pre-merge, on opencode branch)
+ * Transform all files matching take-theirs patterns (pre-merge, on sonderr branch)
  * This applies branding transforms to files that exist on the current branch
  */
 export async function transformAllTakeTheirs(options: TakeTheirsOptions = {}): Promise<TakeTheirsResult[]> {

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 
-import { changeset, select, type Release } from "./opencode-changesets"
+import { changeset, select, type Release } from "./sonderr-changesets"
 
 const releases: Release[] = [
   { tag_name: "v1.2.3", body: "Patch release" },
@@ -11,7 +11,7 @@ const releases: Release[] = [
   { tag_name: "v1.2.5", body: "Prerelease", prerelease: true },
 ]
 
-describe("opencode changesets", () => {
+describe("sonderr changesets", () => {
   test("selects releases in semver range with normalized tags", () => {
     expect(select(releases, "1.2.0", "v1.2.3")).toEqual([
       { tag_name: "v1.2.1", body: "Old tag without prefix" },
@@ -21,24 +21,24 @@ describe("opencode changesets", () => {
   })
 
   test("excludes prereleases", () => {
-    expect(() => select(releases, "1.2.3", "1.2.5")).toThrow("Target opencode release does not exist")
+    expect(() => select(releases, "1.2.3", "1.2.5")).toThrow("Target sonderr release does not exist")
   })
 
   test("requires the target release to exist", () => {
-    expect(() => select(releases, "1.2.0", "99.9.9")).toThrow("Target opencode release does not exist")
+    expect(() => select(releases, "1.2.0", "99.9.9")).toThrow("Target sonderr release does not exist")
   })
 
   test("requires the starting release to exist", () => {
-    expect(() => select(releases, "1.1.9", "1.2.3")).toThrow("Starting opencode release does not exist")
+    expect(() => select(releases, "1.1.9", "1.2.3")).toThrow("Starting sonderr release does not exist")
   })
 
   test("formats changeset markdown", () => {
     expect(changeset([{ tag_name: "v1.2.2", body: "\r\n## Core\r\n\r\n- Fix issue\r\n" }], "1.2.1", "1.2.2")).toBe(`---
-"@kilocode/cli": patch
-"kilo-code": patch
+"@sonderr/cli": patch
+"sonderr-code": patch
 ---
 
-Changes from opencode v1.2.1 to v1.2.2 upstream:
+Changes from sonderr v1.2.1 to v1.2.2 upstream:
 
 - Core: Fix issue
 `)
@@ -73,11 +73,11 @@ Changes from opencode v1.2.1 to v1.2.2 upstream:
         "1.2.2",
       ),
     ).toBe(`---
-"@kilocode/cli": patch
-"kilo-code": patch
+"@sonderr/cli": patch
+"sonderr-code": patch
 ---
 
-Changes from opencode v1.2.1 to v1.2.2 upstream:
+Changes from sonderr v1.2.1 to v1.2.2 upstream:
 
 - Core: Keep this
 `)
@@ -126,11 +126,11 @@ Changes from opencode v1.2.1 to v1.2.2 upstream:
         "1.2.2",
       ),
     ).toBe(`---
-"@kilocode/cli": patch
-"kilo-code": patch
+"@sonderr/cli": patch
+"sonderr-code": patch
 ---
 
-Changes from opencode v1.2.0 to v1.2.2 upstream:
+Changes from sonderr v1.2.0 to v1.2.2 upstream:
 
 - Core Bugfixes: Fix first
 - Core Bugfixes: Fix second
@@ -162,11 +162,11 @@ Changes from opencode v1.2.0 to v1.2.2 upstream:
         "1.2.2",
       ),
     ).toBe(`---
-"@kilocode/cli": patch
-"kilo-code": patch
+"@sonderr/cli": patch
+"sonderr-code": patch
 ---
 
-Changes from opencode v1.2.1 to v1.2.2 upstream:
+Changes from sonderr v1.2.1 to v1.2.2 upstream:
 
 - Core Improvements: Parent item
     - Nested item

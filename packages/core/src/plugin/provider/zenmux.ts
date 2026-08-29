@@ -1,6 +1,6 @@
 import { Effect } from "effect"
 import { define } from "../internal"
-import { ProviderV2 } from "../../provider" // kilocode_change
+import { ProviderV2 } from "../../provider" // sonderr_change
 
 export const ZenmuxPlugin = define({
   id: "zenmux",
@@ -11,10 +11,10 @@ export const ZenmuxPlugin = define({
           if (item.provider.api.type !== "aisdk") continue
           if (item.provider.api.package !== "@ai-sdk/openai-compatible") continue
           if (item.provider.api.url !== "https://zenmux.ai/api/v1") continue
-          if (item.provider.id !== ProviderV2.ID.make("zenmux")) continue // kilocode_change
+          if (item.provider.id !== ProviderV2.ID.make("zenmux")) continue // sonderr_change
           evt.provider.update(item.provider.id, (provider) => {
-            provider.request.headers["HTTP-Referer"] ??= "https://kilo.ai/" // kilocode_change
-            provider.request.headers["X-Title"] ??= "Kilo Code" // kilocode_change
+            provider.request.headers["HTTP-Referer"] ??= "https://kilo.ai/" // sonderr_change
+            provider.request.headers["X-Title"] ??= "Sonderr" // sonderr_change
           })
         }
       }),

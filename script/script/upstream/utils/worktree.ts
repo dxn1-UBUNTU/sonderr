@@ -15,7 +15,7 @@ export interface RefInput {
 }
 
 export interface RefInfo {
-  opencode: string
+  sonderr: string
   main: string
   auto: string
   branch: string
@@ -56,7 +56,7 @@ async function assertWorktree(path: string) {
 async function assertClean(path: string) {
   const status = await $`git -C ${path} status --porcelain`.text()
   if (status.trim()) {
-    throw new Error(`${path} has local changes; clean it before refreshing opencode merge references`)
+    throw new Error(`${path} has local changes; clean it before refreshing sonderr merge references`)
   }
 }
 
@@ -82,12 +82,12 @@ async function detach(path: string) {
 async function snapshot(input: RefInput) {
   if (input.snapshot) return input.snapshot
 
-  const idx = join(tmpdir(), `kilo-opencode-merge-${randomUUID()}.index`)
+  const idx = join(tmpdir(), `sonderr-sonderr-merge-${randomUUID()}.index`)
   try {
     await $`env GIT_INDEX_FILE=${idx} git read-tree ${input.base}`.quiet()
     await $`env GIT_INDEX_FILE=${idx} git add -A`.quiet()
     const tree = (await $`env GIT_INDEX_FILE=${idx} git write-tree`.text()).trim()
-    const msg = `chore: snapshot automated opencode merge for ${input.tag}`
+    const msg = `chore: snapshot automated sonderr merge for ${input.tag}`
     const commit = await $`git commit-tree ${tree} -p ${input.base} -p ${input.merge} -m ${msg}`.text()
     return commit.trim()
   } finally {
@@ -97,11 +97,11 @@ async function snapshot(input: RefInput) {
 
 export async function prepare(input: RefInput): Promise<RefInfo> {
   const repo = await root()
-  const dir = join(repo, ".worktrees", "opencode-merge")
-  const opencode = join(dir, "opencode")
-  const main = join(dir, "kilo-main")
+  const dir = join(repo, ".worktrees", "sonderr-merge")
+  const sonderr = join(dir, "sonderr")
+  const main = join(dir, "sonderr-main")
   const auto = join(dir, "auto-merge")
-  const branch = `opencode-merge/auto-${slug(input.tag)}`
+  const branch = `sonderr-merge/auto-${slug(input.tag)}`
 
   await mkdir(dir, { recursive: true })
   await $`git worktree prune`.quiet()
@@ -110,12 +110,12 @@ export async function prepare(input: RefInput): Promise<RefInfo> {
   await detach(auto)
   await $`git branch -f ${branch} ${snap}`.quiet()
 
-  await checkout(opencode, input.upstream)
+  await checkout(sonderr, input.upstream)
   await checkout(main, input.base)
   await checkout(auto, branch)
 
   return {
-    opencode,
+    sonderr,
     main,
     auto,
     branch,

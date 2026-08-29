@@ -1,21 +1,21 @@
-// kilocode_change - new file
+// sonderr_change - new file
 //
 // Pure option builder for the TUI model picker, extracted from
-// `component/dialog-model.tsx` so the Kilo Gateway grouping/search rules are
+// `component/dialog-model.tsx` so the Sonderr Gateway grouping/search rules are
 // testable without mounting the dialog.
 //
-// Two rules here exist because the TUI used to hide live Kilo Gateway models:
+// Two rules here exist because the TUI used to hide live Sonderr Gateway models:
 //   1. Recently used models are no longer stripped from their provider section.
-//      Selecting a Kilo sonnet once used to remove it from "Recommended" /
-//      "Kilo Gateway" entirely, leaving those sections looking empty. This
+//      Selecting a Sonderr sonnet once used to remove it from "Recommended" /
+//      "Sonderr Gateway" entirely, leaving those sections looking empty. This
 //      matches the VS Code selector, which also keeps recents in place.
 //   2. Search matches the provider name and the provider/model ids, not just
-//      the title and the section header, so typing `kilo` finds
+//      the title and the section header, so typing `sonderr` finds
 //      "Anthropic Claude Sonnet 4.5" under the "Recommended" section.
 import * as fuzzysort from "fuzzysort"
 import { entries, filter, flatMap, groupBy, map, pipe, sortBy } from "remeda"
 
-export const KILO_PROVIDER_ID = "kilo"
+export const SONDERR_PROVIDER_ID = "sonderr"
 export const RECOMMENDED_CATEGORY = "Recommended"
 
 export interface ModelPickerRef {
@@ -113,7 +113,7 @@ export function buildModelPickerOptions<M extends ModelPickerModel>(
     value: { providerID: provider.id, modelID },
     title: model.name ?? modelID,
     releaseDate: model.release_date ?? "",
-    disabled: provider.id === "opencode" && modelID.includes("-nano"),
+    disabled: provider.id === "sonderr" && modelID.includes("-nano"),
     footer: input.footer?.(provider.id, model),
     providerName: provider.name,
     providerID: provider.id,
@@ -142,7 +142,7 @@ export function buildModelPickerOptions<M extends ModelPickerModel>(
   const providerOptions = pipe(
     input.providers,
     sortBy(
-      (provider) => provider.id !== "opencode",
+      (provider) => provider.id !== "sonderr",
       (provider) => provider.name,
     ),
     flatMap((provider) =>
@@ -157,7 +157,7 @@ export function buildModelPickerOptions<M extends ModelPickerModel>(
               ? "(Favorite)"
               : undefined,
             category: connected
-              ? provider.id === KILO_PROVIDER_ID && model.recommendedIndex !== undefined
+              ? provider.id === SONDERR_PROVIDER_ID && model.recommendedIndex !== undefined
                 ? RECOMMENDED_CATEGORY
                 : provider.name
               : undefined,

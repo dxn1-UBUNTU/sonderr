@@ -1,6 +1,6 @@
 import { createEffect, on, type Accessor } from "solid-js"
 import { createStore, reconcile } from "solid-js/store"
-import { useFilteredList } from "@opencode-ai/ui/hooks"
+import { useFilteredList } from "@sonderr/ui/hooks"
 import { createPromptInputV2Attachments, type PromptInputV2AttachmentConfig } from "./attachments"
 import { createPromptInputV2Store, type PromptInputV2StoreInput } from "./store"
 import type {
@@ -205,7 +205,7 @@ export function createPromptInputV2Controller(input: {
       ids: suggestions().map((item) => item.id),
       empty: draft.state.prompt.every(
         (part) => part.type !== "image" && (!("content" in part) || part.content.length === 0),
-      ), // kilocode_change - attachments keep shell drafts non-empty
+      ), // sonderr_change - attachments keep shell drafts non-empty
     })
     if (handled) event.preventDefault()
     if (handled && event.key !== "Enter" && event.key !== "Tab" && state.popover.type !== "closed") {

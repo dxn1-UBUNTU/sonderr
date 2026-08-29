@@ -1,13 +1,13 @@
 import { describe, expect } from "bun:test"
 import { Cause, Deferred, Duration, Effect, Exit, Fiber, Layer } from "effect"
 import * as TestClock from "effect/testing/TestClock"
-import { Integration } from "@opencode-ai/core/integration"
-import { Credential } from "@opencode-ai/core/credential"
-import { EventV2 } from "@opencode-ai/core/event"
+import { Integration } from "@sonderr/core/integration"
+import { Credential } from "@sonderr/core/credential"
+import { EventV2 } from "@sonderr/core/event"
 import { it } from "../lib/effect"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
 
-// Regression coverage for Kilo's OAuth attempt settlement guards: persistence
+// Regression coverage for Sonderr's OAuth attempt settlement guards: persistence
 // happens before completion is exposed, and settlement is atomic with
 // cancellation, expiry, and timeouts.
 

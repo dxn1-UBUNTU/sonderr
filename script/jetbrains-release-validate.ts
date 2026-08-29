@@ -1,12 +1,12 @@
 #!/usr/bin/env bun
-// kilocode_change - new file
+// sonderr_change - new file
 
 import { $ } from "bun"
 import { appendFileSync } from "node:fs"
 import semver from "semver"
 import { parseArgs } from "util"
 
-const repo = process.env.GH_REPO ?? process.env.GITHUB_REPOSITORY ?? "Kilo-Org/kilocode"
+const repo = process.env.GH_REPO ?? process.env.GITHUB_REPOSITORY ?? "Sonderr-Org/sonderr"
 const { values } = parseArgs({
   args: Bun.argv.slice(2),
   options: {
@@ -72,12 +72,12 @@ if (sha !== commit) throw new Error(`${tag} points at ${sha}, expected ${commit}
 
 const prop = await props()
 if (prop !== ver)
-  throw new Error(`packages/kilo-jetbrains/gradle.properties kilo.jetbrains.version is ${prop}, expected ${ver}`)
+  throw new Error(`packages/sonderr-jetbrains/gradle.properties sonderr.jetbrains.version is ${prop}, expected ${ver}`)
 if (!(await pinned())) {
-  throw new Error("packages/kilo-jetbrains/gradle.properties has kilo.cli.pinned=false; JetBrains releases require kilo.cli.pinned=true")
+  throw new Error("packages/sonderr-jetbrains/gradle.properties has sonderr.cli.pinned=false; JetBrains releases require sonderr.cli.pinned=true")
 }
 
-const changelog = await Bun.file("packages/kilo-jetbrains/CHANGELOG.md").text()
+const changelog = await Bun.file("packages/sonderr-jetbrains/CHANGELOG.md").text()
 if (!changelog.includes(`## [${ver}]`)) throw new Error(`CHANGELOG.md is missing section for ${ver}`)
 
 const marketplace = kind === "rc" ? "eap" : "default"
@@ -114,18 +114,18 @@ function need(body: string, key: string) {
 }
 
 async function props() {
-  const text = await Bun.file("packages/kilo-jetbrains/gradle.properties").text()
-  const line = text.split(/\r?\n/).find((item) => item.startsWith("kilo.jetbrains.version="))
+  const text = await Bun.file("packages/sonderr-jetbrains/gradle.properties").text()
+  const line = text.split(/\r?\n/).find((item) => item.startsWith("sonderr.jetbrains.version="))
   const value = line?.split("=", 2)[1]?.trim()
-  if (!value) throw new Error("packages/kilo-jetbrains/gradle.properties is missing kilo.jetbrains.version")
+  if (!value) throw new Error("packages/sonderr-jetbrains/gradle.properties is missing sonderr.jetbrains.version")
   return value
 }
 
 async function pinned() {
-  const text = await Bun.file("packages/kilo-jetbrains/gradle.properties").text()
+  const text = await Bun.file("packages/sonderr-jetbrains/gradle.properties").text()
   const value = text.split(/\r?\n/).flatMap((line) => {
     const [key, raw] = line.split("=", 2)
-    if (key.trim() !== "kilo.cli.pinned") return []
+    if (key.trim() !== "sonderr.cli.pinned") return []
     return [raw?.trim().toLowerCase()]
   })[0]
   return value == null || value === "true"

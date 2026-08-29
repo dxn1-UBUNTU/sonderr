@@ -150,7 +150,7 @@ export const makeWebSocketExecutor = <E>(
               }),
             )
             .pipe(Effect.orDie)
-          // kilocode_change start - preserve causal client/server transcript order during replay
+          // sonderr_change start - preserve causal client/server transcript order during replay
           const progress = yield* Ref.make({ position: 0, changed: yield* Deferred.make<void>() })
           const lock = yield* Semaphore.make(1)
           return {
@@ -205,7 +205,7 @@ export const makeWebSocketExecutor = <E>(
                   new Error(`WebSocket event count: expected ${claimed.interaction.events.length}, received ${used}`),
                 )
             }),
-            // kilocode_change end
+            // sonderr_change end
           }
         }),
     }

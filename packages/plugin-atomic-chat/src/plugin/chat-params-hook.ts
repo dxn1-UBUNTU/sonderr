@@ -87,11 +87,11 @@ export function createChatParamsHook(toastNotifier: ToastNotifier) {
                 "1. Open Atomic Chat",
                 "2. Load the model you want to use",
                 "3. Confirm curl http://127.0.0.1:1337/v1/models lists that model id",
-                "4. Retry in Kilo Code",
+                "4. Retry in Sonderr",
               ]
             : [
                 "1. Ensure Atomic Chat is running",
-                "2. Verify the API URL in kilo.json matches Atomic Chat settings",
+                "2. Verify the API URL in sonderr.json matches Atomic Chat settings",
                 "3. Retry your request",
               ],
         similarModels: similarModels.map((item) => ({

@@ -1,8 +1,8 @@
-import { SessionV2 } from "@opencode-ai/core/session"
+import { SessionV2 } from "@sonderr/core/session"
 import { DateTime, Effect, Stream } from "effect"
 import { HttpApiBuilder, HttpApiSchema } from "effect/unstable/httpapi"
 import { Api } from "../api"
-import { SessionsCursor } from "@opencode-ai/protocol/groups/session"
+import { SessionsCursor } from "@sonderr/protocol/groups/session"
 import {
   ConflictError,
   InvalidCursorError,
@@ -10,8 +10,8 @@ import {
   ServiceUnavailableError,
   SessionNotFoundError,
   UnknownError,
-} from "@opencode-ai/protocol/errors"
-import { Location } from "@opencode-ai/core/location" // kilocode_change
+} from "@sonderr/protocol/errors"
+import { Location } from "@sonderr/core/location" // sonderr_change
 
 const DefaultSessionsLimit = 50
 const DefaultSessionHistoryLimit = 50
@@ -67,17 +67,17 @@ export const SessionHandler = HttpApiBuilder.group(Api, "server.session", (handl
       .handle(
         "session.create",
         Effect.fn(function* (ctx) {
-          const location = yield* Location.Service // kilocode_change
+          const location = yield* Location.Service // sonderr_change
           return {
             data: yield* session.create({
               id: ctx.payload.id,
               agent: ctx.payload.agent,
               model: ctx.payload.model,
-              // kilocode_change start - honor createKiloClient's configured Location
+              // sonderr_change start - honor createSonderrClient's configured Location
               location:
                 ctx.payload.location ??
                 Location.Ref.make({ directory: location.directory, workspaceID: location.workspaceID }),
-              // kilocode_change end
+              // sonderr_change end
             }),
           }
         }),

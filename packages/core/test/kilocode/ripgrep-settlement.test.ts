@@ -2,9 +2,9 @@ import { describe, expect } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { Effect, Fiber, Layer } from "effect"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { Ripgrep } from "@opencode-ai/core/ripgrep"
-import { RipgrepBinary } from "@opencode-ai/core/ripgrep/binary"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { Ripgrep } from "@sonderr/core/ripgrep"
+import { RipgrepBinary } from "@sonderr/core/ripgrep/binary"
 import { tmpdir } from "../fixture/tmpdir"
 import { it } from "../lib/effect"
 
@@ -80,7 +80,7 @@ const layer = (binary: string) =>
     ],
   ] as const)
 
-describe("Kilo ripgrep settlement", () => {
+describe("Sonderr ripgrep settlement", () => {
   it.live(
     "settles a bounded parameterized grep when inherited output stays open",
     Effect.acquireUseRelease(

@@ -1,15 +1,15 @@
 import { createEffect, createMemo, For, Show, type Accessor, type JSX } from "solid-js"
-import { FileIcon } from "@opencode-ai/ui/file-icon"
-import { Icon } from "@opencode-ai/ui/icon"
-import { IconButton } from "@opencode-ai/ui/icon-button"
-import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
-import { useI18n } from "@opencode-ai/ui/context/i18n"
-import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
-import { Icon as IconV2 } from "@opencode-ai/ui/v2/icon"
-import { IconButtonV2 } from "@opencode-ai/ui/v2/icon-button-v2"
-import { KeybindV2 } from "@opencode-ai/ui/v2/keybind-v2"
-import { MenuV2 } from "@opencode-ai/ui/v2/menu-v2"
-import { TooltipV2 } from "@opencode-ai/ui/v2/tooltip-v2"
+import { FileIcon } from "@sonderr/ui/file-icon"
+import { Icon } from "@sonderr/ui/icon"
+import { IconButton } from "@sonderr/ui/icon-button"
+import { ProviderIcon } from "@sonderr/ui/provider-icon"
+import { useI18n } from "@sonderr/ui/context/i18n"
+import { ButtonV2 } from "@sonderr/ui/v2/button-v2"
+import { Icon as IconV2 } from "@sonderr/ui/v2/icon"
+import { IconButtonV2 } from "@sonderr/ui/v2/icon-button-v2"
+import { KeybindV2 } from "@sonderr/ui/v2/keybind-v2"
+import { MenuV2 } from "@sonderr/ui/v2/menu-v2"
+import { TooltipV2 } from "@sonderr/ui/v2/tooltip-v2"
 import { AttachmentCardV2 } from "../attachment-card-v2"
 import { CommentCardV2 } from "../comment-card-v2"
 import { typeLabel } from "../../../components/message-file"
@@ -117,7 +117,7 @@ export function PromptInputV2(props: PromptInputV2Props) {
         }}
         onSubmit={(event) => {
           event.preventDefault()
-          if (!props.disabled && props.controller.canSubmit()) props.controller.submit() // kilocode_change
+          if (!props.disabled && props.controller.canSubmit()) props.controller.submit() // sonderr_change
         }}
         onDragEnter={props.controller.onDragEnter}
         onDragOver={props.controller.onDragOver}
@@ -161,7 +161,7 @@ export function PromptInputV2(props: PromptInputV2Props) {
             // @ts-expect-error
             autocomplete="off"
             class={
-              "relative z-10 block min-h-[60px] max-h-[180px] w-full overflow-y-auto whitespace-pre-wrap bg-transparent px-4 pt-4 pb-2 text-[13px] font-[440] leading-5 text-v2-text-text-base focus:outline-none empty:before:content-['\\200B'] [&_[data-mention=file]]:text-syntax-property [&_[data-mention=agent]]:text-syntax-type [&_[data-mention=reference]]:text-syntax-keyword" /* kilocode_change - escape CSS code point for TypeScript */
+              "relative z-10 block min-h-[60px] max-h-[180px] w-full overflow-y-auto whitespace-pre-wrap bg-transparent px-4 pt-4 pb-2 text-[13px] font-[440] leading-5 text-v2-text-text-base focus:outline-none empty:before:content-['\\200B'] [&_[data-mention=file]]:text-syntax-property [&_[data-mention=agent]]:text-syntax-type [&_[data-mention=reference]]:text-syntax-keyword" /* sonderr_change - escape CSS code point for TypeScript */
             }
             classList={{ "font-mono!": state.mode === "shell", "opacity-50": props.disabled }}
             onInput={(event) => {
@@ -176,7 +176,7 @@ export function PromptInputV2(props: PromptInputV2Props) {
               if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
                 event.preventDefault()
                 if (event.repeat) return
-                if (props.disabled || !props.controller.canSubmit()) return // kilocode_change - match submit eligibility
+                if (props.disabled || !props.controller.canSubmit()) return // sonderr_change - match submit eligibility
                 props.controller.submit()
               }
             }}
@@ -260,7 +260,7 @@ export function PromptInputV2(props: PromptInputV2Props) {
           <PromptInputV2SubmitButton
             mode={state.mode}
             stopping={view.submit.stopping()}
-            disabled={props.disabled || !props.controller.canSubmit()} // kilocode_change
+            disabled={props.disabled || !props.controller.canSubmit()} // sonderr_change
             sendLabel={i18n.t("ui.promptInput.send")}
             stopLabel={i18n.t("ui.promptInput.stop")}
             onSubmit={props.controller.submit}

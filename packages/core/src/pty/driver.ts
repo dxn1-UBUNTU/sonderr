@@ -1,2 +1,2 @@
-// kilocode_change - expose the conditional PTY driver to Kilo's legacy interactive terminal
+// sonderr_change - expose the conditional PTY driver to Sonderr's legacy interactive terminal
 export * from "#pty"

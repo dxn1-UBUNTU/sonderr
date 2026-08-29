@@ -35,13 +35,13 @@ function resourceAttributes() {
 
 export function resource(): { serviceName: string; serviceVersion: string; attributes: Record<string, string> } {
   return {
-    serviceName: "opencode",
+    serviceName: "sonderr",
     serviceVersion: InstallationVersion,
     attributes: {
       ...resourceAttributes(),
       "deployment.environment.name": InstallationChannel,
-      "opencode.client": Flag.KILO_CLIENT,
-      "opencode.run": runID,
+      "sonderr.client": Flag.SONDERR_CLIENT,
+      "sonderr.run": runID,
       "service.instance.id": runID,
     },
   }

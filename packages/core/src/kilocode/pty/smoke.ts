@@ -1,5 +1,5 @@
 import { Shell } from "../../shell"
-import { KiloPtyTermination } from "./termination"
+import { SonderrPtyTermination } from "./termination"
 import { spawn } from "#pty"
 
 const TIMEOUT = 15_000
@@ -8,7 +8,7 @@ export async function smoke() {
   const proc = spawn(Shell.preferred(), [], {
     name: "xterm-256color",
     cwd: process.cwd(),
-    env: { ...process.env, TERM: "xterm-256color", KILO_TERMINAL: "1" } as Record<string, string>,
+    env: { ...process.env, TERM: "xterm-256color", SONDERR_TERMINAL: "1" } as Record<string, string>,
     cols: 80,
     rows: 24,
   })
@@ -18,7 +18,7 @@ export async function smoke() {
   const data = proc.onData((chunk) => {
     state.output += chunk
     const lines = state.output.replace(/\x1b\[[0-?]*[ -/]*[@-~]/g, "").split(/\r?\n/)
-    if (lines.some((line) => line.trim() === "KILO_PTY_READY")) output.resolve()
+    if (lines.some((line) => line.trim() === "SONDERR_PTY_READY")) output.resolve()
   })
   const exit = proc.onExit((event) => {
     state.exited = true
@@ -28,7 +28,7 @@ export async function smoke() {
 
   try {
     proc.resize(100, 40)
-    proc.write("echo KILO_PTY_READY\r")
+    proc.write("echo SONDERR_PTY_READY\r")
     await Promise.race([
       output.promise,
       new Promise<never>((_, reject) =>
@@ -62,7 +62,7 @@ export async function smoke() {
   })
   let stopped = false
   try {
-    await KiloPtyTermination.terminate(active)
+    await SonderrPtyTermination.terminate(active)
     stopped = true
   } finally {
     if (!stopped) active.kill()

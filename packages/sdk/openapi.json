@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "kilo",
+    "title": "sonderr",
     "version": "1.0.0",
-    "description": "kilo api"
+    "description": "sonderr api"
   },
   "paths": {
     "/auth/{providerID}": {
@@ -64,7 +64,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.auth.set({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.auth.set({\n  ...\n})"
           }
         ]
       },
@@ -116,7 +116,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.auth.remove({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.auth.remove({\n  ...\n})"
           }
         ]
       }
@@ -207,7 +207,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.app.log({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.app.log({\n  ...\n})"
           }
         ]
       }
@@ -267,7 +267,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.controlPlane.moveSession({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.controlPlane.moveSession({\n  ...\n})"
           }
         ]
       }
@@ -311,12 +311,12 @@
             }
           }
         },
-        "description": "Get health information about the Kilo server.",
+        "description": "Get health information about the Sonderr server.",
         "summary": "Get health",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.global.health({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.global.health({\n  ...\n})"
           }
         ]
       }
@@ -348,12 +348,12 @@
             }
           }
         },
-        "description": "Subscribe to global events from the Kilo system using server-sent events.",
+        "description": "Subscribe to global events from the Sonderr system using server-sent events.",
         "summary": "Get global events",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.global.event({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.global.event({\n  ...\n})"
           }
         ]
       }
@@ -385,12 +385,12 @@
             }
           }
         },
-        "description": "Retrieve the current global Kilo configuration settings and preferences.",
+        "description": "Retrieve the current global Sonderr configuration settings and preferences.",
         "summary": "Get global configuration",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.global.config.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.global.config.get({\n  ...\n})"
           }
         ]
       },
@@ -427,7 +427,7 @@
             }
           }
         },
-        "description": "Update global Kilo configuration settings and preferences.",
+        "description": "Update global Sonderr configuration settings and preferences.",
         "summary": "Update global configuration",
         "requestBody": {
           "content": {
@@ -441,7 +441,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.global.config.update({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.global.config.update({\n  ...\n})"
           }
         ]
       }
@@ -474,12 +474,12 @@
             }
           }
         },
-        "description": "Clean up and dispose all Kilo instances, releasing all resources.",
+        "description": "Clean up and dispose all Sonderr instances, releasing all resources.",
         "summary": "Dispose instance",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.global.dispose({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.global.dispose({\n  ...\n})"
           }
         ]
       }
@@ -548,8 +548,8 @@
             }
           }
         },
-        "description": "Upgrade kilo to the specified version or latest if not specified.",
-        "summary": "Upgrade kilo",
+        "description": "Upgrade sonderr to the specified version or latest if not specified.",
+        "summary": "Upgrade sonderr",
         "requestBody": {
           "content": {
             "application/json": {
@@ -568,7 +568,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.global.upgrade({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.global.upgrade({\n  ...\n})"
           }
         ]
       }
@@ -612,7 +612,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.event.subscribe({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.event.subscribe({\n  ...\n})"
           }
         ]
       }
@@ -661,12 +661,12 @@
             }
           }
         },
-        "description": "Retrieve the current Kilo configuration settings and preferences.",
+        "description": "Retrieve the current Sonderr configuration settings and preferences.",
         "summary": "Get configuration",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.config.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.config.get({\n  ...\n})"
           }
         ]
       },
@@ -720,7 +720,7 @@
             }
           }
         },
-        "description": "Update Kilo configuration settings and preferences.",
+        "description": "Update Sonderr configuration settings and preferences.",
         "summary": "Update configuration",
         "requestBody": {
           "content": {
@@ -734,7 +734,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.config.update({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.config.update({\n  ...\n})"
           }
         ]
       }
@@ -805,7 +805,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.config.warnings({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.config.warnings({\n  ...\n})"
           }
         ]
       }
@@ -876,7 +876,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.config.providers({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.config.providers({\n  ...\n})"
           }
         ]
       }
@@ -925,12 +925,12 @@
             }
           }
         },
-        "description": "Get experimental features enabled on the Kilo server.",
+        "description": "Get experimental features enabled on the Sonderr server.",
         "summary": "Get experimental capabilities",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.capabilities.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.capabilities.get({\n  ...\n})"
           }
         ]
       }
@@ -994,7 +994,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.console.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.console.get({\n  ...\n})"
           }
         ]
       }
@@ -1091,7 +1091,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.console.listOrgs({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.console.listOrgs({\n  ...\n})"
           }
         ]
       }
@@ -1131,7 +1131,7 @@
             }
           }
         },
-        "description": "Persist a new active Console account/org selection for the current local Kilo state.",
+        "description": "Persist a new active Console account/org selection for the current local Sonderr state.",
         "summary": "Switch active Console org",
         "requestBody": {
           "content": {
@@ -1155,7 +1155,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.console.switchOrg({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.console.switchOrg({\n  ...\n})"
           }
         ]
       }
@@ -1232,7 +1232,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tool.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tool.list({\n  ...\n})"
           }
         ]
       }
@@ -1293,7 +1293,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tool.ids({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tool.ids({\n  ...\n})"
           }
         ]
       }
@@ -1353,12 +1353,12 @@
             }
           }
         },
-        "description": "List all git worktrees for the current project and whether Kilo manages them.",
+        "description": "List all git worktrees for the current project and whether Sonderr manages them.",
         "summary": "List worktrees",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.worktree.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.worktree.list({\n  ...\n})"
           }
         ]
       },
@@ -1426,7 +1426,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.worktree.create({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.worktree.create({\n  ...\n})"
           }
         ]
       },
@@ -1495,7 +1495,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.worktree.remove({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.worktree.remove({\n  ...\n})"
           }
         ]
       }
@@ -1566,7 +1566,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.worktree.reset({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.worktree.reset({\n  ...\n})"
           }
         ]
       }
@@ -1639,7 +1639,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.worktree.diff({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.worktree.diff({\n  ...\n})"
           }
         ]
       }
@@ -1712,7 +1712,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.worktree.diffSummary({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.worktree.diffSummary({\n  ...\n})"
           }
         ]
       }
@@ -1789,7 +1789,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.worktree.diffFile({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.worktree.diffFile({\n  ...\n})"
           }
         ]
       }
@@ -1931,12 +1931,12 @@
             }
           }
         },
-        "description": "Get a list of all Kilo sessions across projects, sorted by most recently updated. Archived sessions are excluded by default.",
+        "description": "Get a list of all Sonderr sessions across projects, sorted by most recently updated. Archived sessions are excluded by default.",
         "summary": "List sessions",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.session.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.session.list({\n  ...\n})"
           }
         ]
       }
@@ -2007,7 +2007,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.session.background({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.session.background({\n  ...\n})"
           }
         ]
       }
@@ -2065,7 +2065,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.resource.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.resource.list({\n  ...\n})"
           }
         ]
       }
@@ -2191,7 +2191,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.find.text({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.find.text({\n  ...\n})"
           }
         ]
       }
@@ -2285,7 +2285,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.find.files({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.find.files({\n  ...\n})"
           }
         ]
       }
@@ -2351,7 +2351,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.find.symbols({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.find.symbols({\n  ...\n})"
           }
         ]
       }
@@ -2417,7 +2417,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.file.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.file.list({\n  ...\n})"
           }
         ]
       }
@@ -2479,7 +2479,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.file.read({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.file.read({\n  ...\n})"
           }
         ]
       }
@@ -2537,7 +2537,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.file.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.file.status({\n  ...\n})"
           }
         ]
       }
@@ -2587,12 +2587,12 @@
             }
           }
         },
-        "description": "Clean up and dispose the current Kilo instance, releasing all resources.",
+        "description": "Clean up and dispose the current Sonderr instance, releasing all resources.",
         "summary": "Dispose instance",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.instance.dispose({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.instance.dispose({\n  ...\n})"
           }
         ]
       }
@@ -2641,12 +2641,12 @@
             }
           }
         },
-        "description": "Retrieve the current working directory and related path information for the Kilo instance.",
+        "description": "Retrieve the current working directory and related path information for the Sonderr instance.",
         "summary": "Get paths",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.path.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.path.get({\n  ...\n})"
           }
         ]
       }
@@ -2700,7 +2700,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.vcs.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.vcs.get({\n  ...\n})"
           }
         ]
       }
@@ -2758,7 +2758,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.vcs.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.vcs.status({\n  ...\n})"
           }
         ]
       }
@@ -2834,7 +2834,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.vcs.diff({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.vcs.diff({\n  ...\n})"
           }
         ]
       }
@@ -2888,7 +2888,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.vcs.diff.raw({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.vcs.diff.raw({\n  ...\n})"
           }
         ]
       }
@@ -2973,7 +2973,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.vcs.apply({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.vcs.apply({\n  ...\n})"
           }
         ]
       }
@@ -3026,12 +3026,12 @@
             }
           }
         },
-        "description": "Get a list of all available commands in the Kilo system.",
+        "description": "Get a list of all available commands in the Sonderr system.",
         "summary": "List commands",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.command.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.command.list({\n  ...\n})"
           }
         ]
       }
@@ -3084,12 +3084,12 @@
             }
           }
         },
-        "description": "Get a list of all available AI agents in the Kilo system.",
+        "description": "Get a list of all available AI agents in the Sonderr system.",
         "summary": "List agents",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.app.agents({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.app.agents({\n  ...\n})"
           }
         ]
       }
@@ -3161,12 +3161,12 @@
             }
           }
         },
-        "description": "Get a list of all available skills in the Kilo system.",
+        "description": "Get a list of all available skills in the Sonderr system.",
         "summary": "List skills",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.app.skills({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.app.skills({\n  ...\n})"
           }
         ]
       }
@@ -3224,7 +3224,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.lsp.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.lsp.status({\n  ...\n})"
           }
         ]
       }
@@ -3282,7 +3282,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.formatter.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.formatter.status({\n  ...\n})"
           }
         ]
       }
@@ -3340,7 +3340,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.mcp.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.mcp.status({\n  ...\n})"
           }
         ]
       },
@@ -3429,7 +3429,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.mcp.add({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.mcp.add({\n  ...\n})"
           }
         ]
       }
@@ -3519,7 +3519,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.mcp.auth.start({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.mcp.auth.start({\n  ...\n})"
           }
         ]
       },
@@ -3598,7 +3598,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.mcp.auth.remove({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.mcp.auth.remove({\n  ...\n})"
           }
         ]
       }
@@ -3693,7 +3693,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.mcp.auth.callback({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.mcp.auth.callback({\n  ...\n})"
           }
         ]
       }
@@ -3772,7 +3772,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.mcp.auth.authenticate({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.mcp.auth.authenticate({\n  ...\n})"
           }
         ]
       }
@@ -3844,7 +3844,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.mcp.connect({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.mcp.connect({\n  ...\n})"
           }
         ]
       }
@@ -3916,7 +3916,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.mcp.disconnect({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.mcp.disconnect({\n  ...\n})"
           }
         ]
       }
@@ -4023,7 +4023,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.mcp.readResource({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.mcp.readResource({\n  ...\n})"
           }
         ]
       }
@@ -4130,7 +4130,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.mcp.callTool({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.mcp.callTool({\n  ...\n})"
           }
         ]
       }
@@ -4183,12 +4183,12 @@
             }
           }
         },
-        "description": "Get a list of projects that have been opened with Kilo.",
+        "description": "Get a list of projects that have been opened with Sonderr.",
         "summary": "List all projects",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.project.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.project.list({\n  ...\n})"
           }
         ]
       }
@@ -4237,12 +4237,12 @@
             }
           }
         },
-        "description": "Retrieve the currently active project that Kilo is working with.",
+        "description": "Retrieve the currently active project that Sonderr is working with.",
         "summary": "Get current project",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.project.current({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.project.current({\n  ...\n})"
           }
         ]
       }
@@ -4296,7 +4296,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.project.initGit({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.project.initGit({\n  ...\n})"
           }
         ]
       }
@@ -4396,7 +4396,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.project.update({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.project.update({\n  ...\n})"
           }
         ]
       }
@@ -4458,7 +4458,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.project.directories({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.project.directories({\n  ...\n})"
           }
         ]
       }
@@ -4542,7 +4542,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.projectCopy.generateName({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.projectCopy.generateName({\n  ...\n})"
           }
         ]
       }
@@ -4613,7 +4613,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.pty.shells({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.pty.shells({\n  ...\n})"
           }
         ]
       }
@@ -4666,12 +4666,12 @@
             }
           }
         },
-        "description": "Get a list of all active pseudo-terminal (PTY) sessions managed by Kilo.",
+        "description": "Get a list of all active pseudo-terminal (PTY) sessions managed by Sonderr.",
         "summary": "List PTY sessions",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.pty.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.pty.list({\n  ...\n})"
           }
         ]
       },
@@ -4778,7 +4778,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.pty.create({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.pty.create({\n  ...\n})"
           }
         ]
       }
@@ -4851,7 +4851,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.pty.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.pty.get({\n  ...\n})"
           }
         ]
       },
@@ -4970,7 +4970,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.pty.update({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.pty.update({\n  ...\n})"
           }
         ]
       },
@@ -5042,7 +5042,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.pty.remove({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.pty.remove({\n  ...\n})"
           }
         ]
       }
@@ -5125,7 +5125,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.pty.connectToken({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.pty.connectToken({\n  ...\n})"
           }
         ]
       }
@@ -5183,7 +5183,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.question.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.question.list({\n  ...\n})"
           }
         ]
       }
@@ -5284,7 +5284,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.question.reply({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.question.reply({\n  ...\n})"
           }
         ]
       }
@@ -5365,7 +5365,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.question.reject({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.question.reject({\n  ...\n})"
           }
         ]
       }
@@ -5423,7 +5423,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.permission.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.permission.list({\n  ...\n})"
           }
         ]
       }
@@ -5527,7 +5527,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.permission.reply({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.permission.reply({\n  ...\n})"
           }
         ]
       }
@@ -5625,7 +5625,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.permission.saveAlwaysRules({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.permission.saveAlwaysRules({\n  ...\n})"
           }
         ]
       }
@@ -5719,7 +5719,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.permission.allowEverything({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.permission.allowEverything({\n  ...\n})"
           }
         ]
       }
@@ -5802,7 +5802,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.provider.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.provider.list({\n  ...\n})"
           }
         ]
       }
@@ -5863,7 +5863,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.provider.auth({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.provider.auth({\n  ...\n})"
           }
         ]
       }
@@ -5955,7 +5955,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.provider.oauth.authorize({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.provider.oauth.authorize({\n  ...\n})"
           }
         ]
       }
@@ -6045,7 +6045,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.provider.oauth.callback({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.provider.oauth.callback({\n  ...\n})"
           }
         ]
       }
@@ -6155,12 +6155,12 @@
             }
           }
         },
-        "description": "Get a list of all Kilo sessions, sorted by most recently updated.",
+        "description": "Get a list of all Sonderr sessions, sorted by most recently updated.",
         "summary": "List sessions",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.list({\n  ...\n})"
           }
         ]
       },
@@ -6214,7 +6214,7 @@
             }
           }
         },
-        "description": "Create a new Kilo session for interacting with AI assistants and managing conversations.",
+        "description": "Create a new Sonderr session for interacting with AI assistants and managing conversations.",
         "summary": "Create session",
         "requestBody": {
           "content": {
@@ -6273,7 +6273,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.create({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.create({\n  ...\n})"
           }
         ]
       }
@@ -6338,7 +6338,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.status({\n  ...\n})"
           }
         ]
       }
@@ -6413,12 +6413,12 @@
             }
           }
         },
-        "description": "Retrieve detailed information about a specific Kilo session.",
+        "description": "Retrieve detailed information about a specific Sonderr session.",
         "summary": "Get session",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.get({\n  ...\n})"
           }
         ]
       },
@@ -6497,7 +6497,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.delete({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.delete({\n  ...\n})"
           }
         ]
       },
@@ -6605,7 +6605,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.update({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.update({\n  ...\n})"
           }
         ]
       }
@@ -6689,7 +6689,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.children({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.children({\n  ...\n})"
           }
         ]
       }
@@ -6773,7 +6773,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.todo({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.todo({\n  ...\n})"
           }
         ]
       }
@@ -6866,7 +6866,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.diff({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.diff({\n  ...\n})"
           }
         ]
       }
@@ -6981,7 +6981,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.messages({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.messages({\n  ...\n})"
           }
         ]
       },
@@ -7175,7 +7175,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.prompt({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.prompt({\n  ...\n})"
           }
         ]
       }
@@ -7278,7 +7278,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.message({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.message({\n  ...\n})"
           }
         ]
       },
@@ -7392,7 +7392,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.deleteMessage({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.deleteMessage({\n  ...\n})"
           }
         ]
       }
@@ -7488,7 +7488,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.fork({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.fork({\n  ...\n})"
           }
         ]
       }
@@ -7559,7 +7559,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.abort({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.abort({\n  ...\n})"
           }
         ]
       }
@@ -7663,7 +7663,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.init({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.init({\n  ...\n})"
           }
         ]
       }
@@ -7746,7 +7746,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.share({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.share({\n  ...\n})"
           }
         ]
       },
@@ -7827,7 +7827,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.unshare({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.unshare({\n  ...\n})"
           }
         ]
       }
@@ -7930,7 +7930,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.summarize({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.summarize({\n  ...\n})"
           }
         ]
       }
@@ -8107,7 +8107,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.prompt_async({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.prompt_async({\n  ...\n})"
           }
         ]
       }
@@ -8265,7 +8265,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.command({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.command({\n  ...\n})"
           }
         ]
       }
@@ -8405,7 +8405,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.shell({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.shell({\n  ...\n})"
           }
         ]
       }
@@ -8516,7 +8516,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.revert({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.revert({\n  ...\n})"
           }
         ]
       }
@@ -8606,7 +8606,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.unrevert({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.unrevert({\n  ...\n})"
           }
         ]
       }
@@ -8721,7 +8721,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.permission.respond({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.permission.respond({\n  ...\n})"
           }
         ]
       }
@@ -8819,7 +8819,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.part.delete({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.part.delete({\n  ...\n})"
           }
         ]
       },
@@ -8923,7 +8923,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.part.update({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.part.update({\n  ...\n})"
           }
         ]
       }
@@ -9031,7 +9031,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.session.viewed({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.session.viewed({\n  ...\n})"
           }
         ]
       }
@@ -9086,7 +9086,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.sync.start({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sync.start({\n  ...\n})"
           }
         ]
       }
@@ -9199,7 +9199,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.sync.replay({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sync.replay({\n  ...\n})"
           }
         ]
       }
@@ -9286,7 +9286,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.sync.steal({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sync.steal({\n  ...\n})"
           }
         ]
       }
@@ -9385,7 +9385,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.sync.history.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sync.history.list({\n  ...\n})"
           }
         ]
       }
@@ -9463,7 +9463,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.appendPrompt({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.appendPrompt({\n  ...\n})"
           }
         ]
       }
@@ -9518,7 +9518,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.openHelp({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.openHelp({\n  ...\n})"
           }
         ]
       }
@@ -9573,7 +9573,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.openSessions({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.openSessions({\n  ...\n})"
           }
         ]
       }
@@ -9628,7 +9628,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.openThemes({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.openThemes({\n  ...\n})"
           }
         ]
       }
@@ -9683,7 +9683,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.openModels({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.openModels({\n  ...\n})"
           }
         ]
       }
@@ -9738,7 +9738,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.submitPrompt({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.submitPrompt({\n  ...\n})"
           }
         ]
       }
@@ -9793,7 +9793,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.clearPrompt({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.clearPrompt({\n  ...\n})"
           }
         ]
       }
@@ -9871,7 +9871,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.executeCommand({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.executeCommand({\n  ...\n})"
           }
         ]
       }
@@ -9953,7 +9953,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.showToast({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.showToast({\n  ...\n})"
           }
         ]
       }
@@ -10037,7 +10037,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.publish({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.publish({\n  ...\n})"
           }
         ]
       }
@@ -10127,7 +10127,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.selectSession({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.selectSession({\n  ...\n})"
           }
         ]
       }
@@ -10190,7 +10190,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.control.next({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.control.next({\n  ...\n})"
           }
         ]
       }
@@ -10252,7 +10252,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.control.response({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.control.response({\n  ...\n})"
           }
         ]
       }
@@ -10323,7 +10323,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.workspace.adapter.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.workspace.adapter.list({\n  ...\n})"
           }
         ]
       }
@@ -10381,7 +10381,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.workspace.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.workspace.list({\n  ...\n})"
           }
         ]
       },
@@ -10481,7 +10481,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.workspace.create({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.workspace.create({\n  ...\n})"
           }
         ]
       }
@@ -10528,7 +10528,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.workspace.syncList({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.workspace.syncList({\n  ...\n})"
           }
         ]
       }
@@ -10586,7 +10586,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.workspace.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.workspace.status({\n  ...\n})"
           }
         ]
       }
@@ -10656,7 +10656,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.workspace.remove({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.workspace.remove({\n  ...\n})"
           }
         ]
       }
@@ -10754,7 +10754,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.experimental.workspace.warp({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.experimental.workspace.warp({\n  ...\n})"
           }
         ]
       }
@@ -10908,7 +10908,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.agentBuilder.preview({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.agentBuilder.preview({\n  ...\n})"
           }
         ]
       }
@@ -11073,7 +11073,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.agentBuilder.save({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.agentBuilder.save({\n  ...\n})"
           }
         ]
       }
@@ -11131,7 +11131,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.backgroundProcess.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.backgroundProcess.list({\n  ...\n})"
           }
         ]
       }
@@ -11204,7 +11204,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.backgroundProcess.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.backgroundProcess.get({\n  ...\n})"
           }
         ]
       }
@@ -11277,7 +11277,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.backgroundProcess.logs({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.backgroundProcess.logs({\n  ...\n})"
           }
         ]
       }
@@ -11350,7 +11350,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.backgroundProcess.stop({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.backgroundProcess.stop({\n  ...\n})"
           }
         ]
       }
@@ -11423,7 +11423,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.backgroundProcess.restart({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.backgroundProcess.restart({\n  ...\n})"
           }
         ]
       }
@@ -11487,7 +11487,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.backgroundProcess.stopSession({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.backgroundProcess.stopSession({\n  ...\n})"
           }
         ]
       }
@@ -11587,7 +11587,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.branchName.generate({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.branchName.generate({\n  ...\n})"
           }
         ]
       }
@@ -11702,7 +11702,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.commitMessage.generate({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.commitMessage.generate({\n  ...\n})"
           }
         ]
       }
@@ -11766,7 +11766,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.config.overlay({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.config.overlay({\n  ...\n})"
           }
         ]
       },
@@ -11870,7 +11870,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.config.overlayUpdate({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.config.overlayUpdate({\n  ...\n})"
           }
         ]
       }
@@ -11924,7 +11924,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.config.sources({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.config.sources({\n  ...\n})"
           }
         ]
       }
@@ -11978,7 +11978,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.config.effective({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.config.effective({\n  ...\n})"
           }
         ]
       }
@@ -12037,12 +12037,12 @@
             }
           }
         },
-        "description": "List project instruction files used by Kilo and return their current contents.",
+        "description": "List project instruction files used by Sonderr and return their current contents.",
         "summary": "Get project rules",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.config.rules({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.config.rules({\n  ...\n})"
           }
         ]
       },
@@ -12115,7 +12115,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.config.rulesUpdate({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.config.rulesUpdate({\n  ...\n})"
           }
         ]
       }
@@ -12169,7 +12169,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.config.modelState({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.config.modelState({\n  ...\n})"
           }
         ]
       },
@@ -12216,7 +12216,7 @@
             }
           }
         },
-        "description": "Patch TUI-compatible model selections shared with Kilo Console.",
+        "description": "Patch TUI-compatible model selections shared with Sonderr Console.",
         "summary": "Update model state",
         "requestBody": {
           "content": {
@@ -12249,7 +12249,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.config.modelStateUpdate({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.config.modelStateUpdate({\n  ...\n})"
           }
         ]
       }
@@ -12303,7 +12303,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.config.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.config.get({\n  ...\n})"
           }
         ]
       },
@@ -12508,7 +12508,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.config.update({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.config.update({\n  ...\n})"
           }
         ]
       }
@@ -12562,7 +12562,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.tui.keybind.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.tui.keybind.list({\n  ...\n})"
           }
         ]
       }
@@ -12649,7 +12649,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.enhancePrompt.enhance({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.enhancePrompt.enhance({\n  ...\n})"
           }
         ]
       }
@@ -12703,7 +12703,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.indexing.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.indexing.status({\n  ...\n})"
           }
         ]
       }
@@ -12761,7 +12761,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.indexing.warnings({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.indexing.warnings({\n  ...\n})"
           }
         ]
       }
@@ -12790,11 +12790,11 @@
         ],
         "responses": {
           "200": {
-            "description": "Kilo embedding model catalog",
+            "description": "Sonderr embedding model catalog",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/KiloEmbeddingModelCatalog"
+                  "$ref": "#/components/schemas/SonderrEmbeddingModelCatalog"
                 }
               }
             }
@@ -12810,12 +12810,12 @@
             }
           }
         },
-        "description": "Retrieve the embedding models available through the active Kilo account.",
-        "summary": "List Kilo embedding models",
+        "description": "Retrieve the embedding models available through the active Sonderr account.",
+        "summary": "List Sonderr embedding models",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.indexing.models({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.indexing.models({\n  ...\n})"
           }
         ]
       }
@@ -12885,7 +12885,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.indexing.consent({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.indexing.consent({\n  ...\n})"
           }
         ]
       }
@@ -12945,12 +12945,12 @@
             }
           }
         },
-        "description": "Atomically dispose and reboot the current Kilo instance, reloading config, skills, agents, commands, and MCP prompts from disk. Returns 409 if a session is actively running.",
+        "description": "Atomically dispose and reboot the current Sonderr instance, reloading config, skills, agents, commands, and MCP prompts from disk. Returns 409 if a session is actively running.",
         "summary": "Reload instance",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.instance.reload({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.instance.reload({\n  ...\n})"
           }
         ]
       }
@@ -13008,7 +13008,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.interactiveTerminal.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.interactiveTerminal.list({\n  ...\n})"
           }
         ]
       }
@@ -13080,7 +13080,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.interactiveTerminal.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.interactiveTerminal.get({\n  ...\n})"
           }
         ]
       }
@@ -13162,7 +13162,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.interactiveTerminal.write({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.interactiveTerminal.write({\n  ...\n})"
           }
         ]
       }
@@ -13244,7 +13244,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.interactiveTerminal.resize({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.interactiveTerminal.resize({\n  ...\n})"
           }
         ]
       }
@@ -13317,15 +13317,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.interactiveTerminal.close({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.interactiveTerminal.close({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/profile": {
+    "/sonderr/profile": {
       "get": {
-        "tags": ["kilo"],
-        "operationId": "kilo.profile",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.profile",
         "parameters": [
           {
             "name": "directory",
@@ -13407,7 +13407,7 @@
                         }
                       ]
                     },
-                    "kiloPass": {
+                    "sonderrPass": {
                       "anyOf": [
                         {
                           "type": "object",
@@ -13455,7 +13455,7 @@
                       ]
                     }
                   },
-                  "required": ["profile", "balance", "kiloPass", "currentOrgId"],
+                  "required": ["profile", "balance", "sonderrPass", "currentOrgId"],
                   "additionalProperties": false,
                   "description": "Profile data"
                 }
@@ -13480,20 +13480,20 @@
             }
           }
         },
-        "description": "Fetch user profile and organizations from Kilo Gateway",
-        "summary": "Get Kilo Gateway profile",
+        "description": "Fetch user profile and organizations from Sonderr Gateway",
+        "summary": "Get Sonderr Gateway profile",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.profile({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.profile({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/auth-status": {
+    "/sonderr/auth-status": {
       "get": {
-        "tags": ["kilo"],
-        "operationId": "kilo.authStatus",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.authStatus",
         "parameters": [
           {
             "name": "directory",
@@ -13514,7 +13514,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Kilo authentication status",
+            "description": "Sonderr authentication status",
             "content": {
               "application/json": {
                 "schema": {
@@ -13530,7 +13530,7 @@
                   },
                   "required": ["authenticated"],
                   "additionalProperties": false,
-                  "description": "Kilo authentication status"
+                  "description": "Sonderr authentication status"
                 }
               }
             }
@@ -13553,20 +13553,20 @@
             }
           }
         },
-        "description": "Check whether a locally stored Kilo credential can authenticate Gateway requests",
-        "summary": "Get Kilo authentication status",
+        "description": "Check whether a locally stored Sonderr credential can authenticate Gateway requests",
+        "summary": "Get Sonderr authentication status",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.authStatus({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.authStatus({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/modes": {
+    "/sonderr/modes": {
       "get": {
-        "tags": ["kilo"],
-        "operationId": "kilo.modes",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.modes",
         "parameters": [
           {
             "name": "directory",
@@ -13721,15 +13721,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.modes({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.modes({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/fim": {
+    "/sonderr/fim": {
       "post": {
-        "tags": ["kilo"],
-        "operationId": "kilo.fim",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.fim",
         "parameters": [
           {
             "name": "directory",
@@ -13812,7 +13812,7 @@
             }
           }
         },
-        "description": "Proxy a Fill-in-the-Middle completion request to the Kilo Gateway",
+        "description": "Proxy a Fill-in-the-Middle completion request to the Sonderr Gateway",
         "summary": "FIM completion",
         "requestBody": {
           "content": {
@@ -13848,15 +13848,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.fim({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.fim({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/edit": {
+    "/sonderr/edit": {
       "post": {
-        "tags": ["kilo"],
-        "operationId": "kilo.edit",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.edit",
         "parameters": [
           {
             "name": "directory",
@@ -14000,15 +14000,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.edit({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.edit({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/audio/transcriptions": {
+    "/sonderr/audio/transcriptions": {
       "post": {
-        "tags": ["kilo"],
-        "operationId": "kilo.audio.transcriptions",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.audio.transcriptions",
         "parameters": [
           {
             "name": "directory",
@@ -14065,7 +14065,7 @@
             }
           }
         },
-        "description": "Proxy an audio transcription request to the Kilo Gateway",
+        "description": "Proxy an audio transcription request to the Sonderr Gateway",
         "summary": "Speech to text transcription",
         "requestBody": {
           "content": {
@@ -14108,15 +14108,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.audio.transcriptions({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.audio.transcriptions({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/models/images": {
+    "/sonderr/models/images": {
       "get": {
-        "tags": ["kilo"],
-        "operationId": "kilo.models.images",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.models.images",
         "parameters": [
           {
             "name": "directory",
@@ -14181,20 +14181,20 @@
             }
           }
         },
-        "description": "List image-capable models from the Kilo Gateway OpenRouter passthrough",
+        "description": "List image-capable models from the Sonderr Gateway OpenRouter passthrough",
         "summary": "Image generation models",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.models.images({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.models.images({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/models/transcriptions": {
+    "/sonderr/models/transcriptions": {
       "get": {
-        "tags": ["kilo"],
-        "operationId": "kilo.models.transcriptions",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.models.transcriptions",
         "parameters": [
           {
             "name": "directory",
@@ -14256,20 +14256,20 @@
             }
           }
         },
-        "description": "List transcription-capable models from the Kilo Gateway catalog",
+        "description": "List transcription-capable models from the Sonderr Gateway catalog",
         "summary": "Speech-to-text models",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.models.transcriptions({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.models.transcriptions({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/notifications": {
+    "/sonderr/notifications": {
       "get": {
-        "tags": ["kilo"],
-        "operationId": "kilo.notifications",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.notifications",
         "parameters": [
           {
             "name": "directory",
@@ -14356,20 +14356,20 @@
             }
           }
         },
-        "description": "Fetch notifications from Kilo Gateway for CLI display",
-        "summary": "Get Kilo notifications",
+        "description": "Fetch notifications from Sonderr Gateway for CLI display",
+        "summary": "Get Sonderr notifications",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.notifications({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.notifications({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/organization": {
+    "/sonderr/organization": {
       "post": {
-        "tags": ["kilo"],
-        "operationId": "kilo.organization.set",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.organization.set",
         "parameters": [
           {
             "name": "directory",
@@ -14418,8 +14418,8 @@
             }
           }
         },
-        "description": "Switch to a different Kilo Gateway organization",
-        "summary": "Update Kilo Gateway organization",
+        "description": "Switch to a different Sonderr Gateway organization",
+        "summary": "Update Sonderr Gateway organization",
         "requestBody": {
           "content": {
             "application/json": {
@@ -14446,15 +14446,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.organization.set({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.organization.set({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/claw/status": {
+    "/sonderr/claw/status": {
       "get": {
-        "tags": ["kilo"],
-        "operationId": "kilo.claw.status",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.claw.status",
         "parameters": [
           {
             "name": "directory",
@@ -14598,20 +14598,20 @@
             }
           }
         },
-        "description": "Fetch the user's KiloClaw instance status via the KiloClaw worker",
-        "summary": "Get KiloClaw instance status",
+        "description": "Fetch the user's SonderrClaw instance status via the SonderrClaw worker",
+        "summary": "Get SonderrClaw instance status",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.claw.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.claw.status({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/claw/chat-credentials": {
+    "/sonderr/claw/chat-credentials": {
       "get": {
-        "tags": ["kilo"],
-        "operationId": "kilo.claw.chatCredentials",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.claw.chatCredentials",
         "parameters": [
           {
             "name": "directory",
@@ -14632,7 +14632,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Kilo Chat credentials or null",
+            "description": "Sonderr Chat credentials or null",
             "content": {
               "application/json": {
                 "schema": {
@@ -14646,14 +14646,14 @@
                         "expiresAt": {
                           "type": "string"
                         },
-                        "kiloChatUrl": {
+                        "sonderrChatUrl": {
                           "type": "string"
                         },
                         "eventServiceUrl": {
                           "type": "string"
                         }
                       },
-                      "required": ["token", "expiresAt", "kiloChatUrl", "eventServiceUrl"],
+                      "required": ["token", "expiresAt", "sonderrChatUrl", "eventServiceUrl"],
                       "additionalProperties": false
                     },
                     {
@@ -14675,20 +14675,20 @@
             }
           }
         },
-        "description": "Returns the bearer token and endpoint URLs the client uses to talk to the Kilo Chat worker and the Event Service. The bearer is the user's existing long-lived Kilo JWT — kilo-chat and event-service both verify it directly with NEXTAUTH_SECRET, so no separate token mint is needed.",
-        "summary": "Get KiloClaw chat credentials",
+        "description": "Returns the bearer token and endpoint URLs the client uses to talk to the Sonderr Chat worker and the Event Service. The bearer is the user's existing long-lived Sonderr JWT — sonderr-chat and event-service both verify it directly with NEXTAUTH_SECRET, so no separate token mint is needed.",
+        "summary": "Get SonderrClaw chat credentials",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.claw.chatCredentials({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.claw.chatCredentials({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/cloud-sessions": {
+    "/sonderr/cloud-sessions": {
       "get": {
-        "tags": ["kilo"],
-        "operationId": "kilo.cloudSessions",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.cloudSessions",
         "parameters": [
           {
             "name": "directory",
@@ -14807,20 +14807,20 @@
             }
           }
         },
-        "description": "Fetch cloud CLI sessions from Kilo API",
+        "description": "Fetch cloud CLI sessions from Sonderr API",
         "summary": "Get cloud sessions",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.cloudSessions({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.cloudSessions({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/cloud/session/{id}": {
+    "/sonderr/cloud/session/{id}": {
       "get": {
-        "tags": ["kilo"],
-        "operationId": "kilo.cloud.session.get",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.cloud.session.get",
         "parameters": [
           {
             "name": "id",
@@ -14968,20 +14968,20 @@
             }
           }
         },
-        "description": "Fetch full session data from the Kilo cloud for preview",
+        "description": "Fetch full session data from the Sonderr cloud for preview",
         "summary": "Get cloud session",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.cloud.session.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.cloud.session.get({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilo/cloud/session/import": {
+    "/sonderr/cloud/session/import": {
       "post": {
-        "tags": ["kilo"],
-        "operationId": "kilo.cloud.session.import",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.cloud.session.import",
         "parameters": [
           {
             "name": "directory",
@@ -15093,15 +15093,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilo.cloud.session.import({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.cloud.session.import({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/session/{sessionID}/resume": {
+    "/sonderr/session/{sessionID}/resume": {
       "post": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.resumeSession",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.resumeSession",
         "parameters": [
           {
             "name": "sessionID",
@@ -15195,15 +15195,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.resumeSession({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.resumeSession({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/heap/snapshot": {
+    "/sonderr/heap/snapshot": {
       "post": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.heap.snapshot",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.heap.snapshot",
         "parameters": [
           {
             "name": "directory",
@@ -15257,15 +15257,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.heap.snapshot({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.heap.snapshot({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/command/files": {
+    "/sonderr/command/files": {
       "get": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.commandFiles",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.commandFiles",
         "parameters": [
           {
             "name": "directory",
@@ -15315,15 +15315,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.commandFiles({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.commandFiles({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/command/remove": {
+    "/sonderr/command/remove": {
       "post": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.removeCommand",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.removeCommand",
         "parameters": [
           {
             "name": "directory",
@@ -15393,15 +15393,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.removeCommand({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.removeCommand({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/skill/remove": {
+    "/sonderr/skill/remove": {
       "post": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.removeSkill",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.removeSkill",
         "parameters": [
           {
             "name": "directory",
@@ -15471,15 +15471,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.removeSkill({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.removeSkill({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/agent/remove": {
+    "/sonderr/agent/remove": {
       "post": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.removeAgent",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.removeAgent",
         "parameters": [
           {
             "name": "directory",
@@ -15553,15 +15553,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.removeAgent({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.removeAgent({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/snapshot/remove": {
+    "/sonderr/snapshot/remove": {
       "post": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.removeSnapshot",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.removeSnapshot",
         "parameters": [
           {
             "name": "directory",
@@ -15631,15 +15631,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.removeSnapshot({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.removeSnapshot({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/provider-usage": {
+    "/sonderr/provider-usage": {
       "get": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.providerUsage.get",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.providerUsage.get",
         "parameters": [
           {
             "name": "directory",
@@ -15695,15 +15695,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.providerUsage.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.providerUsage.get({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/provider-usage/refresh": {
+    "/sonderr/provider-usage/refresh": {
       "post": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.providerUsage.refresh",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.providerUsage.refresh",
         "parameters": [
           {
             "name": "directory",
@@ -15759,15 +15759,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.providerUsage.refresh({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.providerUsage.refresh({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/notebook": {
+    "/sonderr/notebook": {
       "get": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.notebook.list",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.notebook.list",
         "parameters": [
           {
             "name": "directory",
@@ -15817,15 +15817,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.notebook.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.notebook.list({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/notebook/{requestID}/reply": {
+    "/sonderr/notebook/{requestID}/reply": {
       "post": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.notebook.reply",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.notebook.reply",
         "parameters": [
           {
             "name": "requestID",
@@ -15913,15 +15913,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.notebook.reply({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.notebook.reply({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/notebook/{requestID}/reject": {
+    "/sonderr/notebook/{requestID}/reject": {
       "post": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.notebook.reject",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.notebook.reject",
         "parameters": [
           {
             "name": "requestID",
@@ -16002,15 +16002,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.notebook.reject({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.notebook.reject({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/agent-manager": {
+    "/sonderr/agent-manager": {
       "get": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.agentManager.list",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.agentManager.list",
         "parameters": [
           {
             "name": "directory",
@@ -16060,15 +16060,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.agentManager.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.agentManager.list({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/agent-manager/{requestID}/reply": {
+    "/sonderr/agent-manager/{requestID}/reply": {
       "post": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.agentManager.reply",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.agentManager.reply",
         "parameters": [
           {
             "name": "requestID",
@@ -16156,15 +16156,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.agentManager.reply({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.agentManager.reply({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/agent-manager/{requestID}/reject": {
+    "/sonderr/agent-manager/{requestID}/reject": {
       "post": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.agentManager.reject",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.agentManager.reject",
         "parameters": [
           {
             "name": "requestID",
@@ -16245,15 +16245,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.agentManager.reject({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.agentManager.reject({\n  ...\n})"
           }
         ]
       }
     },
     "/session/{sessionID}/model-usage": {
       "get": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.sessionModelUsage",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.sessionModelUsage",
         "parameters": [
           {
             "name": "sessionID",
@@ -16435,15 +16435,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.sessionModelUsage({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.sessionModelUsage({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/background-jobs": {
+    "/sonderr/background-jobs": {
       "get": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.backgroundJobs",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.backgroundJobs",
         "parameters": [
           {
             "name": "directory",
@@ -16571,15 +16571,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.backgroundJobs({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.backgroundJobs({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/background-jobs/{jobID}/cancel": {
+    "/sonderr/background-jobs/{jobID}/cancel": {
       "post": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.backgroundJob.cancel",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.backgroundJob.cancel",
         "parameters": [
           {
             "name": "jobID",
@@ -16644,15 +16644,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.backgroundJob.cancel({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.backgroundJob.cancel({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/background-jobs/{jobID}/promote": {
+    "/sonderr/background-jobs/{jobID}/promote": {
       "post": {
-        "tags": ["kilocode"],
-        "operationId": "kilocode.backgroundJob.promote",
+        "tags": ["sonderr"],
+        "operationId": "sonderr.backgroundJob.promote",
         "parameters": [
           {
             "name": "jobID",
@@ -16717,12 +16717,12 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.backgroundJob.promote({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.backgroundJob.promote({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/anaconda-desktop/status": {
+    "/sonderr/anaconda-desktop/status": {
       "get": {
         "tags": ["anaconda-desktop"],
         "operationId": "anacondaDesktop.status",
@@ -16771,12 +16771,12 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.anacondaDesktop.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.anacondaDesktop.status({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/anaconda-desktop/open": {
+    "/sonderr/anaconda-desktop/open": {
       "post": {
         "tags": ["anaconda-desktop"],
         "operationId": "anacondaDesktop.open",
@@ -16847,12 +16847,12 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.anacondaDesktop.open({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.anacondaDesktop.open({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/anaconda-desktop/sync": {
+    "/sonderr/anaconda-desktop/sync": {
       "post": {
         "tags": ["anaconda-desktop"],
         "operationId": "anacondaDesktop.sync",
@@ -16961,7 +16961,7 @@
             }
           }
         },
-        "description": "Discover the active local inference server and replace Kilo provider authentication metadata.",
+        "description": "Discover the active local inference server and replace Sonderr provider authentication metadata.",
         "summary": "Synchronize Anaconda Desktop provider",
         "requestBody": {
           "content": {
@@ -16981,7 +16981,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.anacondaDesktop.sync({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.anacondaDesktop.sync({\n  ...\n})"
           }
         ]
       }
@@ -17039,7 +17039,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.network.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.network.list({\n  ...\n})"
           }
         ]
       }
@@ -17120,7 +17120,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.network.reply({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.network.reply({\n  ...\n})"
           }
         ]
       }
@@ -17201,7 +17201,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.network.reject({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.network.reject({\n  ...\n})"
           }
         ]
       }
@@ -17266,7 +17266,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.remote.enable({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.remote.enable({\n  ...\n})"
           }
         ]
       }
@@ -17331,7 +17331,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.remote.disable({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.remote.disable({\n  ...\n})"
           }
         ]
       }
@@ -17396,7 +17396,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.remote.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.remote.status({\n  ...\n})"
           }
         ]
       }
@@ -17461,7 +17461,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.sandbox.support({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sandbox.support({\n  ...\n})"
           }
         ]
       }
@@ -17554,7 +17554,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.sandbox.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sandbox.status({\n  ...\n})"
           }
         ]
       }
@@ -17647,15 +17647,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.sandbox.toggle({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sandbox.toggle({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/session-import/project": {
+    "/sonderr/session-import/project": {
       "post": {
         "tags": ["session-import"],
-        "operationId": "kilocode.sessionImport.project",
+        "operationId": "sonderr.sessionImport.project",
         "parameters": [
           {
             "name": "directory",
@@ -17680,7 +17680,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/KilocodeSessionImportResult"
+                  "$ref": "#/components/schemas/SonderrSessionImportResult"
                 }
               }
             }
@@ -17763,15 +17763,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.sessionImport.project({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.sessionImport.project({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/session-import/session": {
+    "/sonderr/session-import/session": {
       "post": {
         "tags": ["session-import"],
-        "operationId": "kilocode.sessionImport.session",
+        "operationId": "sonderr.sessionImport.session",
         "parameters": [
           {
             "name": "directory",
@@ -17796,7 +17796,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/KilocodeSessionImportResult"
+                  "$ref": "#/components/schemas/SonderrSessionImportResult"
                 }
               }
             }
@@ -17927,15 +17927,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.sessionImport.session({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.sessionImport.session({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/session-import/message": {
+    "/sonderr/session-import/message": {
       "post": {
         "tags": ["session-import"],
-        "operationId": "kilocode.sessionImport.message",
+        "operationId": "sonderr.sessionImport.message",
         "parameters": [
           {
             "name": "directory",
@@ -17960,7 +17960,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/KilocodeSessionImportResult"
+                  "$ref": "#/components/schemas/SonderrSessionImportResult"
                 }
               }
             }
@@ -18165,15 +18165,15 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.sessionImport.message({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.sessionImport.message({\n  ...\n})"
           }
         ]
       }
     },
-    "/kilocode/session-import/part": {
+    "/sonderr/session-import/part": {
       "post": {
         "tags": ["session-import"],
-        "operationId": "kilocode.sessionImport.part",
+        "operationId": "sonderr.sessionImport.part",
         "parameters": [
           {
             "name": "directory",
@@ -18198,7 +18198,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/KilocodeSessionImportResult"
+                  "$ref": "#/components/schemas/SonderrSessionImportResult"
                 }
               }
             }
@@ -18464,7 +18464,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.kilocode.sessionImport.part({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.sonderr.sessionImport.part({\n  ...\n})"
           }
         ]
       }
@@ -18522,7 +18522,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.suggestion.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.suggestion.list({\n  ...\n})"
           }
         ]
       }
@@ -18620,7 +18620,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.suggestion.accept({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.suggestion.accept({\n  ...\n})"
           }
         ]
       }
@@ -18700,7 +18700,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.suggestion.dismiss({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.suggestion.dismiss({\n  ...\n})"
           }
         ]
       }
@@ -18757,7 +18757,7 @@
             }
           }
         },
-        "description": "Forward a telemetry event to PostHog via kilo-telemetry.",
+        "description": "Forward a telemetry event to PostHog via sonderr-telemetry.",
         "summary": "Capture telemetry event",
         "requestBody": {
           "content": {
@@ -18782,7 +18782,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.telemetry.capture({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.telemetry.capture({\n  ...\n})"
           }
         ]
       }
@@ -18839,7 +18839,7 @@
             }
           }
         },
-        "description": "Update the PostHog client's opt-in/out state at runtime. The CLI reads KILO_TELEMETRY_LEVEL once at spawn — this route lets clients (e.g. the VS Code extension) propagate runtime telemetry consent changes.",
+        "description": "Update the PostHog client's opt-in/out state at runtime. The CLI reads SONDERR_TELEMETRY_LEVEL once at spawn — this route lets clients (e.g. the VS Code extension) propagate runtime telemetry consent changes.",
         "summary": "Set PostHog telemetry enabled state",
         "requestBody": {
           "content": {
@@ -18860,7 +18860,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.telemetry.setEnabled({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.telemetry.setEnabled({\n  ...\n})"
           }
         ]
       }
@@ -19119,7 +19119,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.memory.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.memory.status({\n  ...\n})"
           }
         ]
       }
@@ -19377,7 +19377,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.memory.show({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.memory.show({\n  ...\n})"
           }
         ]
       }
@@ -19626,7 +19626,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.memory.enable({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.memory.enable({\n  ...\n})"
           }
         ]
       }
@@ -19856,7 +19856,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.memory.disable({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.memory.disable({\n  ...\n})"
           }
         ]
       }
@@ -20104,7 +20104,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.memory.configure({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.memory.configure({\n  ...\n})"
           }
         ]
       }
@@ -20353,7 +20353,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.memory.rebuild({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.memory.rebuild({\n  ...\n})"
           }
         ]
       }
@@ -20509,7 +20509,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.memory.remember({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.memory.remember({\n  ...\n})"
           }
         ]
       }
@@ -20656,7 +20656,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.memory.correct({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.memory.correct({\n  ...\n})"
           }
         ]
       }
@@ -20799,7 +20799,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.memory.forget({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.memory.forget({\n  ...\n})"
           }
         ]
       }
@@ -20898,14 +20898,14 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.memory.purge({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.memory.purge({\n  ...\n})"
           }
         ]
       }
     },
     "/api/health": {
       "get": {
-        "tags": ["Kilo HttpApi"],
+        "tags": ["Sonderr HttpApi"],
         "operationId": "v2.health.get",
         "parameters": [],
         "security": [],
@@ -20954,14 +20954,14 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.health.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.health.get({\n  ...\n})"
           }
         ]
       }
     },
     "/api/location": {
       "get": {
-        "tags": ["Kilo HttpApi"],
+        "tags": ["Sonderr HttpApi"],
         "operationId": "v2.location.get",
         "parameters": [
           {
@@ -21022,14 +21022,14 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.location.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.location.get({\n  ...\n})"
           }
         ]
       }
     },
     "/api/agent": {
       "get": {
-        "tags": ["Kilo HttpApi"],
+        "tags": ["Sonderr HttpApi"],
         "operationId": "v2.agent.list",
         "parameters": [
           {
@@ -21103,7 +21103,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.agent.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.agent.list({\n  ...\n})"
           }
         ]
       }
@@ -21229,7 +21229,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.list({\n  ...\n})"
           }
         ]
       },
@@ -21308,7 +21308,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.create({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.create({\n  ...\n})"
           }
         ]
       }
@@ -21363,12 +21363,12 @@
             }
           }
         },
-        "description": "Retrieve foreground Session drains currently owned by this Kilo process. Sessions absent from the result are inactive.",
+        "description": "Retrieve foreground Session drains currently owned by this Sonderr process. Sessions absent from the result are inactive.",
         "summary": "List active sessions",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.active({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.active({\n  ...\n})"
           }
         ]
       }
@@ -21450,7 +21450,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.get({\n  ...\n})"
           }
         ]
       }
@@ -21535,7 +21535,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.switchAgent({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.switchAgent({\n  ...\n})"
           }
         ]
       }
@@ -21620,7 +21620,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.switchModel({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.switchModel({\n  ...\n})"
           }
         ]
       }
@@ -21740,7 +21740,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.prompt({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.prompt({\n  ...\n})"
           }
         ]
       }
@@ -21818,7 +21818,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.compact({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.compact({\n  ...\n})"
           }
         ]
       }
@@ -21896,7 +21896,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.wait({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.wait({\n  ...\n})"
           }
         ]
       }
@@ -22012,7 +22012,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.revert.stage({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.revert.stage({\n  ...\n})"
           }
         ]
       }
@@ -22089,7 +22089,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.revert.clear({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.revert.clear({\n  ...\n})"
           }
         ]
       }
@@ -22156,7 +22156,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.revert.commit({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.revert.commit({\n  ...\n})"
           }
         ]
       }
@@ -22251,7 +22251,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.context({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.context({\n  ...\n})"
           }
         ]
       }
@@ -22342,7 +22342,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.history({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.history({\n  ...\n})"
           }
         ]
       }
@@ -22499,7 +22499,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.events({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.events({\n  ...\n})"
           }
         ]
       }
@@ -22562,12 +22562,12 @@
             }
           }
         },
-        "description": "Interrupt active execution owned by this Kilo process. Idle interruption is a no-op.",
+        "description": "Interrupt active execution owned by this Sonderr process. Idle interruption is a no-op.",
         "summary": "Interrupt session execution",
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.interrupt({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.interrupt({\n  ...\n})"
           }
         ]
       }
@@ -22661,7 +22661,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.message({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.message({\n  ...\n})"
           }
         ]
       }
@@ -22779,7 +22779,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.messages({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.messages({\n  ...\n})"
           }
         ]
       }
@@ -22870,7 +22870,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.model.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.model.list({\n  ...\n})"
           }
         ]
       }
@@ -22961,7 +22961,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.provider.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.provider.list({\n  ...\n})"
           }
         ]
       }
@@ -23067,7 +23067,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.provider.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.provider.get({\n  ...\n})"
           }
         ]
       }
@@ -23148,7 +23148,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.integration.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.integration.list({\n  ...\n})"
           }
         ]
       }
@@ -23234,7 +23234,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.integration.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.integration.get({\n  ...\n})"
           }
         ]
       }
@@ -23330,7 +23330,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.integration.connect.key({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.integration.connect.key({\n  ...\n})"
           }
         ]
       }
@@ -23449,7 +23449,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.integration.connect.oauth({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.integration.connect.oauth({\n  ...\n})"
           }
         ]
       }
@@ -23535,7 +23535,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.integration.attempt.status({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.integration.attempt.status({\n  ...\n})"
           }
         ]
       },
@@ -23602,7 +23602,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.integration.attempt.cancel({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.integration.attempt.cancel({\n  ...\n})"
           }
         ]
       }
@@ -23694,14 +23694,14 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.integration.attempt.complete({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.integration.attempt.complete({\n  ...\n})"
           }
         ]
       }
     },
     "/api/credential/{credentialID}": {
       "patch": {
-        "tags": ["Kilo HttpApi"],
+        "tags": ["Sonderr HttpApi"],
         "operationId": "v2.credential.update",
         "parameters": [
           {
@@ -23780,12 +23780,12 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.credential.update({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.credential.update({\n  ...\n})"
           }
         ]
       },
       "delete": {
-        "tags": ["Kilo HttpApi"],
+        "tags": ["Sonderr HttpApi"],
         "operationId": "v2.credential.remove",
         "parameters": [
           {
@@ -23847,7 +23847,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.credential.remove({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.credential.remove({\n  ...\n})"
           }
         ]
       }
@@ -23928,7 +23928,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.permission.request.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.permission.request.list({\n  ...\n})"
           }
         ]
       }
@@ -23995,7 +23995,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.permission.saved.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.permission.saved.list({\n  ...\n})"
           }
         ]
       }
@@ -24045,7 +24045,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.permission.saved.remove({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.permission.saved.remove({\n  ...\n})"
           }
         ]
       }
@@ -24180,7 +24180,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.permission.create({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.permission.create({\n  ...\n})"
           }
         ]
       },
@@ -24263,7 +24263,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.permission.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.permission.list({\n  ...\n})"
           }
         ]
       }
@@ -24357,7 +24357,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.permission.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.permission.get({\n  ...\n})"
           }
         ]
       }
@@ -24457,7 +24457,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.permission.reply({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.permission.reply({\n  ...\n})"
           }
         ]
       }
@@ -24534,7 +24534,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.fs.read({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.fs.read({\n  ...\n})"
           }
         ]
       }
@@ -24623,7 +24623,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.fs.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.fs.list({\n  ...\n})"
           }
         ]
       }
@@ -24729,7 +24729,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.fs.find({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.fs.find({\n  ...\n})"
           }
         ]
       }
@@ -24810,7 +24810,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.command.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.command.list({\n  ...\n})"
           }
         ]
       }
@@ -24891,7 +24891,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.skill.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.skill.list({\n  ...\n})"
           }
         ]
       }
@@ -24939,7 +24939,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.event.subscribe({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.event.subscribe({\n  ...\n})"
           }
         ]
       }
@@ -25020,7 +25020,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.pty.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.pty.list({\n  ...\n})"
           }
         ]
       },
@@ -25145,7 +25145,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.pty.create({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.pty.create({\n  ...\n})"
           }
         ]
       }
@@ -25242,7 +25242,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.pty.get({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.pty.get({\n  ...\n})"
           }
         ]
       },
@@ -25368,7 +25368,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.pty.update({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.pty.update({\n  ...\n})"
           }
         ]
       },
@@ -25446,7 +25446,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.pty.remove({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.pty.remove({\n  ...\n})"
           }
         ]
       }
@@ -25553,7 +25553,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.pty.connectToken({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.pty.connectToken({\n  ...\n})"
           }
         ]
       }
@@ -25667,7 +25667,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.pty.connect({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.pty.connect({\n  ...\n})"
           }
         ]
       }
@@ -25748,7 +25748,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.question.request.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.question.request.list({\n  ...\n})"
           }
         ]
       }
@@ -25833,7 +25833,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.question.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.question.list({\n  ...\n})"
           }
         ]
       }
@@ -25923,7 +25923,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.question.reply({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.question.reply({\n  ...\n})"
           }
         ]
       }
@@ -26003,7 +26003,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.session.question.reject({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.session.question.reject({\n  ...\n})"
           }
         ]
       }
@@ -26084,7 +26084,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.reference.list({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.reference.list({\n  ...\n})"
           }
         ]
       }
@@ -26176,7 +26176,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.projectCopy.create({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.projectCopy.create({\n  ...\n})"
           }
         ]
       },
@@ -26256,7 +26256,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.projectCopy.remove({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.projectCopy.remove({\n  ...\n})"
           }
         ]
       }
@@ -26319,7 +26319,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.v2.projectCopy.refresh({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.v2.projectCopy.refresh({\n  ...\n})"
           }
         ]
       }
@@ -26405,7 +26405,7 @@
         "x-codeSamples": [
           {
             "lang": "js",
-            "source": "import { createKiloClient } from \"@kilocode/sdk\"\n\nconst client = createKiloClient()\nawait client.pty.connect({\n  ...\n})"
+            "source": "import { createSonderrClient } from \"@sonderr/sdk\"\n\nconst client = createSonderrClient()\nawait client.pty.connect({\n  ...\n})"
           }
         ]
       }
@@ -26737,22 +26737,22 @@
             "$ref": "#/components/schemas/EventSuggestionDismissed"
           },
           {
-            "$ref": "#/components/schemas/EventKilocodeAgent_managerStart"
+            "$ref": "#/components/schemas/EventSonderrAgent_managerStart"
           },
           {
-            "$ref": "#/components/schemas/EventKilocodeAgent_managerRequested"
+            "$ref": "#/components/schemas/EventSonderrAgent_managerRequested"
           },
           {
-            "$ref": "#/components/schemas/EventKilocodeAgent_managerCancelled"
+            "$ref": "#/components/schemas/EventSonderrAgent_managerCancelled"
           },
           {
-            "$ref": "#/components/schemas/EventKilocodeNotebookRequested"
+            "$ref": "#/components/schemas/EventSonderrNotebookRequested"
           },
           {
-            "$ref": "#/components/schemas/EventKilocodeNotebookCancelled"
+            "$ref": "#/components/schemas/EventSonderrNotebookCancelled"
           },
           {
-            "$ref": "#/components/schemas/EventKilo-sessionsRemote-status-changed"
+            "$ref": "#/components/schemas/EventSonderr-sessionsRemote-status-changed"
           },
           {
             "$ref": "#/components/schemas/EventLspClientDiagnostics"
@@ -29934,22 +29934,22 @@
                 "$ref": "#/components/schemas/EventSuggestionDismissed"
               },
               {
-                "$ref": "#/components/schemas/EventKilocodeAgent_managerStart"
+                "$ref": "#/components/schemas/EventSonderrAgent_managerStart"
               },
               {
-                "$ref": "#/components/schemas/EventKilocodeAgent_managerRequested"
+                "$ref": "#/components/schemas/EventSonderrAgent_managerRequested"
               },
               {
-                "$ref": "#/components/schemas/EventKilocodeAgent_managerCancelled"
+                "$ref": "#/components/schemas/EventSonderrAgent_managerCancelled"
               },
               {
-                "$ref": "#/components/schemas/EventKilocodeNotebookRequested"
+                "$ref": "#/components/schemas/EventSonderrNotebookRequested"
               },
               {
-                "$ref": "#/components/schemas/EventKilocodeNotebookCancelled"
+                "$ref": "#/components/schemas/EventSonderrNotebookCancelled"
               },
               {
-                "$ref": "#/components/schemas/EventKilo-sessionsRemote-status-changed"
+                "$ref": "#/components/schemas/EventSonderr-sessionsRemote-status-changed"
               },
               {
                 "$ref": "#/components/schemas/EventLspClientDiagnostics"
@@ -33437,7 +33437,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "Server configuration for the kilo serve command"
+        "description": "Server configuration for the sonderr serve command"
       },
       "IndexingConfig": {
         "type": "object",
@@ -33448,7 +33448,7 @@
           "provider": {
             "type": "string",
             "enum": [
-              "kilo",
+              "sonderr",
               "openai",
               "ollama",
               "openai-compatible",
@@ -33485,7 +33485,7 @@
             "type": "string",
             "enum": ["lancedb", "qdrant"]
           },
-          "kilo": {
+          "sonderr": {
             "type": "object",
             "properties": {
               "apiKey": {
@@ -34403,7 +34403,7 @@
                 "type": "integer",
                 "minimum": 250,
                 "maximum": 800,
-                "description": "Width of the Kilo Console project context sidebar in pixels"
+                "description": "Width of the Sonderr Console project context sidebar in pixels"
               },
               "diff_style": {
                 "type": "string",
@@ -39133,7 +39133,7 @@
         "required": ["keybinds"],
         "additionalProperties": false
       },
-      "KiloEmbeddingModelCatalog": {
+      "SonderrEmbeddingModelCatalog": {
         "type": "object",
         "properties": {
           "defaultModel": {
@@ -39397,7 +39397,7 @@
           },
           "sourceKind": {
             "type": "string",
-            "enum": ["kilo_managed", "direct"]
+            "enum": ["sonderr_managed", "direct"]
           },
           "providerLabel": {
             "type": "string"
@@ -40290,7 +40290,7 @@
         "required": ["operation", "message"],
         "additionalProperties": false
       },
-      "KilocodeSessionImportResult": {
+      "SonderrSessionImportResult": {
         "type": "object",
         "properties": {
           "ok": {
@@ -41843,7 +41843,7 @@
         "required": ["id", "type", "properties"],
         "additionalProperties": false
       },
-      "EventKilocodeAgent_managerStart": {
+      "EventSonderrAgent_managerStart": {
         "type": "object",
         "properties": {
           "id": {
@@ -41851,7 +41851,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["kilocode.agent_manager.start"]
+            "enum": ["sonderr.agent_manager.start"]
           },
           "properties": {
             "type": "object",
@@ -41917,7 +41917,7 @@
         "required": ["id", "type", "properties"],
         "additionalProperties": false
       },
-      "EventKilocodeAgent_managerRequested": {
+      "EventSonderrAgent_managerRequested": {
         "type": "object",
         "properties": {
           "id": {
@@ -41925,7 +41925,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["kilocode.agent_manager.requested"]
+            "enum": ["sonderr.agent_manager.requested"]
           },
           "properties": {
             "$ref": "#/components/schemas/AgentManagerRequest"
@@ -41934,7 +41934,7 @@
         "required": ["id", "type", "properties"],
         "additionalProperties": false
       },
-      "EventKilocodeAgent_managerCancelled": {
+      "EventSonderrAgent_managerCancelled": {
         "type": "object",
         "properties": {
           "id": {
@@ -41942,7 +41942,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["kilocode.agent_manager.cancelled"]
+            "enum": ["sonderr.agent_manager.cancelled"]
           },
           "properties": {
             "type": "object",
@@ -41966,7 +41966,7 @@
         "required": ["id", "type", "properties"],
         "additionalProperties": false
       },
-      "EventKilocodeNotebookRequested": {
+      "EventSonderrNotebookRequested": {
         "type": "object",
         "properties": {
           "id": {
@@ -41974,7 +41974,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["kilocode.notebook.requested"]
+            "enum": ["sonderr.notebook.requested"]
           },
           "properties": {
             "$ref": "#/components/schemas/NotebookRequest"
@@ -41983,7 +41983,7 @@
         "required": ["id", "type", "properties"],
         "additionalProperties": false
       },
-      "EventKilocodeNotebookCancelled": {
+      "EventSonderrNotebookCancelled": {
         "type": "object",
         "properties": {
           "id": {
@@ -41991,7 +41991,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["kilocode.notebook.cancelled"]
+            "enum": ["sonderr.notebook.cancelled"]
           },
           "properties": {
             "type": "object",
@@ -42015,7 +42015,7 @@
         "required": ["id", "type", "properties"],
         "additionalProperties": false
       },
-      "EventKilo-sessionsRemote-status-changed": {
+      "EventSonderr-sessionsRemote-status-changed": {
         "type": "object",
         "properties": {
           "id": {
@@ -42023,7 +42023,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["kilo-sessions.remote-status-changed"]
+            "enum": ["sonderr-sessions.remote-status-changed"]
           },
           "properties": {
             "type": "object",
@@ -59573,47 +59573,47 @@
     },
     {
       "name": "agent-builder",
-      "description": "Kilo agent builder routes."
+      "description": "Sonderr agent builder routes."
     },
     {
       "name": "background-process",
-      "description": "Kilo background process routes."
+      "description": "Sonderr background process routes."
     },
     {
       "name": "branch-name",
-      "description": "Kilo branch name routes."
+      "description": "Sonderr branch name routes."
     },
     {
       "name": "commit-message",
-      "description": "Kilo commit message routes."
+      "description": "Sonderr commit message routes."
     },
     {
       "name": "config-console",
-      "description": "Kilo Console config routes."
+      "description": "Sonderr Console config routes."
     },
     {
       "name": "enhance-prompt",
-      "description": "Kilo enhance prompt routes."
+      "description": "Sonderr enhance prompt routes."
     },
     {
       "name": "indexing",
-      "description": "Kilo indexing routes."
+      "description": "Sonderr indexing routes."
     },
     {
       "name": "instance-reload",
-      "description": "Kilo instance reload route."
+      "description": "Sonderr instance reload route."
     },
     {
       "name": "interactive-terminal",
-      "description": "Kilo human-driven interactive terminal routes."
+      "description": "Sonderr human-driven interactive terminal routes."
     },
     {
-      "name": "kilo",
-      "description": "Kilo Gateway routes."
+      "name": "sonderr",
+      "description": "Sonderr Gateway routes."
     },
     {
-      "name": "kilocode",
-      "description": "Kilo-specific routes."
+      "name": "sonderr",
+      "description": "Sonderr-specific routes."
     },
     {
       "name": "anaconda-desktop",
@@ -59621,42 +59621,42 @@
     },
     {
       "name": "network",
-      "description": "Kilo network routes."
+      "description": "Sonderr network routes."
     },
     {
       "name": "remote",
-      "description": "Kilo remote connection routes."
+      "description": "Sonderr remote connection routes."
     },
     {
       "name": "sandbox",
-      "description": "Kilo session sandbox routes."
+      "description": "Sonderr session sandbox routes."
     },
     {
       "name": "session-import",
-      "description": "Kilo legacy session import routes."
+      "description": "Sonderr legacy session import routes."
     },
     {
       "name": "suggestion",
-      "description": "Kilo suggestion routes."
+      "description": "Sonderr suggestion routes."
     },
     {
       "name": "telemetry",
-      "description": "Kilo telemetry routes."
+      "description": "Sonderr telemetry routes."
     },
     {
       "name": "memory",
-      "description": "Kilo memory routes."
+      "description": "Sonderr memory routes."
     },
     {
-      "name": "Kilo HttpApi",
+      "name": "Sonderr HttpApi",
       "description": "Experimental HttpApi surface for selected instance routes."
     },
     {
-      "name": "Kilo HttpApi",
+      "name": "Sonderr HttpApi",
       "description": "Experimental HttpApi surface for selected instance routes."
     },
     {
-      "name": "Kilo HttpApi",
+      "name": "Sonderr HttpApi",
       "description": "Experimental HttpApi surface for selected instance routes."
     },
     {
@@ -59680,7 +59680,7 @@
       "description": "Integration discovery and authentication routes."
     },
     {
-      "name": "Kilo HttpApi",
+      "name": "Sonderr HttpApi",
       "description": "Experimental HttpApi surface for selected instance routes."
     },
     {

@@ -1,4 +1,4 @@
-import { PromptPromoted } from "@opencode-ai/schema/kilocode/durable-event"
+import { PromptPromoted } from "@sonderr/schema/sonderr/durable-event"
 import { Effect } from "effect"
 import { Database } from "../../database/database"
 import { SessionEvent } from "../../session/event"

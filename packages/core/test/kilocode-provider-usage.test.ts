@@ -3,7 +3,7 @@ import { Context, Deferred, Effect, Exit, Fiber, Layer, Scope } from "effect"
 import { Catalog } from "../src/catalog"
 import { Credential } from "../src/credential"
 import { Integration } from "../src/integration"
-import { ProviderUsage } from "../src/kilocode/provider-usage"
+import { ProviderUsage } from "../src/sonderr/provider-usage"
 import { PluginV2 } from "../src/plugin"
 import { ProviderV2 } from "../src/provider"
 import { testEffect } from "./lib/effect"
@@ -12,7 +12,7 @@ const provider = ProviderV2.ID.make("minimax-coding-plan")
 const chinaProvider = ProviderV2.ID.make("minimax-cn-coding-plan")
 const integration = Integration.ID.make("minimax-coding-plan")
 const chinaIntegration = Integration.ID.make("minimax-cn-coding-plan")
-const kilo = Integration.ID.make("kilo")
+const sonderr = Integration.ID.make("sonderr")
 
 type CatalogInput = {
   apiKey?: string
@@ -35,11 +35,11 @@ const catalog = (input?: CatalogInput) => {
         body: input?.apiKey ? { apiKey: input.apiKey } : {},
       },
     })
-    const kiloInfo = ProviderV2.Info.make({
-      id: ProviderV2.ID.kilo,
-      name: "Kilo",
+    const sonderrInfo = ProviderV2.Info.make({
+      id: ProviderV2.ID.sonderr,
+      name: "Sonderr",
       api: { type: "native", settings: {} },
-      request: { headers: {}, body: organization ? { kilocodeOrganizationId: organization } : {} },
+      request: { headers: {}, body: organization ? { sonderrOrganizationId: organization } : {} },
     })
     const china = ProviderV2.Info.make({
       id: chinaProvider,
@@ -47,7 +47,7 @@ const catalog = (input?: CatalogInput) => {
       api: { type: "native", settings: {} },
       request: { headers: {}, body: {} },
     })
-    return input?.china ? [info, china, kiloInfo] : [info, kiloInfo]
+    return input?.china ? [info, china, sonderrInfo] : [info, sonderrInfo]
   }
   return Layer.mock(Catalog.Service)({
     provider: {
@@ -69,17 +69,17 @@ type DirectInput = string | ((id: Integration.ID) => string | undefined) | undef
 
 const directValue = (input: DirectInput, id: Integration.ID) => (typeof input === "function" ? input(id) : input)
 
-const connections = (input: DirectInput, accountID?: string, failure?: () => "global" | "china" | "kilo" | undefined) =>
+const connections = (input: DirectInput, accountID?: string, failure?: () => "global" | "china" | "sonderr" | undefined) =>
   Layer.mock(Integration.Service)({
     connection: {
       active: (id) =>
         Effect.sync(() => {
           const direct = directValue(input, id)
-          return id === kilo || ((id === integration || id === chinaIntegration) && direct)
+          return id === sonderr || ((id === integration || id === chinaIntegration) && direct)
             ? {
                 type: "credential" as const,
                 id: Credential.ID.make(
-                  id === kilo ? "cred_kilo" : id === chinaIntegration ? "cred_direct_cn" : "cred_direct",
+                  id === sonderr ? "cred_sonderr" : id === chinaIntegration ? "cred_direct_cn" : "cred_direct",
                 ),
                 label: "test",
               }
@@ -91,15 +91,15 @@ const connections = (input: DirectInput, accountID?: string, failure?: () => "gl
             connection.type === "credential" && connection.id === "cred_direct_cn" ? chinaIntegration : integration
           const direct = directValue(input, target)
           const kind =
-            connection.type === "credential" && connection.id === "cred_kilo"
-              ? "kilo"
+            connection.type === "credential" && connection.id === "cred_sonderr"
+              ? "sonderr"
               : target === chinaIntegration
                 ? "china"
                 : "global"
           if (failure?.() === kind)
             return Effect.fail(new Integration.AuthorizationError({ cause: `${kind} credential failure` }))
           return Effect.succeed(
-            kind === "kilo"
+            kind === "sonderr"
               ? Credential.OAuth.make({
                   type: "oauth",
                   methodID: Integration.MethodID.make("oauth"),
@@ -183,7 +183,7 @@ const configuredLayer = (input: {
   direct?: DirectInput
   accountID?: string
   config?: CatalogInput
-  failure?: () => "global" | "china" | "kilo" | undefined
+  failure?: () => "global" | "china" | "sonderr" | undefined
   transport?: ProviderUsage.TransportInterface
 }) =>
   Layer.fresh(ProviderUsage.layer).pipe(
@@ -198,7 +198,7 @@ const layer = (
   direct: DirectInput = "sk-cp-direct",
   accountID?: string,
   config?: CatalogInput,
-  failure?: () => "global" | "china" | "kilo" | undefined,
+  failure?: () => "global" | "china" | "sonderr" | undefined,
 ) => configuredLayer({ calls, direct, accountID, config, failure })
 
 const it = testEffect(Layer.empty)
@@ -612,7 +612,7 @@ describe("ProviderUsage location service", () => {
       const calls = { direct: 0, cloud: 0 }
       let byokFailure = false
       let usageFailure = false
-      let credentialFailure: "kilo" | undefined
+      let credentialFailure: "sonderr" | undefined
       let organization: string | undefined
       const scope = yield* Scope.make()
       const usage = Context.get(
@@ -667,27 +667,27 @@ describe("ProviderUsage location service", () => {
       byokFailure = true
       const partial = yield* usage.refresh()
       // Discovery failure retains the last good Cloud state, so usage still refreshes.
-      expect(partial.items.find((item) => item.sourceKind === "kilo_managed")).toMatchObject({ fetchState: "ready" })
+      expect(partial.items.find((item) => item.sourceKind === "sonderr_managed")).toMatchObject({ fetchState: "ready" })
       expect(partial.items.find((item) => item.sourceKind === "direct")).toMatchObject({ fetchState: "ready" })
       expect(JSON.stringify(partial)).not.toContain("private metadata failure")
 
       usageFailure = true
       const degraded = yield* usage.refresh()
-      expect(degraded.items.find((item) => item.sourceKind === "kilo_managed")).toMatchObject({ fetchState: "stale" })
+      expect(degraded.items.find((item) => item.sourceKind === "sonderr_managed")).toMatchObject({ fetchState: "stale" })
       expect(JSON.stringify(degraded)).not.toContain("private usage failure")
 
       byokFailure = false
       usageFailure = false
-      credentialFailure = "kilo"
+      credentialFailure = "sonderr"
       const credential = yield* usage.get()
-      expect(credential.items.find((item) => item.sourceKind === "kilo_managed")).toMatchObject({
+      expect(credential.items.find((item) => item.sourceKind === "sonderr_managed")).toMatchObject({
         fetchState: "stale",
       })
       expect(credential.items.find((item) => item.sourceKind === "direct")).toBeDefined()
 
       organization = "org"
       const organizationResult = yield* usage.get()
-      expect(organizationResult.items.find((item) => item.sourceKind === "kilo_managed")).toBeUndefined()
+      expect(organizationResult.items.find((item) => item.sourceKind === "sonderr_managed")).toBeUndefined()
       expect(organizationResult.items.find((item) => item.sourceKind === "direct")).toBeDefined()
     }),
   )

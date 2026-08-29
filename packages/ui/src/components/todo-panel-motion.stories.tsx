@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { createMemo, onCleanup } from "solid-js" // kilocode_change
+import { createMemo, onCleanup } from "solid-js" // sonderr_change
 import { createStore } from "solid-js/store"
-import type { Todo } from "@kilocode/sdk/v2"
+import type { Todo } from "@sonderr/sdk/v2"
 
 export default {
   title: "UI/Todo Panel Motion",
@@ -10,10 +10,10 @@ export default {
   parameters: {
     docs: {
       description: {
-        // kilocode_change start
+        // sonderr_change start
         component: `### Overview
 This playground isolates the todo dock motion controls without depending on the removed app package.`,
-        // kilocode_change end
+        // sonderr_change end
       },
     },
   },
@@ -139,7 +139,7 @@ export const Playground = {
       countMask: 18,
       countMaskHeight: 0,
       countWidthDuration: 560,
-      collapsed: false, // kilocode_change
+      collapsed: false, // sonderr_change
     })
     const open = () => cfg.open
     const step = () => cfg.step
@@ -181,14 +181,14 @@ export const Playground = {
       scrollRef.scrollTop = scrollRef.scrollHeight
     }
 
-    // kilocode_change start
+    // sonderr_change start
     const collapsed = () => !open() || cfg.collapsed
 
     const setCollapsed = (value: boolean) => {
       if (collapsed() === value) return
       setCfg("collapsed", value)
     }
-    // kilocode_change end
+    // sonderr_change end
 
     const openDock = () => {
       clear()
@@ -251,7 +251,7 @@ export const Playground = {
                   </div>
                 </div>
 
-                {/* kilocode_change start */}
+                {/* sonderr_change start */}
                 <div data-component="todo-motion-dock" data-open={dockOpen()} data-collapsed={collapsed()}>
                   <button
                     type="button"
@@ -275,9 +275,9 @@ export const Playground = {
                       ))}
                     </div>
                   </div>
-                  <textarea placeholder="Ask Kilo to keep working..." />
+                  <textarea placeholder="Ask Sonderr to keep working..." />
                 </div>
-                {/* kilocode_change end */}
+                {/* sonderr_change end */}
               </div>
             </div>
           </div>

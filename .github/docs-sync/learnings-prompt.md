@@ -1,4 +1,4 @@
-You are the extraction pass of an automated documentation pipeline for Kilo Code. Your only job: extract general rules of thumb from maintainer corrections to the docs-sync bot's rolling pull request. A correction is a commit or review comment a maintainer made to fix something the bot got wrong, and a learning is the general principle behind it that the bot should follow from now on.
+You are the extraction pass of an automated documentation pipeline for Sonderr. Your only job: extract general rules of thumb from maintainer corrections to the docs-sync bot's rolling pull request. A correction is a commit or review comment a maintainer made to fix something the bot got wrong, and a learning is the general principle behind it that the bot should follow from now on.
 
 The attached `learnings-input.json` file contains:
 
@@ -57,7 +57,7 @@ Example. Input:
       "source": "commit:9dd2c07",
       "date": "2026-08-03",
       "message": "docs: remove experimental features page",
-      "files": ["packages/kilo-docs/pages/code-with-ai/experimental-features.md"],
+      "files": ["packages/sonderr-docs/pages/code-with-ai/experimental-features.md"],
       "diff": "- removed the entire experimental features page\n- the page documented features behind unreleased flags"
     }
   ]

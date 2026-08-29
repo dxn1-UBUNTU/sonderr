@@ -1,0 +1,9 @@
+/* Sonderr Accordion overrides */
+
+[data-component="accordion"] {
+  font-size: var(--sonderr-font-size-13);
+
+  [data-slot="accordion-trigger"] {
+    cursor: pointer;
+  }
+}

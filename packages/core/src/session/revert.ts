@@ -8,7 +8,7 @@ import { RelativePath } from "../schema"
 import { Snapshot } from "../snapshot"
 import { SessionEvent } from "./event"
 import { SessionMessage } from "./message"
-import * as StoredMessage from "../kilocode/session-message" // kilocode_change
+import * as StoredMessage from "../sonderr/session-message" // sonderr_change
 import { SessionSchema } from "./schema"
 import { SessionMessageTable } from "./sql"
 
@@ -33,7 +33,7 @@ const plan = Effect.fn("SessionRevert.plan")(function* (input: BoundaryInput) {
     .where(and(eq(SessionMessageTable.session_id, input.sessionID), eq(SessionMessageTable.id, input.messageID)))
     .get()
     .pipe(Effect.orDie)
-  // kilocode_change - Kilo keeps session_message.seq nullable for released-data compatibility
+  // sonderr_change - Sonderr keeps session_message.seq nullable for released-data compatibility
   if (!boundary || boundary.seq === null) return yield* new MessageNotFoundError(input)
   const rows = yield* db
     .select()
@@ -53,7 +53,7 @@ const plan = Effect.fn("SessionRevert.plan")(function* (input: BoundaryInput) {
   for (const row of rows) {
     const message = yield* decode(StoredMessage.normalize({ ...row.data, id: row.id, type: row.type })).pipe(
       Effect.orDie,
-    ) // kilocode_change - released rows persist legacy tool content
+    ) // sonderr_change - released rows persist legacy tool content
     if (message.type !== "assistant" || !message.snapshot?.start) continue
     for (const file of message.snapshot.files ?? [])
       if (!files.has(file)) files.set(file, Snapshot.ID.make(message.snapshot.start))

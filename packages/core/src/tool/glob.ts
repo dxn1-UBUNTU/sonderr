@@ -1,16 +1,16 @@
 export * as GlobTool from "./glob"
 
-import { ToolFailure } from "@opencode-ai/llm"
+import { ToolFailure } from "@sonderr/llm"
 import { Effect, Layer, Schema } from "effect"
 import path from "path"
 import { makeLocationNode } from "../effect/app-node"
 import { FileSystem } from "../filesystem"
-// kilocode_change start
+// sonderr_change start
 import { FSUtil } from "../fs-util"
-import * as SearchTarget from "../kilocode/search-target"
-// kilocode_change end
+import * as SearchTarget from "../sonderr/search-target"
+// sonderr_change end
 import { Location } from "../location"
-import { Reference } from "../reference" // kilocode_change
+import { Reference } from "../reference" // sonderr_change
 import { Ripgrep } from "../ripgrep"
 import { RelativePath } from "../schema"
 import { PermissionV2 } from "../permission"
@@ -25,17 +25,17 @@ export const Input = Schema.Struct({
   path: RelativePath.pipe(Schema.optional).annotate({
     description: "Relative directory to search. Defaults to the active Location.",
   }),
-  // kilocode_change start
+  // sonderr_change start
   reference: Schema.NonEmptyString.pipe(Schema.optional).annotate({
     description: "Named project reference to search instead of the active Location",
   }),
   limit: FileSystem.SearchLimit.pipe(Schema.optional).annotate({
-  // kilocode_change end
+  // sonderr_change end
     description: "Maximum results to return",
   }),
 })
 
-// kilocode_change start - retain bounded-search status in tool results and model output
+// sonderr_change start - retain bounded-search status in tool results and model output
 export class Result extends Schema.Class<Result>("GlobTool.Result")({
   items: Schema.Array(FileSystem.Entry),
   truncated: Schema.Boolean,
@@ -51,16 +51,16 @@ export const toModelOutput = (output: ModelOutput) => {
   if (output.partial) lines.push("", "(Some discovered files could not be read.)")
   return lines.join("\n")
 }
-// kilocode_change end
+// sonderr_change end
 
 /** Glob leaf that defaults its filesystem root to the active Location. */
 const layer = Layer.effectDiscard(
   Effect.gen(function* () {
     const tools = yield* Tools.Service
-    const fs = yield* FSUtil.Service // kilocode_change
+    const fs = yield* FSUtil.Service // sonderr_change
     const ripgrep = yield* Ripgrep.Service
     const location = yield* Location.Service
-    const references = yield* Reference.Service // kilocode_change
+    const references = yield* Reference.Service // sonderr_change
     const permission = yield* PermissionV2.Service
 
     yield* tools
@@ -73,12 +73,12 @@ const layer = Layer.effectDiscard(
           toModelOutput: ({ output }) => [
             {
               type: "text",
-              // kilocode_change start - model paths remain absolute while the typed result retains metadata
+              // sonderr_change start - model paths remain absolute while the typed result retains metadata
               text: toModelOutput({
                 ...output,
                 items: output.items.map((entry) => ({ ...entry, path: path.resolve(location.directory, entry.path) })),
               }),
-              // kilocode_change end
+              // sonderr_change end
             },
           ],
           execute: (input, context) =>
@@ -90,14 +90,14 @@ const layer = Layer.effectDiscard(
                 metadata: {
                   root: input.path ?? ".",
                   path: input.path,
-                  reference: input.reference, // kilocode_change
+                  reference: input.reference, // sonderr_change
                   limit: input.limit,
                 },
                 sessionID: context.sessionID,
                 agent: context.agent,
                 source: { type: "tool", messageID: context.assistantMessageID, callID: context.toolCallID },
               })
-              // kilocode_change start - enforce the active Location despite RelativePath being a nominal brand
+              // sonderr_change start - enforce the active Location despite RelativePath being a nominal brand
               const ref = input.reference
                 ? (yield* references.list()).find((item) => item.name === input.reference)
                 : undefined
@@ -110,18 +110,18 @@ const layer = Layer.effectDiscard(
               const target = yield* SearchTarget.inspect(fs, requested)
               if (root.type !== "directory" || target.type !== "directory" || !FSUtil.contains(root.path, target.path))
                 return yield* Effect.fail(new Error("Path escapes the active Location"))
-              // kilocode_change end
+              // sonderr_change end
               return yield* ripgrep
                 .glob({
-                  cwd: target.path, // kilocode_change
+                  cwd: target.path, // sonderr_change
                   pattern: input.pattern,
-                  // kilocode_change start
+                  // sonderr_change start
                   limit: input.limit ?? FileSystem.DEFAULT_SEARCH_LIMIT,
                   validate: SearchTarget.validate(fs, target),
-                  // kilocode_change end
+                  // sonderr_change end
                 })
                 .pipe(
-                  // kilocode_change start - preserve search status after canonical path mapping
+                  // sonderr_change start - preserve search status after canonical path mapping
                   Effect.map(
                     (result) =>
                       new Result({
@@ -136,7 +136,7 @@ const layer = Layer.effectDiscard(
                         ),
                       }),
                   ),
-                  // kilocode_change end
+                  // sonderr_change end
                 )
             }).pipe(
               Effect.mapError(() => new ToolFailure({ message: `Unable to find files matching ${input.pattern}` })),
@@ -150,5 +150,5 @@ const layer = Layer.effectDiscard(
 export const node = makeLocationNode({
   name: "tool/glob",
   layer,
-  deps: [ToolRegistry.node, Ripgrep.node, Location.node, PermissionV2.node, FSUtil.node, Reference.node], // kilocode_change - search targets and references
+  deps: [ToolRegistry.node, Ripgrep.node, Location.node, PermissionV2.node, FSUtil.node, Reference.node], // sonderr_change - search targets and references
 })

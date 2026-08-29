@@ -1,0 +1,484 @@
+.sonderr-console .providers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sonderr-console .provider {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 0.75rem;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  padding: 0.625rem 0.75rem;
+}
+
+.sonderr-console .configured-provider {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.sonderr-console .provider-title,
+.sonderr-console .provider-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.sonderr-console .provider-title,
+.sonderr-console .provider-title > div {
+  min-width: 0;
+}
+
+.sonderr-console .provider-config-header,
+.sonderr-console .provider-drawer-title {
+  align-items: flex-start;
+}
+
+.sonderr-console .provider-drawer-title .provider-icon {
+  margin-top: 0.2rem;
+}
+
+.sonderr-console .provider-actions {
+  gap: 0.25rem;
+  justify-content: flex-end;
+}
+
+.sonderr-console .provider-icon {
+  flex: 0 0 auto;
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.sonderr-console .provider-title strong,
+.sonderr-console .provider-title span {
+  display: block;
+}
+
+.sonderr-console .provider-title strong {
+  overflow: hidden;
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sonderr-console .provider-title span {
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-family: var(--font-family-mono);
+  font-size: 0.6875rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sonderr-console .provider .provider-model-count {
+  display: inline-flex;
+  align-items: center;
+  color: var(--muted-foreground);
+  font-family: var(--font-family-sans);
+  font-size: 0.6875rem;
+  line-height: 1.25rem;
+}
+
+.sonderr-console .provider .tags {
+  flex-wrap: nowrap;
+  gap: 0.625rem;
+}
+
+.sonderr-console .drawer-scrim {
+  position: fixed;
+  z-index: 40;
+  top: var(--app-header-height);
+  right: 0;
+  bottom: 0;
+  left: var(--app-rail-width);
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(2px);
+}
+
+.sonderr-console .provider-drawer {
+  position: fixed;
+  z-index: 41;
+  top: var(--app-header-height);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(44rem, calc(100vw - var(--app-rail-width)));
+  height: calc(100vh - var(--app-header-height));
+  overflow: hidden;
+  border-left: 1px solid var(--border);
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow: -1.5rem 0 4rem color-mix(in srgb, black 22%, transparent);
+}
+
+.sonderr-console .drawer-header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-weak-base);
+  padding: 0.75rem 1.25rem;
+}
+
+.sonderr-console .drawer-header h2 {
+  margin: 0 0 0.25rem;
+  color: var(--text-strong);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.sonderr-console .drawer-header span {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.sonderr-console .drawer-footer {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-weak-base);
+  border-bottom: 0;
+  margin-top: auto;
+  padding: 0.75rem 1.25rem;
+}
+
+.sonderr-console .drawer-search {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--text-weak);
+  font-size: var(--font-size-small);
+  padding: 1rem;
+}
+
+.sonderr-console .add-provider-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding: 16px 0;
+}
+
+.sonderr-console .add-provider-field {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+.sonderr-console .add-provider-field h3 {
+  padding: 0 16px;
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.sonderr-console .add-provider-search {
+  padding: 0 16px;
+}
+
+.sonderr-console .add-provider-search input {
+  height: 2rem;
+  min-height: 2rem;
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  padding: 0 0.5rem;
+}
+
+.sonderr-console .provider-picker,
+.sonderr-console .provider-form {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding-left: 16px;
+}
+
+.sonderr-console .provider-picker {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+}
+
+.sonderr-console .add-provider-picker {
+  flex: 1 1 auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.375rem;
+  min-height: 0;
+  overflow: auto;
+  padding-right: 0;
+  scrollbar-gutter: stable;
+}
+
+.sonderr-console .provider-option {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+  width: auto;
+  border: 1px solid var(--border-weak-base);
+  border-radius: var(--radius-lg);
+  background: var(--surface-base);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 0.85rem;
+  text-align: left;
+  margin-right: 8px;
+}
+
+.sonderr-console .add-provider-option {
+  width: auto;
+  min-height: 3rem;
+  border-color: var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  margin-right: 0;
+  padding: 0.625rem;
+}
+
+.sonderr-console .provider-option > div:not(.tags) > strong,
+.sonderr-console .provider-option .model-title strong {
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.sonderr-console .provider-option > div:not(.tags) > span,
+.sonderr-console .provider-option .model-title span {
+  font-family: var(--font-family-mono);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+}
+
+.sonderr-console .add-provider-option.selected {
+  border-color: var(--primary);
+  background: color-mix(in oklab, var(--primary) 10%, var(--card));
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.sonderr-console .provider-option:hover,
+.sonderr-console .provider-option:focus-visible {
+  border-color: var(--border-focus);
+  background: color-mix(in srgb, var(--surface-brand-base) 12%, var(--surface-base));
+  outline: 0;
+}
+
+.sonderr-console .provider-option > div:not(.tags) > strong,
+.sonderr-console .provider-option > div:not(.tags) > span,
+.sonderr-console .provider-option .model-title strong,
+.sonderr-console .provider-option .model-title span {
+  display: block;
+}
+
+.sonderr-console .provider-option > div:not(.tags) > span,
+.sonderr-console .provider-option .model-title span {
+  overflow: hidden;
+  color: var(--text-weaker);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sonderr-console .add-provider-step {
+  flex: 0 0 auto;
+  margin-top: 1rem;
+  margin-right: var(--add-provider-scrollbar);
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+}
+
+.sonderr-console .add-provider-step strong {
+  color: var(--foreground);
+  font-weight: 400;
+}
+
+.sonderr-console .provider-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.sonderr-console .provider-form label,
+.sonderr-console .provider-auth label {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+  color: var(--text-weak);
+  font-size: var(--font-size-small);
+}
+
+.sonderr-console .provider-form .required-field {
+  color: var(--text-base);
+  font-weight: 600;
+}
+
+.sonderr-console .provider-form .required-field input {
+  border-color: color-mix(in srgb, var(--border-focus) 45%, var(--border-base));
+  background: color-mix(in srgb, var(--surface-base) 88%, var(--surface-brand-base));
+  color: var(--text-strong);
+}
+
+.sonderr-console .provider-form .optional-field {
+  color: var(--text-weaker);
+}
+
+.sonderr-console .provider-form .optional-field input,
+.sonderr-console .provider-form .optional-field textarea {
+  border-color: var(--border-weak-base);
+  background: color-mix(in srgb, var(--surface-base) 72%, transparent);
+  color: var(--text-weak);
+}
+
+.sonderr-console .provider-form .optional-field input::placeholder,
+.sonderr-console .provider-form .optional-field textarea::placeholder {
+  color: color-mix(in srgb, var(--text-weaker) 70%, transparent);
+}
+
+.sonderr-console .provider-form .optional-field:focus-within {
+  color: var(--text-weak);
+}
+
+.sonderr-console .provider-form .optional-field:focus-within input,
+.sonderr-console .provider-form .optional-field:focus-within textarea {
+  background: var(--surface-base);
+  color: var(--text-base);
+}
+
+.sonderr-console .provider-auth {
+  flex: 1 1 auto;
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  min-height: 0;
+  overflow: auto;
+  padding: 1rem;
+}
+
+.sonderr-console .provider-auth p {
+  margin: 0;
+  color: var(--text-weak);
+}
+
+.sonderr-console .provider-auth a {
+  color: var(--text-brand);
+}
+
+.sonderr-console .provider-auth code {
+  display: block;
+  border: 1px solid var(--border-weak-base);
+  border-radius: var(--radius-md);
+  background: var(--surface-base);
+  color: var(--text-base);
+  padding: 0.75rem;
+}
+
+.sonderr-console .auth-methods {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.sonderr-console .form-error {
+  color: var(--status-error-base) !important;
+}
+
+.sonderr-console input.invalid,
+.sonderr-console select.invalid {
+  border-color: var(--status-error-base);
+}
+
+.sonderr-console .confirm-scrim {
+  position: fixed;
+  z-index: 70;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, black 62%, transparent);
+  padding: 1rem;
+}
+
+.sonderr-console .confirm-dialog {
+  width: min(28rem, 100%);
+  overflow: hidden;
+  border: 1px solid var(--border-weak-base);
+  border-radius: var(--radius-lg);
+  background: var(--background-stronger);
+  box-shadow: 0 2rem 5rem color-mix(in srgb, black 35%, transparent);
+}
+
+.sonderr-console .confirm-body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.sonderr-console .confirm-icon {
+  display: grid;
+  place-items: center;
+  color: var(--status-error-base);
+}
+
+.sonderr-console .confirm-icon [data-component="icon"] {
+  width: 3rem;
+  height: 3rem;
+}
+
+.sonderr-console .confirm-body h2,
+.sonderr-console .prompt-copy h2 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+}
+
+.sonderr-console .confirm-body p,
+.sonderr-console .prompt-copy p {
+  margin: 0.5rem 0 0;
+  color: var(--text-weak);
+  font-size: 0.75rem;
+  line-height: 1.625;
+}
+
+.sonderr-console .confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  border-top: 1px solid var(--border-weak-base);
+  background: color-mix(in srgb, var(--background-base) 65%, transparent);
+  padding: 1rem;
+}
+
+.sonderr-console .prompt-form {
+  margin: 0;
+}
+
+.sonderr-console .prompt-body {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.sonderr-console .prompt-field {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--text-strong);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.sonderr-console .prompt-field input {
+  height: 2rem;
+}

@@ -74,7 +74,7 @@ export const dict: Record<string, string> = {
 
   "dialog.usageExceeded.freeTier.title": "Batas gratis tercapai",
   "dialog.usageExceeded.freeTier.description":
-    "Berlangganan Kilo Go untuk akses andal ke model sumber terbuka terbaik, mulai dari $5/bulan.",
+    "Berlangganan Sonderr Go untuk akses andal ke model sumber terbuka terbaik, mulai dari $5/bulan.",
   "dialog.usageExceeded.freeTier.actionLabel": "Berlangganan",
   "dialog.usageExceeded.accountRateLimit.title": "Batas Go tercapai",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -209,7 +209,7 @@ export const dict: Record<string, string> = {
   "ui.patch.action.created": "Dibuat",
   "ui.patch.action.moved": "Dipindahkan",
   "ui.patch.action.patched": "Ditambal",
-  "ui.patch.action.plan": "Rencana", // kilocode_change
+  "ui.patch.action.plan": "Rencana", // sonderr_change
 
   "ui.question.subtitle.answered": "{{count}} dijawab",
   "ui.question.answer.none": "(tidak ada jawaban)",

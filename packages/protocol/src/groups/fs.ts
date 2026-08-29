@@ -1,6 +1,6 @@
-import { FileSystem } from "@opencode-ai/schema/filesystem"
-import { Location } from "@opencode-ai/schema/location"
-import { PositiveInt, RelativePath } from "@opencode-ai/schema/schema"
+import { FileSystem } from "@sonderr/schema/filesystem"
+import { Location } from "@sonderr/schema/location"
+import { PositiveInt, RelativePath } from "@sonderr/schema/schema"
 import { Schema } from "effect"
 import { HttpApiEndpoint, HttpApiGroup, HttpApiSchema, OpenApi } from "effect/unstable/httpapi"
 import { LocationQuery, locationQueryOpenApi } from "./location"
@@ -10,12 +10,12 @@ const ListQuery = Schema.Struct({
   path: RelativePath.pipe(Schema.optional),
 })
 
-// kilocode_change start - expose the wildcard resource to generated SDK callers
+// sonderr_change start - expose the wildcard resource to generated SDK callers
 const ReadQuery = Schema.Struct({
   ...LocationQuery.fields,
   path: RelativePath.pipe(Schema.optional),
 })
-// kilocode_change end
+// sonderr_change end
 
 const FindQuery = Schema.Struct({
   ...LocationQuery.fields,
@@ -27,7 +27,7 @@ const FindQuery = Schema.Struct({
 export const FileSystemGroup = HttpApiGroup.make("server.fs")
   .add(
     HttpApiEndpoint.get("fs.read", "/api/fs/read/*", {
-      query: ReadQuery, // kilocode_change
+      query: ReadQuery, // sonderr_change
       success: Schema.Uint8Array.pipe(HttpApiSchema.asUint8Array()),
     })
       .annotateMerge(locationQueryOpenApi)

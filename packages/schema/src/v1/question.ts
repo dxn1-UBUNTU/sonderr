@@ -15,7 +15,7 @@ export const ID = Schema.String.check(Schema.isStartsWith("que")).pipe(
 export const Option = Schema.Struct({
   label: Schema.String.annotate({ description: "Display text (1-5 words, concise)" }),
   description: Schema.String.annotate({ description: "Explanation of choice" }),
-  // kilocode_change start - Kilo client localization and mode selection hints
+  // sonderr_change start - Sonderr client localization and mode selection hints
   labelKey: Schema.optional(Schema.String).annotate({
     description: "Optional i18n key for the label; clients translate and still reply with `label`",
   }),
@@ -23,7 +23,7 @@ export const Option = Schema.Struct({
   mode: Schema.optional(Schema.String).annotate({
     description: "Optional agent/mode name to pre-select in the UI when this option is picked",
   }),
-  // kilocode_change end
+  // sonderr_change end
 }).annotate({ identifier: "QuestionOption" })
 
 const base = {
@@ -31,14 +31,14 @@ const base = {
   header: Schema.String.annotate({ description: "Very short label (max 30 chars)" }),
   options: Schema.Array(Option).annotate({ description: "Available choices" }),
   multiple: Schema.optional(Schema.Boolean).annotate({ description: "Allow selecting multiple choices" }),
-  // kilocode_change start - optional Kilo client localization keys
+  // sonderr_change start - optional Sonderr client localization keys
   questionKey: Schema.optional(Schema.String).annotate({
     description: "Optional i18n key for the question text; clients fall back to `question` when missing",
   }),
   headerKey: Schema.optional(Schema.String).annotate({
     description: "Optional i18n key for the header; clients fall back to `header` when missing",
   }),
-  // kilocode_change end
+  // sonderr_change end
 }
 
 export const Info = Schema.Struct({
@@ -55,7 +55,7 @@ export const Request = Schema.Struct({
   questions: Schema.Array(Info).annotate({ description: "Questions to ask" }),
   blocking: Schema.optional(Schema.Boolean).annotate({
     description: "Whether this question blocks prompt input (default: true)",
-  }), // kilocode_change
+  }), // sonderr_change
   tool: Schema.optional(Tool),
 }).annotate({ identifier: "QuestionRequest" })
 export const Answer = Schema.Array(Schema.String).annotate({ identifier: "QuestionAnswer" })

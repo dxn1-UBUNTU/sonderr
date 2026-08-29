@@ -90,7 +90,7 @@ export class ListPage extends Schema.Class<ListPage>("ReadTool.ListPage")({
   next: PositiveInt.pipe(Schema.optional),
 }) {}
 
-// kilocode_change start - bind approved reads to filesystem identity
+// sonderr_change start - bind approved reads to filesystem identity
 export interface Target {
   readonly path: AbsolutePath
   readonly type: "file" | "directory"
@@ -107,9 +107,9 @@ export interface Interface {
   ) => Effect.Effect<FileSystem.Content | TextPage, ReadError>
   readonly list: (target: Target, page?: PageInput) => Effect.Effect<ListPage, FSUtil.Error>
 }
-// kilocode_change end
+// sonderr_change end
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/ReadToolFileSystem") {}
+export class Service extends Context.Service<Service, Interface>()("@sonderr/ReadToolFileSystem") {}
 
 const extensions = new Set([
   ".zip",
@@ -174,15 +174,15 @@ export const inspect = Effect.fn("ReadTool.inspect")(function* (fs: FSUtil.Inter
   const info = yield* fs.stat(input)
   const type = info.type === "File" ? "file" : info.type === "Directory" ? "directory" : undefined
   if (!type) return yield* Effect.fail(new PathKindError({ resource: input, expected: "a file or directory" }))
-  // kilocode_change start - retain the approved identity for descriptor verification
+  // sonderr_change start - retain the approved identity for descriptor verification
   const ino = Option.getOrUndefined(info.ino)
   if (ino === undefined) return yield* Effect.die(new Error("Filesystem identity is unavailable"))
   const target = { path: AbsolutePath.make(input), type, dev: info.dev, ino } satisfies Target
-  // kilocode_change end
+  // sonderr_change end
   return target
 })
 
-// kilocode_change - reject targets replaced after permission approval
+// sonderr_change - reject targets replaced after permission approval
 const verify = (target: Target, info: { readonly dev: number; readonly ino: Option.Option<number> }) => {
   if (target.dev === info.dev && target.ino === Option.getOrUndefined(info.ino)) return
   throw new Error("Path changed after approval")
@@ -196,11 +196,11 @@ export const read = Effect.fn("ReadTool.read")(function* (
 ) {
   return yield* Effect.scoped(
     Effect.gen(function* () {
-      // kilocode_change start - open the approved path and verify the descriptor identity
+      // sonderr_change start - open the approved path and verify the descriptor identity
       const file = yield* fs.open(target.path, { flag: "r" })
       const info = yield* file.stat
       yield* Effect.sync(() => verify(target, info))
-      // kilocode_change end
+      // sonderr_change end
       if (info.type !== "File") return yield* Effect.fail(new PathKindError({ resource, expected: "a file" }))
       const first = Option.getOrElse(
         yield* file.readAlloc(Math.min(64 * 1024, Number(info.size) || 4 * 1024)),
@@ -343,7 +343,7 @@ export const read = Effect.fn("ReadTool.read")(function* (
   )
 })
 
-// kilocode_change - verify approved directory identity before listing
+// sonderr_change - verify approved directory identity before listing
 export const list = Effect.fn("ReadTool.list")(function* (fs: FSUtil.Interface, target: Target, page: PageInput = {}) {
   const info = yield* fs.stat(target.path)
   yield* Effect.sync(() => verify(target, info))

@@ -2,14 +2,14 @@ export * as FileSystem from "./filesystem"
 
 import { makeLocationNode } from "./effect/app-node"
 import path from "path"
-import { Context, Effect, Layer, Option, Schema } from "effect" // kilocode_change
+import { Context, Effect, Layer, Option, Schema } from "effect" // sonderr_change
 import { FSUtil } from "./fs-util"
 import { Location } from "./location"
 import { PositiveInt, RelativePath } from "./schema"
 import { FileSystemSearch } from "./filesystem/search"
-import { Entry, FileSystem, FindInput, Match } from "@opencode-ai/schema/filesystem"
-import * as SearchTarget from "./kilocode/search-target" // kilocode_change
-export { Entry, Match, Submatch } from "@opencode-ai/schema/filesystem"
+import { Entry, FileSystem, FindInput, Match } from "@sonderr/schema/filesystem"
+import * as SearchTarget from "./sonderr/search-target" // sonderr_change
+export { Entry, Match, Submatch } from "@sonderr/schema/filesystem"
 
 export const ReadInput = Schema.Struct({
   path: RelativePath,
@@ -32,9 +32,9 @@ export type ListInput = typeof ListInput.Type
 
 export { FindInput }
 
-export const DEFAULT_SEARCH_LIMIT = 100 // kilocode_change - preserve bounded Kilo tool searches
-export const MAX_SEARCH_LIMIT = 100 // kilocode_change
-export const SearchLimit = PositiveInt.check(Schema.isLessThanOrEqualTo(MAX_SEARCH_LIMIT)) // kilocode_change
+export const DEFAULT_SEARCH_LIMIT = 100 // sonderr_change - preserve bounded Sonderr tool searches
+export const MAX_SEARCH_LIMIT = 100 // sonderr_change
+export const SearchLimit = PositiveInt.check(Schema.isLessThanOrEqualTo(MAX_SEARCH_LIMIT)) // sonderr_change
 
 export class GlobInput extends Schema.Class<GlobInput>("FileSystem.GlobInput")({
   pattern: Schema.String,
@@ -59,7 +59,7 @@ export interface Interface {
   readonly grep: (input: GrepInput) => Effect.Effect<readonly Match[]>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/v2/FileSystem") {}
+export class Service extends Context.Service<Service, Interface>()("@sonderr/v2/FileSystem") {}
 
 const baseLayer = Layer.effect(
   Service,
@@ -74,8 +74,8 @@ const baseLayer = Layer.effect(
         return yield* Effect.die(new Error("Path escapes the location"))
       const real = yield* fs.realPath(absolute).pipe(Effect.orDie)
       if (!FSUtil.contains(root, real)) return yield* Effect.die(new Error("Path escapes the location"))
-      const target = yield* SearchTarget.inspect(fs, real).pipe(Effect.orDie) // kilocode_change
-      return { absolute, real, directory: location.directory, root, target } // kilocode_change
+      const target = yield* SearchTarget.inspect(fs, real).pipe(Effect.orDie) // sonderr_change
+      return { absolute, real, directory: location.directory, root, target } // sonderr_change
     })
     return Service.of({
       find: search.find,
@@ -83,8 +83,8 @@ const baseLayer = Layer.effect(
       grep: search.grep,
       read: Effect.fn("FileSystem.read")(function* (input) {
         const target = yield* resolve(input.path)
-        if (target.target.type !== "file") return yield* Effect.die(new Error("Path is not a file")) // kilocode_change
-        // kilocode_change start - read from the validated descriptor, not a second pathname lookup.
+        if (target.target.type !== "file") return yield* Effect.die(new Error("Path is not a file")) // sonderr_change
+        // sonderr_change start - read from the validated descriptor, not a second pathname lookup.
         return yield* Effect.scoped(
           Effect.gen(function* () {
             const file = yield* fs.open(target.real, { flag: "r" }).pipe(Effect.orDie)
@@ -107,12 +107,12 @@ const baseLayer = Layer.effect(
             }
           }),
         )
-        // kilocode_change end
+        // sonderr_change end
       }),
       list: Effect.fn("FileSystem.list")(function* (input = {}) {
         const target = yield* resolve(input.path)
-        if (target.target.type !== "directory") return yield* Effect.die(new Error("Path is not a directory")) // kilocode_change
-        // kilocode_change start - reject directory replacement during enumeration
+        if (target.target.type !== "directory") return yield* Effect.die(new Error("Path is not a directory")) // sonderr_change
+        // sonderr_change start - reject directory replacement during enumeration
         yield* SearchTarget.validate(fs, target.target).pipe(Effect.orDie)
         const entries = yield* fs.readDirectoryEntries(target.real).pipe(
           Effect.orDie,
@@ -134,7 +134,7 @@ const baseLayer = Layer.effect(
         )
         yield* SearchTarget.validate(fs, target.target).pipe(Effect.orDie)
         return entries
-        // kilocode_change end
+        // sonderr_change end
       }),
     })
   }),

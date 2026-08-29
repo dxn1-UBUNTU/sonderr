@@ -1,11 +1,11 @@
-import { and, asc, desc, eq, gt, gte, isNotNull, ne, or } from "drizzle-orm" // kilocode_change
+import { and, asc, desc, eq, gt, gte, isNotNull, ne, or } from "drizzle-orm" // sonderr_change
 import { Effect, Schema } from "effect"
 import { Database } from "../database/database"
 import { MessageDecodeError } from "./error"
 import { SessionMessage } from "./message"
 import { SessionSchema } from "./schema"
 import { SessionContextEpochTable, SessionMessageTable } from "./sql"
-import { normalize } from "../kilocode/session-message" // kilocode_change
+import { normalize } from "../sonderr/session-message" // sonderr_change
 
 type DatabaseService = Database.Interface["db"]
 
@@ -19,7 +19,7 @@ export const latestCompaction = Effect.fnUntraced(function* (db: DatabaseService
       and(
         eq(SessionMessageTable.session_id, sessionID),
         eq(SessionMessageTable.type, "compaction"),
-        isNotNull(SessionMessageTable.seq), // kilocode_change
+        isNotNull(SessionMessageTable.seq), // sonderr_change
       ),
     )
     .orderBy(desc(SessionMessageTable.seq))
@@ -42,7 +42,7 @@ const messageRows = Effect.fnUntraced(function* (
     .where(
       and(
         eq(SessionMessageTable.session_id, sessionID),
-        isNotNull(SessionMessageTable.seq), // kilocode_change
+        isNotNull(SessionMessageTable.seq), // sonderr_change
         compaction
           ? or(
               gte(SessionMessageTable.seq, compaction.seq),
@@ -62,7 +62,7 @@ const messageRows = Effect.fnUntraced(function* (
   return rows
 })
 
-// kilocode_change - normalize released storage shapes only at the assistant tool-state boundary
+// sonderr_change - normalize released storage shapes only at the assistant tool-state boundary
 const decodeMessageRow = (row: typeof SessionMessageTable.$inferSelect) =>
   decode(normalize({ ...row.data, id: row.id, type: row.type })).pipe(
     Effect.mapError(
@@ -106,7 +106,7 @@ export const entriesForRunner = Effect.fn("SessionHistory.entriesForRunner")(fun
   const rows = yield* messageRows(db, sessionID, yield* latestCompaction(db, sessionID), baselineSeq)
   return yield* Effect.forEach(rows, (row) => {
     const seq = row.seq
-    if (seq === null) return Effect.die("Sequenced session history returned a legacy row") // kilocode_change
+    if (seq === null) return Effect.die("Sequenced session history returned a legacy row") // sonderr_change
     return decodeMessageRow(row).pipe(Effect.map((message) => ({ seq, message })))
   })
 })

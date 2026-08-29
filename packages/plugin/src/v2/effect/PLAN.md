@@ -7,8 +7,8 @@ This document describes the agreed target design for the V2 plugin system. It is
 ## Goals
 
 - Internal and external plugins use the same public plugin API.
-- Effect plugins import `@kilocode/plugin/v2/effect`, not `@opencode-ai/core`.
-- Public domain values use generated `@kilocode/sdk` types.
+- Effect plugins import `@sonderr/plugin/v2/effect`, not `@sonderr/core`.
+- Public domain values use generated `@sonderr/sdk` types.
 - Core may retain branded IDs, decoded Effect schemas, and internal service types.
 - Plugins may register replayable domain transforms and runtime hooks imperatively during setup.
 - Registrations are scoped, independently disposable, ordered, and removable.
@@ -424,7 +424,7 @@ The Effect implementation remains the canonical runtime. Promise and embedding w
 
 ### 1. Define Public Contracts
 
-- Define `PluginHost` domain capabilities in `@kilocode/plugin/v2/effect`.
+- Define `PluginHost` domain capabilities in `@sonderr/plugin/v2/effect`.
 - Define SDK-typed editors for agent, catalog, command, integration, reference, skill, and tool.
 - Define typed runtime hook maps per domain.
 - Define `Registration`.

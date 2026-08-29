@@ -72,7 +72,7 @@ export const dict = {
 
   "dialog.usageExceeded.freeTier.title": "無料制限に達しました",
   "dialog.usageExceeded.freeTier.description":
-    "Kilo Go にサブスクライブして、最高のオープンソースモデルに安定してアクセスできます。月額 $5 から。", // kilocode_change
+    "Sonderr Go にサブスクライブして、最高のオープンソースモデルに安定してアクセスできます。月額 $5 から。", // sonderr_change
   "dialog.usageExceeded.freeTier.actionLabel": "サブスクライブ",
   "dialog.usageExceeded.accountRateLimit.title": "Go の制限に達しました",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -194,7 +194,7 @@ export const dict = {
   "ui.patch.action.created": "作成済み",
   "ui.patch.action.moved": "移動済み",
   "ui.patch.action.patched": "パッチ適用済み",
-  "ui.patch.action.plan": "計画", // kilocode_change
+  "ui.patch.action.plan": "計画", // sonderr_change
 
   "ui.question.subtitle.answered": "{{count}}件回答済み",
   "ui.question.answer.none": "(回答なし)",
@@ -215,7 +215,7 @@ export const dict = {
   "ui.message.duration.seconds": "{{count}}秒",
   "ui.message.duration.minutesSeconds": "{{minutes}}分 {{seconds}}秒",
 
-  // kilocode_change start - Kilo UI compatibility
+  // sonderr_change start - Sonderr UI compatibility
   "ui.mermaid.copyPng": "PNG をコピー",
   "ui.mermaid.copySource": "Mermaid ソースをコピー",
   "ui.mermaid.copySvg": "SVG をコピー",
@@ -234,5 +234,5 @@ export const dict = {
   "ui.sessionTurn.diffs.changed": "変更あり",
   "ui.sessionTurn.status.delegatingWaitingPermission": "Subagent waiting for permission",
   "ui.sessionTurn.status.delegatingWaitingQuestion": "Subagent waiting for response",
-  // kilocode_change end
+  // sonderr_change end
 }

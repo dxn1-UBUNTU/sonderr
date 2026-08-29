@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test"
-import { FSUtil } from "@opencode-ai/core/fs-util"
+import { FSUtil } from "@sonderr/core/fs-util"
 
-describe("kilocode filesystem containment", () => {
+describe("sonderr filesystem containment", () => {
   test("keeps dot-prefixed child names internal", () => {
     expect(FSUtil.contains("/a/b", "/a/b/..cache/file")).toBe(true)
   })

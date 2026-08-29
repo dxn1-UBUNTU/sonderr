@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 
-import { Script } from "@opencode-ai/script"
+import { Script } from "@sonderr/script"
 import { $ } from "bun"
 import { fileURLToPath } from "url"
 
@@ -38,7 +38,7 @@ if (await published(pkg.name, pkg.version)) {
   await Bun.write("package.json", JSON.stringify(pkg, null, 2))
   try {
     await $`bun pm pack`
-    await $`npm publish *.tgz --tag ${Script.channel} --access public --provenance` // kilocode_change
+    await $`npm publish *.tgz --tag ${Script.channel} --access public --provenance` // sonderr_change
   } finally {
     await Bun.write("package.json", originalText)
   }

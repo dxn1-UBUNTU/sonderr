@@ -197,7 +197,7 @@ describe("Anthropic Messages route", () => {
             Message.user("What is the weather?"),
             Message.assistant([ToolCallPart.make({ id: "call_1", name: "lookup", input: { query: "weather" } })]),
             Message.tool({ id: "call_1", name: "lookup", result: { forecast: "sunny" } }),
-            Message.user("Summarize the result."), // kilocode_change - preserve Anthropic role alternation
+            Message.user("Summarize the result."), // sonderr_change - preserve Anthropic role alternation
           ],
           cache: "none",
         }),
@@ -211,7 +211,7 @@ describe("Anthropic Messages route", () => {
             role: "assistant",
             content: [{ type: "tool_use", id: "call_1", name: "lookup", input: { query: "weather" } }],
           },
-          // kilocode_change start - adjacent user content is coalesced with tool results
+          // sonderr_change start - adjacent user content is coalesced with tool results
           {
             role: "user",
             content: [
@@ -219,7 +219,7 @@ describe("Anthropic Messages route", () => {
               { type: "text", text: "Summarize the result." },
             ],
           },
-          // kilocode_change end
+          // sonderr_change end
         ],
         stream: true,
         max_tokens: 4096,

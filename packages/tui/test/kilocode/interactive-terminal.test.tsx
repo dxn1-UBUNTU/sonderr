@@ -1,7 +1,7 @@
 /** @jsxImportSource @opentui/solid */
 import { expect, test } from "bun:test"
 import { Show } from "solid-js"
-import type { InteractiveTerminalSnapshot, Session } from "@kilocode/sdk/v2"
+import type { InteractiveTerminalSnapshot, Session } from "@sonderr/sdk/v2"
 import { testRender } from "@opentui/solid"
 import path from "node:path"
 import { ArgsProvider } from "../../src/context/args"

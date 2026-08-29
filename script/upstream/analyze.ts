@@ -7,7 +7,7 @@
  * Usage:
  *   bun run script/upstream/analyze.ts --version v1.1.49
  *   bun run script/upstream/analyze.ts --commit abc123
- *   bun run script/upstream/analyze.ts --version v1.1.49 --base-branch catrielmuller/kilo-opencode-v1.1.44
+ *   bun run script/upstream/analyze.ts --version v1.1.49 --base-branch catrielmuller/sonderr-sonderr-v1.1.44
  */
 
 import { $ } from "bun"
@@ -60,7 +60,7 @@ async function main() {
   // Check upstream remote
   if (!(await git.hasUpstreamRemote())) {
     error("No 'upstream' remote found. Please add it:")
-    info("  git remote add upstream git@github.com:anomalyco/opencode.git")
+    info("  git remote add upstream git@github.com:anomalyco/sonderr.git")
     process.exit(1)
   }
 
@@ -135,7 +135,7 @@ async function main() {
   for (const [rec, files] of byRec) {
     const label =
       rec === "keep-ours"
-        ? "Keep Kilo's"
+        ? "Keep Sonderr's"
         : rec === "codemod"
           ? "Auto-transform"
           : rec === "keep-theirs"
@@ -175,7 +175,7 @@ async function main() {
 
   const keepOursFiles = byRec.get("keep-ours") || []
   if (keepOursFiles.length > 0) {
-    conflictReport.recommendations.push(`${keepOursFiles.length} files will keep Kilo's version`)
+    conflictReport.recommendations.push(`${keepOursFiles.length} files will keep Sonderr's version`)
   }
 
   // Save report

@@ -1,0 +1,220 @@
+.sonderr-console .ui-settings {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.sonderr-console .ui-card {
+  border-color: var(--border);
+  background: var(--card);
+}
+
+.sonderr-console .ui-card:has(.console-diff-select[open]),
+.sonderr-console .ui-card:has(.title-icon-select[open]) {
+  position: relative;
+  z-index: 40;
+  overflow: visible;
+}
+
+.sonderr-console .console-diff-select[open],
+.sonderr-console .title-icon-select[open] {
+  z-index: 41;
+}
+
+.sonderr-console .console-diff-select .models-select-menu,
+.sonderr-console .title-icon-select .models-select-menu {
+  z-index: 42;
+}
+
+.sonderr-console .ui-card-header,
+.sonderr-console .ui-card-footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 0.875rem;
+}
+
+.sonderr-console .ui-card-footer {
+  justify-content: flex-end;
+  border-top: 1px solid var(--border);
+  border-bottom: 0;
+}
+
+.sonderr-console .ui-card-header h2 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.sonderr-console .ui-card-header p {
+  max-width: 42rem;
+  margin: 0.125rem 0 0;
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+}
+
+.sonderr-console .ui-card-body,
+.sonderr-console .ui-form {
+  padding: 0.75rem;
+}
+
+.sonderr-console .ui-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.625rem;
+}
+
+.sonderr-console .ui-field,
+.sonderr-console .ui-toggle {
+  display: grid;
+  gap: 0.375rem;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--card) 72%, transparent);
+  padding: 0.625rem;
+}
+
+.sonderr-console .ui-field > span,
+.sonderr-console .ui-toggle strong {
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.sonderr-console .ui-field small,
+.sonderr-console .ui-toggle small {
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+}
+
+.sonderr-console .ui-toggle strong,
+.sonderr-console .ui-toggle small {
+  display: block;
+}
+
+.sonderr-console .ui-field input,
+.sonderr-console .ui-field select {
+  height: 2rem;
+  min-height: 2rem;
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  padding-block: 0;
+}
+
+.sonderr-console .ui-toggle {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.sonderr-console .ui-toggle:disabled,
+.sonderr-console .ui-field input:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.sonderr-console .ui-toggle:hover:not(:disabled),
+.sonderr-console .ui-toggle:focus-visible,
+.sonderr-console .ui-toggle.selected {
+  border-color: var(--primary);
+  background: color-mix(in oklab, var(--primary) 10%, transparent);
+  outline: 0;
+}
+
+.sonderr-console .theme-preview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.sonderr-console .theme-preview strong,
+.sonderr-console .theme-preview span,
+.sonderr-console .theme-option strong,
+.sonderr-console .theme-option span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sonderr-console .theme-preview strong,
+.sonderr-console .theme-option strong {
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.sonderr-console .theme-preview span,
+.sonderr-console .theme-option span {
+  color: var(--muted-foreground);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+}
+
+.sonderr-console .theme-swatches {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.25rem;
+  width: 8.75rem;
+  justify-self: end;
+}
+
+.sonderr-console .theme-swatch {
+  position: relative;
+  aspect-ratio: 1;
+  min-width: 0;
+  border-radius: var(--radius-md);
+}
+
+.sonderr-console .theme-swatch::after {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--border);
+  border-radius: inherit;
+  content: "";
+  mix-blend-mode: lighten;
+}
+
+.sonderr-console .theme-picker {
+  gap: 0.375rem;
+}
+
+.sonderr-console .theme-option {
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-height: 4.75rem;
+  border-color: var(--border);
+  background: var(--card);
+  padding: 0.75rem;
+}
+
+.sonderr-console .theme-option.selected {
+  border-color: var(--primary);
+  background: color-mix(in oklab, var(--primary) 10%, transparent);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.sonderr-console .theme-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.sonderr-console .theme-footer > div:last-child {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}

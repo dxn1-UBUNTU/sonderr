@@ -1,7 +1,7 @@
-export * as OpenCode from "./opencode"
+export * as Sonderr from "./sonderr"
 export * as Tool from "./tool"
 
-export { ClientError } from "@opencode-ai/client/effect"
+export { ClientError } from "@sonderr/client/effect"
 export {
   AbsolutePath,
   Agent,
@@ -13,5 +13,5 @@ export {
   Session,
   SessionInput,
   SessionMessage,
-} from "@opencode-ai/client/effect"
-export type { OpenCodeEvent } from "@opencode-ai/client/effect"
+} from "@sonderr/client/effect"
+export type { SonderrEvent } from "@sonderr/client/effect"

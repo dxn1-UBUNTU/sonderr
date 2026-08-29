@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@opencode-ai/client",
+  "name": "@sonderr/client",
   "private": true,
   "type": "module",
   "license": "MIT",
@@ -17,8 +17,8 @@
     "test:ci": "mkdir -p .artifacts/unit && bun test --timeout 10000 --reporter=junit --reporter-outfile=.artifacts/unit/junit.xml"
   },
   "dependencies": {
-    "@opencode-ai/schema": "workspace:*",
-    "@opencode-ai/protocol": "workspace:*"
+    "@sonderr/schema": "workspace:*",
+    "@sonderr/protocol": "workspace:*"
   },
   "peerDependencies": {
     "effect": "4.0.0-beta.83"
@@ -30,9 +30,9 @@
   },
   "devDependencies": {
     "@effect/platform-node": "catalog:",
-    "@opencode-ai/core": "workspace:*",
-    "@opencode-ai/httpapi-codegen": "workspace:*",
-    "@opencode-ai/server": "workspace:*",
+    "@sonderr/core": "workspace:*",
+    "@sonderr/httpapi-codegen": "workspace:*",
+    "@sonderr/server": "workspace:*",
     "@tsconfig/bun": "catalog:",
     "@types/bun": "catalog:",
     "@typescript/native-preview": "catalog:",

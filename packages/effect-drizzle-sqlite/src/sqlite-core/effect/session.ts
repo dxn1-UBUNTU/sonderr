@@ -282,7 +282,7 @@ export class SQLiteEffectPreparedQuery<
         return Effect.fail(
           new EffectDrizzleQueryError({
             query: queryString,
-            params: params.map(() => "<redacted>"), // kilocode_change - bound values may contain credentials
+            params: params.map(() => "<redacted>"), // sonderr_change - bound values may contain credentials
             cause: Cause.fail(e),
           }),
         )

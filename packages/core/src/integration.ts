@@ -15,7 +15,7 @@ import {
   SynchronizedRef,
   Types,
 } from "effect"
-import { Integration } from "@opencode-ai/schema/integration"
+import { Integration } from "@sonderr/schema/integration"
 import { Credential } from "./credential"
 import { State } from "./state"
 import { EventV2 } from "./event"
@@ -193,18 +193,18 @@ export interface Interface extends State.Transformable<Draft> {
   }
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/v2/Integration") {}
+export class Service extends Context.Service<Service, Interface>()("@sonderr/v2/Integration") {}
 
 const attemptLifetime = Duration.toMillis(Duration.minutes(10))
 const terminalRetention = Duration.toMillis(Duration.minutes(1))
 const scrubInterval = Duration.seconds(30)
-const settlementTimeout = Duration.seconds(30) // kilocode_change - bound retained OAuth attempt secrets
+const settlementTimeout = Duration.seconds(30) // sonderr_change - bound retained OAuth attempt secrets
 
 type AttemptTime = { created: number; expires: number }
 type PendingAttempt = {
   status: "pending"
   completing: boolean
-  settling: boolean // kilocode_change - cancellation and expiry cannot overtake credential persistence
+  settling: boolean // sonderr_change - cancellation and expiry cannot overtake credential persistence
   authorization: OAuthAuthorization
   integrationID: ID
   methodID: MethodID
@@ -321,7 +321,7 @@ export const locationLayer = Layer.effect(
       return error instanceof Error ? error.message : String(error)
     }
 
-    // kilocode_change start - persist before exposing completion and make settlement atomic with cancellation
+    // sonderr_change start - persist before exposing completion and make settlement atomic with cancellation
     const settle = Effect.fnUntraced(function* (
       attemptID: AttemptID,
       exit: Exit.Exit<Credential.OAuth, AuthorizationError>,
@@ -345,7 +345,7 @@ export const locationLayer = Layer.effect(
                     label: pending.label,
                     value:
                       exit.value.type === "oauth"
-                        ? { ...exit.value, methodID: pending.methodID } // kilocode_change - OAuth is a struct, not a class
+                        ? { ...exit.value, methodID: pending.methodID } // sonderr_change - OAuth is a struct, not a class
                         : exit.value,
                   })
                   .pipe(
@@ -378,7 +378,7 @@ export const locationLayer = Layer.effect(
         }),
       )
     })
-    // kilocode_change end
+    // sonderr_change end
 
     const scrub = Effect.fnUntraced(function* () {
       const now = yield* Clock.currentTimeMillis
@@ -386,7 +386,7 @@ export const locationLayer = Layer.effect(
         const next = new Map(current)
         const scopes: Scope.Closeable[] = []
         for (const [id, attempt] of current) {
-          if (attempt.status === "pending" && !attempt.settling && attempt.time.expires <= now) { // kilocode_change
+          if (attempt.status === "pending" && !attempt.settling && attempt.time.expires <= now) { // sonderr_change
             scopes.push(attempt.scope)
             next.set(id, { status: "expired", time: attempt.time, removeAt: now + terminalRetention })
             continue
@@ -469,7 +469,7 @@ export const locationLayer = Layer.effect(
             new Map(current).set(id, {
               status: "pending",
               completing: authorization.mode === "auto",
-              settling: false, // kilocode_change
+              settling: false, // sonderr_change
               authorization,
               integrationID: input.integrationID,
               methodID: input.methodID,
@@ -479,13 +479,13 @@ export const locationLayer = Layer.effect(
             }),
           )
           if (authorization.mode === "auto") {
-            // kilocode_change start - settle persistence atomically with cancellation
+            // sonderr_change start - settle persistence atomically with cancellation
             yield* authorize(authorization.callback).pipe(
               Effect.exit,
               Effect.flatMap((exit) => settle(id, exit)),
               Effect.forkIn(attemptScope, { startImmediately: true }),
             )
-            // kilocode_change end
+            // sonderr_change end
           }
           return new Attempt({
             attemptID: id,
@@ -526,7 +526,7 @@ export const locationLayer = Layer.effect(
             const match = current.get(input.attemptID)
             if (!match || match.status !== "pending" || match.completing) return [match, current]
             if (match.authorization.mode === "code" && input.code === undefined) return [match, current]
-            return [match, new Map(current).set(input.attemptID, { ...match, completing: true, settling: true })] // kilocode_change
+            return [match, new Map(current).set(input.attemptID, { ...match, completing: true, settling: true })] // sonderr_change
           })
           if (!attempt) return yield* Effect.die(`OAuth attempt not found: ${input.attemptID}`)
           if (attempt.status !== "pending") return
@@ -538,7 +538,7 @@ export const locationLayer = Layer.effect(
             attempt.authorization.mode === "auto"
               ? attempt.authorization.callback
               : attempt.authorization.callback(input.code as string)
-          // kilocode_change start - an interrupted or timed-out callback still settles and releases its attempt.
+          // sonderr_change start - an interrupted or timed-out callback still settles and releases its attempt.
           return yield* Effect.uninterruptibleMask((restore) =>
             Effect.gen(function* () {
               const exit = yield* restore(authorize(callback)).pipe(
@@ -550,12 +550,12 @@ export const locationLayer = Layer.effect(
               if (settled && Exit.isFailure(settled)) return yield* settled
             }),
           )
-          // kilocode_change end
+          // sonderr_change end
         }),
         cancel: Effect.fn("Integration.attempt.cancel")(function* (attemptID) {
           const attempt = yield* SynchronizedRef.modify(attempts, (current) => {
             const match = current.get(attemptID)
-            if (!match || match.status !== "pending" || match.settling) return [undefined, current] // kilocode_change
+            if (!match || match.status !== "pending" || match.settling) return [undefined, current] // sonderr_change
             const next = new Map(current)
             next.delete(attemptID)
             return [match, next]

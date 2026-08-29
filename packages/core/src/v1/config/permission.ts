@@ -2,7 +2,7 @@ export * as ConfigPermissionV1 from "./permission"
 
 import { Schema, SchemaGetter } from "effect"
 
-export const Action = Schema.NullOr(Schema.Literals(["ask", "allow", "deny"])) // kilocode_change - nullable allows null as a delete sentinel
+export const Action = Schema.NullOr(Schema.Literals(["ask", "allow", "deny"])) // sonderr_change - nullable allows null as a delete sentinel
   .annotate({ identifier: "PermissionActionConfig" })
 export type Action = Schema.Schema.Type<typeof Action>
 
@@ -25,7 +25,7 @@ const InputObject = Schema.StructWithRest(
     bash: Schema.optional(Rule),
     task: Schema.optional(Rule),
     external_directory: Schema.optional(Rule),
-    markdown_source: Schema.optional(Rule), // kilocode_change - explicitly authorize external agent/command sources
+    markdown_source: Schema.optional(Rule), // sonderr_change - explicitly authorize external agent/command sources
     todowrite: Schema.optional(Action),
     question: Schema.optional(Action),
     webfetch: Schema.optional(Action),
@@ -33,12 +33,12 @@ const InputObject = Schema.StructWithRest(
     lsp: Schema.optional(Rule),
     doom_loop: Schema.optional(Action),
     skill: Schema.optional(Rule),
-    agent_manager: Schema.optional(Rule), // kilocode_change
-    // kilocode_change start
+    agent_manager: Schema.optional(Rule), // sonderr_change
+    // sonderr_change start
     notebook_read: Schema.optional(Rule),
     notebook_edit: Schema.optional(Rule),
     notebook_execute: Schema.optional(Rule),
-    // kilocode_change end
+    // sonderr_change end
   }),
   [Schema.Record(Schema.String, Rule)],
 )
@@ -46,7 +46,7 @@ const InputObject = Schema.StructWithRest(
 const InputSchema = Schema.Union([Action, InputObject])
 
 const normalizeInput = (input: Schema.Schema.Type<typeof InputSchema>): Schema.Schema.Type<typeof InputObject> =>
-  input === null || typeof input === "string" ? { "*": input } : input // kilocode_change
+  input === null || typeof input === "string" ? { "*": input } : input // sonderr_change
 
 export const Info = InputSchema.pipe(
   Schema.decodeTo(InputObject, {

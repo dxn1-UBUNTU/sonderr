@@ -1,10 +1,10 @@
 import { describe, expect } from "bun:test"
 import path from "path"
 import { Effect, FileSystem } from "effect"
-import { LayerNodePlatform } from "@opencode-ai/core/effect/app-node-platform"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { FSUtil } from "@opencode-ai/core/fs-util"
-import { ReadToolFileSystem } from "@opencode-ai/core/tool/read-filesystem"
+import { LayerNodePlatform } from "@sonderr/core/effect/app-node-platform"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { FSUtil } from "@sonderr/core/fs-util"
+import { ReadToolFileSystem } from "@sonderr/core/tool/read-filesystem"
 import { testEffect } from "./lib/effect"
 
 const it = testEffect(LayerNode.compile(LayerNode.group([FSUtil.node, LayerNodePlatform.filesystem])))
@@ -15,7 +15,7 @@ const fixture = Effect.gen(function* () {
   return { fs, files, directory }
 })
 
-// kilocode_change - Kilo binds reads to an inspected filesystem identity, so tests resolve a target first
+// sonderr_change - Sonderr binds reads to an inspected filesystem identity, so tests resolve a target first
 const target = (fs: FSUtil.Interface, at: string) => ReadToolFileSystem.inspect(fs, at)
 
 describe("ReadToolFileSystem", () => {

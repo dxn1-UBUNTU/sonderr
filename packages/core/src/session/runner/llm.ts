@@ -7,7 +7,7 @@ import {
   SystemPart,
   isContextOverflowFailure,
   type ProviderErrorEvent,
-} from "@opencode-ai/llm"
+} from "@sonderr/llm"
 import { Cause, DateTime, Effect, FiberSet, Layer, Option, Semaphore, Stream } from "effect"
 import { AgentV2 } from "../../agent"
 import { Config } from "../../config"
@@ -59,7 +59,7 @@ import { llmClient } from "../../effect/app-node-platform"
  *
  * - One provider turn
  *   - [x] Translate every projected V2 Session message variant into canonical
- *     `@opencode-ai/llm` messages.
+ *     `@sonderr/llm` messages.
  *   - [ ] Resolve policy-filtered built-in, MCP, plugin, and structured-output tool definitions.
  *   - [x] Stream exactly one `llm.stream(request)` provider turn.
  *   - [x] Persist assistant text and usage events incrementally as they arrive.
@@ -180,7 +180,7 @@ const layer = Layer.effect(
       if (session.location.directory !== location.directory || session.location.workspaceID !== location.workspaceID)
         return yield* Effect.interrupt
       const agent = yield* agents.select(session.agent)
-      const initialized = yield* SessionContextEpoch.initialize(db, loadSystemContext(agent), session.id, location) // kilocode_change
+      const initialized = yield* SessionContextEpoch.initialize(db, loadSystemContext(agent), session.id, location) // sonderr_change
       const toolFibers = yield* FiberSet.make<void, ToolOutputStore.Error>()
       let needsContinuation = false
       let currentStep = step
@@ -195,7 +195,7 @@ const layer = Layer.effect(
         if (promoted > 0) currentStep = 1
       }
       const system =
-        // kilocode_change - pass the expected Location so a concurrent move aborts the epoch
+        // sonderr_change - pass the expected Location so a concurrent move aborts the epoch
         initialized ?? (yield* SessionContextEpoch.prepare(db, events, loadSystemContext(agent), session.id, location))
       const model = yield* models.resolve(session)
       const entries = yield* SessionHistory.entriesForRunner(db, session.id, system.baselineSeq)
@@ -209,7 +209,7 @@ const layer = Layer.effect(
         system: [agent.info?.system, system.baseline]
           .filter((part): part is string => part !== undefined && part.length > 0)
           .map(SystemPart.make),
-        messages: [...toLLMMessages(context, model), ...(isLastStep ? [Message.user(MAX_STEPS_PROMPT)] : [])], // kilocode_change - avoid provider-incompatible assistant prefill
+        messages: [...toLLMMessages(context, model), ...(isLastStep ? [Message.user(MAX_STEPS_PROMPT)] : [])], // sonderr_change - avoid provider-incompatible assistant prefill
         tools: toolMaterialization?.definitions ?? [],
         toolChoice: isLastStep ? "none" : undefined,
       })

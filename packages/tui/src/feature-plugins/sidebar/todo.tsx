@@ -1,4 +1,4 @@
-import type { TuiPlugin, TuiPluginApi } from "@kilocode/plugin/tui"
+import type { TuiPlugin, TuiPluginApi } from "@sonderr/plugin/tui"
 import type { BuiltinTuiPlugin } from "../builtins"
 import { createMemo, For, Show, createSignal } from "solid-js"
 import { TodoItem } from "../../component/todo-item"

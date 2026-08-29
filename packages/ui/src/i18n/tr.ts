@@ -79,7 +79,7 @@ export const dict = {
 
   "dialog.usageExceeded.freeTier.title": "Ücretsiz sınıra ulaşıldı",
   "dialog.usageExceeded.freeTier.description":
-    "En iyi açık kaynaklı modellere güvenilir erişim için Kilo Go'ya abone olun. Aylık $5'ten başlar.", // kilocode_change
+    "En iyi açık kaynaklı modellere güvenilir erişim için Sonderr Go'ya abone olun. Aylık $5'ten başlar.", // sonderr_change
   "dialog.usageExceeded.freeTier.actionLabel": "Abone ol",
   "dialog.usageExceeded.accountRateLimit.title": "Go sınırına ulaşıldı",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -201,7 +201,7 @@ export const dict = {
   "ui.patch.action.created": "Oluşturuldu",
   "ui.patch.action.moved": "Taşındı",
   "ui.patch.action.patched": "Yamalandı",
-  "ui.patch.action.plan": "Plan", // kilocode_change
+  "ui.patch.action.plan": "Plan", // sonderr_change
 
   "ui.question.subtitle.answered": "{{count}} yanıtlandı",
   "ui.question.answer.none": "(yanıt yok)",
@@ -221,7 +221,7 @@ export const dict = {
   "ui.toolErrorCard.copyError": "Hatayı kopyala",
   "ui.message.duration.seconds": "{{count}} sn",
   "ui.message.duration.minutesSeconds": "{{minutes}} dk {{seconds}} sn",
-  // kilocode_change start - preserve Kilo UI translations across the upstream dictionary refresh
+  // sonderr_change start - preserve Sonderr UI translations across the upstream dictionary refresh
   "ui.sessionTurn.status.delegatingWaitingPermission": "Subagent waiting for permission",
   "ui.sessionTurn.status.delegatingWaitingQuestion": "Subagent waiting for response",
   "ui.messagePart.mcp.input": "Giriş",
@@ -239,5 +239,5 @@ export const dict = {
   "ui.message.deleteQueued": "Kuyruktaki mesajı sil",
   "ui.question.subtitle.dismissed": "{{count}} dismissed",
   "ui.question.answer.dismissed": "Dismissed",
-  // kilocode_change end
+  // sonderr_change end
 } satisfies Partial<Record<Keys, string>>

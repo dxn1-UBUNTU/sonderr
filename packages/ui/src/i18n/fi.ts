@@ -68,7 +68,7 @@ export const dict: Record<string, string> = {
   "ui.sessionTurn.error.addCredits": "Lisää krediittejä",
   "dialog.usageExceeded.freeTier.title": "Ilmainen raja saavutettu",
   "dialog.usageExceeded.freeTier.description":
-    "Tilaa Kilo Go saadaksesi luotettavan pääsyn parhaisiin avoimen lähdekoodin malleihin alkaen 5 dollarista kuukaudessa.",
+    "Tilaa Sonderr Go saadaksesi luotettavan pääsyn parhaisiin avoimen lähdekoodin malleihin alkaen 5 dollarista kuukaudessa.",
   "dialog.usageExceeded.freeTier.actionLabel": "Tilaa",
   "dialog.usageExceeded.accountRateLimit.title": "Go-raja saavutettu",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -170,7 +170,7 @@ export const dict: Record<string, string> = {
   "ui.patch.action.created": "Luotu",
   "ui.patch.action.moved": "Siirretty",
   "ui.patch.action.patched": "Paikattu",
-  "ui.patch.action.plan": "Suunnitelma", // kilocode_change
+  "ui.patch.action.plan": "Suunnitelma", // sonderr_change
   "ui.question.subtitle.answered": "Vastatut kysymykset: {{count}}",
   "ui.question.answer.none": "(ei vastausta)",
   "ui.question.review.notAnswered": "(ei vastattu)",

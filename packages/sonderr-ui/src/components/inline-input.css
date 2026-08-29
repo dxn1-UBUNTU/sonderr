@@ -1,0 +1,5 @@
+/* Sonderr Inline Input overrides */
+
+[data-component="inline-input"] {
+  font-size: var(--sonderr-font-size-13);
+}

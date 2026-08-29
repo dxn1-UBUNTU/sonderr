@@ -163,83 +163,83 @@ import type {
   InteractiveTerminalWriteErrors,
   InteractiveTerminalWriteInput,
   InteractiveTerminalWriteResponses,
-  KiloAudioTranscriptionsErrors,
-  KiloAudioTranscriptionsResponses,
-  KiloAuthStatusErrors,
-  KiloAuthStatusResponses,
-  KiloClawChatCredentialsErrors,
-  KiloClawChatCredentialsResponses,
-  KiloClawStatusErrors,
-  KiloClawStatusResponses,
-  KiloCloudSessionGetErrors,
-  KiloCloudSessionGetResponses,
-  KiloCloudSessionImportErrors,
-  KiloCloudSessionImportResponses,
-  KiloCloudSessionsErrors,
-  KiloCloudSessionsResponses,
-  KilocodeAgentManagerListErrors,
-  KilocodeAgentManagerListResponses,
-  KilocodeAgentManagerRejectErrors,
-  KilocodeAgentManagerRejectResponses,
-  KilocodeAgentManagerReplyErrors,
-  KilocodeAgentManagerReplyResponses,
-  KilocodeBackgroundJobCancelErrors,
-  KilocodeBackgroundJobCancelResponses,
-  KilocodeBackgroundJobPromoteErrors,
-  KilocodeBackgroundJobPromoteResponses,
-  KilocodeBackgroundJobsErrors,
-  KilocodeBackgroundJobsResponses,
-  KilocodeCommandFilesErrors,
-  KilocodeCommandFilesResponses,
-  KilocodeHeapSnapshotErrors,
-  KilocodeHeapSnapshotResponses,
-  KilocodeNotebookListErrors,
-  KilocodeNotebookListResponses,
-  KilocodeNotebookRejectErrors,
-  KilocodeNotebookRejectResponses,
-  KilocodeNotebookReplyErrors,
-  KilocodeNotebookReplyResponses,
-  KilocodeProviderUsageGetErrors,
-  KilocodeProviderUsageGetResponses,
-  KilocodeProviderUsageRefreshErrors,
-  KilocodeProviderUsageRefreshResponses,
-  KilocodeRemoveAgentErrors,
-  KilocodeRemoveAgentResponses,
-  KilocodeRemoveCommandErrors,
-  KilocodeRemoveCommandResponses,
-  KilocodeRemoveSkillErrors,
-  KilocodeRemoveSkillResponses,
-  KilocodeRemoveSnapshotErrors,
-  KilocodeRemoveSnapshotResponses,
-  KilocodeResumeSessionErrors,
-  KilocodeResumeSessionResponses,
-  KilocodeSessionImportMessageErrors,
-  KilocodeSessionImportMessageResponses,
-  KilocodeSessionImportPartErrors,
-  KilocodeSessionImportPartResponses,
-  KilocodeSessionImportProjectErrors,
-  KilocodeSessionImportProjectResponses,
-  KilocodeSessionImportSessionErrors,
-  KilocodeSessionImportSessionResponses,
-  KilocodeSessionModelUsageErrors,
-  KilocodeSessionModelUsageResponses,
-  KiloEditErrors,
-  KiloEditResponses,
-  KiloFimErrors,
-  KiloFimResponse,
-  KiloFimResponses,
-  KiloModelsImagesErrors,
-  KiloModelsImagesResponses,
-  KiloModelsTranscriptionsErrors,
-  KiloModelsTranscriptionsResponses,
-  KiloModesErrors,
-  KiloModesResponses,
-  KiloNotificationsErrors,
-  KiloNotificationsResponses,
-  KiloOrganizationSetErrors,
-  KiloOrganizationSetResponses,
-  KiloProfileErrors,
-  KiloProfileResponses,
+  SonderrAudioTranscriptionsErrors,
+  SonderrAudioTranscriptionsResponses,
+  SonderrAuthStatusErrors,
+  SonderrAuthStatusResponses,
+  SonderrClawChatCredentialsErrors,
+  SonderrClawChatCredentialsResponses,
+  SonderrClawStatusErrors,
+  SonderrClawStatusResponses,
+  SonderrCloudSessionGetErrors,
+  SonderrCloudSessionGetResponses,
+  SonderrCloudSessionImportErrors,
+  SonderrCloudSessionImportResponses,
+  SonderrCloudSessionsErrors,
+  SonderrCloudSessionsResponses,
+  SonderrAgentManagerListErrors,
+  SonderrAgentManagerListResponses,
+  SonderrAgentManagerRejectErrors,
+  SonderrAgentManagerRejectResponses,
+  SonderrAgentManagerReplyErrors,
+  SonderrAgentManagerReplyResponses,
+  SonderrBackgroundJobCancelErrors,
+  SonderrBackgroundJobCancelResponses,
+  SonderrBackgroundJobPromoteErrors,
+  SonderrBackgroundJobPromoteResponses,
+  SonderrBackgroundJobsErrors,
+  SonderrBackgroundJobsResponses,
+  SonderrCommandFilesErrors,
+  SonderrCommandFilesResponses,
+  SonderrHeapSnapshotErrors,
+  SonderrHeapSnapshotResponses,
+  SonderrNotebookListErrors,
+  SonderrNotebookListResponses,
+  SonderrNotebookRejectErrors,
+  SonderrNotebookRejectResponses,
+  SonderrNotebookReplyErrors,
+  SonderrNotebookReplyResponses,
+  SonderrProviderUsageGetErrors,
+  SonderrProviderUsageGetResponses,
+  SonderrProviderUsageRefreshErrors,
+  SonderrProviderUsageRefreshResponses,
+  SonderrRemoveAgentErrors,
+  SonderrRemoveAgentResponses,
+  SonderrRemoveCommandErrors,
+  SonderrRemoveCommandResponses,
+  SonderrRemoveSkillErrors,
+  SonderrRemoveSkillResponses,
+  SonderrRemoveSnapshotErrors,
+  SonderrRemoveSnapshotResponses,
+  SonderrResumeSessionErrors,
+  SonderrResumeSessionResponses,
+  SonderrSessionImportMessageErrors,
+  SonderrSessionImportMessageResponses,
+  SonderrSessionImportPartErrors,
+  SonderrSessionImportPartResponses,
+  SonderrSessionImportProjectErrors,
+  SonderrSessionImportProjectResponses,
+  SonderrSessionImportSessionErrors,
+  SonderrSessionImportSessionResponses,
+  SonderrSessionModelUsageErrors,
+  SonderrSessionModelUsageResponses,
+  SonderrEditErrors,
+  SonderrEditResponses,
+  SonderrFimErrors,
+  SonderrFimResponse,
+  SonderrFimResponses,
+  SonderrModelsImagesErrors,
+  SonderrModelsImagesResponses,
+  SonderrModelsTranscriptionsErrors,
+  SonderrModelsTranscriptionsResponses,
+  SonderrModesErrors,
+  SonderrModesResponses,
+  SonderrNotificationsErrors,
+  SonderrNotificationsResponses,
+  SonderrOrganizationSetErrors,
+  SonderrOrganizationSetResponses,
+  SonderrProfileErrors,
+  SonderrProfileResponses,
   LocationRef,
   LspStatusErrors,
   LspStatusResponses,
@@ -667,7 +667,7 @@ class HeyApiRegistry<T> {
   get(key?: string): T {
     const instance = this.instances.get(key ?? this.defaultKey)
     if (!instance) {
-      throw new Error(`No SDK client found. Create one with "new KiloClient()" to fix this error.`)
+      throw new Error(`No SDK client found. Create one with "new SonderrClient()" to fix this error.`)
     }
     return instance
   }
@@ -782,7 +782,7 @@ export class App extends HeyApiClient {
   /**
    * List agents
    *
-   * Get a list of all available AI agents in the Kilo system.
+   * Get a list of all available AI agents in the Sonderr system.
    */
   public agents<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -812,7 +812,7 @@ export class App extends HeyApiClient {
   /**
    * List skills
    *
-   * Get a list of all available skills in the Kilo system.
+   * Get a list of all available skills in the Sonderr system.
    */
   public skills<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -887,7 +887,7 @@ export class Capabilities extends HeyApiClient {
   /**
    * Get experimental capabilities
    *
-   * Get experimental features enabled on the Kilo server.
+   * Get experimental features enabled on the Sonderr server.
    */
   public get<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -991,7 +991,7 @@ export class Console extends HeyApiClient {
   /**
    * Switch active Console org
    *
-   * Persist a new active Console account/org selection for the current local Kilo state.
+   * Persist a new active Console account/org selection for the current local Sonderr state.
    */
   public switchOrg<ThrowOnError extends boolean = false>(
     parameters: {
@@ -1032,7 +1032,7 @@ export class Session extends HeyApiClient {
   /**
    * List sessions
    *
-   * Get a list of all Kilo sessions across projects, sorted by most recently updated. Archived sessions are excluded by default.
+   * Get a list of all Sonderr sessions across projects, sorted by most recently updated. Archived sessions are excluded by default.
    */
   public list<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -1513,7 +1513,7 @@ export class Config extends HeyApiClient {
   /**
    * Get global configuration
    *
-   * Retrieve the current global Kilo configuration settings and preferences.
+   * Retrieve the current global Sonderr configuration settings and preferences.
    */
   public get<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
     return (options?.client ?? this.client).get<GlobalConfigGetResponses, GlobalConfigGetErrors, ThrowOnError>({
@@ -1525,7 +1525,7 @@ export class Config extends HeyApiClient {
   /**
    * Update global configuration
    *
-   * Update global Kilo configuration settings and preferences.
+   * Update global Sonderr configuration settings and preferences.
    */
   public update<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -1551,7 +1551,7 @@ export class Global extends HeyApiClient {
   /**
    * Get health
    *
-   * Get health information about the Kilo server.
+   * Get health information about the Sonderr server.
    */
   public health<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
     return (options?.client ?? this.client).get<GlobalHealthResponses, GlobalHealthErrors, ThrowOnError>({
@@ -1563,7 +1563,7 @@ export class Global extends HeyApiClient {
   /**
    * Get global events
    *
-   * Subscribe to global events from the Kilo system using server-sent events.
+   * Subscribe to global events from the Sonderr system using server-sent events.
    */
   public event<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError, GlobalEventResponse>) {
     return (options?.client ?? this.client).sse.get<GlobalEventResponses, GlobalEventErrors, ThrowOnError>({
@@ -1575,7 +1575,7 @@ export class Global extends HeyApiClient {
   /**
    * Dispose instance
    *
-   * Clean up and dispose all Kilo instances, releasing all resources.
+   * Clean up and dispose all Sonderr instances, releasing all resources.
    */
   public dispose<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
     return (options?.client ?? this.client).post<GlobalDisposeResponses, GlobalDisposeErrors, ThrowOnError>({
@@ -1585,9 +1585,9 @@ export class Global extends HeyApiClient {
   }
 
   /**
-   * Upgrade kilo
+   * Upgrade sonderr
    *
-   * Upgrade kilo to the specified version or latest if not specified.
+   * Upgrade sonderr to the specified version or latest if not specified.
    */
   public upgrade<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -1650,7 +1650,7 @@ export class Config2 extends HeyApiClient {
   /**
    * Get configuration
    *
-   * Retrieve the current Kilo configuration settings and preferences.
+   * Retrieve the current Sonderr configuration settings and preferences.
    */
   public get<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -1680,7 +1680,7 @@ export class Config2 extends HeyApiClient {
   /**
    * Update configuration
    *
-   * Update Kilo configuration settings and preferences.
+   * Update Sonderr configuration settings and preferences.
    */
   public update<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -1921,7 +1921,7 @@ export class Config2 extends HeyApiClient {
   /**
    * Get project rules
    *
-   * List project instruction files used by Kilo and return their current contents.
+   * List project instruction files used by Sonderr and return their current contents.
    */
   public rules<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -2022,7 +2022,7 @@ export class Config2 extends HeyApiClient {
   /**
    * Update model state
    *
-   * Patch TUI-compatible model selections shared with Kilo Console.
+   * Patch TUI-compatible model selections shared with Sonderr Console.
    */
   public modelStateUpdate<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -2171,7 +2171,7 @@ export class Worktree extends HeyApiClient {
   /**
    * List worktrees
    *
-   * List all git worktrees for the current project and whether Kilo manages them.
+   * List all git worktrees for the current project and whether Sonderr manages them.
    */
   public list<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -2575,7 +2575,7 @@ export class Instance extends HeyApiClient {
   /**
    * Dispose instance
    *
-   * Clean up and dispose the current Kilo instance, releasing all resources.
+   * Clean up and dispose the current Sonderr instance, releasing all resources.
    */
   public dispose<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -2605,7 +2605,7 @@ export class Instance extends HeyApiClient {
   /**
    * Reload instance
    *
-   * Atomically dispose and reboot the current Kilo instance, reloading config, skills, agents, commands, and MCP prompts from disk. Returns 409 if a session is actively running.
+   * Atomically dispose and reboot the current Sonderr instance, reloading config, skills, agents, commands, and MCP prompts from disk. Returns 409 if a session is actively running.
    */
   public reload<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -2637,7 +2637,7 @@ export class Path extends HeyApiClient {
   /**
    * Get paths
    *
-   * Retrieve the current working directory and related path information for the Kilo instance.
+   * Retrieve the current working directory and related path information for the Sonderr instance.
    */
   public get<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -2839,7 +2839,7 @@ export class Command extends HeyApiClient {
   /**
    * List commands
    *
-   * Get a list of all available commands in the Kilo system.
+   * Get a list of all available commands in the Sonderr system.
    */
   public list<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -3292,7 +3292,7 @@ export class Project extends HeyApiClient {
   /**
    * List all projects
    *
-   * Get a list of projects that have been opened with Kilo.
+   * Get a list of projects that have been opened with Sonderr.
    */
   public list<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -3322,7 +3322,7 @@ export class Project extends HeyApiClient {
   /**
    * Get current project
    *
-   * Retrieve the currently active project that Kilo is working with.
+   * Retrieve the currently active project that Sonderr is working with.
    */
   public current<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -3489,7 +3489,7 @@ export class Pty extends HeyApiClient {
   /**
    * List PTY sessions
    *
-   * Get a list of all active pseudo-terminal (PTY) sessions managed by Kilo.
+   * Get a list of all active pseudo-terminal (PTY) sessions managed by Sonderr.
    */
   public list<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -4223,7 +4223,7 @@ export class Session2 extends HeyApiClient {
   /**
    * List sessions
    *
-   * Get a list of all Kilo sessions, sorted by most recently updated.
+   * Get a list of all Sonderr sessions, sorted by most recently updated.
    */
   public list<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -4265,7 +4265,7 @@ export class Session2 extends HeyApiClient {
   /**
    * Create session
    *
-   * Create a new Kilo session for interacting with AI assistants and managing conversations.
+   * Create a new Sonderr session for interacting with AI assistants and managing conversations.
    */
   public create<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -4386,7 +4386,7 @@ export class Session2 extends HeyApiClient {
   /**
    * Get session
    *
-   * Retrieve detailed information about a specific Kilo session.
+   * Retrieve detailed information about a specific Sonderr session.
    */
   public get<ThrowOnError extends boolean = false>(
     parameters: {
@@ -6654,9 +6654,9 @@ export class Indexing extends HeyApiClient {
   }
 
   /**
-   * List Kilo embedding models
+   * List Sonderr embedding models
    *
-   * Retrieve the embedding models available through the active Kilo account.
+   * Retrieve the embedding models available through the active Sonderr account.
    */
   public models<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -6919,7 +6919,7 @@ export class Audio extends HeyApiClient {
   /**
    * Speech to text transcription
    *
-   * Proxy an audio transcription request to the Kilo Gateway
+   * Proxy an audio transcription request to the Sonderr Gateway
    */
   public transcriptions<ThrowOnError extends boolean = false>(
     parameters: {
@@ -6953,11 +6953,11 @@ export class Audio extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KiloAudioTranscriptionsResponses,
-      KiloAudioTranscriptionsErrors,
+      SonderrAudioTranscriptionsResponses,
+      SonderrAudioTranscriptionsErrors,
       ThrowOnError
     >({
-      url: "/kilo/audio/transcriptions",
+      url: "/sonderr/audio/transcriptions",
       ...options,
       ...params,
       headers: {
@@ -6973,7 +6973,7 @@ export class Models extends HeyApiClient {
   /**
    * Image generation models
    *
-   * List image-capable models from the Kilo Gateway OpenRouter passthrough
+   * List image-capable models from the Sonderr Gateway OpenRouter passthrough
    */
   public images<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -6993,8 +6993,8 @@ export class Models extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<KiloModelsImagesResponses, KiloModelsImagesErrors, ThrowOnError>({
-      url: "/kilo/models/images",
+    return (options?.client ?? this.client).get<SonderrModelsImagesResponses, SonderrModelsImagesErrors, ThrowOnError>({
+      url: "/sonderr/models/images",
       ...options,
       ...params,
     })
@@ -7003,7 +7003,7 @@ export class Models extends HeyApiClient {
   /**
    * Speech-to-text models
    *
-   * List transcription-capable models from the Kilo Gateway catalog
+   * List transcription-capable models from the Sonderr Gateway catalog
    */
   public transcriptions<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -7024,11 +7024,11 @@ export class Models extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).get<
-      KiloModelsTranscriptionsResponses,
-      KiloModelsTranscriptionsErrors,
+      SonderrModelsTranscriptionsResponses,
+      SonderrModelsTranscriptionsErrors,
       ThrowOnError
     >({
-      url: "/kilo/models/transcriptions",
+      url: "/sonderr/models/transcriptions",
       ...options,
       ...params,
     })
@@ -7037,9 +7037,9 @@ export class Models extends HeyApiClient {
 
 export class Organization extends HeyApiClient {
   /**
-   * Update Kilo Gateway organization
+   * Update Sonderr Gateway organization
    *
-   * Switch to a different Kilo Gateway organization
+   * Switch to a different Sonderr Gateway organization
    */
   public set<ThrowOnError extends boolean = false>(
     parameters: {
@@ -7061,9 +7061,9 @@ export class Organization extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<KiloOrganizationSetResponses, KiloOrganizationSetErrors, ThrowOnError>(
+    return (options?.client ?? this.client).post<SonderrOrganizationSetResponses, SonderrOrganizationSetErrors, ThrowOnError>(
       {
-        url: "/kilo/organization",
+        url: "/sonderr/organization",
         ...options,
         ...params,
         headers: {
@@ -7078,9 +7078,9 @@ export class Organization extends HeyApiClient {
 
 export class Claw extends HeyApiClient {
   /**
-   * Get KiloClaw instance status
+   * Get SonderrClaw instance status
    *
-   * Fetch the user's KiloClaw instance status via the KiloClaw worker
+   * Fetch the user's SonderrClaw instance status via the SonderrClaw worker
    */
   public status<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -7100,17 +7100,17 @@ export class Claw extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<KiloClawStatusResponses, KiloClawStatusErrors, ThrowOnError>({
-      url: "/kilo/claw/status",
+    return (options?.client ?? this.client).get<SonderrClawStatusResponses, SonderrClawStatusErrors, ThrowOnError>({
+      url: "/sonderr/claw/status",
       ...options,
       ...params,
     })
   }
 
   /**
-   * Get KiloClaw chat credentials
+   * Get SonderrClaw chat credentials
    *
-   * Returns the bearer token and endpoint URLs the client uses to talk to the Kilo Chat worker and the Event Service. The bearer is the user's existing long-lived Kilo JWT — kilo-chat and event-service both verify it directly with NEXTAUTH_SECRET, so no separate token mint is needed.
+   * Returns the bearer token and endpoint URLs the client uses to talk to the Sonderr Chat worker and the Event Service. The bearer is the user's existing long-lived Sonderr JWT — sonderr-chat and event-service both verify it directly with NEXTAUTH_SECRET, so no separate token mint is needed.
    */
   public chatCredentials<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -7131,11 +7131,11 @@ export class Claw extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).get<
-      KiloClawChatCredentialsResponses,
-      KiloClawChatCredentialsErrors,
+      SonderrClawChatCredentialsResponses,
+      SonderrClawChatCredentialsErrors,
       ThrowOnError
     >({
-      url: "/kilo/claw/chat-credentials",
+      url: "/sonderr/claw/chat-credentials",
       ...options,
       ...params,
     })
@@ -7146,7 +7146,7 @@ export class Session3 extends HeyApiClient {
   /**
    * Get cloud session
    *
-   * Fetch full session data from the Kilo cloud for preview
+   * Fetch full session data from the Sonderr cloud for preview
    */
   public get<ThrowOnError extends boolean = false>(
     parameters: {
@@ -7168,8 +7168,8 @@ export class Session3 extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<KiloCloudSessionGetResponses, KiloCloudSessionGetErrors, ThrowOnError>({
-      url: "/kilo/cloud/session/{id}",
+    return (options?.client ?? this.client).get<SonderrCloudSessionGetResponses, SonderrCloudSessionGetErrors, ThrowOnError>({
+      url: "/sonderr/cloud/session/{id}",
       ...options,
       ...params,
     })
@@ -7201,11 +7201,11 @@ export class Session3 extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KiloCloudSessionImportResponses,
-      KiloCloudSessionImportErrors,
+      SonderrCloudSessionImportResponses,
+      SonderrCloudSessionImportErrors,
       ThrowOnError
     >({
-      url: "/kilo/cloud/session/import",
+      url: "/sonderr/cloud/session/import",
       ...options,
       ...params,
       headers: {
@@ -7224,11 +7224,11 @@ export class Cloud extends HeyApiClient {
   }
 }
 
-export class Kilo extends HeyApiClient {
+export class Sonderr extends HeyApiClient {
   /**
-   * Get Kilo Gateway profile
+   * Get Sonderr Gateway profile
    *
-   * Fetch user profile and organizations from Kilo Gateway
+   * Fetch user profile and organizations from Sonderr Gateway
    */
   public profile<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -7248,17 +7248,17 @@ export class Kilo extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<KiloProfileResponses, KiloProfileErrors, ThrowOnError>({
-      url: "/kilo/profile",
+    return (options?.client ?? this.client).get<SonderrProfileResponses, SonderrProfileErrors, ThrowOnError>({
+      url: "/sonderr/profile",
       ...options,
       ...params,
     })
   }
 
   /**
-   * Get Kilo authentication status
+   * Get Sonderr authentication status
    *
-   * Check whether a locally stored Kilo credential can authenticate Gateway requests
+   * Check whether a locally stored Sonderr credential can authenticate Gateway requests
    */
   public authStatus<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -7278,8 +7278,8 @@ export class Kilo extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<KiloAuthStatusResponses, KiloAuthStatusErrors, ThrowOnError>({
-      url: "/kilo/auth-status",
+    return (options?.client ?? this.client).get<SonderrAuthStatusResponses, SonderrAuthStatusErrors, ThrowOnError>({
+      url: "/sonderr/auth-status",
       ...options,
       ...params,
     })
@@ -7308,8 +7308,8 @@ export class Kilo extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<KiloModesResponses, KiloModesErrors, ThrowOnError>({
-      url: "/kilo/modes",
+    return (options?.client ?? this.client).get<SonderrModesResponses, SonderrModesErrors, ThrowOnError>({
+      url: "/sonderr/modes",
       ...options,
       ...params,
     })
@@ -7318,7 +7318,7 @@ export class Kilo extends HeyApiClient {
   /**
    * FIM completion
    *
-   * Proxy a Fill-in-the-Middle completion request to the Kilo Gateway
+   * Proxy a Fill-in-the-Middle completion request to the Sonderr Gateway
    */
   public fim<ThrowOnError extends boolean = false>(
     parameters: {
@@ -7331,7 +7331,7 @@ export class Kilo extends HeyApiClient {
       maxTokens?: number
       temperature?: number
     },
-    options?: Options<never, ThrowOnError, KiloFimResponse>,
+    options?: Options<never, ThrowOnError, SonderrFimResponse>,
   ) {
     const params = buildClientParams(
       [parameters],
@@ -7350,8 +7350,8 @@ export class Kilo extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).sse.post<KiloFimResponses, KiloFimErrors, ThrowOnError>({
-      url: "/kilo/fim",
+    return (options?.client ?? this.client).sse.post<SonderrFimResponses, SonderrFimErrors, ThrowOnError>({
+      url: "/sonderr/fim",
       ...options,
       ...params,
       headers: {
@@ -7410,8 +7410,8 @@ export class Kilo extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<KiloEditResponses, KiloEditErrors, ThrowOnError>({
-      url: "/kilo/edit",
+    return (options?.client ?? this.client).post<SonderrEditResponses, SonderrEditErrors, ThrowOnError>({
+      url: "/sonderr/edit",
       ...options,
       ...params,
       headers: {
@@ -7423,9 +7423,9 @@ export class Kilo extends HeyApiClient {
   }
 
   /**
-   * Get Kilo notifications
+   * Get Sonderr notifications
    *
-   * Fetch notifications from Kilo Gateway for CLI display
+   * Fetch notifications from Sonderr Gateway for CLI display
    */
   public notifications<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -7445,8 +7445,8 @@ export class Kilo extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<KiloNotificationsResponses, KiloNotificationsErrors, ThrowOnError>({
-      url: "/kilo/notifications",
+    return (options?.client ?? this.client).get<SonderrNotificationsResponses, SonderrNotificationsErrors, ThrowOnError>({
+      url: "/sonderr/notifications",
       ...options,
       ...params,
     })
@@ -7455,7 +7455,7 @@ export class Kilo extends HeyApiClient {
   /**
    * Get cloud sessions
    *
-   * Fetch cloud CLI sessions from Kilo API
+   * Fetch cloud CLI sessions from Sonderr API
    */
   public cloudSessions<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -7481,8 +7481,8 @@ export class Kilo extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).get<KiloCloudSessionsResponses, KiloCloudSessionsErrors, ThrowOnError>({
-      url: "/kilo/cloud-sessions",
+    return (options?.client ?? this.client).get<SonderrCloudSessionsResponses, SonderrCloudSessionsErrors, ThrowOnError>({
+      url: "/sonderr/cloud-sessions",
       ...options,
       ...params,
     })
@@ -7539,11 +7539,11 @@ export class Heap extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeHeapSnapshotResponses,
-      KilocodeHeapSnapshotErrors,
+      SonderrHeapSnapshotResponses,
+      SonderrHeapSnapshotErrors,
       ThrowOnError
     >({
-      url: "/kilocode/heap/snapshot",
+      url: "/sonderr/heap/snapshot",
       ...options,
       ...params,
     })
@@ -7575,11 +7575,11 @@ export class ProviderUsage extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).get<
-      KilocodeProviderUsageGetResponses,
-      KilocodeProviderUsageGetErrors,
+      SonderrProviderUsageGetResponses,
+      SonderrProviderUsageGetErrors,
       ThrowOnError
     >({
-      url: "/kilocode/provider-usage",
+      url: "/sonderr/provider-usage",
       ...options,
       ...params,
     })
@@ -7609,11 +7609,11 @@ export class ProviderUsage extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeProviderUsageRefreshResponses,
-      KilocodeProviderUsageRefreshErrors,
+      SonderrProviderUsageRefreshResponses,
+      SonderrProviderUsageRefreshErrors,
       ThrowOnError
     >({
-      url: "/kilocode/provider-usage/refresh",
+      url: "/sonderr/provider-usage/refresh",
       ...options,
       ...params,
     })
@@ -7645,11 +7645,11 @@ export class Notebook extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).get<
-      KilocodeNotebookListResponses,
-      KilocodeNotebookListErrors,
+      SonderrNotebookListResponses,
+      SonderrNotebookListErrors,
       ThrowOnError
     >({
-      url: "/kilocode/notebook",
+      url: "/sonderr/notebook",
       ...options,
       ...params,
     })
@@ -7683,11 +7683,11 @@ export class Notebook extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeNotebookReplyResponses,
-      KilocodeNotebookReplyErrors,
+      SonderrNotebookReplyResponses,
+      SonderrNotebookReplyErrors,
       ThrowOnError
     >({
-      url: "/kilocode/notebook/{requestID}/reply",
+      url: "/sonderr/notebook/{requestID}/reply",
       ...options,
       ...params,
       headers: {
@@ -7726,11 +7726,11 @@ export class Notebook extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeNotebookRejectResponses,
-      KilocodeNotebookRejectErrors,
+      SonderrNotebookRejectResponses,
+      SonderrNotebookRejectErrors,
       ThrowOnError
     >({
-      url: "/kilocode/notebook/{requestID}/reject",
+      url: "/sonderr/notebook/{requestID}/reject",
       ...options,
       ...params,
       headers: {
@@ -7767,11 +7767,11 @@ export class AgentManager extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).get<
-      KilocodeAgentManagerListResponses,
-      KilocodeAgentManagerListErrors,
+      SonderrAgentManagerListResponses,
+      SonderrAgentManagerListErrors,
       ThrowOnError
     >({
-      url: "/kilocode/agent-manager",
+      url: "/sonderr/agent-manager",
       ...options,
       ...params,
     })
@@ -7805,11 +7805,11 @@ export class AgentManager extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeAgentManagerReplyResponses,
-      KilocodeAgentManagerReplyErrors,
+      SonderrAgentManagerReplyResponses,
+      SonderrAgentManagerReplyErrors,
       ThrowOnError
     >({
-      url: "/kilocode/agent-manager/{requestID}/reply",
+      url: "/sonderr/agent-manager/{requestID}/reply",
       ...options,
       ...params,
       headers: {
@@ -7848,11 +7848,11 @@ export class AgentManager extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeAgentManagerRejectResponses,
-      KilocodeAgentManagerRejectErrors,
+      SonderrAgentManagerRejectResponses,
+      SonderrAgentManagerRejectErrors,
       ThrowOnError
     >({
-      url: "/kilocode/agent-manager/{requestID}/reject",
+      url: "/sonderr/agent-manager/{requestID}/reject",
       ...options,
       ...params,
       headers: {
@@ -7891,11 +7891,11 @@ export class BackgroundJob extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeBackgroundJobCancelResponses,
-      KilocodeBackgroundJobCancelErrors,
+      SonderrBackgroundJobCancelResponses,
+      SonderrBackgroundJobCancelErrors,
       ThrowOnError
     >({
-      url: "/kilocode/background-jobs/{jobID}/cancel",
+      url: "/sonderr/background-jobs/{jobID}/cancel",
       ...options,
       ...params,
     })
@@ -7927,11 +7927,11 @@ export class BackgroundJob extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeBackgroundJobPromoteResponses,
-      KilocodeBackgroundJobPromoteErrors,
+      SonderrBackgroundJobPromoteResponses,
+      SonderrBackgroundJobPromoteErrors,
       ThrowOnError
     >({
-      url: "/kilocode/background-jobs/{jobID}/promote",
+      url: "/sonderr/background-jobs/{jobID}/promote",
       ...options,
       ...params,
     })
@@ -7987,11 +7987,11 @@ export class SessionImport extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeSessionImportProjectResponses,
-      KilocodeSessionImportProjectErrors,
+      SonderrSessionImportProjectResponses,
+      SonderrSessionImportProjectErrors,
       ThrowOnError
     >({
-      url: "/kilocode/session-import/project",
+      url: "/sonderr/session-import/project",
       ...options,
       ...params,
       headers: {
@@ -8083,11 +8083,11 @@ export class SessionImport extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeSessionImportSessionResponses,
-      KilocodeSessionImportSessionErrors,
+      SonderrSessionImportSessionResponses,
+      SonderrSessionImportSessionErrors,
       ThrowOnError
     >({
-      url: "/kilocode/session-import/session",
+      url: "/sonderr/session-import/session",
       ...options,
       ...params,
       headers: {
@@ -8175,11 +8175,11 @@ export class SessionImport extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeSessionImportMessageResponses,
-      KilocodeSessionImportMessageErrors,
+      SonderrSessionImportMessageResponses,
+      SonderrSessionImportMessageErrors,
       ThrowOnError
     >({
-      url: "/kilocode/session-import/message",
+      url: "/sonderr/session-import/message",
       ...options,
       ...params,
       headers: {
@@ -8307,11 +8307,11 @@ export class SessionImport extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeSessionImportPartResponses,
-      KilocodeSessionImportPartErrors,
+      SonderrSessionImportPartResponses,
+      SonderrSessionImportPartErrors,
       ThrowOnError
     >({
-      url: "/kilocode/session-import/part",
+      url: "/sonderr/session-import/part",
       ...options,
       ...params,
       headers: {
@@ -8323,7 +8323,7 @@ export class SessionImport extends HeyApiClient {
   }
 }
 
-export class Kilocode extends HeyApiClient {
+export class Sonderr extends HeyApiClient {
   /**
    * Resume an interrupted session
    *
@@ -8354,11 +8354,11 @@ export class Kilocode extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeResumeSessionResponses,
-      KilocodeResumeSessionErrors,
+      SonderrResumeSessionResponses,
+      SonderrResumeSessionErrors,
       ThrowOnError
     >({
-      url: "/kilocode/session/{sessionID}/resume",
+      url: "/sonderr/session/{sessionID}/resume",
       ...options,
       ...params,
       headers: {
@@ -8393,11 +8393,11 @@ export class Kilocode extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).get<
-      KilocodeCommandFilesResponses,
-      KilocodeCommandFilesErrors,
+      SonderrCommandFilesResponses,
+      SonderrCommandFilesErrors,
       ThrowOnError
     >({
-      url: "/kilocode/command/files",
+      url: "/sonderr/command/files",
       ...options,
       ...params,
     })
@@ -8429,11 +8429,11 @@ export class Kilocode extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeRemoveCommandResponses,
-      KilocodeRemoveCommandErrors,
+      SonderrRemoveCommandResponses,
+      SonderrRemoveCommandErrors,
       ThrowOnError
     >({
-      url: "/kilocode/command/remove",
+      url: "/sonderr/command/remove",
       ...options,
       ...params,
       headers: {
@@ -8469,9 +8469,9 @@ export class Kilocode extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<KilocodeRemoveSkillResponses, KilocodeRemoveSkillErrors, ThrowOnError>(
+    return (options?.client ?? this.client).post<SonderrRemoveSkillResponses, SonderrRemoveSkillErrors, ThrowOnError>(
       {
-        url: "/kilocode/skill/remove",
+        url: "/sonderr/skill/remove",
         ...options,
         ...params,
         headers: {
@@ -8510,9 +8510,9 @@ export class Kilocode extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<KilocodeRemoveAgentResponses, KilocodeRemoveAgentErrors, ThrowOnError>(
+    return (options?.client ?? this.client).post<SonderrRemoveAgentResponses, SonderrRemoveAgentErrors, ThrowOnError>(
       {
-        url: "/kilocode/agent/remove",
+        url: "/sonderr/agent/remove",
         ...options,
         ...params,
         headers: {
@@ -8550,11 +8550,11 @@ export class Kilocode extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).post<
-      KilocodeRemoveSnapshotResponses,
-      KilocodeRemoveSnapshotErrors,
+      SonderrRemoveSnapshotResponses,
+      SonderrRemoveSnapshotErrors,
       ThrowOnError
     >({
-      url: "/kilocode/snapshot/remove",
+      url: "/sonderr/snapshot/remove",
       ...options,
       ...params,
       headers: {
@@ -8591,8 +8591,8 @@ export class Kilocode extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).get<
-      KilocodeSessionModelUsageResponses,
-      KilocodeSessionModelUsageErrors,
+      SonderrSessionModelUsageResponses,
+      SonderrSessionModelUsageErrors,
       ThrowOnError
     >({
       url: "/session/{sessionID}/model-usage",
@@ -8627,11 +8627,11 @@ export class Kilocode extends HeyApiClient {
       ],
     )
     return (options?.client ?? this.client).get<
-      KilocodeBackgroundJobsResponses,
-      KilocodeBackgroundJobsErrors,
+      SonderrBackgroundJobsResponses,
+      SonderrBackgroundJobsErrors,
       ThrowOnError
     >({
-      url: "/kilocode/background-jobs",
+      url: "/sonderr/background-jobs",
       ...options,
       ...params,
     })
@@ -8697,7 +8697,7 @@ export class AnacondaDesktop extends HeyApiClient {
       AnacondaDesktopStatusErrors,
       ThrowOnError
     >({
-      url: "/kilocode/anaconda-desktop/status",
+      url: "/sonderr/anaconda-desktop/status",
       ...options,
       ...params,
     })
@@ -8728,7 +8728,7 @@ export class AnacondaDesktop extends HeyApiClient {
     )
     return (options?.client ?? this.client).post<AnacondaDesktopOpenResponses, AnacondaDesktopOpenErrors, ThrowOnError>(
       {
-        url: "/kilocode/anaconda-desktop/open",
+        url: "/sonderr/anaconda-desktop/open",
         ...options,
         ...params,
       },
@@ -8738,7 +8738,7 @@ export class AnacondaDesktop extends HeyApiClient {
   /**
    * Synchronize Anaconda Desktop provider
    *
-   * Discover the active local inference server and replace Kilo provider authentication metadata.
+   * Discover the active local inference server and replace Sonderr provider authentication metadata.
    */
   public sync<ThrowOnError extends boolean = false>(
     parameters?: {
@@ -8762,7 +8762,7 @@ export class AnacondaDesktop extends HeyApiClient {
     )
     return (options?.client ?? this.client).post<AnacondaDesktopSyncResponses, AnacondaDesktopSyncErrors, ThrowOnError>(
       {
-        url: "/kilocode/anaconda-desktop/sync",
+        url: "/sonderr/anaconda-desktop/sync",
         ...options,
         ...params,
         headers: {
@@ -9166,7 +9166,7 @@ export class Telemetry extends HeyApiClient {
   /**
    * Capture telemetry event
    *
-   * Forward a telemetry event to PostHog via kilo-telemetry.
+   * Forward a telemetry event to PostHog via sonderr-telemetry.
    */
   public capture<ThrowOnError extends boolean = false>(
     parameters: {
@@ -9207,7 +9207,7 @@ export class Telemetry extends HeyApiClient {
   /**
    * Set PostHog telemetry enabled state
    *
-   * Update the PostHog client's opt-in/out state at runtime. The CLI reads KILO_TELEMETRY_LEVEL once at spawn — this route lets clients (e.g. the VS Code extension) propagate runtime telemetry consent changes.
+   * Update the PostHog client's opt-in/out state at runtime. The CLI reads SONDERR_TELEMETRY_LEVEL once at spawn — this route lets clients (e.g. the VS Code extension) propagate runtime telemetry consent changes.
    */
   public setEnabled<ThrowOnError extends boolean = false>(
     parameters: {
@@ -10084,7 +10084,7 @@ export class Session4 extends HeyApiClient {
   /**
    * List active sessions
    *
-   * Retrieve foreground Session drains currently owned by this Kilo process. Sessions absent from the result are inactive.
+   * Retrieve foreground Session drains currently owned by this Sonderr process. Sessions absent from the result are inactive.
    */
   public active<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
     return (options?.client ?? this.client).get<V2SessionActiveResponses, V2SessionActiveErrors, ThrowOnError>({
@@ -10353,7 +10353,7 @@ export class Session4 extends HeyApiClient {
   /**
    * Interrupt session execution
    *
-   * Interrupt active execution owned by this Kilo process. Idle interruption is a no-op.
+   * Interrupt active execution owned by this Sonderr process. Idle interruption is a no-op.
    */
   public interrupt<ThrowOnError extends boolean = false>(
     parameters: {
@@ -11670,12 +11670,12 @@ export class V2 extends HeyApiClient {
   }
 }
 
-export class KiloClient extends HeyApiClient {
-  public static readonly __registry = new HeyApiRegistry<KiloClient>()
+export class SonderrClient extends HeyApiClient {
+  public static readonly __registry = new HeyApiRegistry<SonderrClient>()
 
   constructor(args?: { client?: Client; key?: string }) {
     super(args)
-    KiloClient.__registry.set(this, args?.key)
+    SonderrClient.__registry.set(this, args?.key)
   }
 
   private _auth?: Auth
@@ -11843,14 +11843,14 @@ export class KiloClient extends HeyApiClient {
     return (this._interactiveTerminal ??= new InteractiveTerminal({ client: this.client }))
   }
 
-  private _kilo?: Kilo
-  get kilo(): Kilo {
-    return (this._kilo ??= new Kilo({ client: this.client }))
+  private _sonderr?: Sonderr
+  get sonderr(): Sonderr {
+    return (this._sonderr ??= new Sonderr({ client: this.client }))
   }
 
-  private _kilocode?: Kilocode
-  get kilocode(): Kilocode {
-    return (this._kilocode ??= new Kilocode({ client: this.client }))
+  private _sonderr?: Sonderr
+  get sonderr(): Sonderr {
+    return (this._sonderr ??= new Sonderr({ client: this.client }))
   }
 
   private _anacondaDesktop?: AnacondaDesktop

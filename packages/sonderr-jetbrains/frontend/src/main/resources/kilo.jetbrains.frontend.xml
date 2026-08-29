@@ -1,0 +1,373 @@
+<idea-plugin>
+    <dependencies>
+        <module name="intellij.platform.frontend"/>
+        <plugin id="org.jetbrains.plugins.terminal"/>
+        <module name="intellij.terminal.frontend"/>
+        <module name="sonderr.jetbrains.shared"/>
+    </dependencies>
+
+    <resource-bundle>messages.SonderrBundle</resource-bundle>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="ai.sonderr.client.migration.SonderrMigrationService"/>
+        <applicationService serviceImplementation="ai.sonderr.client.autocomplete.SonderrAutocompleteSettingsService"/>
+        <customPasteProvider implementation="ai.sonderr.client.session.ui.prompt.PromptAttachmentPasteProvider"/>
+
+        <notificationGroup id="Sonderr"
+                           displayType="BALLOON"
+                           bundle="messages.SonderrBundle"
+                           key="notification.group.sonderr"/>
+
+        <toolWindow id="Sonderr"
+                    anchor="left"
+                    icon="/icons/sonderr.svg"
+                    factoryClass="ai.sonderr.client.SonderrToolWindowFactory"/>
+
+        <fileEditorProvider id="SonderrVfsEditor" implementation="ai.sonderr.client.vfs.SonderrFileEditorProvider"/>
+        <fileEditorProvider id="SonderrVfsSourceEditor"
+                            order="after SonderrVfsEditor"
+                            implementation="ai.sonderr.client.vfs.SonderrSourceEditorProvider"/>
+        <fileType name="SONDERR_WORKTREE_SESSION"
+                  implementationClass="ai.sonderr.client.agentManager.worktree.WorktreeSessionFileType"
+                  fieldName="INSTANCE"/>
+
+        <applicationConfigurable
+                parentId="tools"
+                id="ai.sonderr.jetbrains.settings"
+                instance="ai.sonderr.client.settings.SonderrSettingsConfigurable"
+                bundle="messages.SonderrBundle"
+                key="settings.sonderr.displayName"/>
+
+        <applicationConfigurable
+                parentId="ai.sonderr.jetbrains.settings"
+                id="ai.sonderr.jetbrains.settings.profile"
+                groupWeight="5"
+                instance="ai.sonderr.client.settings.profile.UserProfileConfigurable"
+                bundle="messages.SonderrBundle"
+                key="settings.profile.displayName"/>
+
+        <applicationConfigurable
+                parentId="ai.sonderr.jetbrains.settings"
+                id="ai.sonderr.jetbrains.settings.models"
+                groupWeight="4"
+                instance="ai.sonderr.client.settings.models.ModelsConfigurable"
+                bundle="messages.SonderrBundle"
+                key="settings.models.displayName"/>
+
+        <applicationConfigurable
+                parentId="ai.sonderr.jetbrains.settings"
+                id="ai.sonderr.jetbrains.settings.providers"
+                groupWeight="2"
+                instance="ai.sonderr.client.settings.providers.ProvidersConfigurable"
+                bundle="messages.SonderrBundle"
+                key="settings.providers.displayName"/>
+
+        <applicationConfigurable
+                parentId="ai.sonderr.jetbrains.settings"
+                id="ai.sonderr.jetbrains.settings.agentBehavior"
+                groupWeight="1"
+                instance="ai.sonderr.client.settings.agents.AgentBehaviorConfigurable"
+                bundle="messages.SonderrBundle"
+                key="settings.agentBehavior.displayName"/>
+
+        <applicationConfigurable
+                parentId="ai.sonderr.jetbrains.settings"
+                id="ai.sonderr.jetbrains.settings.context"
+                groupWeight="-1"
+                instance="ai.sonderr.client.settings.context.ContextConfigurable"
+                bundle="messages.SonderrBundle"
+                key="settings.context.displayName"/>
+
+        <applicationConfigurable
+                parentId="ai.sonderr.jetbrains.settings"
+                id="ai.sonderr.jetbrains.settings.autoApprove"
+                groupWeight="0"
+                instance="ai.sonderr.client.settings.autoapprove.AutoApproveConfigurable"
+                bundle="messages.SonderrBundle"
+                key="settings.autoApprove.displayName"/>
+
+        <applicationConfigurable
+                parentId="ai.sonderr.jetbrains.settings"
+                id="ai.sonderr.jetbrains.settings.advanced"
+                groupWeight="-2"
+                instance="ai.sonderr.client.settings.AdvancedConfigurable"
+                bundle="messages.SonderrBundle"
+                key="settings.advanced.displayName"/>
+
+        <applicationConfigurable
+                parentId="ai.sonderr.jetbrains.settings.agentBehavior"
+                id="ai.sonderr.jetbrains.settings.agentBehavior.agents"
+                instance="ai.sonderr.client.settings.agents.AgentsConfigurable"
+                bundle="messages.SonderrBundle"
+                key="settings.agentBehavior.agents.displayName"/>
+
+        <applicationConfigurable
+                parentId="ai.sonderr.jetbrains.settings.agentBehavior"
+                id="ai.sonderr.jetbrains.settings.agentBehavior.mcp"
+                instance="ai.sonderr.client.settings.agents.McpConfigurable"
+                bundle="messages.SonderrBundle"
+                key="settings.agentBehavior.mcp.displayName"/>
+
+        <applicationConfigurable
+                parentId="ai.sonderr.jetbrains.settings.agentBehavior"
+                id="ai.sonderr.jetbrains.settings.agentBehavior.skills"
+                instance="ai.sonderr.client.settings.agents.SkillsConfigurable"
+                bundle="messages.SonderrBundle"
+                key="settings.agentBehavior.skills.displayName"/>
+
+        <applicationConfigurable
+                parentId="ai.sonderr.jetbrains.settings.agentBehavior"
+                id="ai.sonderr.jetbrains.settings.agentBehavior.workflows"
+                instance="ai.sonderr.client.settings.agents.WorkflowsConfigurable"
+                bundle="messages.SonderrBundle"
+                key="settings.agentBehavior.workflows.displayName"/>
+
+        <applicationConfigurable
+                parentId="ai.sonderr.jetbrains.settings.agentBehavior"
+                id="ai.sonderr.jetbrains.settings.agentBehavior.rules"
+                instance="ai.sonderr.client.settings.rules.RulesConfigurable"
+                bundle="messages.SonderrBundle"
+                key="settings.agentBehavior.rules.displayName"/>
+
+        <registryKey key="sonderr.session.condense"
+                     description="Enable event condensing in the session update queue (merges redundant snapshots before model delivery)."
+                     defaultValue="true"
+                     restartRequired="false"
+                     overrides="false"/>
+        <registryKey key="sonderr.session.flushMs"
+                     description="Session update queue flush cadence in milliseconds."
+                     defaultValue="150"
+                     restartRequired="false"
+                     overrides="false"/>
+        <registryKey key="sonderr.session.inactive.disposeTimeoutMs"
+                     description="Milliseconds before hidden session UI is disposed after switching away."
+                     defaultValue="180000"
+                     restartRequired="false"
+                     overrides="false"/>
+        <registryKey key="sonderr.session.validateRoots"
+                      description="Treat settled (non-streaming) transcript turns as Swing validate roots so their internal repaints do not relayout the whole transcript."
+                      defaultValue="true"
+                      restartRequired="false"
+                      overrides="false"/>
+        <registryKey key="sonderr.diagram.inline.enabled"
+                     description="Render Mermaid diagram fences inline in markdown session views."
+                     defaultValue="true"
+                     restartRequired="false"
+                     overrides="false"/>
+    </extensions>
+
+    <applicationListeners>
+        <listener class="ai.sonderr.client.plugin.SonderrFrontendDynamicPluginListener"
+                  topic="com.intellij.ide.plugins.DynamicPluginListener"/>
+    </applicationListeners>
+
+    <actions>
+        <action id="Sonderr.Restart"
+                class="ai.sonderr.client.actions.RestartSonderrAction"/>
+
+        <action id="Sonderr.Reinstall"
+                class="ai.sonderr.client.actions.ReinstallSonderrAction"/>
+
+        <action id="Sonderr.CoreInfo"
+                class="ai.sonderr.client.actions.CoreInfoAction"/>
+
+        <action id="Sonderr.OpenSettings"
+                class="ai.sonderr.client.actions.OpenSettingsAction"
+                icon="AllIcons.General.GearPlain"/>
+
+        <action id="Sonderr.OpenLocalConfig"
+                class="ai.sonderr.client.actions.OpenLocalConfigAction"/>
+
+        <action id="Sonderr.OpenGlobalConfig"
+                class="ai.sonderr.client.actions.OpenGlobalConfigAction"/>
+
+        <action id="Sonderr.ForceMigration"
+                class="ai.sonderr.client.actions.ForceMigrationAction"/>
+
+        <group id="Sonderr.CliGroup" text="Core" popup="true">
+            <reference ref="Sonderr.Restart"/>
+            <reference ref="Sonderr.Reinstall"/>
+            <separator/>
+            <reference ref="Sonderr.CoreInfo"/>
+        </group>
+
+        <group id="Sonderr.OpenConfigGroup" text="Config Files" popup="true">
+            <reference ref="Sonderr.OpenLocalConfig"/>
+            <reference ref="Sonderr.OpenGlobalConfig"/>
+            <separator/>
+            <reference ref="Sonderr.ForceMigration"/>
+        </group>
+
+        <group id="Sonderr.SettingsGroup">
+            <reference ref="Sonderr.OpenSettings"/>
+            <separator/>
+            <reference ref="Sonderr.OpenConfigGroup"/>
+            <separator/>
+            <reference ref="Sonderr.CliGroup"/>
+        </group>
+
+        <action id="Sonderr.Settings"
+                class="ai.sonderr.client.actions.SonderrSettingsAction"
+                icon="AllIcons.General.GearPlain"/>
+
+        <action id="Sonderr.NewSession"
+                class="ai.sonderr.client.actions.NewSessionAction"/>
+
+        <action id="Sonderr.NewWorktree"
+                class="ai.sonderr.client.actions.NewWorktreeAction"/>
+
+        <action id="Sonderr.Chat.NewWorktree"
+                class="ai.sonderr.client.actions.ChatNewWorktreeAction"
+                text="New Worktree"
+                description="Create a new git worktree with its own branch and session"/>
+
+        <action id="Sonderr.Chat.MoveToWorktree"
+                class="ai.sonderr.client.actions.ChatMoveToWorktreeAction"
+                text="Move to Worktree"
+                description="Move this session into a new git worktree"/>
+
+        <action id="Sonderr.History"
+                class="ai.sonderr.client.actions.HistoryAction"/>
+
+        <!-- Declarative toolbar group for the Sonderr tool window title bar -->
+        <group id="Sonderr.ToolWindowToolbar">
+            <reference ref="Sonderr.NewSession"/>
+            <reference ref="Sonderr.NewWorktree"/>
+            <reference ref="Sonderr.History"/>
+            <reference ref="Sonderr.Settings"/>
+        </group>
+
+        <action id="Sonderr.SendPrompt"
+                class="ai.sonderr.client.actions.SendPromptAction"
+                text="Send Prompt"
+                description="Send the current Sonderr prompt">
+            <keyboard-shortcut keymap="$default"
+                               first-keystroke="ENTER"/>
+            <keyboard-shortcut keymap="Mac OS X 10.5+"
+                               first-keystroke="meta ENTER"/>
+            <keyboard-shortcut keymap="$default"
+                               first-keystroke="control ENTER"/>
+        </action>
+
+        <action id="Sonderr.StopSession"
+                class="ai.sonderr.client.actions.StopSessionAction"
+                text="Stop Session"
+                description="Stop the current Sonderr session">
+            <keyboard-shortcut keymap="$default"
+                               first-keystroke="alt S"/>
+        </action>
+
+        <action id="Sonderr.Session.Open"
+                class="ai.sonderr.client.actions.OpenSessionAction">
+            <keyboard-shortcut keymap="$default" first-keystroke="ENTER"/>
+        </action>
+
+        <action id="Sonderr.Session.Rename"
+                class="ai.sonderr.client.actions.RenameSessionAction"
+                use-shortcut-of="RenameElement"/>
+
+        <action id="Sonderr.Session.Delete"
+                class="ai.sonderr.client.actions.DeleteSessionAction"
+                use-shortcut-of="$Delete"/>
+
+        <action id="Sonderr.Worktree.Rename"
+                class="ai.sonderr.client.actions.RenameWorktreeAction"/>
+
+        <action id="Sonderr.Worktree.Delete"
+                class="ai.sonderr.client.actions.DeleteWorktreeAction"/>
+
+        <action id="Sonderr.Worktree.OpenPr"
+                class="ai.sonderr.client.actions.OpenWorktreePrAction"/>
+
+        <action id="Sonderr.Worktree.OpenDiff"
+                class="ai.sonderr.client.actions.OpenWorktreeDiffAction"/>
+
+        <action id="Sonderr.WorktreeSession.Rename"
+                class="ai.sonderr.client.actions.RenameWorktreeSessionAction"/>
+
+        <action id="Sonderr.WorktreeSession.Delete"
+                class="ai.sonderr.client.actions.DeleteWorktreeSessionAction"/>
+
+        <group id="Sonderr.Worktree.RowMenu">
+            <reference ref="Sonderr.Worktree.Rename"/>
+            <separator/>
+            <reference ref="Sonderr.Worktree.OpenPr"/>
+            <reference ref="Sonderr.Worktree.OpenDiff"/>
+            <separator/>
+            <reference ref="Sonderr.Worktree.Delete"/>
+        </group>
+
+        <group id="Sonderr.WorktreeSession.RowMenu">
+            <reference ref="Sonderr.WorktreeSession.Rename"/>
+            <reference ref="Sonderr.WorktreeSession.Delete"/>
+        </group>
+
+        <group id="Sonderr.History.ContextMenu">
+            <reference ref="Sonderr.Session.Open"/>
+            <separator/>
+            <reference ref="Sonderr.Session.Rename"/>
+            <reference ref="Sonderr.Session.Delete"/>
+        </group>
+
+        <!-- Text and descriptions come from SonderrBundle via action.<id>.text / .description. -->
+        <action id="Sonderr.Session.AutoApprove"
+                class="ai.sonderr.client.actions.SessionAutoApproveAction"/>
+
+        <action id="Sonderr.Session.CompareToBase"
+                class="ai.sonderr.client.actions.CompareToBaseAction"/>
+
+        <action id="Sonderr.Session.OpenPr"
+                class="ai.sonderr.client.actions.OpenSessionPrAction"/>
+
+        <action id="Sonderr.Session.CopyPrRef"
+                class="ai.sonderr.client.actions.CopySessionPrRefAction"/>
+
+        <action id="Sonderr.Session.CopyId"
+                class="ai.sonderr.client.actions.CopySessionIdAction"/>
+
+        <action id="Sonderr.Session.Share"
+                class="ai.sonderr.client.actions.ShareSessionAction"/>
+
+        <action id="Sonderr.Session.CopyShareLink"
+                class="ai.sonderr.client.actions.CopyShareLinkAction"/>
+
+        <!--
+          Right-click menu inside a chat session. Every item resolves its context from
+          SessionActionsKeys.ACTIONS (or PromptDataKeys.SEND) which SessionUi publishes, so the menu
+          works from any point in the session. Items hide rather than disable when they do not apply,
+          which keeps the menu short in the common case. New Worktree / Move to Worktree live only on
+          the branch dock toolbar, not here.
+        -->
+        <group id="Sonderr.Session.ContextMenu">
+            <reference ref="Sonderr.Session.AutoApprove"/>
+            <separator/>
+            <reference ref="Sonderr.Session.CompareToBase"/>
+            <reference ref="Sonderr.Session.OpenPr"/>
+            <reference ref="Sonderr.Session.CopyPrRef"/>
+            <separator/>
+            <reference ref="$Copy"/>
+            <separator/>
+            <reference ref="Sonderr.Session.CopyId"/>
+            <reference ref="Sonderr.Session.Share"/>
+            <reference ref="Sonderr.Session.CopyShareLink"/>
+            <separator/>
+            <reference ref="Sonderr.StopSession"/>
+        </group>
+
+        <!--
+          Popup shown from the "more" icon in the prompt bar. Same SessionActionsKeys.ACTIONS context
+          as the context menu, with Copy and Stop reserved for the right-click menu.
+        -->
+        <group id="Sonderr.Session.PromptMenu">
+            <reference ref="Sonderr.Session.AutoApprove"/>
+            <separator/>
+            <reference ref="Sonderr.Session.CompareToBase"/>
+            <reference ref="Sonderr.Session.OpenPr"/>
+            <reference ref="Sonderr.Session.CopyPrRef"/>
+            <separator/>
+            <reference ref="Sonderr.Session.CopyId"/>
+            <reference ref="Sonderr.Session.Share"/>
+            <reference ref="Sonderr.Session.CopyShareLink"/>
+        </group>
+    </actions>
+</idea-plugin>

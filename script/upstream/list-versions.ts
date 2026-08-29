@@ -6,7 +6,7 @@
  *   bun run script/upstream/list-versions.ts
  */
 
-import { getAvailableUpstreamVersions, getCurrentKiloVersion } from "./utils/version"
+import { getAvailableUpstreamVersions, getCurrentSonderrVersion } from "./utils/version"
 import { fetchUpstream, hasUpstreamRemote, isAncestor } from "./utils/git"
 import { header, info, success, warn, error } from "./utils/logger"
 
@@ -16,7 +16,7 @@ async function main() {
   // Check upstream remote
   if (!(await hasUpstreamRemote())) {
     error("No 'upstream' remote found. Please add it:")
-    info("  git remote add upstream git@github.com:anomalyco/opencode.git")
+    info("  git remote add upstream git@github.com:anomalyco/sonderr.git")
     process.exit(1)
   }
 
@@ -24,10 +24,10 @@ async function main() {
   await fetchUpstream()
 
   const versions = await getAvailableUpstreamVersions()
-  const kiloVersion = await getCurrentKiloVersion()
+  const sonderrVersion = await getCurrentSonderrVersion()
 
   console.log()
-  success(`Current Kilo version: ${kiloVersion}`)
+  success(`Current Sonderr version: ${sonderrVersion}`)
   console.log()
 
   info("Available upstream versions (newest first):")

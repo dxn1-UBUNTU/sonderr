@@ -13,19 +13,19 @@ import {
   transformDependencies,
 } from "./transform-package-json"
 
-test("fixScripts preserves Kilo-only root scripts from base", () => {
+test("fixScripts preserves Sonderr-only root scripts from base", () => {
   const ours = {
     scripts: {
-      "dev-setup": "kilo dev-setup",
-      postinstall: "bun run --cwd packages/opencode fix-node-pty && bun run script/setup-git.ts",
-      extension: "bun --cwd packages/kilo-vscode script/launch.ts",
-      "extension:isolated": "bun --cwd packages/kilo-vscode script/launch.ts --isolated",
-      "extension:isolated:clean": "bun --cwd packages/kilo-vscode script/launch.ts --isolated --clean",
+      "dev-setup": "sonderr dev-setup",
+      postinstall: "bun run --cwd packages/cli fix-node-pty && bun run script/setup-git.ts",
+      extension: "bun --cwd packages/sonderr-vscode script/launch.ts",
+      "extension:isolated": "bun --cwd packages/sonderr-vscode script/launch.ts --isolated",
+      "extension:isolated:clean": "bun --cwd packages/sonderr-vscode script/launch.ts --isolated --clean",
       "test:script:ci": "bun test ./script",
     },
   }
   const pkg: Record<string, unknown> = {
-    scripts: { postinstall: "bun run --cwd packages/opencode fix-node-pty" },
+    scripts: { postinstall: "bun run --cwd packages/cli fix-node-pty" },
   }
   const changes: string[] = []
   fixScripts(pkg, "package.json", ours, changes)
@@ -40,11 +40,11 @@ test("fixScripts preserves Kilo-only root scripts from base", () => {
   expect(changes.some((c) => c.includes("dev-setup"))).toBe(true)
 })
 
-test("fixRepository preserves Kilo package links", () => {
+test("fixRepository preserves Sonderr package links", () => {
   const ours = {
-    repository: { url: "https://github.com/Kilo-Org/kilocode.git" },
-    homepage: "https://github.com/Kilo-Org/kilocode/tree/main/packages/example",
-    bugs: "https://github.com/Kilo-Org/kilocode/issues",
+    repository: { url: "https://github.com/Sonderr-Org/sonderr.git" },
+    homepage: "https://github.com/Sonderr-Org/sonderr/tree/main/packages/example",
+    bugs: "https://github.com/Sonderr-Org/sonderr/issues",
   }
   const pkg: Record<string, unknown> = {
     repository: { url: "https://example.com/upstream.git" },
@@ -59,16 +59,16 @@ test("fixRepository preserves Kilo package links", () => {
   expect(pkg.homepage).toBe(ours.homepage)
   expect(pkg.bugs).toBe(ours.bugs)
   expect(changes).toEqual([
-    "repository: preserved Kilo metadata",
-    "homepage: preserved Kilo metadata",
-    "bugs: preserved Kilo metadata",
+    "repository: preserved Sonderr metadata",
+    "homepage: preserved Sonderr metadata",
+    "bugs: preserved Sonderr metadata",
   ])
 })
 
 test("fixScripts removes upstream-only dead scripts from root", () => {
   const pkg: Record<string, unknown> = {
     scripts: {
-      dev: "bun run --cwd packages/opencode src/index.ts",
+      dev: "bun run --cwd packages/cli src/index.ts",
       "dev:desktop": "bun --cwd packages/desktop-electron dev",
       "dev:web": "bun --cwd packages/app dev",
       "dev:console": "ulimit -n 10240 2>/dev/null; bun run --cwd packages/console/app dev",
@@ -86,11 +86,11 @@ test("fixScripts removes upstream-only dead scripts from root", () => {
   expect(changes.length).toBe(4)
 })
 
-test("fixScripts preserves opencode test scripts", () => {
+test("fixScripts preserves sonderr test scripts", () => {
   const ours = { scripts: { test: "bun test", "test:ci": "bun test --ci" } }
   const pkg: Record<string, unknown> = { scripts: { test: "vitest" } }
   const changes: string[] = []
-  fixScripts(pkg, "packages/opencode/package.json", ours, changes)
+  fixScripts(pkg, "packages/cli/package.json", ours, changes)
   const scripts = pkg.scripts as Record<string, string>
   expect(scripts.test).toBe("bun test")
   expect(scripts["test:ci"]).toBe("bun test --ci")
@@ -103,10 +103,10 @@ test("fixScripts preserves dev:local and shared-package test:ci scripts", () => 
   fixScripts(
     root,
     "package.json",
-    { scripts: { "dev:local": "bun run packages/opencode/script/dev-local.ts" } },
+    { scripts: { "dev:local": "bun run packages/cli/script/dev-local.ts" } },
     changes,
   )
-  expect((root.scripts as Record<string, string>)["dev:local"]).toBe("bun run packages/opencode/script/dev-local.ts")
+  expect((root.scripts as Record<string, string>)["dev:local"]).toBe("bun run packages/cli/script/dev-local.ts")
 
   for (const path of [
     "packages/client/package.json",
@@ -127,7 +127,7 @@ test("fixScripts preserves dev:local and shared-package test:ci scripts", () => 
   }
 })
 
-test("fixTrustedDependencies removes native-build permissions against Kilo policy", () => {
+test("fixTrustedDependencies removes native-build permissions against Sonderr policy", () => {
   const pkg: Record<string, unknown> = { trustedDependencies: ["tree-sitter-powershell", "bun-pty"] }
   const changes: string[] = []
   fixTrustedDependencies(pkg, "package.json", changes)
@@ -198,19 +198,19 @@ test("transformDependencies removes the incompatible spinner runtime", () => {
   expect(result.changes).toEqual(["opentui-spinner: removed (incompatible OpenTUI runtime)"])
 })
 
-test("fixMetadata preserves opencode publish metadata from base", () => {
-  const ours = { keywords: ["cli", "kilo", "opencode"], private: false }
-  const pkg: Record<string, unknown> = { keywords: ["opencode"], private: true }
+test("fixMetadata preserves sonderr publish metadata from base", () => {
+  const ours = { keywords: ["cli", "sonderr", "sonderr"], private: false }
+  const pkg: Record<string, unknown> = { keywords: ["sonderr"], private: true }
   const changes: string[] = []
-  fixMetadata(pkg, "packages/opencode/package.json", ours, changes)
+  fixMetadata(pkg, "packages/cli/package.json", ours, changes)
   expect(pkg.keywords).toEqual(ours.keywords)
   expect(pkg.private).toBe(false)
   expect(changes).toContain("keywords: preserved from base")
   expect(changes).toContain("private: preserved from base")
 })
 
-test("mergeWithNewestVersions preserves ours' key order so kilo-only deps don't relocate", () => {
-  // Regression: when ours has a kilo-only dep in the middle (e.g. rotating-file-stream
+test("mergeWithNewestVersions preserves ours' key order so sonderr-only deps don't relocate", () => {
+  // Regression: when ours has a sonderr-only dep in the middle (e.g. rotating-file-stream
   // alphabetically between npm-package-arg and semver) and theirs lacks it, the merge
   // result must keep that key in its original position. Previously this function
   // started from theirs' keys and appended ours-only keys at the end, causing git's
@@ -239,10 +239,10 @@ test("mergeWithNewestVersions appends theirs-only keys at the end", () => {
   expect(Object.keys(result)).toEqual(["a", "b", "c"])
 })
 
-test("selectBunPackageManager keeps the newer Bun version and prefers Kilo on ties", () => {
+test("selectBunPackageManager keeps the newer Bun version and prefers Sonderr on ties", () => {
   expect(selectBunPackageManager("bun@1.3.14", "bun@1.3.13")).toBe("bun@1.3.14")
   expect(selectBunPackageManager("bun@1.3.14", "bun@1.3.15")).toBe("bun@1.3.15")
-  expect(selectBunPackageManager("bun@1.3.14+kilo", "bun@1.3.14+upstream")).toBe("bun@1.3.14+kilo")
+  expect(selectBunPackageManager("bun@1.3.14+sonderr", "bun@1.3.14+upstream")).toBe("bun@1.3.14+sonderr")
 })
 
 test("selectBunPackageManager preserves valid versions over malformed values", () => {
@@ -257,15 +257,15 @@ test("fixPackageManager prevents root Bun downgrades", () => {
   const changes: string[] = []
   fixPackageManager(pkg, "package.json", ours, changes)
   expect(pkg.packageManager).toBe("bun@1.3.14")
-  expect(changes).toEqual(["packageManager: bun@1.3.13 -> bun@1.3.14 (preserved Kilo pin)"])
+  expect(changes).toEqual(["packageManager: bun@1.3.13 -> bun@1.3.14 (preserved Sonderr pin)"])
 })
 
-test("fixPackageManager restores a valid Kilo pin over malformed upstream", () => {
+test("fixPackageManager restores a valid Sonderr pin over malformed upstream", () => {
   const pkg: Record<string, unknown> = { packageManager: "bun@latest" }
   const changes: string[] = []
   fixPackageManager(pkg, "package.json", { packageManager: "bun@1.3.14" }, changes)
   expect(pkg.packageManager).toBe("bun@1.3.14")
-  expect(changes).toEqual(["packageManager: bun@latest -> bun@1.3.14 (preserved Kilo pin)"])
+  expect(changes).toEqual(["packageManager: bun@latest -> bun@1.3.14 (preserved Sonderr pin)"])
 })
 
 test("fixPackageManager accepts upstream Bun upgrades", () => {
@@ -279,7 +279,7 @@ test("fixPackageManager accepts upstream Bun upgrades", () => {
 test("fixPackageManager ignores nested package.json files", () => {
   const pkg: Record<string, unknown> = { packageManager: "bun@1.3.13" }
   const changes: string[] = []
-  fixPackageManager(pkg, "packages/opencode/package.json", { packageManager: "bun@1.3.14" }, changes)
+  fixPackageManager(pkg, "packages/cli/package.json", { packageManager: "bun@1.3.14" }, changes)
   expect(pkg.packageManager).toBe("bun@1.3.13")
   expect(changes).toEqual([])
 })

@@ -96,7 +96,7 @@ export interface Interface {
   readonly cancel: (id: string) => Effect.Effect<Info | undefined>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/BackgroundJob") {}
+export class Service extends Context.Service<Service, Interface>()("@sonderr/BackgroundJob") {}
 
 function snapshot(job: Active): Info {
   return {
@@ -137,7 +137,7 @@ export const make = Effect.gen(function* () {
       if (job.info.status !== "running") return [{ info: snapshot(job) }, jobs]
       const pending = job.pending - 1
       const output =
-        Exit.isSuccess(exit) && exit.value && sequence > (job.output?.sequence ?? -1) // kilocode_change - empty outputs never clobber; only the latest non-empty result wins (#13469)
+        Exit.isSuccess(exit) && exit.value && sequence > (job.output?.sequence ?? -1) // sonderr_change - empty outputs never clobber; only the latest non-empty result wins (#13469)
           ? { sequence, text: exit.value }
           : job.output
       if (Exit.isSuccess(exit) && pending > 0) {

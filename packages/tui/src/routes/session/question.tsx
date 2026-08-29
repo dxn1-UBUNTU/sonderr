@@ -3,23 +3,23 @@ import { createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-j
 import { useRenderer } from "@opentui/solid"
 import type { TextareaRenderable } from "@opentui/core"
 import { selectedForeground, tint, useTheme } from "../../context/theme"
-import type { QuestionAnswer, QuestionRequest } from "@kilocode/sdk/v2"
+import type { QuestionAnswer, QuestionRequest } from "@sonderr/sdk/v2"
 import { useSDK } from "../../context/sdk"
 import { SplitBorder } from "../../ui/border"
 import { useTuiConfig } from "../../config"
-import { useBindings, useOpencodeModeStack } from "../../keymap"
+import { useBindings, useSonderrModeStack } from "../../keymap"
 
 const QUESTION_MODE = "question"
 
-// kilocode_change start
+// sonderr_change start
 export function QuestionPrompt(props: {
   request: QuestionRequest; nonBlocking?: boolean; inputFocused?: () => boolean; directory?: string }) {
-  // kilocode_change end
+  // sonderr_change end
   const sdk = useSDK()
   const { theme } = useTheme()
   const renderer = useRenderer()
   const tuiConfig = useTuiConfig()
-  const modeStack = useOpencodeModeStack()
+  const modeStack = useSonderrModeStack()
 
   const questions = createMemo(() => props.request.questions)
   const single = createMemo(() => questions().length === 1 && questions()[0]?.multiple !== true)
@@ -216,9 +216,9 @@ export function QuestionPrompt(props: {
 
     return {
       mode: QUESTION_MODE,
-      // kilocode_change start - avoid intrusive key capture for non-blocking review questions
+      // sonderr_change start - avoid intrusive key capture for non-blocking review questions
       enabled: !store.editing && !(props.nonBlocking && props.inputFocused?.()),
-      // kilocode_change end
+      // sonderr_change end
       commands: [
         {
           name: "app.exit",

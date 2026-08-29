@@ -1,10 +1,10 @@
 import { describe, expect } from "bun:test"
 import { Effect, Layer } from "effect"
-import { CommandV2 } from "@opencode-ai/core/command"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { Location } from "@opencode-ai/core/location"
-import { CommandPlugin } from "@opencode-ai/core/plugin/command"
-import { AbsolutePath } from "@opencode-ai/core/schema"
+import { CommandV2 } from "@sonderr/core/command"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { Location } from "@sonderr/core/location"
+import { CommandPlugin } from "@sonderr/core/plugin/command"
+import { AbsolutePath } from "@sonderr/core/schema"
 import { location } from "../fixture/location"
 import { testEffect } from "../lib/effect"
 import { host } from "./host"
@@ -37,9 +37,9 @@ describe("CommandPlugin.Plugin", () => {
         description: "guided AGENTS.md setup",
       })
       expect((yield* command.get("init"))?.template).toContain("`/repo`")
-      expect((yield* command.get("init"))?.template).toContain("future Kilo sessions") // kilocode_change
-      expect((yield* command.get("init"))?.template).toContain("`kilo.json`") // kilocode_change
-      expect((yield* command.get("init"))?.template).not.toContain("OpenCode") // kilocode_change
+      expect((yield* command.get("init"))?.template).toContain("future Sonderr sessions") // sonderr_change
+      expect((yield* command.get("init"))?.template).toContain("`sonderr.json`") // sonderr_change
+      expect((yield* command.get("init"))?.template).not.toContain("Sonderr") // sonderr_change
       expect(yield* command.get("review")).toMatchObject({
         name: "review",
         description: "review changes [commit|branch|pr], defaults to uncommitted",

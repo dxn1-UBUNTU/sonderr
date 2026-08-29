@@ -19,7 +19,7 @@ export const Failed = Event.define({
   },
 })
 
-// kilocode_change start - fires after the worktree's start script finishes, unlike Ready
+// sonderr_change start - fires after the worktree's start script finishes, unlike Ready
 export const SetupReady = Event.define({
   type: "worktree.setup.ready",
   schema: {
@@ -27,6 +27,6 @@ export const SetupReady = Event.define({
     branch: optional(Schema.String),
   },
 })
-// kilocode_change end
+// sonderr_change end
 
-export const Definitions = Event.inventory(Ready, Failed, SetupReady) // kilocode_change
+export const Definitions = Event.inventory(Ready, Failed, SetupReady) // sonderr_change

@@ -1,7 +1,7 @@
 import type { ThemeRegistrationResolved } from "@pierre/diffs"
 
-export const OpenCodeTheme = {
-  name: "Kilo",
+export const SonderrTheme = {
+  name: "Sonderr",
   bg: "var(--color-background-stronger)",
   fg: "var(--text-base)",
   colors: {

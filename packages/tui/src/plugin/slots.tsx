@@ -1,6 +1,6 @@
-import type { TuiPluginApi, TuiSlotContext, TuiSlotMap, TuiSlotProps } from "@kilocode/plugin/tui"
+import type { TuiPluginApi, TuiSlotContext, TuiSlotMap, TuiSlotProps } from "@sonderr/plugin/tui"
 import { createSlot, createSolidSlotRegistry, type JSX, type SolidPlugin } from "@opentui/solid"
-import { children, createSignal, mergeProps } from "solid-js" // kilocode_change
+import { children, createSignal, mergeProps } from "solid-js" // sonderr_change
 import { isRecord } from "../util/record"
 
 type RuntimeSlotMap = TuiSlotMap<Record<string, object>>
@@ -25,7 +25,7 @@ function isHostSlotPlugin(value: unknown): value is HostSlotPlugin<Record<string
 export function createSlots() {
   const empty: SlotView = () => null
   const [view, setView] = createSignal<SlotView>(empty)
-  // kilocode_change start - keep stateful fallback children mounted while preserving reactive slot props
+  // sonderr_change start - keep stateful fallback children mounted while preserving reactive slot props
   const Slot: SlotView = (props) => {
     const value = children(() => props.children)
     const merged = mergeProps(props, {
@@ -35,7 +35,7 @@ export function createSlots() {
     })
     return view()(merged as TuiSlotProps<string>)
   }
-  // kilocode_change end
+  // sonderr_change end
 
   return {
     Slot,

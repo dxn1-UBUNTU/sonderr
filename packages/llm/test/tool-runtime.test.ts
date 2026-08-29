@@ -6,7 +6,7 @@ import {
   LLMEvent,
   LLMRequest,
   LLMResponse,
-  StoredToolContent, // kilocode_change
+  StoredToolContent, // sonderr_change
   ToolChoice,
   ToolContent,
   ToolOutput,
@@ -257,11 +257,11 @@ describe("LLMClient tools", () => {
 
   it.effect("decodes persisted legacy tool media and file content", () =>
     Effect.sync(() => {
-      // kilocode_change start - storage accepts released shapes while public content remains canonical
+      // sonderr_change start - storage accepts released shapes while public content remains canonical
       const decode = Schema.decodeUnknownSync(StoredToolContent)
       const current = Schema.decodeUnknownSync(ToolContent)
       expect(() => current({ type: "media", mediaType: "image/png", data: "AAAA" })).toThrow()
-      // kilocode_change end
+      // sonderr_change end
       expect(decode({ type: "media", mediaType: "image/png", data: "AAAA", filename: "image.png" })).toEqual({
         type: "file",
         uri: "data:image/png;base64,AAAA",

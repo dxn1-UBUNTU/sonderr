@@ -2,7 +2,7 @@ import { TextAttributes } from "@opentui/core"
 import { useTheme } from "../context/theme"
 import { useDialog, type DialogContext } from "./dialog"
 import { useBindings } from "../keymap"
-import { For } from "solid-js" // kilocode_change
+import { For } from "solid-js" // sonderr_change
 
 export type DialogAlertProps = {
   title: string
@@ -37,13 +37,13 @@ export function DialogAlert(props: DialogAlertProps) {
           esc
         </text>
       </box>
-      {/* kilocode_change start - render escaped and literal newlines on separate rows */}
+      {/* sonderr_change start - render escaped and literal newlines on separate rows */}
       <box paddingBottom={1} flexDirection="column">
         <For each={props.message.replace(/\\n/g, "\n").split("\n")}>
           {(line) => <text fg={theme.textMuted}>{line}</text>}
         </For>
       </box>
-      {/* kilocode_change end */}
+      {/* sonderr_change end */}
       <box flexDirection="row" justifyContent="flex-end" paddingBottom={1}>
         <box
           paddingLeft={3}

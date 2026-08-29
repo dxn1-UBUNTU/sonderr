@@ -1,4 +1,4 @@
-// kilocode_change - new file
+// sonderr_change - new file
 
 /**
  * Resolves the docs-sync watermark: the timestamp of the newest source PR the

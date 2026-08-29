@@ -2,7 +2,7 @@ import { SyntaxStyle, RGBA, type TerminalColors } from "@opentui/core"
 import aura from "./assets/aura.json" with { type: "json" }
 import ayu from "./assets/ayu.json" with { type: "json" }
 import carbonfox from "./assets/carbonfox.json" with { type: "json" }
-import colorblind from "./assets/colorblind.json" with { type: "json" } // kilocode_change
+import colorblind from "./assets/colorblind.json" with { type: "json" } // sonderr_change
 import catppuccinFrappe from "./assets/catppuccin-frappe.json" with { type: "json" }
 import catppuccinMacchiato from "./assets/catppuccin-macchiato.json" with { type: "json" }
 import catppuccin from "./assets/catppuccin.json" with { type: "json" }
@@ -14,8 +14,8 @@ import flexoki from "./assets/flexoki.json" with { type: "json" }
 import github from "./assets/github.json" with { type: "json" }
 import gruvbox from "./assets/gruvbox.json" with { type: "json" }
 import kanagawa from "./assets/kanagawa.json" with { type: "json" }
-import kilo from "./assets/kilo.json" with { type: "json" } // kilocode_change
-import kilo1 from "./assets/kilo-v1.json" with { type: "json" } // kilocode_change
+import sonderr from "./assets/sonderr.json" with { type: "json" } // sonderr_change
+import sonderr1 from "./assets/sonderr-v1.json" with { type: "json" } // sonderr_change
 import lucentOrng from "./assets/lucent-orng.json" with { type: "json" }
 import material from "./assets/material.json" with { type: "json" }
 import matrix from "./assets/matrix.json" with { type: "json" }
@@ -24,7 +24,7 @@ import monokai from "./assets/monokai.json" with { type: "json" }
 import nightowl from "./assets/nightowl.json" with { type: "json" }
 import nord from "./assets/nord.json" with { type: "json" }
 import onedark from "./assets/one-dark.json" with { type: "json" }
-import opencode from "./assets/opencode.json" with { type: "json" }
+import sonderr from "./assets/sonderr.json" with { type: "json" }
 import orng from "./assets/orng.json" with { type: "json" }
 import osakaJade from "./assets/osaka-jade.json" with { type: "json" }
 import palenight from "./assets/palenight.json" with { type: "json" }
@@ -144,8 +144,8 @@ export const DEFAULT_THEMES: Record<string, ThemeJson> = {
   github,
   gruvbox,
   kanagawa,
-  kilo, // kilocode_change
-  ["kilo-v1"]: kilo1, // kilocode_change
+  sonderr, // sonderr_change
+  ["sonderr-v1"]: sonderr1, // sonderr_change
   material,
   matrix,
   mercury,
@@ -154,7 +154,7 @@ export const DEFAULT_THEMES: Record<string, ThemeJson> = {
   nord,
   ["one-dark"]: onedark,
   ["osaka-jade"]: osakaJade,
-  opencode,
+  sonderr,
   orng,
   ["lucent-orng"]: lucentOrng,
   palenight,
@@ -166,7 +166,7 @@ export const DEFAULT_THEMES: Record<string, ThemeJson> = {
   vercel,
   zenburn,
   carbonfox,
-  colorblind, // kilocode_change
+  colorblind, // sonderr_change
 }
 
 const pluginThemes: Record<string, ThemeJson> = {}

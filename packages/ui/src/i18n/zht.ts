@@ -76,7 +76,7 @@ export const dict = {
   "ui.sessionTurn.error.addCredits": "新增點數",
 
   "dialog.usageExceeded.freeTier.title": "已達免費額度上限",
-  "dialog.usageExceeded.freeTier.description": "訂閱 Kilo Go，可靠地使用最佳開源模型，每月 $5 起。", // kilocode_change
+  "dialog.usageExceeded.freeTier.description": "訂閱 Sonderr Go，可靠地使用最佳開源模型，每月 $5 起。", // sonderr_change
   "dialog.usageExceeded.freeTier.actionLabel": "訂閱",
   "dialog.usageExceeded.accountRateLimit.title": "已達 Go 額度上限",
   "dialog.usageExceeded.accountRateLimit.description": "已達使用額度上限。若要立即繼續使用此模型，請啟用可用餘額計費",
@@ -197,7 +197,7 @@ export const dict = {
   "ui.patch.action.created": "已建立",
   "ui.patch.action.moved": "已移動",
   "ui.patch.action.patched": "已套用修補",
-  "ui.patch.action.plan": "計畫", // kilocode_change
+  "ui.patch.action.plan": "計畫", // sonderr_change
 
   "ui.question.subtitle.answered": "已回答 {{count}} 題",
   "ui.question.answer.none": "（無答案）",
@@ -217,7 +217,7 @@ export const dict = {
   "ui.toolErrorCard.copyError": "複製錯誤",
   "ui.message.duration.seconds": "{{count}}秒",
   "ui.message.duration.minutesSeconds": "{{minutes}}分 {{seconds}}秒",
-  // kilocode_change start - preserve Kilo UI translations across the upstream dictionary refresh
+  // sonderr_change start - preserve Sonderr UI translations across the upstream dictionary refresh
   "ui.sessionTurn.status.delegatingWaitingPermission": "Subagent waiting for permission",
   "ui.sessionTurn.status.delegatingWaitingQuestion": "Subagent waiting for response",
   "ui.messagePart.mcp.input": "輸入",
@@ -235,5 +235,5 @@ export const dict = {
   "ui.message.deleteQueued": "刪除排隊中的訊息",
   "ui.question.subtitle.dismissed": "{{count}} dismissed",
   "ui.question.answer.dismissed": "Dismissed",
-  // kilocode_change end
+  // sonderr_change end
 } satisfies Partial<Record<Keys, string>>

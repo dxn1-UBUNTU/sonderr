@@ -9,17 +9,17 @@ import type {
   TuiAttentionSoundName,
   TuiAttentionSoundPack,
   TuiAttentionSoundPackInfo,
-} from "@kilocode/plugin/tui"
+} from "@sonderr/plugin/tui"
 import { AttentionSoundName, type TuiConfig } from "./config"
 import { Schema } from "effect"
 import stripAnsi from "strip-ansi"
 import * as TuiAudio from "./audio"
-import defaultSoundPath from "@opencode-ai/ui/audio/bip-bop-01.mp3" with { type: "file" }
-import questionSoundPath from "@opencode-ai/ui/audio/bip-bop-03.mp3" with { type: "file" }
-import permissionSoundPath from "@opencode-ai/ui/audio/staplebops-06.mp3" with { type: "file" }
-import errorSoundPath from "@opencode-ai/ui/audio/nope-03.mp3" with { type: "file" }
-import doneSoundPath from "@opencode-ai/ui/audio/bip-bop-01.mp3" with { type: "file" }
-import subagentDoneSoundPath from "@opencode-ai/ui/audio/yup-01.mp3" with { type: "file" }
+import defaultSoundPath from "@sonderr/ui/audio/bip-bop-01.mp3" with { type: "file" }
+import questionSoundPath from "@sonderr/ui/audio/bip-bop-03.mp3" with { type: "file" }
+import permissionSoundPath from "@sonderr/ui/audio/staplebops-06.mp3" with { type: "file" }
+import errorSoundPath from "@sonderr/ui/audio/nope-03.mp3" with { type: "file" }
+import doneSoundPath from "@sonderr/ui/audio/bip-bop-01.mp3" with { type: "file" }
+import subagentDoneSoundPath from "@sonderr/ui/audio/yup-01.mp3" with { type: "file" }
 
 type FocusState = "unknown" | "focused" | "blurred"
 
@@ -38,14 +38,14 @@ type TuiAttentionHost = TuiAttention & {
   dispose(): void
 }
 
-const DEFAULT_TITLE = "Kilo" // kilocode_change
-const DEFAULT_PACK_ID = "kilo.default" // kilocode_change
+const DEFAULT_TITLE = "Sonderr" // sonderr_change
+const DEFAULT_PACK_ID = "sonderr.default" // sonderr_change
 const KV_SOUND_PACK = "attention_sound_pack"
 const TITLE_LIMIT = 80
 const MESSAGE_LIMIT = 240
 const BUILTIN_PACK: RegisteredSoundPack = {
   id: DEFAULT_PACK_ID,
-  name: "Kilo Default", // kilocode_change
+  name: "Sonderr Default", // sonderr_change
   builtin: true,
   sounds: {
     default: defaultSoundPath,

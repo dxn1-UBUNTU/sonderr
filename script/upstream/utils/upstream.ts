@@ -8,19 +8,19 @@ import { isI18nFile, transformI18nContent } from "../transforms/transform-i18n"
 import { applyScriptTransforms } from "../transforms/transform-scripts"
 import { applyBrandingTransforms } from "../transforms/transform-take-theirs"
 import { applyWebTransforms } from "../transforms/transform-web"
-import { removeKiloWeb } from "../transforms/remove-kilo-web"
+import { removeSonderrWeb } from "../transforms/remove-sonderr-web"
 import { warn, info } from "./logger"
 import { compareVersions, parseVersion, type VersionInfo } from "./version"
 import { isAncestor } from "./git"
 
-const url = "https://github.com/anomalyco/opencode.git"
+const url = "https://github.com/anomalyco/sonderr.git"
 const workflows = [".github/workflows/publish.yml", ".github/workflows/beta.yml"]
 
 /**
  * Repo-relative path of the file that records the last merged upstream tag.
  * Single line containing the upstream tag (e.g. `v1.14.33`).
  */
-export const versionFile = ".opencode-version"
+export const versionFile = ".sonderr-version"
 
 export async function root() {
   return (await $`git rev-parse --show-toplevel`.text()).trim()
@@ -64,7 +64,7 @@ export async function last(): Promise<VersionInfo> {
 }
 
 /**
- * Read the recorded last-merged upstream tag from `.opencode-version`. Returns
+ * Read the recorded last-merged upstream tag from `.sonderr-version`. Returns
  * null if the file is missing/empty, or if the recorded tag cannot be resolved
  * to a commit (e.g. tags have not been fetched yet). Falls back to the
  * isAncestor-based discovery in `last()`.
@@ -106,7 +106,7 @@ async function resolveTag(tag: string): Promise<string | null> {
 }
 
 /**
- * Record the merged upstream tag in `.opencode-version` so subsequent runs of
+ * Record the merged upstream tag in `.sonderr-version` so subsequent runs of
  * `last()` resolve instantly without an `ls-remote` walk.
  */
 export async function writeVersion(tag: string): Promise<string> {
@@ -195,7 +195,7 @@ export async function translate(file: string, text: string) {
   const i18n = transformI18nContent(branded, false, isI18nFile(file)).result
   const ext = applyExtensionTransforms(i18n, file).result
   const web = applyWebTransforms(ext).result
-  const command = removeKiloWeb(file, web).result
+  const command = removeSonderrWeb(file, web).result
 
   return workflow(file, command)
 }
@@ -203,11 +203,11 @@ export async function translate(file: string, text: string) {
 function workflow(file: string, text: string) {
   if (!workflows.includes(file)) return text
   return text
-    .replace(/github\.repository == 'anomalyco\/opencode'/g, "github.repository == 'Kilo-Org/kilocode'")
-    .replace(/github\.repository == "anomalyco\/opencode"/g, 'github.repository == "Kilo-Org/kilocode"')
-    .replace(/\bopencode-ai\b/g, "@kilocode/cli")
+    .replace(/github\.repository == 'anomalyco\/sonderr'/g, "github.repository == 'Sonderr-Org/sonderr'")
+    .replace(/github\.repository == "anomalyco\/sonderr"/g, 'github.repository == "Sonderr-Org/sonderr"')
+    .replace(/\bsonderr-ai\b/g, "@sonderr/cli")
     .replace(
-      /GH_REPO:\s*\$\{\{ \(github\.ref_name == 'beta' && 'anomalyco\/opencode-beta'\) \|\| github\.repository \}\}/g,
+      /GH_REPO:\s*\$\{\{ \(github\.ref_name == 'beta' && 'anomalyco\/sonderr-beta'\) \|\| github\.repository \}\}/g,
       "GH_REPO: ${{ github.repository }}",
     )
 }

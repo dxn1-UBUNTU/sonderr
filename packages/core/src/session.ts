@@ -2,15 +2,15 @@ export * as SessionV2 from "./session"
 export * from "./session/schema"
 
 import { DateTime, Effect, Layer, Schema, Context, Stream } from "effect"
-import { ListAnchor } from "@opencode-ai/schema/session"
-import { and, asc, desc, eq, gt, isNotNull, like, lt, or, type SQL } from "drizzle-orm" // kilocode_change
+import { ListAnchor } from "@sonderr/schema/session"
+import { and, asc, desc, eq, gt, isNotNull, like, lt, or, type SQL } from "drizzle-orm" // sonderr_change
 import { ProjectV2 } from "./project"
 import { WorkspaceV2 } from "./workspace"
 import { ModelV2 } from "./model"
 import { Location } from "./location"
 import { SessionMessage } from "./session/message"
 import { Prompt } from "./session/prompt"
-import { PromptInput } from "@opencode-ai/schema/prompt-input"
+import { PromptInput } from "@sonderr/schema/prompt-input"
 import { EventV2 } from "./event"
 import { Database } from "./database/database"
 import { SessionProjector } from "./session/projector"
@@ -32,12 +32,12 @@ import { LocationServiceMap } from "./location-service-map"
 import { MessageDecodeError } from "./session/error"
 import { SessionEvent } from "./session/event"
 import { SessionInput } from "./session/input"
-import { normalize } from "./kilocode/session-message" // kilocode_change
+import { normalize } from "./sonderr/session-message" // sonderr_change
 import { Snapshot } from "./snapshot"
 import { SessionRevert } from "./session/revert"
-import { Revert } from "@opencode-ai/schema/revert"
+import { Revert } from "@sonderr/schema/revert"
 import { FSUtil } from "./fs-util"
-import { SessionDurable, type SessionDurableEvent } from "@opencode-ai/schema/durable-event-manifest" // kilocode_change
+import { SessionDurable, type SessionDurableEvent } from "@sonderr/schema/durable-event-manifest" // sonderr_change
 
 export const RevertState = Revert.State
 export type RevertState = Revert.State
@@ -134,12 +134,12 @@ export interface Interface {
   readonly events: (input: {
     sessionID: SessionSchema.ID
     after?: number
-  }) => Stream.Stream<SessionDurableEvent, NotFoundError> // kilocode_change - released durable event compatibility
+  }) => Stream.Stream<SessionDurableEvent, NotFoundError> // sonderr_change - released durable event compatibility
   readonly history: (input: {
     sessionID: SessionSchema.ID
     after?: number
     limit: number
-  }) => Effect.Effect<{ events: ReadonlyArray<SessionDurableEvent>; hasMore: boolean }, NotFoundError> // kilocode_change
+  }) => Effect.Effect<{ events: ReadonlyArray<SessionDurableEvent>; hasMore: boolean }, NotFoundError> // sonderr_change
   readonly switchAgent: (input: { sessionID: SessionSchema.ID; agent: string }) => Effect.Effect<void, NotFoundError>
   readonly switchModel: (input: {
     sessionID: SessionSchema.ID
@@ -180,7 +180,7 @@ export interface Interface {
   }
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/v2/Session") {}
+export class Service extends Context.Service<Service, Interface>()("@sonderr/v2/Session") {}
 
 const layer = Layer.effect(
   Service,
@@ -193,10 +193,10 @@ const layer = Layer.effect(
     const store = yield* SessionStore.Service
     const locations = yield* LocationServiceMap.Service
     const decodeMessage = Schema.decodeUnknownEffect(SessionMessage.Message)
-    const isDurableSessionEvent = Schema.is(SessionDurable.schema) // kilocode_change - include released storage keys
+    const isDurableSessionEvent = Schema.is(SessionDurable.schema) // sonderr_change - include released storage keys
     const decode = (row: typeof SessionMessageTable.$inferSelect) =>
       decodeMessage(normalize({ ...row.data, id: row.id, type: row.type })).pipe(
-        // kilocode_change - normalize released tool content on paginated reads
+        // sonderr_change - normalize released tool content on paginated reads
         Effect.mapError(
           () =>
             new MessageDecodeError({
@@ -316,7 +316,7 @@ const layer = Layer.effect(
                 and(
                   eq(SessionMessageTable.session_id, input.sessionID),
                   eq(SessionMessageTable.id, input.cursor.id),
-                  isNotNull(SessionMessageTable.seq), // kilocode_change
+                  isNotNull(SessionMessageTable.seq), // sonderr_change
                 ),
               )
               .get()
@@ -332,7 +332,7 @@ const layer = Layer.effect(
             : undefined
         const where = boundary
           ? and(eq(SessionMessageTable.session_id, input.sessionID), isNotNull(SessionMessageTable.seq), boundary)
-          : and(eq(SessionMessageTable.session_id, input.sessionID), isNotNull(SessionMessageTable.seq)) // kilocode_change
+          : and(eq(SessionMessageTable.session_id, input.sessionID), isNotNull(SessionMessageTable.seq)) // sonderr_change
         const query = db
           .select()
           .from(SessionMessageTable)
@@ -356,7 +356,7 @@ const layer = Layer.effect(
           result
             .get(input.sessionID)
             .pipe(Effect.as(events.durable({ aggregateID: input.sessionID, after: input.after }))),
-        ).pipe(Stream.filter((event): event is SessionDurableEvent => isDurableSessionEvent(event))), // kilocode_change
+        ).pipe(Stream.filter((event): event is SessionDurableEvent => isDurableSessionEvent(event))), // sonderr_change
       history: Effect.fn("V2Session.history")(function* (input) {
         yield* result.get(input.sessionID)
         return yield* EventV2.readAggregate(db, {

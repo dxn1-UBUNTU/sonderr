@@ -212,7 +212,7 @@ function chunks<T>(items: T[], size = 200): T[][] {
 
 /**
  * Overlay transformed upstream changes onto the previous compatibility tree.
- * Paths unchanged upstream keep their prior Kilo content, including Kilo-only
+ * Paths unchanged upstream keep their prior Sonderr content, including Sonderr-only
  * files and marker-bearing shared files.
  */
 export async function overlayCompatTree(input: {
@@ -278,7 +278,7 @@ async function compatUpstream(message: string): Promise<string | null> {
 }
 
 function compatTag(message: string): string | null {
-  const prefix = "refactor: kilo compat for "
+  const prefix = "refactor: sonderr compat for "
   if (!message.startsWith(prefix)) return null
   return message.slice(prefix.length).trim().split(/\s+/)[0] ?? null
 }
@@ -327,7 +327,7 @@ async function candidate(line: string): Promise<Candidate | null> {
 }
 
 export async function findLatestCompatCommit(base: string, target: string): Promise<CompatBase | null> {
-  const grep = "^refactor: kilo compat for "
+  const grep = "^refactor: sonderr compat for "
   const result = await $`git log --format=%H%x00%s --grep=${grep} ${base}`.quiet().nothrow()
   if (result.exitCode !== 0) {
     throw new Error(`Failed to search compatibility commits: ${result.stderr.toString()}`)
@@ -426,7 +426,7 @@ export async function checkoutTheirs(files: string[]): Promise<void> {
 
 /**
  * Remove untracked files and directories from specific directories.
- * Used to clean build artifacts from Kilo-specific directories after checking
+ * Used to clean build artifacts from Sonderr-specific directories after checking
  * out the upstream branch, where package-level .gitignore files don't exist.
  */
 export async function cleanDirectories(dirs: string[]): Promise<void> {
@@ -436,14 +436,14 @@ export async function cleanDirectories(dirs: string[]): Promise<void> {
 }
 
 /**
- * Check if the "ours" version of a conflicted file contains kilocode_change markers.
+ * Check if the "ours" version of a conflicted file contains sonderr_change markers.
  * Uses git stage :2: which is the "ours" side during a merge conflict.
  * Returns false if the file doesn't exist in ours (new file from upstream).
  */
-export async function oursHasKilocodeChanges(file: string): Promise<boolean> {
+export async function oursHasSonderrChanges(file: string): Promise<boolean> {
   const result = await $`git show :2:${file}`.quiet().nothrow()
   if (result.exitCode !== 0) return false
-  return result.stdout.toString().includes("kilocode_change")
+  return result.stdout.toString().includes("sonderr_change")
 }
 
 /**
@@ -471,7 +471,7 @@ async function reset(dir: string): Promise<void> {
  */
 export async function trainRerere(grep: string): Promise<number> {
   const head = (await $`git rev-parse --verify HEAD`.text()).trim()
-  const dir = join(tmpdir(), `kilo-rerere-train-${randomUUID()}`)
+  const dir = join(tmpdir(), `sonderr-rerere-train-${randomUUID()}`)
 
   let learned = 0
 

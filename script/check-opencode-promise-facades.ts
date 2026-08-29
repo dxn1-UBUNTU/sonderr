@@ -1,9 +1,9 @@
 #!/usr/bin/env bun
-// kilocode_change - new file
+// sonderr_change - new file
 
 /**
  * Prevents new service-local runtimes in shared Effect modules while the
- * remaining Kilo Promise facades are migrated away. It also prevents tests
+ * remaining Sonderr Promise facades are migrated away. It also prevents tests
  * from reaching through the global application runtime unless the integration
  * boundary is explicitly classified.
  *
@@ -14,8 +14,8 @@
 import path from "node:path"
 
 const ROOT = path.resolve(import.meta.dir, "..")
-const DIR = path.join(ROOT, "packages", "opencode", "src")
-const TEST_DIR = path.join(ROOT, "packages", "opencode", "test")
+const DIR = path.join(ROOT, "packages", "sonderr", "src")
+const TEST_DIR = path.join(ROOT, "packages", "sonderr", "test")
 const PATTERN = /makeRuntime\s*\(\s*Service\s*,/g
 const TEST_PATTERN = /\bAppRuntime\b/g
 
@@ -30,24 +30,24 @@ const allow: Record<string, string> = {
 
 const testAllow: Record<string, { count: number; reason: string }> = {
   "preload.ts": { count: 2, reason: "global test-suite AppRuntime cleanup boundary" },
-  "kilocode/config-resilience.test.ts": { count: 4, reason: "existing runtime integration test" },
-  "kilocode/config-validation.test.ts": { count: 2, reason: "existing runtime integration test" },
-  "kilocode/cli-shutdown.test.ts": { count: 1, reason: "mocked runtime boundary for shutdown unit tests" },
-  "kilocode/plan-followup.test.ts": { count: 3, reason: "existing runtime integration test" },
-  "kilocode/session-compaction-chunks.test.ts": {
+  "sonderr/config-resilience.test.ts": { count: 4, reason: "existing runtime integration test" },
+  "sonderr/config-validation.test.ts": { count: 2, reason: "existing runtime integration test" },
+  "sonderr/cli-shutdown.test.ts": { count: 1, reason: "mocked runtime boundary for shutdown unit tests" },
+  "sonderr/plan-followup.test.ts": { count: 3, reason: "existing runtime integration test" },
+  "sonderr/session-compaction-chunks.test.ts": {
     count: 2,
     reason: "disk-backed instance integration test cleanup",
   },
-  "kilocode/session-fork-remap.test.ts": {
+  "sonderr/session-fork-remap.test.ts": {
     count: 2,
     reason: "disk-backed instance integration test cleanup",
   },
-  "kilocode/kilo-sessions.test.ts": {
+  "sonderr/sonderr-sessions.test.ts": {
     count: 31,
     reason:
       "K1 W1: real integration test for SessionStatus→detach→heartbeat-fence; " +
       "the test creates a session and sets its status via the global AppRuntime, " +
-      "then drives the module-level KiloSessions seams and verifies the fence. " +
+      "then drives the module-level SonderrSessions seams and verifies the fence. " +
       "DEF-3 extends this with heartbeat attention-status coverage: the heartbeat " +
       "resolves pending question/permission from the global Question.Service and " +
       "Permission.Service, so a test can only assert it by raising and replying to " +
@@ -55,19 +55,19 @@ const testAllow: Record<string, { count: number; reason: string }> = {
       "the global-runtime coupling is exactly what is under test. " +
       "PR-link advertise tests extend this with session creation through the same global AppRuntime.",
   },
-  "kilocode/session/platform-attribution.test.ts": { count: 2, reason: "existing runtime integration test" },
-  "kilocode/session-prompt-queue.test.ts": { count: 6, reason: "prompt queue legacy instance bridge regression" },
-  "kilocode/session-prompt-steering.test.ts": {
+  "sonderr/session/platform-attribution.test.ts": { count: 2, reason: "existing runtime integration test" },
+  "sonderr/session-prompt-queue.test.ts": { count: 6, reason: "prompt queue legacy instance bridge regression" },
+  "sonderr/session-prompt-steering.test.ts": {
     count: 2,
     reason: "disk-backed prompt steering integration test cleanup",
   },
-  "server/experimental-session-list.test.ts": { count: 2, reason: "Kilo session list integration test" },
-  "kilocode/server/cloud-session-import.test.ts": { count: 5, reason: "full app cloud import transaction integration" },
-  "kilocode/server/listener-runtime.test.ts": { count: 4, reason: "listener and AppRuntime integration test" },
+  "server/experimental-session-list.test.ts": { count: 2, reason: "Sonderr session list integration test" },
+  "sonderr/server/cloud-session-import.test.ts": { count: 5, reason: "full app cloud import transaction integration" },
+  "sonderr/server/listener-runtime.test.ts": { count: 4, reason: "listener and AppRuntime integration test" },
   "tool/recall.test.ts": { count: 11, reason: "existing runtime integration test" },
 }
 
-const owned = (file: string) => file.startsWith("kilocode/") || file.startsWith("kilo-sessions/")
+const owned = (file: string) => file.startsWith("sonderr/") || file.startsWith("sonderr-sessions/")
 const hits: Array<{ file: string; line: number }> = []
 const glob = new Bun.Glob("**/*.ts")
 
@@ -84,7 +84,7 @@ const invalid = hits.filter((hit) => !allow[hit.file])
 const drift = Object.entries(allow).flatMap(([file, reason]) => {
   const count = hits.filter((hit) => hit.file === file).length
   if (count === 1) return []
-  return [`  packages/opencode/src/${file}: expected 1 classified site, found ${count} (${reason})`]
+  return [`  packages/cli/src/${file}: expected 1 classified site, found ${count} (${reason})`]
 })
 
 const testHits: Array<{ file: string; line: number }> = []
@@ -101,14 +101,14 @@ const testDrift = Object.entries(testAllow).flatMap(([file, entry]) => {
   const count = testHits.filter((hit) => hit.file === file).length
   if (count === entry.count) return []
   return [
-    `  packages/opencode/test/${file}: expected ${entry.count} classified reference(s), found ${count} (${entry.reason})`,
+    `  packages/cli/test/${file}: expected ${entry.count} classified reference(s), found ${count} (${entry.reason})`,
   ]
 })
 
 if (invalid.length > 0 || drift.length > 0 || testInvalid.length > 0 || testDrift.length > 0) {
   if (invalid.length > 0) {
-    console.error("Found unclassified service-local Effect runtimes in shared opencode modules:")
-    for (const hit of invalid) console.error(`  packages/opencode/src/${hit.file}:${hit.line}`)
+    console.error("Found unclassified service-local Effect runtimes in shared sonderr modules:")
+    for (const hit of invalid) console.error(`  packages/cli/src/${hit.file}:${hit.line}`)
     console.error("")
   }
   if (drift.length > 0) {
@@ -117,8 +117,8 @@ if (invalid.length > 0 || drift.length > 0 || testInvalid.length > 0 || testDrif
     console.error("")
   }
   if (testInvalid.length > 0) {
-    console.error("Found unclassified AppRuntime use in opencode tests:")
-    for (const hit of testInvalid) console.error(`  packages/opencode/test/${hit.file}:${hit.line}`)
+    console.error("Found unclassified AppRuntime use in sonderr tests:")
+    for (const hit of testInvalid) console.error(`  packages/cli/test/${hit.file}:${hit.line}`)
     console.error("")
   }
   if (testDrift.length > 0) {
@@ -133,5 +133,5 @@ if (invalid.length > 0 || drift.length > 0 || testInvalid.length > 0 || testDrif
 }
 
 console.log(
-  `check-opencode-promise-facades: ${hits.length} classified runtime site(s), ${testHits.length} classified test reference(s), no runtime drift found.`,
+  `check-sonderr-promise-facades: ${hits.length} classified runtime site(s), ${testHits.length} classified test reference(s), no runtime drift found.`,
 )

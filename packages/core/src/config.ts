@@ -4,9 +4,9 @@ import { makeLocationNode } from "./effect/app-node"
 import path from "path"
 import { type ParseError, parse } from "jsonc-parser"
 import { Context, Effect, Layer, Option, Schema } from "effect"
-import { Permission } from "@opencode-ai/schema/permission"
+import { Permission } from "@sonderr/schema/permission"
 import { FSUtil } from "./fs-util"
-import { Flag } from "./flag/flag" // kilocode_change
+import { Flag } from "./flag/flag" // sonderr_change
 import { Global } from "./global"
 import { Location } from "./location"
 import { Policy } from "./policy"
@@ -131,7 +131,7 @@ export interface Interface {
   readonly entries: () => Effect.Effect<Entry[]>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/v2/Config") {}
+export class Service extends Context.Service<Service, Interface>()("@sonderr/v2/Config") {}
 
 const layer = Layer.effect(
   Service,
@@ -140,7 +140,7 @@ const layer = Layer.effect(
     const global = yield* Global.Service
     const location = yield* Location.Service
     const policy = yield* Policy.Service
-    const names = ["config.json", "kilo.json", "kilo.jsonc", "opencode.json", "opencode.jsonc"] // kilocode_change
+    const names = ["config.json", "sonderr.json", "sonderr.jsonc", "sonderr.json", "sonderr.jsonc"] // sonderr_change
     const decodeOptions = { errors: "all", onExcessProperty: "ignore", propertyOrder: "original" } as const
     const decodeInfo = Schema.decodeUnknownOption(Info, decodeOptions)
     const decodeV1Info = Schema.decodeUnknownOption(ConfigV1.Info, decodeOptions)
@@ -175,11 +175,11 @@ const layer = Layer.effect(
     const locationIsGlobal = path.resolve(location.directory) === path.resolve(global.config)
     // Read configuration once when this location opens. Later calls reuse these
     // values until the location is reopened.
-    const discovered = locationIsGlobal || Flag.KILO_DISABLE_PROJECT_CONFIG // kilocode_change
+    const discovered = locationIsGlobal || Flag.SONDERR_DISABLE_PROJECT_CONFIG // sonderr_change
       ? []
       : yield* fs
           .up({
-            targets: [".kilo", ".kilocode", ...names.toReversed()], // kilocode_change
+            targets: [".sonderr", ".sonderr", ...names.toReversed()], // sonderr_change
             start: location.directory,
             stop: location.project.directory,
           })
@@ -187,22 +187,22 @@ const layer = Layer.effect(
     const directories = [
       globalDirectory,
       ...discovered
-        .filter((item) => [".kilo", ".kilocode"].includes(path.basename(item))) // kilocode_change
+        .filter((item) => [".sonderr", ".sonderr"].includes(path.basename(item))) // sonderr_change
         .toReversed()
         .map((directory) => AbsolutePath.make(directory)),
     ]
     // A config closer to the opened directory should win over one higher up.
     // Search starts nearby, so reverse the results before applying them.
-    // kilocode_change start
-    const directPaths = discovered.filter((item) => ![".kilo", ".kilocode"].includes(path.basename(item))).toReversed()
-    // kilocode_change end
+    // sonderr_change start
+    const directPaths = discovered.filter((item) => ![".sonderr", ".sonderr"].includes(path.basename(item))).toReversed()
+    // sonderr_change end
     const direct = yield* Effect.forEach(directPaths, loadFile).pipe(
       Effect.orDie,
       Effect.map((configs) => configs.filter((config): config is Document => config !== undefined)),
     )
     const supplementary = yield* Effect.forEach(directories, loadDirectory).pipe(Effect.orDie)
     // Apply general settings first and more specific settings last:
-    // global config, project files, then Kilo config-directory files. // kilocode_change
+    // global config, project files, then Sonderr config-directory files. // sonderr_change
     const configs = [...(supplementary[0] ?? []), ...direct, ...supplementary.slice(1).flat()]
     // Rules use the opposite order so a user-global rule can override a
     // repository rule. Statement order inside each file stays unchanged.

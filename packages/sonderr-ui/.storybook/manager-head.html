@@ -1,0 +1,11 @@
+<style>
+  /* Hide Color Scheme toolbar when sonderr-vscode theme is active */
+  html[data-sonderr-theme="sonderr-vscode"] [aria-label^="Color Scheme"] {
+    display: none !important;
+  }
+
+  /* Hide VS Code Theme toolbar by default and when sonderr theme is active */
+  html:not([data-sonderr-theme="sonderr-vscode"]) [aria-label^="VSCode Theme"] {
+    display: none !important;
+  }
+</style>

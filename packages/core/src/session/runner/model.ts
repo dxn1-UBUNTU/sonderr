@@ -1,11 +1,11 @@
 export * as SessionRunnerModel from "./model"
 
 import { makeLocationNode } from "../../effect/app-node"
-import { type Model } from "@opencode-ai/llm"
-import * as AnthropicMessages from "@opencode-ai/llm/protocols/anthropic-messages"
-import * as OpenAICompatibleChat from "@opencode-ai/llm/protocols/openai-compatible-chat"
-import * as OpenAIResponses from "@opencode-ai/llm/protocols/openai-responses"
-import { Auth, type AnyRoute } from "@opencode-ai/llm/route"
+import { type Model } from "@sonderr/llm"
+import * as AnthropicMessages from "@sonderr/llm/protocols/anthropic-messages"
+import * as OpenAICompatibleChat from "@sonderr/llm/protocols/openai-compatible-chat"
+import * as OpenAIResponses from "@sonderr/llm/protocols/openai-responses"
+import { Auth, type AnyRoute } from "@sonderr/llm/route"
 import { Context, Effect, Layer, Schema } from "effect"
 import { produce } from "immer"
 import { Catalog } from "../../catalog"
@@ -75,7 +75,7 @@ export interface Interface {
   readonly resolve: (session: SessionSchema.Info) => Effect.Effect<Model, Error>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/v2/SessionRunnerModel") {}
+export class Service extends Context.Service<Service, Interface>()("@sonderr/v2/SessionRunnerModel") {}
 
 /** Test or embedding seam for supplying a model resolver directly. */
 export const layerWith = (resolve: Interface["resolve"]) => Layer.succeed(Service, Service.of({ resolve }))
@@ -138,16 +138,16 @@ export const fromCatalogModel = (
       : produce(model, (draft) => {
           Object.assign(draft.request.body, credential.metadata)
         })
-  // kilocode_change start - Kilo Gateway consumes the migrated OAuth account as its organization route.
+  // sonderr_change start - Sonderr Gateway consumes the migrated OAuth account as its organization route.
   // Only the account id crosses into the request body; other oauth metadata stays out of provider requests.
   const resolved =
     credential?.type === "oauth" && credential.metadata?.accountID !== undefined
       ? produce(merged, (draft) => {
-          draft.request.body.kilocodeOrganizationId = String(credential.metadata!.accountID)
+          draft.request.body.sonderrOrganizationId = String(credential.metadata!.accountID)
           delete draft.request.body.accountID
         })
       : merged
-  // kilocode_change end
+  // sonderr_change end
   const key = apiKey(resolved, credential)
   if (resolved.api.type === "aisdk" && resolved.api.package === "@ai-sdk/openai") {
     return Effect.succeed(

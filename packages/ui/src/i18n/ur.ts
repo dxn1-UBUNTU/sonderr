@@ -70,7 +70,7 @@ export const dict: Record<string, string> = {
   "ui.sessionTurn.error.addCredits": "کریڈٹ شامل کریں۔",
   "dialog.usageExceeded.freeTier.title": "مفت استعمال کی حد پوری ہو گئی",
   "dialog.usageExceeded.freeTier.description":
-    "$5/ماہ سے شروع ہونے والے بہترین اوپن سورس ماڈلز تک قابل اعتماد رسائی کے لیے Kilo Go کو سبسکرائب کریں۔",
+    "$5/ماہ سے شروع ہونے والے بہترین اوپن سورس ماڈلز تک قابل اعتماد رسائی کے لیے Sonderr Go کو سبسکرائب کریں۔",
   "dialog.usageExceeded.freeTier.actionLabel": "سبسکرائب کریں۔",
   "dialog.usageExceeded.accountRateLimit.title": "Go حد تک پہنچ گئی۔",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -189,7 +189,7 @@ export const dict: Record<string, string> = {
   "ui.patch.action.created": "بنا دیا گیا",
   "ui.patch.action.moved": "منتقل کر دیا گیا",
   "ui.patch.action.patched": "پیچ کیا گیا",
-  "ui.patch.action.plan": "منصوبہ", // kilocode_change
+  "ui.patch.action.plan": "منصوبہ", // sonderr_change
   "ui.question.subtitle.answered": "{{count}} کے جواب دیے گئے",
   "ui.question.answer.none": "(کوئی جواب نہیں)",
   "ui.question.review.notAnswered": "(جواب نہیں دیا گیا)",

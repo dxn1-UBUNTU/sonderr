@@ -309,7 +309,7 @@ describe("http-recorder", () => {
     expect(received).toEqual(['{"type":"session.created"}', '{"type":"response.completed"}'])
   })
 
-  // kilocode_change - regression coverage for internal replay ordering and auto recording
+  // sonderr_change - regression coverage for internal replay ordering and auto recording
   test("internal WebSocket replay preserves causal frame ordering", async () => {
     const received: string[] = []
     await runRecorder(

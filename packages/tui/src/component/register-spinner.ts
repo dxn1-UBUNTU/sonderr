@@ -1,4 +1,4 @@
-// kilocode_change start - register against Kilo's active OpenTUI runtime instead of opentui-spinner's nested 0.3 runtime
+// sonderr_change start - register against Sonderr's active OpenTUI runtime instead of opentui-spinner's nested 0.3 runtime
 import {
   type ColorInput,
   type OptimizedBuffer,
@@ -133,7 +133,7 @@ declare module "@opentui/solid" {
   }
 }
 
-export function registerOpencodeSpinner() {
+export function registerSonderrSpinner() {
   if (!getComponentCatalogue().spinner) extend({ spinner: SpinnerRenderable })
 }
-// kilocode_change end
+// sonderr_change end

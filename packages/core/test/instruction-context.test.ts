@@ -2,15 +2,15 @@ import { describe, expect } from "bun:test"
 import { Effect, Layer } from "effect"
 import fs from "fs/promises"
 import path from "path"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { FSUtil } from "@opencode-ai/core/fs-util"
-import { Global } from "@opencode-ai/core/global"
-import { InstructionContext } from "@opencode-ai/core/instruction-context"
-import { Location } from "@opencode-ai/core/location"
-import { AbsolutePath } from "@opencode-ai/core/schema"
-import { SystemContext } from "@opencode-ai/core/system-context"
-import { SystemContextRegistry } from "@opencode-ai/core/system-context/registry"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { FSUtil } from "@sonderr/core/fs-util"
+import { Global } from "@sonderr/core/global"
+import { InstructionContext } from "@sonderr/core/instruction-context"
+import { Location } from "@sonderr/core/location"
+import { AbsolutePath } from "@sonderr/core/schema"
+import { SystemContext } from "@sonderr/core/system-context"
+import { SystemContextRegistry } from "@sonderr/core/system-context/registry"
 import { location } from "./fixture/location"
 import { tmpdir } from "./fixture/tmpdir"
 import { testEffect } from "./lib/effect"
@@ -257,9 +257,9 @@ describe("InstructionContext", () => {
 
   it.effect("honors the project instruction opt-out", () =>
     Effect.gen(function* () {
-      const previous = process.env.KILO_DISABLE_PROJECT_CONFIG
+      const previous = process.env.SONDERR_DISABLE_PROJECT_CONFIG
       let scanned = false
-      process.env.KILO_DISABLE_PROJECT_CONFIG = "1"
+      process.env.SONDERR_DISABLE_PROJECT_CONFIG = "1"
 
       yield* SystemContextRegistry.Service.pipe(
         Effect.flatMap((service) => service.load()),
@@ -280,8 +280,8 @@ describe("InstructionContext", () => {
         ),
         Effect.ensuring(
           Effect.sync(() => {
-            if (previous === undefined) delete process.env.KILO_DISABLE_PROJECT_CONFIG
-            else process.env.KILO_DISABLE_PROJECT_CONFIG = previous
+            if (previous === undefined) delete process.env.SONDERR_DISABLE_PROJECT_CONFIG
+            else process.env.SONDERR_DISABLE_PROJECT_CONFIG = previous
           }),
         ),
       )

@@ -1,5 +1,5 @@
-import { Schema, SchemaGetter } from "effect" // kilocode_change
-import { ToolContent, ToolFileContent, ToolTextContent } from "@opencode-ai/schema/llm"
+import { Schema, SchemaGetter } from "effect" // sonderr_change
+import { ToolContent, ToolFileContent, ToolTextContent } from "@sonderr/schema/llm"
 import { JsonSchema, MessageRole, ProviderMetadata } from "./ids"
 import { CacheHint, CachePolicy, GenerationOptions, HttpOptions, ModelSchema, ProviderOptions } from "./options"
 import { isRecord } from "../utils/record"
@@ -42,9 +42,9 @@ export type MediaPart = Schema.Schema.Type<typeof MediaPart>
 
 export { ToolContent, ToolFileContent, ToolTextContent }
 
-export { StoredToolContent } from "@opencode-ai/schema/llm" // kilocode_change - shared with the durable event schema
+export { StoredToolContent } from "@sonderr/schema/llm" // sonderr_change - shared with the durable event schema
 
-// kilocode_change start - Kilo keeps a tolerant tool-result value union
+// sonderr_change start - Sonderr keeps a tolerant tool-result value union
 const toolResultValueSchema = Schema.Union([
   Schema.Struct({ type: Schema.Literal("json"), value: Schema.Unknown }),
   Schema.Struct({ type: Schema.Literal("text"), value: Schema.Unknown }),
@@ -52,23 +52,23 @@ const toolResultValueSchema = Schema.Union([
   Schema.Struct({ type: Schema.Literal("content"), value: Schema.Array(ToolContent) }),
 ]).annotate({ identifier: "LLM.ToolResult" })
 export type ToolResultValue = Schema.Schema.Type<typeof toolResultValueSchema>
-// kilocode_change end
+// sonderr_change end
 
 const isToolResultValue = (value: unknown): value is ToolResultValue =>
   isRecord(value) &&
   (value.type === "text" || value.type === "json" || value.type === "error" || value.type === "content") &&
   "value" in value
 
-// kilocode_change start
+// sonderr_change start
 export const ToolResultValue = Object.assign(toolResultValueSchema, {
   is: isToolResultValue,
   make: (value: unknown, type: ToolResultValue["type"] = "json"): ToolResultValue => {
     if (isToolResultValue(value)) return value
     if (type === "content") return { type, value: Array.isArray(value) ? value : [] }
     return { type, value }
-    // kilocode_change end
+    // sonderr_change end
   },
-}) // kilocode_change
+}) // sonderr_change
 
 export interface ToolOutput {
   readonly structured: unknown

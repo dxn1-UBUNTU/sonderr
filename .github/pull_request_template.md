@@ -71,4 +71,4 @@ Docs-only, config-only, and similar changes still need concrete evidence. For ex
 
 ## Get in Touch
 
-<!-- We'd love to have a way to chat with you about your changes if necessary. If you're in the [Kilo Code Discord](https://kilo.ai/discord), please share your handle here. -->
+<!-- We'd love to have a way to chat with you about your changes if necessary. If you're in the [Sonderr Discord](https://kilo.ai/discord), please share your handle here. -->

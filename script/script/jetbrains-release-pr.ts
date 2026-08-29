@@ -1,13 +1,13 @@
 #!/usr/bin/env bun
-// kilocode_change - new file
+// sonderr_change - new file
 
 import { $ } from "bun"
 import semver from "semver"
 import { parseArgs } from "util"
 
-const props = new URL("../packages/kilo-jetbrains/gradle.properties", import.meta.url).pathname
-const log = new URL("../packages/kilo-jetbrains/CHANGELOG.md", import.meta.url).pathname
-const repo = process.env.GH_REPO ?? process.env.GITHUB_REPOSITORY ?? "Kilo-Org/kilocode"
+const props = new URL("../packages/sonderr-jetbrains/gradle.properties", import.meta.url).pathname
+const log = new URL("../packages/sonderr-jetbrains/CHANGELOG.md", import.meta.url).pathname
+const repo = process.env.GH_REPO ?? process.env.GITHUB_REPOSITORY ?? "Sonderr-Org/sonderr"
 
 const { values } = parseArgs({
   args: Bun.argv.slice(2),
@@ -43,7 +43,7 @@ if (!semver.valid(ver)) throw new Error(`Invalid semver: ${ver}`)
 
 await $`git fetch origin main --tags`
 if (!(await pinned())) {
-  throw new Error("packages/kilo-jetbrains/gradle.properties has kilo.cli.pinned=false; JetBrains releases require kilo.cli.pinned=true")
+  throw new Error("packages/sonderr-jetbrains/gradle.properties has sonderr.cli.pinned=false; JetBrains releases require sonderr.cli.pinned=true")
 }
 
 const tag = `jetbrains/v${ver}`
@@ -72,7 +72,7 @@ if (dry) {
 await $`git checkout -B ${branch} ${sha}`
 await writeprops(ver)
 await writelog(ver, entry)
-await $`git add packages/kilo-jetbrains/gradle.properties packages/kilo-jetbrains/CHANGELOG.md`
+await $`git add packages/sonderr-jetbrains/gradle.properties packages/sonderr-jetbrains/CHANGELOG.md`
 
 const changed = await $`git diff --cached --quiet`.nothrow()
 if (changed.exitCode !== 0) await $`git commit -m ${`release(jetbrains): v${ver}`}`
@@ -210,9 +210,9 @@ function entries(notes: string) {
 
 async function writeprops(ver: string) {
   const current = await Bun.file(props).text()
-  const line = `kilo.jetbrains.version=${ver}`
-  const next = current.match(/^kilo\.jetbrains\.version=/m)
-    ? current.replace(/^kilo\.jetbrains\.version=.*$/m, line)
+  const line = `sonderr.jetbrains.version=${ver}`
+  const next = current.match(/^sonderr\.jetbrains\.version=/m)
+    ? current.replace(/^sonderr\.jetbrains\.version=.*$/m, line)
     : `${current.trim()}\n${line}\n`
   await Bun.write(props, next.endsWith("\n") ? next : `${next}\n`)
 }
@@ -221,7 +221,7 @@ async function pinned() {
   const text = await Bun.file(props).text()
   const value = text.split(/\r?\n/).flatMap((line) => {
     const [key, raw] = line.split("=", 2)
-    if (key.trim() !== "kilo.cli.pinned") return []
+    if (key.trim() !== "sonderr.cli.pinned") return []
     return [raw?.trim().toLowerCase()]
   })[0]
   return value == null || value === "true"
@@ -249,7 +249,7 @@ function regex(ver: string) {
 function body(ver: string, kind: string, from: string, tag: string, sha: string, notes: string) {
   return `## Summary
 - Prepare JetBrains ${kind} release ${ver}.
-- Review \`packages/kilo-jetbrains/gradle.properties\` and edit \`packages/kilo-jetbrains/CHANGELOG.md\` before merging.
+- Review \`packages/sonderr-jetbrains/gradle.properties\` and edit \`packages/sonderr-jetbrains/CHANGELOG.md\` before merging.
 
 JetBrains-Version: ${ver}
 JetBrains-Kind: ${kind}

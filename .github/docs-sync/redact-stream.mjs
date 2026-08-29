@@ -1,8 +1,8 @@
-// kilocode_change - new file
+// sonderr_change - new file
 
 /**
  * Line-wise stdin→stdout filter that redacts secret-looking env values.
- * Used in the docs-sync workflow so kilo stdout piped to edit-log.txt is safe.
+ * Used in the docs-sync workflow so sonderr stdout piped to edit-log.txt is safe.
  * Env values contain no newlines, so line-wise processing never splits a value.
  */
 

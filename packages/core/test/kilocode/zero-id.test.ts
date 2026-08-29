@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, test } from "bun:test"
-import { zeroID } from "@opencode-ai/core/kilocode/zero-id"
+import { zeroID } from "@sonderr/core/sonderr/zero-id"
 
 describe("zeroID", () => {
   test("accepts only string, number, and boolean parts", () => {

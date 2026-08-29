@@ -28,4 +28,4 @@ Encrypted config stored at `~/.config/sonderr/config.json`. Your key never leave
 
 ## License
 
-MIT. Based on Kilo Code (Kilo-Org/kilocode).
+MIT. Based on Sonderr (Sonderr-Org/sonderr).

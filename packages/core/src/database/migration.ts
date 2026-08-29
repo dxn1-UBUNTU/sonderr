@@ -2,7 +2,7 @@ export * as DatabaseMigration from "./migration"
 
 import { sql } from "drizzle-orm"
 import { Effect, Semaphore } from "effect"
-import type { EffectDrizzleSqlite } from "@opencode-ai/effect-drizzle-sqlite"
+import type { EffectDrizzleSqlite } from "@sonderr/effect-drizzle-sqlite"
 import { migrations } from "./migration.gen"
 import schema from "./schema.gen"
 
@@ -68,7 +68,7 @@ export function applyOnly(db: Database, input: Migration[]) {
 
     for (const migration of input) {
       if (completed.has(migration.id)) continue
-      // kilocode_change start - another kilo process may have recorded this migration since the snapshot above; take the write lock and re-check before replaying, or the journal insert dies on the primary key
+      // sonderr_change start - another sonderr process may have recorded this migration since the snapshot above; take the write lock and re-check before replaying, or the journal insert dies on the primary key
       yield* db.transaction(
         (tx) =>
           Effect.gen(function* () {
@@ -80,7 +80,7 @@ export function applyOnly(db: Database, input: Migration[]) {
           }),
         { behavior: "immediate" },
       )
-      // kilocode_change end
+      // sonderr_change end
     }
   })
 }

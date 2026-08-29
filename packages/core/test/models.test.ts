@@ -1,39 +1,39 @@
 import { describe, expect, beforeAll, beforeEach, afterAll } from "bun:test"
 import { Effect, Layer, Ref } from "effect"
 import { HttpClient, HttpClientResponse } from "effect/unstable/http"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNodePlatform } from "@opencode-ai/core/effect/app-node-platform"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { Flag } from "@opencode-ai/core/flag/flag"
-import { Global } from "@opencode-ai/core/global"
-import { ModelsDev } from "@opencode-ai/core/models-dev"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNodePlatform } from "@sonderr/core/effect/app-node-platform"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { Flag } from "@sonderr/core/flag/flag"
+import { Global } from "@sonderr/core/global"
+import { ModelsDev } from "@sonderr/core/models-dev"
 import { it } from "./lib/effect"
 import { readFile, rm, writeFile, utimes, mkdir } from "fs/promises"
 import path from "path"
 
-// test/preload.ts pins KILO_MODELS_PATH to a fixture so other tests can
+// test/preload.ts pins SONDERR_MODELS_PATH to a fixture so other tests can
 // resolve providers without network. These tests need to drive the on-disk
 // cache themselves and silence the eager refresh fork. Save/restore around
 // the suite — never leak the mutation to subsequent test files in the same
 // bun process.
-const ORIGINAL_MODELS_PATH = Flag.KILO_MODELS_PATH
-const ORIGINAL_DISABLE_FETCH = Flag.KILO_DISABLE_MODELS_FETCH
-// kilocode_change start - isolate the mutable cache fixture from parallel package test processes
+const ORIGINAL_MODELS_PATH = Flag.SONDERR_MODELS_PATH
+const ORIGINAL_DISABLE_FETCH = Flag.SONDERR_DISABLE_MODELS_FETCH
+// sonderr_change start - isolate the mutable cache fixture from parallel package test processes
 const original = Global.Path.cache
 const root = path.join(Global.Path.tmp, `models-test-${process.pid}-${Math.random().toString(36).slice(2)}`)
-// kilocode_change end
+// sonderr_change end
 beforeAll(() => {
-  Flag.KILO_MODELS_PATH = undefined
-  Flag.KILO_DISABLE_MODELS_FETCH = true
-  Global.Path.cache = root // kilocode_change
+  Flag.SONDERR_MODELS_PATH = undefined
+  Flag.SONDERR_DISABLE_MODELS_FETCH = true
+  Global.Path.cache = root // sonderr_change
 })
 afterAll(() => {
-  Flag.KILO_MODELS_PATH = ORIGINAL_MODELS_PATH
-  Flag.KILO_DISABLE_MODELS_FETCH = ORIGINAL_DISABLE_FETCH
-  Global.Path.cache = original // kilocode_change
+  Flag.SONDERR_MODELS_PATH = ORIGINAL_MODELS_PATH
+  Flag.SONDERR_DISABLE_MODELS_FETCH = ORIGINAL_DISABLE_FETCH
+  Global.Path.cache = original // sonderr_change
 })
 
-const cacheFile = path.join(root, "models.json") // kilocode_change
+const cacheFile = path.join(root, "models.json") // sonderr_change
 
 const fixture: Record<string, ModelsDev.Provider> = {
   acme: {
@@ -123,7 +123,7 @@ beforeEach(async () => {
 })
 
 afterAll(async () => {
-  await rm(root, { recursive: true, force: true }) // kilocode_change
+  await rm(root, { recursive: true, force: true }) // sonderr_change
 })
 
 const initialState: MockState = {
@@ -167,12 +167,12 @@ describe("ModelsDev Service", () => {
       const context = yield* Layer.build(buildLayer(state))
       const result = yield* Effect.acquireUseRelease(
         Effect.sync(() => {
-          Flag.KILO_DISABLE_MODELS_FETCH = false
+          Flag.SONDERR_DISABLE_MODELS_FETCH = false
         }),
         () => ModelsDev.Service.use((s) => s.get()).pipe(Effect.provide(context)),
         () =>
           Effect.sync(() => {
-            Flag.KILO_DISABLE_MODELS_FETCH = true
+            Flag.SONDERR_DISABLE_MODELS_FETCH = true
           }),
       )
       expect(result).toEqual(fixture2)
@@ -238,8 +238,8 @@ describe("ModelsDev Service", () => {
       const final = yield* Ref.get(state)
       expect(final.calls.length).toBe(1)
       expect(final.calls[0].url).toContain("/api.json")
-      expect(final.calls[0].userAgent).toStartWith("opencode/")
-      expect(final.calls[0].userAgent).toEndWith(`/${Flag.KILO_CLIENT}`)
+      expect(final.calls[0].userAgent).toStartWith("sonderr/")
+      expect(final.calls[0].userAgent).toEndWith(`/${Flag.SONDERR_CLIENT}`)
     }),
   )
 

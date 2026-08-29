@@ -2,10 +2,10 @@ import fs from "fs/promises"
 import path from "path"
 import { describe, expect } from "bun:test"
 import { Effect, Exit, Layer } from "effect"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { FileSystem } from "@opencode-ai/core/filesystem"
-import { Location } from "@opencode-ai/core/location"
-import { AbsolutePath, RelativePath } from "@opencode-ai/core/schema"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { FileSystem } from "@sonderr/core/filesystem"
+import { Location } from "@sonderr/core/location"
+import { AbsolutePath, RelativePath } from "@sonderr/core/schema"
 import { location } from "./fixture/location"
 import { tmpdir } from "./fixture/tmpdir"
 import { it } from "./lib/effect"
@@ -67,7 +67,7 @@ describe("FileSystem", () => {
     ),
   )
 
-  // kilocode_change start - canonical containment must reject in-worktree links to outside paths
+  // sonderr_change start - canonical containment must reject in-worktree links to outside paths
   it.live("rejects symlink escapes for reads, lists, and searches", () =>
     withTmp((directory) =>
       withTmp((outside) =>
@@ -88,5 +88,5 @@ describe("FileSystem", () => {
       ),
     ),
   )
-  // kilocode_change end
+  // sonderr_change end
 })

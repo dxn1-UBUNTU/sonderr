@@ -1,7 +1,7 @@
-// kilocode_change - new file
+// sonderr_change - new file
 
 /**
- * Commits the agent's packages/kilo-docs changes, pushes the rolling branch,
+ * Commits the agent's packages/sonderr-docs changes, pushes the rolling branch,
  * and creates or updates the rolling auto-docs PR.
  *
  * No-op when the agent produced no docs changes. PRs become drafts when the
@@ -29,8 +29,8 @@ const PENDING_DISPLAY_CAP = 60
 const SUMMARY_FILE = ".docs-sync-summary.json"
 // Owner of the rolling docs PR: assigned and asked for review on creation.
 const DOCS_OWNER = "emilieschario"
-const DOCS_PATH = "packages/kilo-docs"
-export const LEARNINGS_FILE = "packages/kilo-docs/LEARNINGS.md"
+const DOCS_PATH = "packages/sonderr-docs"
+export const LEARNINGS_FILE = "packages/sonderr-docs/LEARNINGS.md"
 
 const git = (args) =>
   execFileSync("git", args, { stdio: ["ignore", "pipe", "inherit"] })
@@ -108,7 +108,7 @@ export function renderBody({
 
   return `## Automated docs sync — ${date}
 
-This PR keeps kilo.ai/docs in sync with features merged to [Kilo-Org/cloud](https://github.com/Kilo-Org/cloud) and [Kilo-Org/kilocode](https://github.com/Kilo-Org/kilocode). Every change below links to the merged PR it documents.
+This PR keeps kilo.ai/docs in sync with features merged to [Sonderr-Org/cloud](https://github.com/Sonderr-Org/cloud) and [Sonderr-Org/sonderr](https://github.com/Sonderr-Org/sonderr). Every change below links to the merged PR it documents.
 
 - Window: \`${since}\` → \`${through}\`
 - Verification (docs build + tests): **${verified ? "passing" : "FAILING — needs a human look"}**
@@ -275,8 +275,8 @@ export function nonContentFiles(changedFiles) {
   return (Array.isArray(changedFiles) ? changedFiles : []).filter(
     (f) =>
       f !== LEARNINGS_FILE &&
-      !f.startsWith("packages/kilo-docs/pages/") &&
-      !f.startsWith("packages/kilo-docs/lib/nav/"),
+      !f.startsWith("packages/sonderr-docs/pages/") &&
+      !f.startsWith("packages/sonderr-docs/lib/nav/"),
   )
 }
 
@@ -345,7 +345,7 @@ export function noDiffReport({ uncovered, sinceOverride }) {
     list.length === 0
       ? ["The agent found nothing worth documenting in this window."]
       : [
-          `No packages/kilo-docs diff was produced, but ${list.length} PR(s) remain uncovered and will be re-collected on the next scheduled run:`,
+          `No packages/sonderr-docs diff was produced, but ${list.length} PR(s) remain uncovered and will be re-collected on the next scheduled run:`,
           "",
           ...list.map((u) => `- [${u.url}] ${u.reason || "uncovered"}`),
         ]
@@ -384,7 +384,7 @@ async function main() {
   const uncovered = computeUncovered({ worthy, summary: agentSummary, triage })
 
   if (git(["status", "--porcelain", "--", DOCS_PATH]) === "") {
-    console.log("no packages/kilo-docs changes produced; nothing to commit")
+    console.log("no packages/sonderr-docs changes produced; nothing to commit")
     const { summary, warning } = noDiffReport({ uncovered, sinceOverride })
     appendSummary(summary)
     if (warning) console.warn(`::warning::${warning}`)

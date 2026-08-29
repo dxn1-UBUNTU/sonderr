@@ -25,7 +25,7 @@ async function commit(message: string) {
 }
 
 beforeEach(async () => {
-  dir = await mkdtemp(join(tmpdir(), "kilo-upstream-git-"))
+  dir = await mkdtemp(join(tmpdir(), "sonderr-upstream-git-"))
   process.chdir(dir)
   await $`git init -b upstream`.quiet()
   await $`git config user.name Test`.quiet()
@@ -38,30 +38,30 @@ afterEach(async () => {
 })
 
 test("finds previous compatibility commit for transformed base", async () => {
-  await Bun.write("brand.txt", "opencode A\n")
+  await Bun.write("brand.txt", "sonderr A\n")
   const old = await commit("release: v1.0.0")
 
-  await Bun.write("brand.txt", "opencode B\n")
+  await Bun.write("brand.txt", "sonderr B\n")
   const target = await commit("release: v1.0.1")
   await $`git tag v1.0.1 ${target}`.quiet()
 
   await $`git checkout -b main ${old}`.quiet()
   await $`git tag v1.0.0 ${old}`.quiet()
-  await Bun.write("brand.txt", "kilo A\n")
-  const prior = await commit("refactor: kilo compat for v1.0.0")
+  await Bun.write("brand.txt", "sonderr A\n")
+  const prior = await commit("refactor: sonderr compat for v1.0.0")
 
   const found = await findLatestCompatCommit("main", target)
   expect(found?.commit).toBe(prior)
   expect(found?.upstream).toBe(old)
 
   await $`git checkout ${target}`.quiet()
-  await $`git checkout -b opencode-v1.0.1`.quiet()
-  await Bun.write("brand.txt", "kilo B\n")
+  await $`git checkout -b sonderr-v1.0.1`.quiet()
+  await Bun.write("brand.txt", "sonderr B\n")
   await $`git add -A`.quiet()
   const tree = await writeTree()
-  const next = await createCommit(tree, "refactor: kilo compat for v1.0.1", prior)
-  await updateBranch("opencode-v1.0.1", next)
-  const base = (await $`git merge-base main opencode-v1.0.1`.text()).trim()
+  const next = await createCommit(tree, "refactor: sonderr compat for v1.0.1", prior)
+  await updateBranch("sonderr-v1.0.1", next)
+  const base = (await $`git merge-base main sonderr-v1.0.1`.text()).trim()
   expect(base).toBe(prior)
   expect(await getCommitParents(next)).toEqual([prior])
 
@@ -71,35 +71,35 @@ test("finds previous compatibility commit for transformed base", async () => {
   expect(await getCommitParents(link)).toEqual([prior, target])
   expect(await isAncestor(target, link)).toBe(true)
 
-  const linked = (await $`git merge-base main opencode-v1.0.1`.text()).trim()
+  const linked = (await $`git merge-base main sonderr-v1.0.1`.text()).trim()
   expect(linked).toBe(prior)
 
-  await $`git merge opencode-v1.0.1`.quiet()
+  await $`git merge sonderr-v1.0.1`.quiet()
   const head = await getCommitHash("HEAD")
   expect(await getCommitParents(head)).toEqual([link, next])
   expect(await isAncestor(target, head)).toBe(true)
 })
 
 test("finds previous compatibility commit when upstream tags diverge", async () => {
-  await Bun.write("brand.txt", "opencode 1.4.9\n")
+  await Bun.write("brand.txt", "sonderr 1.4.9\n")
   const old = await commit("release: v1.4.9")
   await $`git tag v1.4.9 ${old}`.quiet()
 
   await $`git checkout -b release-30 ${old}`.quiet()
-  await Bun.write("brand.txt", "opencode 1.14.30\n")
+  await Bun.write("brand.txt", "sonderr 1.14.30\n")
   const side = await commit("release: v1.14.30")
   await $`git tag v1.14.30 ${side}`.quiet()
 
   await $`git checkout -b release-31 ${old}`.quiet()
-  await Bun.write("brand.txt", "opencode 1.14.31\n")
+  await Bun.write("brand.txt", "sonderr 1.14.31\n")
   const target = await commit("release: v1.14.31")
   await $`git tag v1.14.31 ${target}`.quiet()
 
   await $`git checkout -b main ${old}`.quiet()
-  await Bun.write("brand.txt", "kilo 1.4.9\n")
-  const ancient = await commit("refactor: kilo compat for v1.4.9")
-  await Bun.write("brand.txt", "kilo 1.14.30\n")
-  const prior = await commit("refactor: kilo compat for v1.14.30")
+  await Bun.write("brand.txt", "sonderr 1.4.9\n")
+  const ancient = await commit("refactor: sonderr compat for v1.4.9")
+  await Bun.write("brand.txt", "sonderr 1.14.30\n")
+  const prior = await commit("refactor: sonderr compat for v1.14.30")
 
   expect(await isAncestor(side, target)).toBe(false)
   expect(await isAncestor(old, target)).toBe(true)
@@ -110,27 +110,27 @@ test("finds previous compatibility commit when upstream tags diverge", async () 
   expect(found?.commit).not.toBe(ancient)
 })
 
-test("compatibility tree preserves Kilo paths unchanged upstream", async () => {
-  await Bun.write("shared.txt", "opencode A\n")
-  await Bun.write("unchanged.txt", "opencode unchanged\n")
+test("compatibility tree preserves Sonderr paths unchanged upstream", async () => {
+  await Bun.write("shared.txt", "sonderr A\n")
+  await Bun.write("unchanged.txt", "sonderr unchanged\n")
   await Bun.write("removed.txt", "remove me\n")
   const old = await commit("release: v1.0.0")
 
-  await Bun.write("shared.txt", "opencode B\n")
-  await Bun.write("added.txt", "opencode added\n")
+  await Bun.write("shared.txt", "sonderr B\n")
+  await Bun.write("added.txt", "sonderr added\n")
   await rm("removed.txt")
   const target = await commit("release: v1.0.1")
 
   await $`git checkout -b main ${old}`.quiet()
-  await Bun.write("shared.txt", "kilo A\n")
-  await Bun.write("unchanged.txt", "kilo marker\n")
-  await Bun.write("kilo-only.txt", "keep me\n")
-  const previous = await commit("refactor: kilo compat for v1.0.0")
+  await Bun.write("shared.txt", "sonderr A\n")
+  await Bun.write("unchanged.txt", "sonderr marker\n")
+  await Bun.write("sonderr-only.txt", "keep me\n")
+  const previous = await commit("refactor: sonderr compat for v1.0.0")
 
   await $`git checkout --detach ${target}`.quiet()
-  await Bun.write("shared.txt", "kilo B\n")
-  await Bun.write("added.txt", "kilo added\n")
-  await Bun.write(".opencode-version", "v1.0.1\n")
+  await Bun.write("shared.txt", "sonderr B\n")
+  await Bun.write("added.txt", "sonderr added\n")
+  await Bun.write(".sonderr-version", "v1.0.1\n")
   await $`git add -A`.quiet()
   const transformed = await writeTree()
   const tree = await overlayCompatTree({
@@ -138,13 +138,13 @@ test("compatibility tree preserves Kilo paths unchanged upstream", async () => {
     upstream: old,
     target,
     transformed,
-    extra: [".opencode-version"],
+    extra: [".sonderr-version"],
   })
 
-  expect(await $`git show ${`${tree}:shared.txt`}`.text()).toBe("kilo B\n")
-  expect(await $`git show ${`${tree}:added.txt`}`.text()).toBe("kilo added\n")
-  expect(await $`git show ${`${tree}:unchanged.txt`}`.text()).toBe("kilo marker\n")
-  expect(await $`git show ${`${tree}:kilo-only.txt`}`.text()).toBe("keep me\n")
-  expect(await $`git show ${`${tree}:.opencode-version`}`.text()).toBe("v1.0.1\n")
+  expect(await $`git show ${`${tree}:shared.txt`}`.text()).toBe("sonderr B\n")
+  expect(await $`git show ${`${tree}:added.txt`}`.text()).toBe("sonderr added\n")
+  expect(await $`git show ${`${tree}:unchanged.txt`}`.text()).toBe("sonderr marker\n")
+  expect(await $`git show ${`${tree}:sonderr-only.txt`}`.text()).toBe("keep me\n")
+  expect(await $`git show ${`${tree}:.sonderr-version`}`.text()).toBe("v1.0.1\n")
   expect((await $`git cat-file -e ${`${tree}:removed.txt`}`.quiet().nothrow()).exitCode).not.toBe(0)
 })

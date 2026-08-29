@@ -290,7 +290,7 @@ function download(url: string, filename: string) {
 }
 
 function save(url: string, filename: string) {
-  const event = new CustomEvent("kilo:save-image", {
+  const event = new CustomEvent("sonderr:save-image", {
     bubbles: true,
     cancelable: true,
     detail: { dataUrl: url, filename },

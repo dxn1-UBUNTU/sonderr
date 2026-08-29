@@ -43,7 +43,7 @@ export function buildNotes(input: { version: string; prerelease: boolean; releas
 export async function publishNotes(input: { version: string; prerelease: boolean; repo?: string; temp?: string }) {
   const repo = input.repo ? ["--repo", input.repo] : []
   const releases: Release[] = await $`gh release list --limit 1000 --json tagName,isDraft,isPrerelease ${repo}`.json()
-  const changelog = await Bun.file(new URL("../../packages/kilo-vscode/CHANGELOG.md", import.meta.url)).text()
+  const changelog = await Bun.file(new URL("../../packages/sonderr-vscode/CHANGELOG.md", import.meta.url)).text()
   const body = buildNotes({ ...input, releases, changelog })
   const notes = `${input.temp ?? "/tmp"}/release-notes.txt`
   const target = input.version.startsWith("v") ? input.version : `v${input.version}`

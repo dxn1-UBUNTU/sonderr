@@ -1,6 +1,6 @@
 export * as WebSearchTool from "./websearch"
 
-import { ToolFailure } from "@opencode-ai/llm"
+import { ToolFailure } from "@sonderr/llm"
 import { Context, Duration, Effect, Layer, Schema } from "effect"
 import { HttpClient, HttpClientRequest } from "effect/unstable/http"
 import { makeLocationNode } from "../effect/app-node"
@@ -67,17 +67,17 @@ export interface Config {
   readonly parallelApiKey?: string
 }
 
-export class ConfigService extends Context.Service<ConfigService, Config>()("@opencode/v2/WebSearchConfig") {}
+export class ConfigService extends Context.Service<ConfigService, Config>()("@sonderr/v2/WebSearchConfig") {}
 
 /** Isolates the retained product environment contract from the generic tool implementation. */
 export const defaultConfigLayer = Layer.sync(ConfigService, () =>
   ConfigService.of({
     provider:
-      process.env.KILO_WEBSEARCH_PROVIDER === "exa" || process.env.KILO_WEBSEARCH_PROVIDER === "parallel"
-        ? process.env.KILO_WEBSEARCH_PROVIDER
+      process.env.SONDERR_WEBSEARCH_PROVIDER === "exa" || process.env.SONDERR_WEBSEARCH_PROVIDER === "parallel"
+        ? process.env.SONDERR_WEBSEARCH_PROVIDER
         : undefined,
-    enableExa: truthy("KILO_EXPERIMENTAL") || truthy("KILO_ENABLE_EXA") || truthy("KILO_EXPERIMENTAL_EXA"),
-    enableParallel: truthy("KILO_ENABLE_PARALLEL") || truthy("KILO_EXPERIMENTAL_PARALLEL"),
+    enableExa: truthy("SONDERR_EXPERIMENTAL") || truthy("SONDERR_ENABLE_EXA") || truthy("SONDERR_EXPERIMENTAL_EXA"),
+    enableParallel: truthy("SONDERR_ENABLE_PARALLEL") || truthy("SONDERR_EXPERIMENTAL_PARALLEL"),
     exaApiKey: process.env.EXA_API_KEY,
     parallelApiKey: process.env.PARALLEL_API_KEY,
   }),
@@ -237,7 +237,7 @@ const layer = Layer.effectDiscard(
                         // V2 invocation context does not safely expose the model yet.
                       },
                       {
-                        "User-Agent": `opencode/${InstallationVersion}`,
+                        "User-Agent": `sonderr/${InstallationVersion}`,
                         ...(config.parallelApiKey ? { Authorization: `Bearer ${config.parallelApiKey}` } : {}),
                       },
                     )

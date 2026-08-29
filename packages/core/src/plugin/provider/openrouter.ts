@@ -1,7 +1,7 @@
 import { Effect } from "effect"
 import { ModelV2 } from "../../model"
 import { define } from "../internal"
-import { ProviderV2 } from "../../provider" // kilocode_change
+import { ProviderV2 } from "../../provider" // sonderr_change
 
 export const OpenRouterPlugin = define({
   id: "openrouter",
@@ -11,10 +11,10 @@ export const OpenRouterPlugin = define({
         for (const item of evt.provider.list()) {
           if (item.provider.api.type !== "aisdk") continue
           if (item.provider.api.package !== "@openrouter/ai-sdk-provider") continue
-          if (item.provider.id !== ProviderV2.ID.openrouter) continue // kilocode_change
+          if (item.provider.id !== ProviderV2.ID.openrouter) continue // sonderr_change
           evt.provider.update(item.provider.id, (provider) => {
-            provider.request.headers["HTTP-Referer"] = "https://kilo.ai/" // kilocode_change
-            provider.request.headers["X-Title"] = "Kilo Code" // kilocode_change
+            provider.request.headers["HTTP-Referer"] = "https://kilo.ai/" // sonderr_change
+            provider.request.headers["X-Title"] = "Sonderr" // sonderr_change
           })
           for (const modelID of [ModelV2.ID.make("gpt-5-chat-latest"), ModelV2.ID.make("openai/gpt-5-chat")]) {
             if (!item.models.has(modelID)) continue

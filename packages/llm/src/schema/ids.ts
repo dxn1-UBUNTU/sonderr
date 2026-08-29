@@ -1,5 +1,5 @@
 import { Schema } from "effect"
-import { ProviderMetadata } from "@opencode-ai/schema/llm"
+import { ProviderMetadata } from "@sonderr/schema/llm"
 
 export { ProviderMetadata }
 
@@ -42,7 +42,7 @@ export const FinishReason = Schema.Literals([
   "tool-calls",
   "content-filter",
   "error",
-  "other", // kilocode_change - preserve the AI SDK's unexpected provider finish reason
+  "other", // sonderr_change - preserve the AI SDK's unexpected provider finish reason
   "unknown",
 ])
 export type FinishReason = Schema.Schema.Type<typeof FinishReason>

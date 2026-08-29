@@ -1,7 +1,7 @@
 import { createMemo, onMount } from "solid-js"
 import { useSync } from "../../context/sync"
 import { DialogSelect, type DialogSelectOption } from "../../ui/dialog-select"
-import type { TextPart } from "@kilocode/sdk/v2"
+import type { TextPart } from "@sonderr/sdk/v2"
 import { Locale } from "../../util/locale"
 import { DialogMessage } from "./dialog-message"
 import { useDialog } from "../../ui/dialog"

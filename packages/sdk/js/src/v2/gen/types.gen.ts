@@ -112,12 +112,12 @@ export type Event =
   | EventSuggestionShown
   | EventSuggestionAccepted
   | EventSuggestionDismissed
-  | EventKilocodeAgentManagerStart
-  | EventKilocodeAgentManagerRequested
-  | EventKilocodeAgentManagerCancelled
-  | EventKilocodeNotebookRequested
-  | EventKilocodeNotebookCancelled
-  | EventKiloSessionsRemoteStatusChanged
+  | EventSonderrAgentManagerStart
+  | EventSonderrAgentManagerRequested
+  | EventSonderrAgentManagerCancelled
+  | EventSonderrNotebookRequested
+  | EventSonderrNotebookCancelled
+  | EventSonderrSessionsRemoteStatusChanged
   | EventLspClientDiagnostics
   | EventMemoryStatus1
   | EventMemoryUpdated1
@@ -1170,12 +1170,12 @@ export type GlobalEvent = {
     | EventSuggestionShown
     | EventSuggestionAccepted
     | EventSuggestionDismissed
-    | EventKilocodeAgentManagerStart
-    | EventKilocodeAgentManagerRequested
-    | EventKilocodeAgentManagerCancelled
-    | EventKilocodeNotebookRequested
-    | EventKilocodeNotebookCancelled
-    | EventKiloSessionsRemoteStatusChanged
+    | EventSonderrAgentManagerStart
+    | EventSonderrAgentManagerRequested
+    | EventSonderrAgentManagerCancelled
+    | EventSonderrNotebookRequested
+    | EventSonderrNotebookCancelled
+    | EventSonderrSessionsRemoteStatusChanged
     | EventLspClientDiagnostics
     | EventMemoryStatus
     | EventMemoryUpdated
@@ -2200,7 +2200,7 @@ export type GlobalEvent = {
 export type LogLevel = "DEBUG" | "INFO" | "WARN" | "ERROR"
 
 /**
- * Server configuration for the kilo serve command
+ * Server configuration for the sonderr serve command
  */
 export type ServerConfig = {
   port?: number
@@ -2213,7 +2213,7 @@ export type ServerConfig = {
 export type IndexingConfig = {
   enabled?: boolean
   provider?:
-    | "kilo"
+    | "sonderr"
     | "openai"
     | "ollama"
     | "openai-compatible"
@@ -2226,7 +2226,7 @@ export type IndexingConfig = {
   model?: string | null
   dimension?: number | null
   vectorStore?: "lancedb" | "qdrant"
-  kilo?: {
+  sonderr?: {
     apiKey?: string
     baseUrl?: string
     organizationId?: string
@@ -2537,7 +2537,7 @@ export type Config = {
   indexing?: IndexingConfig
   console?: {
     /**
-     * Width of the Kilo Console project context sidebar in pixels
+     * Width of the Sonderr Console project context sidebar in pixels
      */
     context_sidebar_width?: number
     diff_style?: "unified" | "split"
@@ -4081,7 +4081,7 @@ export type TuiKeybindListResponse = {
   keybinds: Array<TuiKeybindInfo>
 }
 
-export type KiloEmbeddingModelCatalog = {
+export type SonderrEmbeddingModelCatalog = {
   defaultModel: string
   models: Array<{
     id: string
@@ -4171,7 +4171,7 @@ export type ProviderUsageError = {
 export type ProviderUsageSnapshot = {
   id: string
   providerID: string
-  sourceKind: "kilo_managed" | "direct"
+  sourceKind: "sonderr_managed" | "direct"
   providerLabel: string
   planLabel: string
   sourceLabel: string
@@ -4456,7 +4456,7 @@ export type AnacondaDesktopOperationError = {
   message: string
 }
 
-export type KilocodeSessionImportResult = {
+export type SonderrSessionImportResult = {
   ok: boolean
   id: string
   skipped?: boolean
@@ -4963,9 +4963,9 @@ export type EventSuggestionDismissed = {
   }
 }
 
-export type EventKilocodeAgentManagerStart = {
+export type EventSonderrAgentManagerStart = {
   id: string
-  type: "kilocode.agent_manager.start"
+  type: "sonderr.agent_manager.start"
   properties: {
     requestID: string
     sessionID: string
@@ -4985,15 +4985,15 @@ export type EventKilocodeAgentManagerStart = {
   }
 }
 
-export type EventKilocodeAgentManagerRequested = {
+export type EventSonderrAgentManagerRequested = {
   id: string
-  type: "kilocode.agent_manager.requested"
+  type: "sonderr.agent_manager.requested"
   properties: AgentManagerRequest
 }
 
-export type EventKilocodeAgentManagerCancelled = {
+export type EventSonderrAgentManagerCancelled = {
   id: string
-  type: "kilocode.agent_manager.cancelled"
+  type: "sonderr.agent_manager.cancelled"
   properties: {
     requestID: AgentManagerRequestId
     sessionID: string
@@ -5001,15 +5001,15 @@ export type EventKilocodeAgentManagerCancelled = {
   }
 }
 
-export type EventKilocodeNotebookRequested = {
+export type EventSonderrNotebookRequested = {
   id: string
-  type: "kilocode.notebook.requested"
+  type: "sonderr.notebook.requested"
   properties: NotebookRequest
 }
 
-export type EventKilocodeNotebookCancelled = {
+export type EventSonderrNotebookCancelled = {
   id: string
-  type: "kilocode.notebook.cancelled"
+  type: "sonderr.notebook.cancelled"
   properties: {
     requestID: NotebookRequestId
     sessionID: string
@@ -5017,9 +5017,9 @@ export type EventKilocodeNotebookCancelled = {
   }
 }
 
-export type EventKiloSessionsRemoteStatusChanged = {
+export type EventSonderrSessionsRemoteStatusChanged = {
   id: string
-  type: "kilo-sessions.remote-status-changed"
+  type: "sonderr-sessions.remote-status-changed"
   properties: {
     enabled: boolean
     connected: boolean
@@ -15718,9 +15718,9 @@ export type IndexingModelsError = IndexingModelsErrors[keyof IndexingModelsError
 
 export type IndexingModelsResponses = {
   /**
-   * Kilo embedding model catalog
+   * Sonderr embedding model catalog
    */
-  200: KiloEmbeddingModelCatalog
+  200: SonderrEmbeddingModelCatalog
 }
 
 export type IndexingModelsResponse = IndexingModelsResponses[keyof IndexingModelsResponses]
@@ -15954,26 +15954,26 @@ export type InteractiveTerminalCloseResponses = {
 export type InteractiveTerminalCloseResponse =
   InteractiveTerminalCloseResponses[keyof InteractiveTerminalCloseResponses]
 
-export type KiloProfileData = {
+export type SonderrProfileData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/profile"
+  url: "/sonderr/profile"
 }
 
-export type KiloProfileErrors = {
+export type SonderrProfileErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KiloProfileError = KiloProfileErrors[keyof KiloProfileErrors]
+export type SonderrProfileError = SonderrProfileErrors[keyof SonderrProfileErrors]
 
-export type KiloProfileResponses = {
+export type SonderrProfileResponses = {
   /**
    * Profile data
    */
@@ -15992,7 +15992,7 @@ export type KiloProfileResponses = {
     balance: {
       balance: number
     } | null
-    kiloPass: {
+    sonderrPass: {
       currentPeriodBaseCreditsUsd: number
       currentPeriodUsageUsd: number
       currentPeriodBonusCreditsUsd: number
@@ -16002,30 +16002,30 @@ export type KiloProfileResponses = {
   }
 }
 
-export type KiloProfileResponse = KiloProfileResponses[keyof KiloProfileResponses]
+export type SonderrProfileResponse = SonderrProfileResponses[keyof SonderrProfileResponses]
 
-export type KiloAuthStatusData = {
+export type SonderrAuthStatusData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/auth-status"
+  url: "/sonderr/auth-status"
 }
 
-export type KiloAuthStatusErrors = {
+export type SonderrAuthStatusErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KiloAuthStatusError = KiloAuthStatusErrors[keyof KiloAuthStatusErrors]
+export type SonderrAuthStatusError = SonderrAuthStatusErrors[keyof SonderrAuthStatusErrors]
 
-export type KiloAuthStatusResponses = {
+export type SonderrAuthStatusResponses = {
   /**
-   * Kilo authentication status
+   * Sonderr authentication status
    */
   200: {
     authenticated: boolean
@@ -16033,28 +16033,28 @@ export type KiloAuthStatusResponses = {
   }
 }
 
-export type KiloAuthStatusResponse = KiloAuthStatusResponses[keyof KiloAuthStatusResponses]
+export type SonderrAuthStatusResponse = SonderrAuthStatusResponses[keyof SonderrAuthStatusResponses]
 
-export type KiloModesData = {
+export type SonderrModesData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/modes"
+  url: "/sonderr/modes"
 }
 
-export type KiloModesErrors = {
+export type SonderrModesErrors = {
   /**
    * Bad request
    */
   400: BadRequestError
 }
 
-export type KiloModesError = KiloModesErrors[keyof KiloModesErrors]
+export type SonderrModesError = SonderrModesErrors[keyof SonderrModesErrors]
 
-export type KiloModesResponses = {
+export type SonderrModesResponses = {
   /**
    * Organization modes list
    */
@@ -16087,9 +16087,9 @@ export type KiloModesResponses = {
   }
 }
 
-export type KiloModesResponse = KiloModesResponses[keyof KiloModesResponses]
+export type SonderrModesResponse = SonderrModesResponses[keyof SonderrModesResponses]
 
-export type KiloFimData = {
+export type SonderrFimData = {
   body?: {
     prefix: string
     suffix: string
@@ -16103,19 +16103,19 @@ export type KiloFimData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/fim"
+  url: "/sonderr/fim"
 }
 
-export type KiloFimErrors = {
+export type SonderrFimErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KiloFimError = KiloFimErrors[keyof KiloFimErrors]
+export type SonderrFimError = SonderrFimErrors[keyof SonderrFimErrors]
 
-export type KiloFimResponses = {
+export type SonderrFimResponses = {
   /**
    * Streaming FIM completion response
    */
@@ -16134,9 +16134,9 @@ export type KiloFimResponses = {
   }
 }
 
-export type KiloFimResponse = KiloFimResponses[keyof KiloFimResponses]
+export type SonderrFimResponse = SonderrFimResponses[keyof SonderrFimResponses]
 
-export type KiloEditData = {
+export type SonderrEditData = {
   body?: {
     provider?: string
     model?: string
@@ -16158,19 +16158,19 @@ export type KiloEditData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/edit"
+  url: "/sonderr/edit"
 }
 
-export type KiloEditErrors = {
+export type SonderrEditErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KiloEditError = KiloEditErrors[keyof KiloEditErrors]
+export type SonderrEditError = SonderrEditErrors[keyof SonderrEditErrors]
 
-export type KiloEditResponses = {
+export type SonderrEditResponses = {
   /**
    * Next Edit completion
    */
@@ -16183,9 +16183,9 @@ export type KiloEditResponses = {
   }
 }
 
-export type KiloEditResponse = KiloEditResponses[keyof KiloEditResponses]
+export type SonderrEditResponse = SonderrEditResponses[keyof SonderrEditResponses]
 
-export type KiloAudioTranscriptionsData = {
+export type SonderrAudioTranscriptionsData = {
   body?: {
     model: string
     input_audio: {
@@ -16201,19 +16201,19 @@ export type KiloAudioTranscriptionsData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/audio/transcriptions"
+  url: "/sonderr/audio/transcriptions"
 }
 
-export type KiloAudioTranscriptionsErrors = {
+export type SonderrAudioTranscriptionsErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KiloAudioTranscriptionsError = KiloAudioTranscriptionsErrors[keyof KiloAudioTranscriptionsErrors]
+export type SonderrAudioTranscriptionsError = SonderrAudioTranscriptionsErrors[keyof SonderrAudioTranscriptionsErrors]
 
-export type KiloAudioTranscriptionsResponses = {
+export type SonderrAudioTranscriptionsResponses = {
   /**
    * Transcription response
    */
@@ -16223,28 +16223,28 @@ export type KiloAudioTranscriptionsResponses = {
   }
 }
 
-export type KiloAudioTranscriptionsResponse = KiloAudioTranscriptionsResponses[keyof KiloAudioTranscriptionsResponses]
+export type SonderrAudioTranscriptionsResponse = SonderrAudioTranscriptionsResponses[keyof SonderrAudioTranscriptionsResponses]
 
-export type KiloModelsImagesData = {
+export type SonderrModelsImagesData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/models/images"
+  url: "/sonderr/models/images"
 }
 
-export type KiloModelsImagesErrors = {
+export type SonderrModelsImagesErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KiloModelsImagesError = KiloModelsImagesErrors[keyof KiloModelsImagesErrors]
+export type SonderrModelsImagesError = SonderrModelsImagesErrors[keyof SonderrModelsImagesErrors]
 
-export type KiloModelsImagesResponses = {
+export type SonderrModelsImagesResponses = {
   /**
    * Image-capable model list
    */
@@ -16255,28 +16255,28 @@ export type KiloModelsImagesResponses = {
   }>
 }
 
-export type KiloModelsImagesResponse = KiloModelsImagesResponses[keyof KiloModelsImagesResponses]
+export type SonderrModelsImagesResponse = SonderrModelsImagesResponses[keyof SonderrModelsImagesResponses]
 
-export type KiloModelsTranscriptionsData = {
+export type SonderrModelsTranscriptionsData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/models/transcriptions"
+  url: "/sonderr/models/transcriptions"
 }
 
-export type KiloModelsTranscriptionsErrors = {
+export type SonderrModelsTranscriptionsErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KiloModelsTranscriptionsError = KiloModelsTranscriptionsErrors[keyof KiloModelsTranscriptionsErrors]
+export type SonderrModelsTranscriptionsError = SonderrModelsTranscriptionsErrors[keyof SonderrModelsTranscriptionsErrors]
 
-export type KiloModelsTranscriptionsResponses = {
+export type SonderrModelsTranscriptionsResponses = {
   /**
    * Speech-to-text model list
    */
@@ -16286,29 +16286,29 @@ export type KiloModelsTranscriptionsResponses = {
   }>
 }
 
-export type KiloModelsTranscriptionsResponse =
-  KiloModelsTranscriptionsResponses[keyof KiloModelsTranscriptionsResponses]
+export type SonderrModelsTranscriptionsResponse =
+  SonderrModelsTranscriptionsResponses[keyof SonderrModelsTranscriptionsResponses]
 
-export type KiloNotificationsData = {
+export type SonderrNotificationsData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/notifications"
+  url: "/sonderr/notifications"
 }
 
-export type KiloNotificationsErrors = {
+export type SonderrNotificationsErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KiloNotificationsError = KiloNotificationsErrors[keyof KiloNotificationsErrors]
+export type SonderrNotificationsError = SonderrNotificationsErrors[keyof SonderrNotificationsErrors]
 
-export type KiloNotificationsResponses = {
+export type SonderrNotificationsResponses = {
   /**
    * Notifications list
    */
@@ -16325,9 +16325,9 @@ export type KiloNotificationsResponses = {
   }>
 }
 
-export type KiloNotificationsResponse = KiloNotificationsResponses[keyof KiloNotificationsResponses]
+export type SonderrNotificationsResponse = SonderrNotificationsResponses[keyof SonderrNotificationsResponses]
 
-export type KiloOrganizationSetData = {
+export type SonderrOrganizationSetData = {
   body?: {
     organizationId: string | null
   }
@@ -16336,38 +16336,38 @@ export type KiloOrganizationSetData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/organization"
+  url: "/sonderr/organization"
 }
 
-export type KiloOrganizationSetErrors = {
+export type SonderrOrganizationSetErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KiloOrganizationSetError = KiloOrganizationSetErrors[keyof KiloOrganizationSetErrors]
+export type SonderrOrganizationSetError = SonderrOrganizationSetErrors[keyof SonderrOrganizationSetErrors]
 
-export type KiloOrganizationSetResponses = {
+export type SonderrOrganizationSetResponses = {
   /**
    * Organization updated successfully
    */
   200: boolean
 }
 
-export type KiloOrganizationSetResponse = KiloOrganizationSetResponses[keyof KiloOrganizationSetResponses]
+export type SonderrOrganizationSetResponse = SonderrOrganizationSetResponses[keyof SonderrOrganizationSetResponses]
 
-export type KiloClawStatusData = {
+export type SonderrClawStatusData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/claw/status"
+  url: "/sonderr/claw/status"
 }
 
-export type KiloClawStatusErrors = {
+export type SonderrClawStatusErrors = {
   /**
    * Bad request
    */
@@ -16378,9 +16378,9 @@ export type KiloClawStatusErrors = {
   503: EffectHttpApiErrorServiceUnavailable
 }
 
-export type KiloClawStatusError = KiloClawStatusErrors[keyof KiloClawStatusErrors]
+export type SonderrClawStatusError = SonderrClawStatusErrors[keyof SonderrClawStatusErrors]
 
-export type KiloClawStatusResponses = {
+export type SonderrClawStatusResponses = {
   /**
    * Instance status
    */
@@ -16411,42 +16411,42 @@ export type KiloClawStatusResponses = {
   }
 }
 
-export type KiloClawStatusResponse = KiloClawStatusResponses[keyof KiloClawStatusResponses]
+export type SonderrClawStatusResponse = SonderrClawStatusResponses[keyof SonderrClawStatusResponses]
 
-export type KiloClawChatCredentialsData = {
+export type SonderrClawChatCredentialsData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/claw/chat-credentials"
+  url: "/sonderr/claw/chat-credentials"
 }
 
-export type KiloClawChatCredentialsErrors = {
+export type SonderrClawChatCredentialsErrors = {
   /**
    * Bad request
    */
   400: BadRequestError
 }
 
-export type KiloClawChatCredentialsError = KiloClawChatCredentialsErrors[keyof KiloClawChatCredentialsErrors]
+export type SonderrClawChatCredentialsError = SonderrClawChatCredentialsErrors[keyof SonderrClawChatCredentialsErrors]
 
-export type KiloClawChatCredentialsResponses = {
+export type SonderrClawChatCredentialsResponses = {
   /**
-   * Kilo Chat credentials or null
+   * Sonderr Chat credentials or null
    */
   200: {
     token: string
     expiresAt: string
-    kiloChatUrl: string
+    sonderrChatUrl: string
     eventServiceUrl: string
   } | null
 }
 
-export type KiloClawChatCredentialsResponse = KiloClawChatCredentialsResponses[keyof KiloClawChatCredentialsResponses]
+export type SonderrClawChatCredentialsResponse = SonderrClawChatCredentialsResponses[keyof SonderrClawChatCredentialsResponses]
 
-export type KiloCloudSessionsData = {
+export type SonderrCloudSessionsData = {
   body?: never
   path?: never
   query?: {
@@ -16456,19 +16456,19 @@ export type KiloCloudSessionsData = {
     limit?: number
     gitUrl?: string
   }
-  url: "/kilo/cloud-sessions"
+  url: "/sonderr/cloud-sessions"
 }
 
-export type KiloCloudSessionsErrors = {
+export type SonderrCloudSessionsErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KiloCloudSessionsError = KiloCloudSessionsErrors[keyof KiloCloudSessionsErrors]
+export type SonderrCloudSessionsError = SonderrCloudSessionsErrors[keyof SonderrCloudSessionsErrors]
 
-export type KiloCloudSessionsResponses = {
+export type SonderrCloudSessionsResponses = {
   /**
    * Cloud sessions list
    */
@@ -16484,9 +16484,9 @@ export type KiloCloudSessionsResponses = {
   }
 }
 
-export type KiloCloudSessionsResponse = KiloCloudSessionsResponses[keyof KiloCloudSessionsResponses]
+export type SonderrCloudSessionsResponse = SonderrCloudSessionsResponses[keyof SonderrCloudSessionsResponses]
 
-export type KiloCloudSessionGetData = {
+export type SonderrCloudSessionGetData = {
   body?: never
   path: {
     id: string
@@ -16495,10 +16495,10 @@ export type KiloCloudSessionGetData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/cloud/session/{id}"
+  url: "/sonderr/cloud/session/{id}"
 }
 
-export type KiloCloudSessionGetErrors = {
+export type SonderrCloudSessionGetErrors = {
   /**
    * Bad request
    */
@@ -16509,9 +16509,9 @@ export type KiloCloudSessionGetErrors = {
   404: NotFoundError
 }
 
-export type KiloCloudSessionGetError = KiloCloudSessionGetErrors[keyof KiloCloudSessionGetErrors]
+export type SonderrCloudSessionGetError = SonderrCloudSessionGetErrors[keyof SonderrCloudSessionGetErrors]
 
-export type KiloCloudSessionGetResponses = {
+export type SonderrCloudSessionGetResponses = {
   /**
    * Cloud session data
    */
@@ -16544,9 +16544,9 @@ export type KiloCloudSessionGetResponses = {
   }
 }
 
-export type KiloCloudSessionGetResponse = KiloCloudSessionGetResponses[keyof KiloCloudSessionGetResponses]
+export type SonderrCloudSessionGetResponse = SonderrCloudSessionGetResponses[keyof SonderrCloudSessionGetResponses]
 
-export type KiloCloudSessionImportData = {
+export type SonderrCloudSessionImportData = {
   body?: {
     sessionId: string
   }
@@ -16555,10 +16555,10 @@ export type KiloCloudSessionImportData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilo/cloud/session/import"
+  url: "/sonderr/cloud/session/import"
 }
 
-export type KiloCloudSessionImportErrors = {
+export type SonderrCloudSessionImportErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
@@ -16573,9 +16573,9 @@ export type KiloCloudSessionImportErrors = {
   500: CloudSessionImportError
 }
 
-export type KiloCloudSessionImportError = KiloCloudSessionImportErrors[keyof KiloCloudSessionImportErrors]
+export type SonderrCloudSessionImportError = SonderrCloudSessionImportErrors[keyof SonderrCloudSessionImportErrors]
 
-export type KiloCloudSessionImportResponses = {
+export type SonderrCloudSessionImportResponses = {
   /**
    * Imported session info
    */
@@ -16589,9 +16589,9 @@ export type KiloCloudSessionImportResponses = {
   }
 }
 
-export type KiloCloudSessionImportResponse = KiloCloudSessionImportResponses[keyof KiloCloudSessionImportResponses]
+export type SonderrCloudSessionImportResponse = SonderrCloudSessionImportResponses[keyof SonderrCloudSessionImportResponses]
 
-export type KilocodeResumeSessionData = {
+export type SonderrResumeSessionData = {
   body?: {
     messageID: string
     snapshotInitialization?: "wait"
@@ -16603,10 +16603,10 @@ export type KilocodeResumeSessionData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/session/{sessionID}/resume"
+  url: "/sonderr/session/{sessionID}/resume"
 }
 
-export type KilocodeResumeSessionErrors = {
+export type SonderrResumeSessionErrors = {
   /**
    * InvalidRequestError
    */
@@ -16617,74 +16617,74 @@ export type KilocodeResumeSessionErrors = {
   404: NotFoundError
 }
 
-export type KilocodeResumeSessionError = KilocodeResumeSessionErrors[keyof KilocodeResumeSessionErrors]
+export type SonderrResumeSessionError = SonderrResumeSessionErrors[keyof SonderrResumeSessionErrors]
 
-export type KilocodeResumeSessionResponses = {
+export type SonderrResumeSessionResponses = {
   /**
    * Session continuation accepted
    */
   200: boolean
 }
 
-export type KilocodeResumeSessionResponse = KilocodeResumeSessionResponses[keyof KilocodeResumeSessionResponses]
+export type SonderrResumeSessionResponse = SonderrResumeSessionResponses[keyof SonderrResumeSessionResponses]
 
-export type KilocodeHeapSnapshotData = {
+export type SonderrHeapSnapshotData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/heap/snapshot"
+  url: "/sonderr/heap/snapshot"
 }
 
-export type KilocodeHeapSnapshotErrors = {
+export type SonderrHeapSnapshotErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KilocodeHeapSnapshotError = KilocodeHeapSnapshotErrors[keyof KilocodeHeapSnapshotErrors]
+export type SonderrHeapSnapshotError = SonderrHeapSnapshotErrors[keyof SonderrHeapSnapshotErrors]
 
-export type KilocodeHeapSnapshotResponses = {
+export type SonderrHeapSnapshotResponses = {
   /**
    * Heap snapshot file path
    */
   200: string
 }
 
-export type KilocodeHeapSnapshotResponse = KilocodeHeapSnapshotResponses[keyof KilocodeHeapSnapshotResponses]
+export type SonderrHeapSnapshotResponse = SonderrHeapSnapshotResponses[keyof SonderrHeapSnapshotResponses]
 
-export type KilocodeCommandFilesData = {
+export type SonderrCommandFilesData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/command/files"
+  url: "/sonderr/command/files"
 }
 
-export type KilocodeCommandFilesErrors = {
+export type SonderrCommandFilesErrors = {
   /**
    * Bad request
    */
   400: BadRequestError
 }
 
-export type KilocodeCommandFilesError = KilocodeCommandFilesErrors[keyof KilocodeCommandFilesErrors]
+export type SonderrCommandFilesError = SonderrCommandFilesErrors[keyof SonderrCommandFilesErrors]
 
-export type KilocodeCommandFilesResponses = {
+export type SonderrCommandFilesResponses = {
   /**
    * Command files
    */
   200: Array<CommandFile>
 }
 
-export type KilocodeCommandFilesResponse = KilocodeCommandFilesResponses[keyof KilocodeCommandFilesResponses]
+export type SonderrCommandFilesResponse = SonderrCommandFilesResponses[keyof SonderrCommandFilesResponses]
 
-export type KilocodeRemoveCommandData = {
+export type SonderrRemoveCommandData = {
   body?: {
     location: string
   }
@@ -16693,28 +16693,28 @@ export type KilocodeRemoveCommandData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/command/remove"
+  url: "/sonderr/command/remove"
 }
 
-export type KilocodeRemoveCommandErrors = {
+export type SonderrRemoveCommandErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KilocodeRemoveCommandError = KilocodeRemoveCommandErrors[keyof KilocodeRemoveCommandErrors]
+export type SonderrRemoveCommandError = SonderrRemoveCommandErrors[keyof SonderrRemoveCommandErrors]
 
-export type KilocodeRemoveCommandResponses = {
+export type SonderrRemoveCommandResponses = {
   /**
    * Command removed
    */
   200: boolean
 }
 
-export type KilocodeRemoveCommandResponse = KilocodeRemoveCommandResponses[keyof KilocodeRemoveCommandResponses]
+export type SonderrRemoveCommandResponse = SonderrRemoveCommandResponses[keyof SonderrRemoveCommandResponses]
 
-export type KilocodeRemoveSkillData = {
+export type SonderrRemoveSkillData = {
   body?: {
     location: string
   }
@@ -16723,28 +16723,28 @@ export type KilocodeRemoveSkillData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/skill/remove"
+  url: "/sonderr/skill/remove"
 }
 
-export type KilocodeRemoveSkillErrors = {
+export type SonderrRemoveSkillErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KilocodeRemoveSkillError = KilocodeRemoveSkillErrors[keyof KilocodeRemoveSkillErrors]
+export type SonderrRemoveSkillError = SonderrRemoveSkillErrors[keyof SonderrRemoveSkillErrors]
 
-export type KilocodeRemoveSkillResponses = {
+export type SonderrRemoveSkillResponses = {
   /**
    * Skill removed
    */
   200: boolean
 }
 
-export type KilocodeRemoveSkillResponse = KilocodeRemoveSkillResponses[keyof KilocodeRemoveSkillResponses]
+export type SonderrRemoveSkillResponse = SonderrRemoveSkillResponses[keyof SonderrRemoveSkillResponses]
 
-export type KilocodeRemoveAgentData = {
+export type SonderrRemoveAgentData = {
   body?: {
     name: string
     scope?: "global" | "project"
@@ -16754,28 +16754,28 @@ export type KilocodeRemoveAgentData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/agent/remove"
+  url: "/sonderr/agent/remove"
 }
 
-export type KilocodeRemoveAgentErrors = {
+export type SonderrRemoveAgentErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KilocodeRemoveAgentError = KilocodeRemoveAgentErrors[keyof KilocodeRemoveAgentErrors]
+export type SonderrRemoveAgentError = SonderrRemoveAgentErrors[keyof SonderrRemoveAgentErrors]
 
-export type KilocodeRemoveAgentResponses = {
+export type SonderrRemoveAgentResponses = {
   /**
    * Agent removed
    */
   200: boolean
 }
 
-export type KilocodeRemoveAgentResponse = KilocodeRemoveAgentResponses[keyof KilocodeRemoveAgentResponses]
+export type SonderrRemoveAgentResponse = SonderrRemoveAgentResponses[keyof SonderrRemoveAgentResponses]
 
-export type KilocodeRemoveSnapshotData = {
+export type SonderrRemoveSnapshotData = {
   body?: {
     worktree: string
   }
@@ -16784,38 +16784,38 @@ export type KilocodeRemoveSnapshotData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/snapshot/remove"
+  url: "/sonderr/snapshot/remove"
 }
 
-export type KilocodeRemoveSnapshotErrors = {
+export type SonderrRemoveSnapshotErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KilocodeRemoveSnapshotError = KilocodeRemoveSnapshotErrors[keyof KilocodeRemoveSnapshotErrors]
+export type SonderrRemoveSnapshotError = SonderrRemoveSnapshotErrors[keyof SonderrRemoveSnapshotErrors]
 
-export type KilocodeRemoveSnapshotResponses = {
+export type SonderrRemoveSnapshotResponses = {
   /**
    * Snapshot repository removed
    */
   200: boolean
 }
 
-export type KilocodeRemoveSnapshotResponse = KilocodeRemoveSnapshotResponses[keyof KilocodeRemoveSnapshotResponses]
+export type SonderrRemoveSnapshotResponse = SonderrRemoveSnapshotResponses[keyof SonderrRemoveSnapshotResponses]
 
-export type KilocodeProviderUsageGetData = {
+export type SonderrProviderUsageGetData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/provider-usage"
+  url: "/sonderr/provider-usage"
 }
 
-export type KilocodeProviderUsageGetErrors = {
+export type SonderrProviderUsageGetErrors = {
   /**
    * Bad request
    */
@@ -16826,29 +16826,29 @@ export type KilocodeProviderUsageGetErrors = {
   503: EffectHttpApiErrorServiceUnavailable
 }
 
-export type KilocodeProviderUsageGetError = KilocodeProviderUsageGetErrors[keyof KilocodeProviderUsageGetErrors]
+export type SonderrProviderUsageGetError = SonderrProviderUsageGetErrors[keyof SonderrProviderUsageGetErrors]
 
-export type KilocodeProviderUsageGetResponses = {
+export type SonderrProviderUsageGetResponses = {
   /**
    * Current provider usage
    */
   200: ProviderUsage
 }
 
-export type KilocodeProviderUsageGetResponse =
-  KilocodeProviderUsageGetResponses[keyof KilocodeProviderUsageGetResponses]
+export type SonderrProviderUsageGetResponse =
+  SonderrProviderUsageGetResponses[keyof SonderrProviderUsageGetResponses]
 
-export type KilocodeProviderUsageRefreshData = {
+export type SonderrProviderUsageRefreshData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/provider-usage/refresh"
+  url: "/sonderr/provider-usage/refresh"
 }
 
-export type KilocodeProviderUsageRefreshErrors = {
+export type SonderrProviderUsageRefreshErrors = {
   /**
    * Bad request
    */
@@ -16859,48 +16859,48 @@ export type KilocodeProviderUsageRefreshErrors = {
   503: EffectHttpApiErrorServiceUnavailable
 }
 
-export type KilocodeProviderUsageRefreshError =
-  KilocodeProviderUsageRefreshErrors[keyof KilocodeProviderUsageRefreshErrors]
+export type SonderrProviderUsageRefreshError =
+  SonderrProviderUsageRefreshErrors[keyof SonderrProviderUsageRefreshErrors]
 
-export type KilocodeProviderUsageRefreshResponses = {
+export type SonderrProviderUsageRefreshResponses = {
   /**
    * Refreshed provider usage
    */
   200: ProviderUsage
 }
 
-export type KilocodeProviderUsageRefreshResponse =
-  KilocodeProviderUsageRefreshResponses[keyof KilocodeProviderUsageRefreshResponses]
+export type SonderrProviderUsageRefreshResponse =
+  SonderrProviderUsageRefreshResponses[keyof SonderrProviderUsageRefreshResponses]
 
-export type KilocodeNotebookListData = {
+export type SonderrNotebookListData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/notebook"
+  url: "/sonderr/notebook"
 }
 
-export type KilocodeNotebookListErrors = {
+export type SonderrNotebookListErrors = {
   /**
    * Bad request
    */
   400: BadRequestError
 }
 
-export type KilocodeNotebookListError = KilocodeNotebookListErrors[keyof KilocodeNotebookListErrors]
+export type SonderrNotebookListError = SonderrNotebookListErrors[keyof SonderrNotebookListErrors]
 
-export type KilocodeNotebookListResponses = {
+export type SonderrNotebookListResponses = {
   /**
    * Pending notebook host requests
    */
   200: Array<NotebookRequest>
 }
 
-export type KilocodeNotebookListResponse = KilocodeNotebookListResponses[keyof KilocodeNotebookListResponses]
+export type SonderrNotebookListResponse = SonderrNotebookListResponses[keyof SonderrNotebookListResponses]
 
-export type KilocodeNotebookReplyData = {
+export type SonderrNotebookReplyData = {
   body?: {
     result: NotebookResult
   }
@@ -16911,10 +16911,10 @@ export type KilocodeNotebookReplyData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/notebook/{requestID}/reply"
+  url: "/sonderr/notebook/{requestID}/reply"
 }
 
-export type KilocodeNotebookReplyErrors = {
+export type SonderrNotebookReplyErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
@@ -16925,18 +16925,18 @@ export type KilocodeNotebookReplyErrors = {
   404: NotFoundError
 }
 
-export type KilocodeNotebookReplyError = KilocodeNotebookReplyErrors[keyof KilocodeNotebookReplyErrors]
+export type SonderrNotebookReplyError = SonderrNotebookReplyErrors[keyof SonderrNotebookReplyErrors]
 
-export type KilocodeNotebookReplyResponses = {
+export type SonderrNotebookReplyResponses = {
   /**
    * Notebook reply accepted
    */
   200: boolean
 }
 
-export type KilocodeNotebookReplyResponse = KilocodeNotebookReplyResponses[keyof KilocodeNotebookReplyResponses]
+export type SonderrNotebookReplyResponse = SonderrNotebookReplyResponses[keyof SonderrNotebookReplyResponses]
 
-export type KilocodeNotebookRejectData = {
+export type SonderrNotebookRejectData = {
   body?: {
     error: NotebookFailure
   }
@@ -16947,10 +16947,10 @@ export type KilocodeNotebookRejectData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/notebook/{requestID}/reject"
+  url: "/sonderr/notebook/{requestID}/reject"
 }
 
-export type KilocodeNotebookRejectErrors = {
+export type SonderrNotebookRejectErrors = {
   /**
    * Bad request
    */
@@ -16961,47 +16961,47 @@ export type KilocodeNotebookRejectErrors = {
   404: NotFoundError
 }
 
-export type KilocodeNotebookRejectError = KilocodeNotebookRejectErrors[keyof KilocodeNotebookRejectErrors]
+export type SonderrNotebookRejectError = SonderrNotebookRejectErrors[keyof SonderrNotebookRejectErrors]
 
-export type KilocodeNotebookRejectResponses = {
+export type SonderrNotebookRejectResponses = {
   /**
    * Notebook rejection accepted
    */
   200: boolean
 }
 
-export type KilocodeNotebookRejectResponse = KilocodeNotebookRejectResponses[keyof KilocodeNotebookRejectResponses]
+export type SonderrNotebookRejectResponse = SonderrNotebookRejectResponses[keyof SonderrNotebookRejectResponses]
 
-export type KilocodeAgentManagerListData = {
+export type SonderrAgentManagerListData = {
   body?: never
   path?: never
   query?: {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/agent-manager"
+  url: "/sonderr/agent-manager"
 }
 
-export type KilocodeAgentManagerListErrors = {
+export type SonderrAgentManagerListErrors = {
   /**
    * Bad request
    */
   400: BadRequestError
 }
 
-export type KilocodeAgentManagerListError = KilocodeAgentManagerListErrors[keyof KilocodeAgentManagerListErrors]
+export type SonderrAgentManagerListError = SonderrAgentManagerListErrors[keyof SonderrAgentManagerListErrors]
 
-export type KilocodeAgentManagerListResponses = {
+export type SonderrAgentManagerListResponses = {
   /**
    * Pending Agent Manager host requests
    */
   200: Array<AgentManagerRequest>
 }
 
-export type KilocodeAgentManagerListResponse =
-  KilocodeAgentManagerListResponses[keyof KilocodeAgentManagerListResponses]
+export type SonderrAgentManagerListResponse =
+  SonderrAgentManagerListResponses[keyof SonderrAgentManagerListResponses]
 
-export type KilocodeAgentManagerReplyData = {
+export type SonderrAgentManagerReplyData = {
   body?: {
     result: AgentManagerResult
   }
@@ -17012,10 +17012,10 @@ export type KilocodeAgentManagerReplyData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/agent-manager/{requestID}/reply"
+  url: "/sonderr/agent-manager/{requestID}/reply"
 }
 
-export type KilocodeAgentManagerReplyErrors = {
+export type SonderrAgentManagerReplyErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
@@ -17026,19 +17026,19 @@ export type KilocodeAgentManagerReplyErrors = {
   404: NotFoundError
 }
 
-export type KilocodeAgentManagerReplyError = KilocodeAgentManagerReplyErrors[keyof KilocodeAgentManagerReplyErrors]
+export type SonderrAgentManagerReplyError = SonderrAgentManagerReplyErrors[keyof SonderrAgentManagerReplyErrors]
 
-export type KilocodeAgentManagerReplyResponses = {
+export type SonderrAgentManagerReplyResponses = {
   /**
    * Agent Manager reply accepted
    */
   200: boolean
 }
 
-export type KilocodeAgentManagerReplyResponse =
-  KilocodeAgentManagerReplyResponses[keyof KilocodeAgentManagerReplyResponses]
+export type SonderrAgentManagerReplyResponse =
+  SonderrAgentManagerReplyResponses[keyof SonderrAgentManagerReplyResponses]
 
-export type KilocodeAgentManagerRejectData = {
+export type SonderrAgentManagerRejectData = {
   body?: {
     error: AgentManagerFailure
   }
@@ -17049,10 +17049,10 @@ export type KilocodeAgentManagerRejectData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/agent-manager/{requestID}/reject"
+  url: "/sonderr/agent-manager/{requestID}/reject"
 }
 
-export type KilocodeAgentManagerRejectErrors = {
+export type SonderrAgentManagerRejectErrors = {
   /**
    * Bad request
    */
@@ -17063,19 +17063,19 @@ export type KilocodeAgentManagerRejectErrors = {
   404: NotFoundError
 }
 
-export type KilocodeAgentManagerRejectError = KilocodeAgentManagerRejectErrors[keyof KilocodeAgentManagerRejectErrors]
+export type SonderrAgentManagerRejectError = SonderrAgentManagerRejectErrors[keyof SonderrAgentManagerRejectErrors]
 
-export type KilocodeAgentManagerRejectResponses = {
+export type SonderrAgentManagerRejectResponses = {
   /**
    * Agent Manager rejection accepted
    */
   200: boolean
 }
 
-export type KilocodeAgentManagerRejectResponse =
-  KilocodeAgentManagerRejectResponses[keyof KilocodeAgentManagerRejectResponses]
+export type SonderrAgentManagerRejectResponse =
+  SonderrAgentManagerRejectResponses[keyof SonderrAgentManagerRejectResponses]
 
-export type KilocodeSessionModelUsageData = {
+export type SonderrSessionModelUsageData = {
   body?: never
   path: {
     sessionID: string
@@ -17087,7 +17087,7 @@ export type KilocodeSessionModelUsageData = {
   url: "/session/{sessionID}/model-usage"
 }
 
-export type KilocodeSessionModelUsageErrors = {
+export type SonderrSessionModelUsageErrors = {
   /**
    * Bad request
    */
@@ -17098,9 +17098,9 @@ export type KilocodeSessionModelUsageErrors = {
   404: NotFoundError
 }
 
-export type KilocodeSessionModelUsageError = KilocodeSessionModelUsageErrors[keyof KilocodeSessionModelUsageErrors]
+export type SonderrSessionModelUsageError = SonderrSessionModelUsageErrors[keyof SonderrSessionModelUsageErrors]
 
-export type KilocodeSessionModelUsageResponses = {
+export type SonderrSessionModelUsageResponses = {
   /**
    * Model usage for a session tree
    */
@@ -17137,10 +17137,10 @@ export type KilocodeSessionModelUsageResponses = {
   }
 }
 
-export type KilocodeSessionModelUsageResponse =
-  KilocodeSessionModelUsageResponses[keyof KilocodeSessionModelUsageResponses]
+export type SonderrSessionModelUsageResponse =
+  SonderrSessionModelUsageResponses[keyof SonderrSessionModelUsageResponses]
 
-export type KilocodeBackgroundJobsData = {
+export type SonderrBackgroundJobsData = {
   body?: never
   path?: never
   query: {
@@ -17148,19 +17148,19 @@ export type KilocodeBackgroundJobsData = {
     workspace?: string
     sessionID: string
   }
-  url: "/kilocode/background-jobs"
+  url: "/sonderr/background-jobs"
 }
 
-export type KilocodeBackgroundJobsErrors = {
+export type SonderrBackgroundJobsErrors = {
   /**
    * Bad request
    */
   400: BadRequestError
 }
 
-export type KilocodeBackgroundJobsError = KilocodeBackgroundJobsErrors[keyof KilocodeBackgroundJobsErrors]
+export type SonderrBackgroundJobsError = SonderrBackgroundJobsErrors[keyof SonderrBackgroundJobsErrors]
 
-export type KilocodeBackgroundJobsResponses = {
+export type SonderrBackgroundJobsResponses = {
   /**
    * Background jobs
    */
@@ -17178,9 +17178,9 @@ export type KilocodeBackgroundJobsResponses = {
   }>
 }
 
-export type KilocodeBackgroundJobsResponse = KilocodeBackgroundJobsResponses[keyof KilocodeBackgroundJobsResponses]
+export type SonderrBackgroundJobsResponse = SonderrBackgroundJobsResponses[keyof SonderrBackgroundJobsResponses]
 
-export type KilocodeBackgroundJobCancelData = {
+export type SonderrBackgroundJobCancelData = {
   body?: never
   path: {
     jobID: string
@@ -17189,10 +17189,10 @@ export type KilocodeBackgroundJobCancelData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/background-jobs/{jobID}/cancel"
+  url: "/sonderr/background-jobs/{jobID}/cancel"
 }
 
-export type KilocodeBackgroundJobCancelErrors = {
+export type SonderrBackgroundJobCancelErrors = {
   /**
    * Bad request
    */
@@ -17203,20 +17203,20 @@ export type KilocodeBackgroundJobCancelErrors = {
   404: NotFoundError
 }
 
-export type KilocodeBackgroundJobCancelError =
-  KilocodeBackgroundJobCancelErrors[keyof KilocodeBackgroundJobCancelErrors]
+export type SonderrBackgroundJobCancelError =
+  SonderrBackgroundJobCancelErrors[keyof SonderrBackgroundJobCancelErrors]
 
-export type KilocodeBackgroundJobCancelResponses = {
+export type SonderrBackgroundJobCancelResponses = {
   /**
    * Background job cancelled
    */
   200: boolean
 }
 
-export type KilocodeBackgroundJobCancelResponse =
-  KilocodeBackgroundJobCancelResponses[keyof KilocodeBackgroundJobCancelResponses]
+export type SonderrBackgroundJobCancelResponse =
+  SonderrBackgroundJobCancelResponses[keyof SonderrBackgroundJobCancelResponses]
 
-export type KilocodeBackgroundJobPromoteData = {
+export type SonderrBackgroundJobPromoteData = {
   body?: never
   path: {
     jobID: string
@@ -17225,10 +17225,10 @@ export type KilocodeBackgroundJobPromoteData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/background-jobs/{jobID}/promote"
+  url: "/sonderr/background-jobs/{jobID}/promote"
 }
 
-export type KilocodeBackgroundJobPromoteErrors = {
+export type SonderrBackgroundJobPromoteErrors = {
   /**
    * Bad request
    */
@@ -17239,18 +17239,18 @@ export type KilocodeBackgroundJobPromoteErrors = {
   404: NotFoundError
 }
 
-export type KilocodeBackgroundJobPromoteError =
-  KilocodeBackgroundJobPromoteErrors[keyof KilocodeBackgroundJobPromoteErrors]
+export type SonderrBackgroundJobPromoteError =
+  SonderrBackgroundJobPromoteErrors[keyof SonderrBackgroundJobPromoteErrors]
 
-export type KilocodeBackgroundJobPromoteResponses = {
+export type SonderrBackgroundJobPromoteResponses = {
   /**
    * Background job promoted
    */
   200: boolean
 }
 
-export type KilocodeBackgroundJobPromoteResponse =
-  KilocodeBackgroundJobPromoteResponses[keyof KilocodeBackgroundJobPromoteResponses]
+export type SonderrBackgroundJobPromoteResponse =
+  SonderrBackgroundJobPromoteResponses[keyof SonderrBackgroundJobPromoteResponses]
 
 export type AnacondaDesktopStatusData = {
   body?: never
@@ -17259,7 +17259,7 @@ export type AnacondaDesktopStatusData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/anaconda-desktop/status"
+  url: "/sonderr/anaconda-desktop/status"
 }
 
 export type AnacondaDesktopStatusErrors = {
@@ -17287,7 +17287,7 @@ export type AnacondaDesktopOpenData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/anaconda-desktop/open"
+  url: "/sonderr/anaconda-desktop/open"
 }
 
 export type AnacondaDesktopOpenErrors = {
@@ -17325,7 +17325,7 @@ export type AnacondaDesktopSyncData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/anaconda-desktop/sync"
+  url: "/sonderr/anaconda-desktop/sync"
 }
 
 export type AnacondaDesktopSyncErrors = {
@@ -17664,7 +17664,7 @@ export type SandboxToggleResponses = {
 
 export type SandboxToggleResponse = SandboxToggleResponses[keyof SandboxToggleResponses]
 
-export type KilocodeSessionImportProjectData = {
+export type SonderrSessionImportProjectData = {
   body?: {
     id: string
     worktree: string
@@ -17685,30 +17685,30 @@ export type KilocodeSessionImportProjectData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/session-import/project"
+  url: "/sonderr/session-import/project"
 }
 
-export type KilocodeSessionImportProjectErrors = {
+export type SonderrSessionImportProjectErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KilocodeSessionImportProjectError =
-  KilocodeSessionImportProjectErrors[keyof KilocodeSessionImportProjectErrors]
+export type SonderrSessionImportProjectError =
+  SonderrSessionImportProjectErrors[keyof SonderrSessionImportProjectErrors]
 
-export type KilocodeSessionImportProjectResponses = {
+export type SonderrSessionImportProjectResponses = {
   /**
    * Project import result
    */
-  200: KilocodeSessionImportResult
+  200: SonderrSessionImportResult
 }
 
-export type KilocodeSessionImportProjectResponse =
-  KilocodeSessionImportProjectResponses[keyof KilocodeSessionImportProjectResponses]
+export type SonderrSessionImportProjectResponse =
+  SonderrSessionImportProjectResponses[keyof SonderrSessionImportProjectResponses]
 
-export type KilocodeSessionImportSessionData = {
+export type SonderrSessionImportSessionData = {
   body?: {
     id: string
     projectID: string
@@ -17748,30 +17748,30 @@ export type KilocodeSessionImportSessionData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/session-import/session"
+  url: "/sonderr/session-import/session"
 }
 
-export type KilocodeSessionImportSessionErrors = {
+export type SonderrSessionImportSessionErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KilocodeSessionImportSessionError =
-  KilocodeSessionImportSessionErrors[keyof KilocodeSessionImportSessionErrors]
+export type SonderrSessionImportSessionError =
+  SonderrSessionImportSessionErrors[keyof SonderrSessionImportSessionErrors]
 
-export type KilocodeSessionImportSessionResponses = {
+export type SonderrSessionImportSessionResponses = {
   /**
    * Session import result
    */
-  200: KilocodeSessionImportResult
+  200: SonderrSessionImportResult
 }
 
-export type KilocodeSessionImportSessionResponse =
-  KilocodeSessionImportSessionResponses[keyof KilocodeSessionImportSessionResponses]
+export type SonderrSessionImportSessionResponse =
+  SonderrSessionImportSessionResponses[keyof SonderrSessionImportSessionResponses]
 
-export type KilocodeSessionImportMessageData = {
+export type SonderrSessionImportMessageData = {
   body?: {
     id: string
     sessionID: string
@@ -17828,30 +17828,30 @@ export type KilocodeSessionImportMessageData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/session-import/message"
+  url: "/sonderr/session-import/message"
 }
 
-export type KilocodeSessionImportMessageErrors = {
+export type SonderrSessionImportMessageErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KilocodeSessionImportMessageError =
-  KilocodeSessionImportMessageErrors[keyof KilocodeSessionImportMessageErrors]
+export type SonderrSessionImportMessageError =
+  SonderrSessionImportMessageErrors[keyof SonderrSessionImportMessageErrors]
 
-export type KilocodeSessionImportMessageResponses = {
+export type SonderrSessionImportMessageResponses = {
   /**
    * Message import result
    */
-  200: KilocodeSessionImportResult
+  200: SonderrSessionImportResult
 }
 
-export type KilocodeSessionImportMessageResponse =
-  KilocodeSessionImportMessageResponses[keyof KilocodeSessionImportMessageResponses]
+export type SonderrSessionImportMessageResponse =
+  SonderrSessionImportMessageResponses[keyof SonderrSessionImportMessageResponses]
 
-export type KilocodeSessionImportPartData = {
+export type SonderrSessionImportPartData = {
   body?: {
     id: string
     messageID: string
@@ -17947,27 +17947,27 @@ export type KilocodeSessionImportPartData = {
     directory?: string
     workspace?: string
   }
-  url: "/kilocode/session-import/part"
+  url: "/sonderr/session-import/part"
 }
 
-export type KilocodeSessionImportPartErrors = {
+export type SonderrSessionImportPartErrors = {
   /**
    * BadRequest | InvalidRequestError
    */
   400: EffectHttpApiErrorBadRequest | InvalidRequestError
 }
 
-export type KilocodeSessionImportPartError = KilocodeSessionImportPartErrors[keyof KilocodeSessionImportPartErrors]
+export type SonderrSessionImportPartError = SonderrSessionImportPartErrors[keyof SonderrSessionImportPartErrors]
 
-export type KilocodeSessionImportPartResponses = {
+export type SonderrSessionImportPartResponses = {
   /**
    * Part import result
    */
-  200: KilocodeSessionImportResult
+  200: SonderrSessionImportResult
 }
 
-export type KilocodeSessionImportPartResponse =
-  KilocodeSessionImportPartResponses[keyof KilocodeSessionImportPartResponses]
+export type SonderrSessionImportPartResponse =
+  SonderrSessionImportPartResponses[keyof SonderrSessionImportPartResponses]
 
 export type SuggestionListData = {
   body?: never

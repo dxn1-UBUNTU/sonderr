@@ -1,6 +1,6 @@
-# kilocode_change start
-ARG REGISTRY=ghcr.io/kilo-org
-# kilocode_change end
+# sonderr_change start
+ARG REGISTRY=ghcr.io/sonderr-org
+# sonderr_change end
 FROM ${REGISTRY}/build/base:24.04
 
 SHELL ["/bin/bash", "-lc"]

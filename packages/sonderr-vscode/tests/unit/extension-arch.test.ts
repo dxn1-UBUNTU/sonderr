@@ -1,0 +1,348 @@
+/**
+ * Architecture test: package.json ↔ source command sync
+ *
+ * Every command declared in package.json contributes.commands must have a
+ * matching registerCommand() call somewhere in src/. A declaration without
+ * an implementation causes a silent "command not found" error at runtime
+ * that is hard to diagnose — VS Code shows no warning at activation time.
+ */
+
+import { describe, it, expect } from "bun:test"
+import fs from "node:fs"
+import path from "node:path"
+
+const ROOT = path.resolve(import.meta.dir, "../..")
+const PKG_JSON_FILE = path.join(ROOT, "package.json")
+const SRC_DIR = path.join(ROOT, "src")
+const EXTENSION_FILE = path.join(ROOT, "src/extension.ts")
+const SONDERR_PROVIDER_FILE = path.join(ROOT, "src/SonderrProvider.ts")
+const SETTINGS_PROVIDER_FILE = path.join(ROOT, "src/SettingsEditorProvider.ts")
+const VSCODE_HOST_FILE = path.join(ROOT, "src/agent-manager/vscode-host.ts")
+
+function sliceBlock(source: string, start: number): string {
+  const open = source.indexOf("{", start)
+  expect(open, "block opening brace must exist").toBeGreaterThan(-1)
+
+  const state = { depth: 0, end: -1 }
+  Array.from(source.slice(open)).some((ch, i) => {
+    if (ch === "{") state.depth++
+    if (ch === "}") state.depth--
+    if (state.depth !== 0) return false
+    state.end = open + i
+    return true
+  })
+
+  if (state.end > -1) return source.slice(start, state.end + 1)
+
+  throw new Error("block closing brace not found")
+}
+
+function readSrcFiles(dir: string): string {
+  const parts: string[] = []
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name)
+    if (entry.isDirectory()) {
+      parts.push(readSrcFiles(full))
+    } else if (entry.name.endsWith(".ts") && !entry.name.endsWith(".test.ts") && !entry.name.endsWith(".spec.ts")) {
+      parts.push(fs.readFileSync(full, "utf-8"))
+    }
+  }
+  return parts.join("\n")
+}
+
+describe("Extension — package.json command sync", () => {
+  const pkg = JSON.parse(fs.readFileSync(PKG_JSON_FILE, "utf-8"))
+  const declared: string[] = pkg.contributes?.commands?.map((c: { command: string }) => c.command) ?? []
+  const source = readSrcFiles(SRC_DIR)
+
+  // Extract command IDs that appear in registerCommand() calls specifically.
+  // This avoids false positives from executeCommand() or other string references.
+  const registered = new Set([...source.matchAll(/registerCommand\s*\(\s*["']([^"']+)["']/g)].map((m) => m[1]))
+
+  /**
+   * Every command declared in package.json must be registered via registerCommand()
+   * somewhere in src/. A bare string match would accept executeCommand() references,
+   * which don't actually register a handler.
+   *
+   * Commands registered via template literals (e.g. jumpTo${i}) are detected by
+   * checking the dynamic registerCommand pattern in source instead.
+   */
+  it("every contributes.commands entry has a registerCommand() call", () => {
+    // Commands generated via template literals can't be extracted by regex,
+    // so verify the dynamic registration pattern exists in source instead.
+    const dynamic: Record<string, string> = {
+      "sonderr-code.new.agentManager.jumpTo": "registerCommand(`sonderr-code.new.agentManager.jumpTo${",
+    }
+
+    const missing: string[] = []
+    for (const cmd of declared) {
+      const entry = Object.entries(dynamic).find(([prefix]) => cmd.startsWith(prefix))
+      if (entry) {
+        const [, pattern] = entry
+        if (!source.includes(pattern)) missing.push(`${cmd} (dynamic pattern not found)`)
+        continue
+      }
+      if (!registered.has(cmd)) missing.push(cmd)
+    }
+
+    expect(
+      missing,
+      `Commands declared in package.json but not registered via registerCommand().\n` +
+        `Add registerCommand("...", ...) or remove the declaration:\n` +
+        missing.map((m) => `  - ${m}`).join("\n"),
+    ).toEqual([])
+  })
+
+  /**
+   * All declared commands must use the sonderr-code.new. prefix.
+   * The legacy sonderr-code.* namespace (without .new.) belongs to the old
+   * extension and must not be reintroduced.
+   */
+  it("all declared commands use the sonderr-code.new. prefix", () => {
+    const bad = declared.filter((cmd) => !cmd.startsWith("sonderr-code.new."))
+    expect(
+      bad,
+      `Commands without "sonderr-code.new." prefix — use the namespaced form:\n` + bad.map((b) => `  - ${b}`).join("\n"),
+    ).toEqual([])
+  })
+
+  it("scopes Agent Manager search to the panel and leaves the integrated terminal alone", () => {
+    const binding = pkg.contributes?.keybindings?.find(
+      (item: { command: string }) => item.command === "sonderr-code.new.agentManager.search",
+    )
+    expect(binding).toMatchObject({
+      key: "ctrl+f",
+      mac: "cmd+f",
+      when: "activeWebviewPanelId == 'sonderr-code.new.AgentManagerPanel' && !terminalFocus",
+    })
+  })
+
+  it("keeps Agent Manager session and terminal shortcuts focus-aware", () => {
+    const terminal = pkg.contributes?.keybindings?.find(
+      (item: { command: string }) => item.command === "sonderr-code.new.agentManager.showTerminal",
+    )
+    const create = pkg.contributes?.keybindings?.find(
+      (item: { command: string }) => item.command === "sonderr-code.new.agentManager.newTerminalTab",
+    )
+    const sessionCreate = pkg.contributes?.keybindings?.find(
+      (item: { command: string }) => item.command === "sonderr-code.new.agentManager.newTab",
+    )
+    expect(terminal).toMatchObject({
+      key: "ctrl+/",
+      mac: "cmd+/",
+      when: "activeWebviewPanelId == 'sonderr-code.new.AgentManagerPanel' && !sonderr-code.new.sidebarFocused",
+    })
+    expect(create).toMatchObject({
+      key: "ctrl+shift+t",
+      mac: "cmd+shift+t",
+      when: "activeWebviewPanelId == 'sonderr-code.new.AgentManagerPanel' && !sonderr-code.new.agentManagerSideTerminalFocused",
+    })
+    expect(sessionCreate).toMatchObject({
+      key: "ctrl+t",
+      mac: "cmd+t",
+      when: "activeWebviewPanelId == 'sonderr-code.new.AgentManagerPanel' && !sonderr-code.new.agentManagerSideTerminalFocused",
+    })
+    const terminalCreate = pkg.contributes?.keybindings?.find(
+      (item: { command: string; key?: string; mac?: string; when?: string }) =>
+        item.command === "sonderr-code.new.agentManager.newSideTerminal" && item.key === "ctrl+t",
+    )
+    expect(terminalCreate).toMatchObject({
+      key: "ctrl+t",
+      mac: "cmd+t",
+      when: "activeWebviewPanelId == 'sonderr-code.new.AgentManagerPanel' && sonderr-code.new.agentManagerSideTerminalFocused",
+    })
+    expect(
+      pkg.contributes?.keybindings?.some(
+        (item: { command: string }) =>
+          item.command === "sonderr-code.new.agentManager.newTerminal" ||
+          item.command === "sonderr-code.new.agentManager.newMainTerminal",
+      ),
+    ).toBe(false)
+  })
+
+  it("declares the Agent Manager terminal destination setting", () => {
+    const setting = pkg.contributes?.configuration?.properties?.["sonderr-code.new.agentManager.terminalButtonDestination"]
+    expect(setting).toMatchObject({
+      type: "string",
+      scope: "application",
+      default: "vscode",
+      enum: ["vscode", "agentManager"],
+    })
+    expect(setting.enumDescriptions).toHaveLength(setting.enum.length)
+  })
+
+  it("scopes the open PR shortcut to Agent Manager", () => {
+    const binding = pkg.contributes?.keybindings?.find(
+      (item: { command: string }) => item.command === "sonderr-code.new.agentManager.openPR",
+    )
+    expect(binding).toMatchObject({
+      key: "ctrl+shift+r",
+      mac: "cmd+shift+r",
+      when: "activeWebviewPanelId == 'sonderr-code.new.AgentManagerPanel'",
+    })
+  })
+
+  it("scopes agent mode shortcuts to focused Sonderr webviews", () => {
+    const bindings = pkg.contributes?.keybindings?.filter(
+      (item: { command: string }) =>
+        item.command === "sonderr-code.new.cycleAgentMode" || item.command === "sonderr-code.new.cyclePreviousAgentMode",
+    )
+    const when =
+      "sonderr-code.new.sidebarFocused || activeWebviewPanelId == 'sonderr-code.new.AgentManagerPanel' || activeWebviewPanelId == 'sonderr-code.new.TabPanel'"
+
+    expect(bindings).toHaveLength(2)
+    expect(bindings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ command: "sonderr-code.new.cycleAgentMode", when }),
+        expect.objectContaining({ command: "sonderr-code.new.cyclePreviousAgentMode", when }),
+      ]),
+    )
+  })
+})
+
+// ---------------------------------------------------------------------------
+// SonderrProvider handler wiring — every new SonderrProvider() must get
+// setContinueInWorktreeHandler() called before resolving its webview.
+//
+// Regression: tab panels created via openSonderrInNewTab() and the TabPanel
+// deserializer were missing the handler, causing "Capturing changes..." to
+// spin forever because the webview message was silently dropped.
+// ---------------------------------------------------------------------------
+
+describe("Extension — SonderrProvider handler wiring", () => {
+  const ext = fs.readFileSync(EXTENSION_FILE, "utf-8")
+
+  /**
+   * Every `new SonderrProvider(` in extension.ts must be followed (before the
+   * next `new SonderrProvider(`) by a `setContinueInWorktreeHandler` call.
+   * This prevents future tab/panel additions from silently missing the handler.
+   */
+  it("every SonderrProvider instance gets setContinueInWorktreeHandler wired", () => {
+    const pattern = /new SonderrProvider\(/g
+    const instances: number[] = []
+    let match
+    while ((match = pattern.exec(ext)) !== null) {
+      instances.push(match.index)
+    }
+
+    expect(
+      instances.length,
+      "expected at least 3 SonderrProvider instances (sidebar, tab, deserializer)",
+    ).toBeGreaterThanOrEqual(3)
+
+    const missing: string[] = []
+    for (let i = 0; i < instances.length; i++) {
+      const start = instances[i]
+      const end = instances[i + 1] ?? ext.length
+      const region = ext.slice(start, end)
+
+      if (!region.includes("setContinueInWorktreeHandler")) {
+        const line = ext.slice(0, start).split("\n").length
+        missing.push(`SonderrProvider at line ${line}`)
+      }
+    }
+
+    expect(
+      missing,
+      `These SonderrProvider instances are missing setContinueInWorktreeHandler.\n` +
+        `Without it, "Continue in Worktree" silently no-ops and the spinner\n` +
+        `stays stuck on "Capturing changes..." forever.\n\n` +
+        missing.map((m) => `  - ${m}`).join("\n"),
+    ).toEqual([])
+  })
+
+  it("openSonderrInNewTab wires setContinueInWorktreeHandler before resolveWebviewPanel", () => {
+    const fn = ext.indexOf("function openSonderrInNewTab")
+    expect(fn, "openSonderrInNewTab must exist").toBeGreaterThan(-1)
+    const body = sliceBlock(ext, fn)
+    const handler = body.indexOf("setContinueInWorktreeHandler")
+    const resolve = body.indexOf("resolveWebviewPanel")
+    expect(handler, "setContinueInWorktreeHandler must be called").toBeGreaterThan(-1)
+    expect(resolve, "resolveWebviewPanel must be called").toBeGreaterThan(-1)
+    expect(handler, "handler must be wired before resolving the panel").toBeLessThan(resolve)
+  })
+
+  it("TabPanel deserializer wires setContinueInWorktreeHandler before resolveWebviewPanel", () => {
+    const serializer = ext.indexOf('"sonderr-code.new.TabPanel"')
+    expect(serializer, "TabPanel serializer must exist").toBeGreaterThan(-1)
+    const body = sliceBlock(ext, serializer)
+    const handler = body.indexOf("setContinueInWorktreeHandler")
+    const resolve = body.indexOf("resolveWebviewPanel")
+    expect(handler, "setContinueInWorktreeHandler must be called in deserializer").toBeGreaterThan(-1)
+    expect(resolve, "resolveWebviewPanel must be called in deserializer").toBeGreaterThan(-1)
+    expect(handler, "handler must be wired before resolving the panel").toBeLessThan(resolve)
+  })
+})
+
+describe("Extension — editor panel placement", () => {
+  const ext = fs.readFileSync(EXTENSION_FILE, "utf-8")
+  const settings = fs.readFileSync(SETTINGS_PROVIDER_FILE, "utf-8")
+
+  it("opens Sonderr as a tab in the active editor group", () => {
+    const fn = ext.indexOf("function openSonderrInNewTab")
+    expect(fn, "openSonderrInNewTab must exist").toBeGreaterThan(-1)
+    const body = sliceBlock(ext, fn)
+
+    expect(body).toContain("vscode.ViewColumn.Active")
+    expect(body).not.toContain("visibleTextEditors")
+    expect(body).not.toContain("workbench.action.newGroupRight")
+    expect(body).not.toContain("workbench.action.lockEditorGroup")
+  })
+
+  it("opens and reveals Settings in the active editor group", () => {
+    const fn = settings.indexOf("openPanel(view")
+    expect(fn, "SettingsEditorProvider.openPanel must exist").toBeGreaterThan(-1)
+    const body = sliceBlock(settings, fn)
+
+    expect(body).toContain("existing.reveal(vscode.ViewColumn.Active)")
+    expect(body.match(/vscode\.ViewColumn\.Active/g)).toHaveLength(2)
+    expect(body).not.toContain("vscode.ViewColumn.One")
+  })
+})
+
+// ---------------------------------------------------------------------------
+// SonderrProvider — continueInWorktree error fallback
+//
+// Regression: when continueInWorktreeHandler is null, the message handler
+// must send an error back to the webview so the spinner resets. Previously
+// it silently no-op'd, leaving the UI stuck.
+// ---------------------------------------------------------------------------
+
+describe("Extension — Agent Manager remote wiring", () => {
+  const ext = fs.readFileSync(EXTENSION_FILE, "utf-8")
+  const host = fs.readFileSync(VSCODE_HOST_FILE, "utf-8")
+
+  it("passes the shared remote service to Agent Manager", () => {
+    expect(ext).toContain("new VscodeHost(context.extensionUri, connectionService, context, remoteService)")
+  })
+
+  it("wires the remote service before attaching the Agent Manager webview", () => {
+    const remote = host.indexOf("provider.setRemoteService(this.remoteService)")
+    const attach = host.indexOf("provider.attachToWebview")
+    expect(remote).toBeGreaterThan(-1)
+    expect(attach).toBeGreaterThan(-1)
+    expect(remote).toBeLessThan(attach)
+  })
+})
+
+describe("SonderrProvider — remote focus lifecycle", () => {
+  const provider = fs.readFileSync(SONDERR_PROVIDER_FILE, "utf-8")
+
+  it("registers newly created sessions and uses the synchronous session ID", () => {
+    const create = sliceBlock(provider, provider.indexOf("private async handleCreateSession"))
+    const resolve = sliceBlock(provider, provider.indexOf("private async resolveSession"))
+    expect(create).toContain("this.focusSession(session.id)")
+    expect(resolve).toContain("this.focusSession(session.id)")
+    expect(provider).toContain("this.focusSession(webviewView.visible ? this.contextSessionID : undefined)")
+  })
+})
+
+describe("SonderrProvider — continueInWorktree error fallback", () => {
+  const helper = fs.readFileSync(path.join(ROOT, "src/sonderr-provider/continue-worktree.ts"), "utf-8")
+
+  it("sends error progress when handler is missing", () => {
+    expect(helper, "must send error status back to webview").toContain('"error"')
+    expect(helper, "must use continueInWorktreeProgress message type").toContain("continueInWorktreeProgress")
+    expect(helper, "must handle missing handler case").toContain("no handler registered")
+  })
+})

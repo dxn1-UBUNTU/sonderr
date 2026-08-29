@@ -72,7 +72,7 @@ export const dict = {
 
   "dialog.usageExceeded.freeTier.title": "Limite gratuito atingido",
   "dialog.usageExceeded.freeTier.description":
-    "Assine o Kilo Go para ter acesso confiável aos melhores modelos de código aberto, a partir de $5/mês.", // kilocode_change
+    "Assine o Sonderr Go para ter acesso confiável aos melhores modelos de código aberto, a partir de $5/mês.", // sonderr_change
   "dialog.usageExceeded.freeTier.actionLabel": "Assinar",
   "dialog.usageExceeded.accountRateLimit.title": "Limite do Go atingido",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -145,7 +145,7 @@ export const dict = {
   "ui.textField.copied": "Copiado",
 
   "ui.imagePreview.alt": "Visualização de imagem",
-  // kilocode_change start
+  // sonderr_change start
   "ui.mermaid.rendering": "Renderizando diagrama Mermaid...",
   "ui.mermaid.renderError": "Falha ao renderizar Mermaid: {{message}}",
   "ui.mermaid.errorDefault": "Não foi possível renderizar o diagrama Mermaid.",
@@ -156,7 +156,7 @@ export const dict = {
   "ui.mermaid.copyPng": "Copiar PNG",
   "ui.mermaid.downloadSvg": "Baixar SVG",
   "ui.mermaid.downloadPng": "Baixar PNG",
-  // kilocode_change end
+  // sonderr_change end
   "ui.scrollView.ariaLabel": "conteúdo rolável",
 
   "ui.tool.read": "Ler",
@@ -201,7 +201,7 @@ export const dict = {
   "ui.message.collapse": "Recolher mensagem",
   "ui.message.copy": "Copiar",
   "ui.message.copyMessage": "Copiar mensagem",
-  "ui.message.deleteQueued": "Excluir mensagem na fila", // kilocode_change
+  "ui.message.deleteQueued": "Excluir mensagem na fila", // sonderr_change
   "ui.message.forkMessage": "Bifurcar para nova sessão",
   "ui.message.revertMessage": "Redefinir para este ponto",
   "ui.message.copyResponse": "Copiar resposta",
@@ -215,12 +215,12 @@ export const dict = {
   "ui.patch.action.created": "Criado",
   "ui.patch.action.moved": "Movido",
   "ui.patch.action.patched": "Patch aplicado",
-  "ui.patch.action.plan": "Plano", // kilocode_change
+  "ui.patch.action.plan": "Plano", // sonderr_change
 
   "ui.question.subtitle.answered": "{{count}} respondidas",
-  "ui.question.subtitle.dismissed": "{{count}} dismissed", // kilocode_change
+  "ui.question.subtitle.dismissed": "{{count}} dismissed", // sonderr_change
   "ui.question.answer.none": "(sem resposta)",
-  "ui.question.answer.dismissed": "Dismissed", // kilocode_change
+  "ui.question.answer.dismissed": "Dismissed", // sonderr_change
   "ui.question.review.notAnswered": "(não respondida)",
   "ui.question.multiHint": "Selecione todas que se aplicam",
   "ui.question.singleHint": "Selecione uma resposta",

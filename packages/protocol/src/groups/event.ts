@@ -1,7 +1,7 @@
-import { Event } from "@opencode-ai/schema/event"
-import { EventManifest } from "@opencode-ai/schema/event-manifest"
-import { Location } from "@opencode-ai/schema/location"
-import type { Definition } from "@opencode-ai/schema/event"
+import { Event } from "@sonderr/schema/event"
+import { EventManifest } from "@sonderr/schema/event-manifest"
+import { Location } from "@sonderr/schema/location"
+import type { Definition } from "@sonderr/schema/event"
 import { Schema } from "effect"
 import { HttpApiEndpoint, HttpApiGroup, HttpApiSchema, OpenApi } from "effect/unstable/httpapi"
 
@@ -51,8 +51,8 @@ export const makeEventGroup = <const Definitions extends ReadonlyArray<Definitio
 
 const event = make(EventManifest.ServerDefinitions)
 export const EventGroup = event.group
-export const OpenCodeEvent = event.schema
-export type OpenCodeEvent = typeof OpenCodeEvent.Type
-export type OpenCodeEventEncoded = typeof OpenCodeEvent.Encoded
+export const SonderrEvent = event.schema
+export type SonderrEvent = typeof SonderrEvent.Type
+export type SonderrEventEncoded = typeof SonderrEvent.Encoded
 
-export const KiloEvent = schema(EventManifest.Definitions) // kilocode_change - encode the full Kilo event bus
+export const SonderrEvent = schema(EventManifest.Definitions) // sonderr_change - encode the full Sonderr event bus

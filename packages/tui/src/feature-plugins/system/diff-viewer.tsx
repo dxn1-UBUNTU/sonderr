@@ -1,6 +1,6 @@
 /** @jsxImportSource @opentui/solid */
-import type { TuiPlugin, TuiPluginApi, TuiRouteCurrent } from "@kilocode/plugin/tui"
-import type { SnapshotFileDiff, VcsFileDiff } from "@kilocode/sdk/v2"
+import type { TuiPlugin, TuiPluginApi, TuiRouteCurrent } from "@sonderr/plugin/tui"
+import type { SnapshotFileDiff, VcsFileDiff } from "@sonderr/sdk/v2"
 import {
   TextAttributes,
   type BorderSides,
@@ -38,7 +38,7 @@ import {
 const ROUTE = "diff"
 const MIN_SPLIT_WIDTH = 100
 const FILE_TREE_WIDTH = 32
-const PLAIN_TEXT_FILETYPE = "opencode-plain-text"
+const PLAIN_TEXT_FILETYPE = "sonderr-plain-text"
 const VCS_DIFF_CONTEXT_LINES = 12
 const KV_SHOW_FILE_TREE = "diff_viewer_show_file_tree"
 const KV_SINGLE_PATCH = "diff_viewer_single_patch"

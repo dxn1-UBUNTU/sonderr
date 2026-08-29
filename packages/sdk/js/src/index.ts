@@ -1,16 +1,16 @@
 export * from "./client.js"
 export * from "./server.js"
 
-import { createKiloClient } from "./client.js"
-import { createKiloServer } from "./server.js"
+import { createSonderrClient } from "./client.js"
+import { createSonderrServer } from "./server.js"
 import type { ServerOptions } from "./server.js"
 
-export async function createKilo(options?: ServerOptions) {
-  const server = await createKiloServer({
+export async function createSonderr(options?: ServerOptions) {
+  const server = await createSonderrServer({
     ...options,
   })
 
-  const client = createKiloClient({
+  const client = createSonderrClient({
     baseUrl: server.url,
   })
 

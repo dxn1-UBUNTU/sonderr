@@ -3,11 +3,11 @@ import fs from "fs/promises"
 import path from "path"
 import { pathToFileURL } from "url"
 import { Effect, Layer } from "effect"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { EventV2 } from "@opencode-ai/core/event"
-import { Global } from "@opencode-ai/core/global"
-import { Reference } from "@opencode-ai/core/reference"
-import { Repository } from "@opencode-ai/core/repository"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { EventV2 } from "@sonderr/core/event"
+import { Global } from "@sonderr/core/global"
+import { Reference } from "@sonderr/core/reference"
+import { Repository } from "@sonderr/core/repository"
 import { commit, git, gitRemote } from "../fixture/git"
 import { tmpdir } from "../fixture/tmpdir"
 import { it } from "../lib/effect"
@@ -21,7 +21,7 @@ const events = Layer.mock(EventV2.Service)({
     }),
 })
 
-describe("Kilo reference compatibility", () => {
+describe("Sonderr reference compatibility", () => {
   it.live("materializes and refreshes configured Git references", () =>
     withRemote((fixture) => {
       const global = Global.layerWith({
@@ -34,13 +34,13 @@ describe("Kilo reference compatibility", () => {
       ])
 
       return Effect.gen(function* () {
-        const previous = process.env.KILO_REPO_CLONE_GITHUB_BASE_URL
+        const previous = process.env.SONDERR_REPO_CLONE_GITHUB_BASE_URL
         const base = pathToFileURL(fixture.root).href
-        process.env.KILO_REPO_CLONE_GITHUB_BASE_URL = base.endsWith("/") ? base : `${base}/`
+        process.env.SONDERR_REPO_CLONE_GITHUB_BASE_URL = base.endsWith("/") ? base : `${base}/`
         yield* Effect.addFinalizer(() =>
           Effect.sync(() => {
-            if (previous === undefined) delete process.env.KILO_REPO_CLONE_GITHUB_BASE_URL
-            else process.env.KILO_REPO_CLONE_GITHUB_BASE_URL = previous
+            if (previous === undefined) delete process.env.SONDERR_REPO_CLONE_GITHUB_BASE_URL
+            else process.env.SONDERR_REPO_CLONE_GITHUB_BASE_URL = previous
           }),
         )
 

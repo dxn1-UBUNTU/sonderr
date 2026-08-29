@@ -2,18 +2,18 @@ import fs from "fs/promises"
 import path from "path"
 import { describe, expect } from "bun:test"
 import { Deferred, Effect, Exit, Fiber, Layer } from "effect"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { FileMutation } from "@opencode-ai/core/file-mutation"
-import { FSUtil } from "@opencode-ai/core/fs-util"
-import { Location } from "@opencode-ai/core/location"
-import { LocationMutation } from "@opencode-ai/core/location-mutation"
-import { PermissionV2 } from "@opencode-ai/core/permission"
-import { AbsolutePath } from "@opencode-ai/core/schema"
-import { SessionV2 } from "@opencode-ai/core/session"
-import { ToolRegistry } from "@opencode-ai/core/tool/registry"
-import { ToolOutputStore } from "@opencode-ai/core/tool-output-store"
-import { ApplyPatchTool } from "@opencode-ai/core/tool/apply-patch"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { FileMutation } from "@sonderr/core/file-mutation"
+import { FSUtil } from "@sonderr/core/fs-util"
+import { Location } from "@sonderr/core/location"
+import { LocationMutation } from "@sonderr/core/location-mutation"
+import { PermissionV2 } from "@sonderr/core/permission"
+import { AbsolutePath } from "@sonderr/core/schema"
+import { SessionV2 } from "@sonderr/core/session"
+import { ToolRegistry } from "@sonderr/core/tool/registry"
+import { ToolOutputStore } from "@sonderr/core/tool-output-store"
+import { ApplyPatchTool } from "@sonderr/core/tool/apply-patch"
 import { location } from "./fixture/location"
 import { tmpdir } from "./fixture/tmpdir"
 import { testEffect } from "./lib/effect"
@@ -202,7 +202,7 @@ describe("ApplyPatchTool", () => {
     ),
   )
 
-  // kilocode_change start
+  // sonderr_change start
   it.live("omits oversized patches from durable structured output", () =>
     Effect.acquireUseRelease(
       Effect.promise(() => tmpdir()),
@@ -227,7 +227,7 @@ describe("ApplyPatchTool", () => {
       (tmp) => Effect.promise(() => tmp[Symbol.asyncDispose]()),
     ),
   )
-  // kilocode_change end
+  // sonderr_change end
 
   it.live("rejects moves before applying any hunk", () =>
     Effect.acquireUseRelease(

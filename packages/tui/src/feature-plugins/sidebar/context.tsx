@@ -1,7 +1,7 @@
-import type { AssistantMessage } from "@kilocode/sdk/v2"
-import type { TuiPlugin, TuiPluginApi } from "@kilocode/plugin/tui"
+import type { AssistantMessage } from "@sonderr/sdk/v2"
+import type { TuiPlugin, TuiPluginApi } from "@sonderr/plugin/tui"
 import type { BuiltinTuiPlugin } from "../builtins"
-import { createMemo, createSignal, Show } from "solid-js" // kilocode_change
+import { createMemo, createSignal, Show } from "solid-js" // sonderr_change
 
 const id = "internal:sidebar-context"
 
@@ -11,13 +11,13 @@ const money = new Intl.NumberFormat("en-US", {
 })
 
 function View(props: { api: TuiPluginApi; session_id: string }) {
-  // kilocode_change start
+  // sonderr_change start
   const [open, setOpen] = createSignal(true)
-  // kilocode_change end
+  // sonderr_change end
   const theme = () => props.api.theme.current
   const msg = createMemo(() => props.api.state.session.messages(props.session_id))
   const session = createMemo(() => props.api.state.session.get(props.session_id))
-  // kilocode_change start
+  // sonderr_change start
   const cost = createMemo(() => {
     const total = msg().reduce((sum, item) => {
       if (item.role !== "assistant") return sum
@@ -25,7 +25,7 @@ function View(props: { api: TuiPluginApi; session_id: string }) {
     }, 0)
     return Math.max(session()?.cost ?? 0, total)
   })
-  // kilocode_change end
+  // sonderr_change end
 
   const state = createMemo(() => {
     const last = msg().findLast((item): item is AssistantMessage => item.role === "assistant" && item.tokens.output > 0)
@@ -47,7 +47,7 @@ function View(props: { api: TuiPluginApi; session_id: string }) {
 
   return (
     <box>
-      {/* kilocode_change start */}
+      {/* sonderr_change start */}
       <box flexDirection="row" gap={1} onMouseDown={() => setOpen((x) => !x)}>
         <text fg={theme().text}>{open() ? "▼" : "▶"}</text>
         <text fg={theme().text}>
@@ -65,7 +65,7 @@ function View(props: { api: TuiPluginApi; session_id: string }) {
         <text fg={theme().textMuted}>{state().percent ?? 0}% used</text>
         <text fg={theme().textMuted}>{money.format(cost())} spent</text>
       </Show>
-      {/* kilocode_change end */}
+      {/* sonderr_change end */}
     </box>
   )
 }

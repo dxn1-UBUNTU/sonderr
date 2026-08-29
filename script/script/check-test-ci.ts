@@ -1,4 +1,4 @@
-// kilocode_change - new file
+// sonderr_change - new file
 import path from "path"
 
 const root = path.resolve(import.meta.dir, "..")
@@ -10,7 +10,7 @@ const proc = Bun.spawnSync(["git", "ls-files", "packages", "script"], {
 })
 if (proc.exitCode !== 0) throw new Error(proc.stderr.toString() || "Unable to list tracked package tests")
 
-const exempt = new Set(["packages/kilo-vscode"])
+const exempt = new Set(["packages/sonderr-vscode"])
 const dirs = new Set(
   proc.stdout
     .toString()

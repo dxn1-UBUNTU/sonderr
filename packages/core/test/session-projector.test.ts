@@ -1,28 +1,28 @@
 import { describe, expect } from "bun:test"
 import { DateTime, Effect, Schema } from "effect"
 import { asc, eq } from "drizzle-orm"
-import { Database } from "@opencode-ai/core/database/database"
-import { LayerNode } from "@opencode-ai/core/effect/layer-node"
-import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
-import { EventV2 } from "@opencode-ai/core/event"
-import { EventTable } from "@opencode-ai/core/event/sql"
-import { ModelV2 } from "@opencode-ai/core/model"
-import { Project } from "@opencode-ai/core/project"
-import { ProjectTable } from "@opencode-ai/core/project/sql"
-import { ProviderV2 } from "@opencode-ai/core/provider"
-import { AbsolutePath } from "@opencode-ai/core/schema"
-import { SessionV2 } from "@opencode-ai/core/session"
-import { SessionEvent } from "@opencode-ai/core/session/event"
-import { SessionMessage } from "@opencode-ai/core/session/message"
-import { Prompt } from "@opencode-ai/core/session/prompt"
-import { SessionMessageUpdater } from "@opencode-ai/core/session/message-updater"
-import { SessionProjector } from "@opencode-ai/core/session/projector"
-import { SessionExecution } from "@opencode-ai/core/session/execution"
-import { SessionInput } from "@opencode-ai/core/session/input"
-import { SessionInputTable, SessionMessageTable, SessionTable } from "@opencode-ai/core/session/sql"
-import * as StoredMessage from "@opencode-ai/core/kilocode/session-message" // kilocode_change
+import { Database } from "@sonderr/core/database/database"
+import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { AppNodeBuilder } from "@sonderr/core/effect/app-node-builder"
+import { EventV2 } from "@sonderr/core/event"
+import { EventTable } from "@sonderr/core/event/sql"
+import { ModelV2 } from "@sonderr/core/model"
+import { Project } from "@sonderr/core/project"
+import { ProjectTable } from "@sonderr/core/project/sql"
+import { ProviderV2 } from "@sonderr/core/provider"
+import { AbsolutePath } from "@sonderr/core/schema"
+import { SessionV2 } from "@sonderr/core/session"
+import { SessionEvent } from "@sonderr/core/session/event"
+import { SessionMessage } from "@sonderr/core/session/message"
+import { Prompt } from "@sonderr/core/session/prompt"
+import { SessionMessageUpdater } from "@sonderr/core/session/message-updater"
+import { SessionProjector } from "@sonderr/core/session/projector"
+import { SessionExecution } from "@sonderr/core/session/execution"
+import { SessionInput } from "@sonderr/core/session/input"
+import { SessionInputTable, SessionMessageTable, SessionTable } from "@sonderr/core/session/sql"
+import * as StoredMessage from "@sonderr/core/sonderr/session-message" // sonderr_change
 import { testEffect } from "./lib/effect"
-import { Snapshot } from "@opencode-ai/core/snapshot"
+import { Snapshot } from "@sonderr/core/snapshot"
 
 const it = testEffect(AppNodeBuilder.build(LayerNode.group([Database.node, EventV2.node, SessionProjector.node])))
 const sessionsLayer = AppNodeBuilder.build(SessionV2.node, [[SessionExecution.node, SessionExecution.noopLayer]])
@@ -244,7 +244,7 @@ describe("SessionProjector", () => {
         timestamp: created,
         model,
       })
-      // kilocode_change start
+      // sonderr_change start
       const assistantID = SessionMessage.ID.create()
       yield* events.publish(SessionEvent.Step.Started, {
         sessionID,
@@ -285,7 +285,7 @@ describe("SessionProjector", () => {
         content: [{ type: "file", uri: "data:image/png;base64,AAAA", mime: "image/png", name: "pixel.png" }],
         provider: { executed: false },
       })
-      // kilocode_change end
+      // sonderr_change end
       yield* events.publish(SessionEvent.Synthetic, {
         sessionID,
         messageID: SessionMessage.ID.create(),
@@ -350,11 +350,11 @@ describe("SessionProjector", () => {
         .orderBy(asc(SessionMessageTable.seq))
         .all()
         .pipe(Effect.orDie)
-      // kilocode_change start - assert the projector itself writes the released-reader compaction shape.
+      // sonderr_change start - assert the projector itself writes the released-reader compaction shape.
       const compaction = rows.find((row) => row.type === "compaction")
       expect(compaction?.data).toMatchObject({
         summary: "summary\n\nRecent context:\nrecent context",
-        kilo_summary: "summary",
+        sonderr_summary: "summary",
         recent: "recent context",
       })
       const released = Schema.decodeUnknownSync(
@@ -399,19 +399,19 @@ describe("SessionProjector", () => {
           ),
         }),
       )({ ...assistant?.data, type: assistant?.type })
-      // kilocode_change end
+      // sonderr_change end
       const messages = rows.map((row) =>
-        // kilocode_change start
+        // sonderr_change start
         Schema.decodeUnknownSync(SessionMessage.Message)(
           StoredMessage.normalize({ ...row.data, id: row.id, type: row.type }),
         ),
-        // kilocode_change end
+        // sonderr_change end
       )
 
       expect(messages.map((message) => message.type)).toEqual([
         "agent-switched",
         "model-switched",
-        "assistant", // kilocode_change
+        "assistant", // sonderr_change
         "synthetic",
         "shell",
         "compaction",

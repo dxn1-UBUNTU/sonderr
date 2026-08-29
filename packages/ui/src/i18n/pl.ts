@@ -74,7 +74,7 @@ export const dict = {
 
   "dialog.usageExceeded.freeTier.title": "Osiągnięto limit darmowy",
   "dialog.usageExceeded.freeTier.description":
-    "Subskrybuj Kilo Go, aby uzyskać niezawodny dostęp do najlepszych modeli open source, od $5/miesiąc.", // kilocode_change
+    "Subskrybuj Sonderr Go, aby uzyskać niezawodny dostęp do najlepszych modeli open source, od $5/miesiąc.", // sonderr_change
   "dialog.usageExceeded.freeTier.actionLabel": "Subskrybuj",
   "dialog.usageExceeded.accountRateLimit.title": "Osiągnięto limit Go",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -203,7 +203,7 @@ export const dict = {
   "ui.patch.action.created": "Utworzono",
   "ui.patch.action.moved": "Przeniesiono",
   "ui.patch.action.patched": "Załatano",
-  "ui.patch.action.plan": "Plan", // kilocode_change
+  "ui.patch.action.plan": "Plan", // sonderr_change
 
   "ui.question.subtitle.answered": "Liczba odpowiedzi: {{count}}",
   "ui.question.answer.none": "(brak odpowiedzi)",
@@ -224,7 +224,7 @@ export const dict = {
   "ui.message.duration.seconds": "{{count}} s",
   "ui.message.duration.minutesSeconds": "{{minutes}} min {{seconds}} s",
 
-  // kilocode_change start - Kilo UI compatibility
+  // sonderr_change start - Sonderr UI compatibility
   "ui.mermaid.copyPng": "Kopiuj PNG",
   "ui.mermaid.copySource": "Kopiuj źródło Mermaid",
   "ui.mermaid.copySvg": "Kopiuj SVG",
@@ -243,5 +243,5 @@ export const dict = {
   "ui.sessionTurn.diffs.changed": "Zmieniono",
   "ui.sessionTurn.status.delegatingWaitingPermission": "Subagent waiting for permission",
   "ui.sessionTurn.status.delegatingWaitingQuestion": "Subagent waiting for response",
-  // kilocode_change end
+  // sonderr_change end
 }

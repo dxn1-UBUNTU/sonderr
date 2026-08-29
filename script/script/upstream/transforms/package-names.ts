@@ -1,16 +1,16 @@
 #!/usr/bin/env bun
 /**
- * Transform package names and branding from opencode to kilo
+ * Transform package names and branding from sonderr to sonderr
  *
  * This script transforms:
- * - opencode-ai -> @kilocode/cli
- * - @opencode-ai/cli -> @kilocode/cli
- * - @opencode-ai/sdk -> @kilocode/sdk
- * - @opencode-ai/plugin -> @kilocode/plugin
- * - OPENCODE_* -> KILO_* (env variables, excluding OPENCODE_API_KEY)
- * - x-opencode-* -> x-kilo-* (HTTP headers)
- * - opencode.db -> kilo.db (database filename)
- * - window.__OPENCODE__ -> window.__KILO__ (window global)
+ * - sonderr-ai -> @sonderr/cli
+ * - @sonderr/cli -> @sonderr/cli
+ * - @sonderr/sdk -> @sonderr/sdk
+ * - @sonderr/plugin -> @sonderr/plugin
+ * - SONDERR_* -> SONDERR_* (env variables, excluding SONDERR_API_KEY)
+ * - x-sonderr-* -> x-sonderr-* (HTTP headers)
+ * - sonderr.db -> sonderr.db (database filename)
+ * - window.__SONDERR__ -> window.__SONDERR__ (window global)
  */
 
 import { Glob } from "bun"
@@ -30,65 +30,65 @@ export interface TransformOptions {
 
 const PACKAGE_PATTERNS = [
   // In package.json name field
-  { pattern: /"name":\s*"opencode-ai"/, replacement: '"name": "@kilocode/cli"' },
-  { pattern: /"name":\s*"@opencode-ai\/cli"/, replacement: '"name": "@kilocode/cli"' },
+  { pattern: /"name":\s*"sonderr-ai"/, replacement: '"name": "@sonderr/cli"' },
+  { pattern: /"name":\s*"@sonderr-ai\/cli"/, replacement: '"name": "@sonderr/cli"' },
 
   // In dependencies/devDependencies
-  { pattern: /"opencode-ai":\s*"/g, replacement: '"@kilocode/cli": "' },
-  { pattern: /"@opencode-ai\/cli":\s*"/g, replacement: '"@kilocode/cli": "' },
-  { pattern: /"@opencode-ai\/sdk":\s*"/g, replacement: '"@kilocode/sdk": "' },
-  { pattern: /"@opencode-ai\/plugin":\s*"/g, replacement: '"@kilocode/plugin": "' },
+  { pattern: /"sonderr-ai":\s*"/g, replacement: '"@sonderr/cli": "' },
+  { pattern: /"@sonderr-ai\/cli":\s*"/g, replacement: '"@sonderr/cli": "' },
+  { pattern: /"@sonderr-ai\/sdk":\s*"/g, replacement: '"@sonderr/sdk": "' },
+  { pattern: /"@sonderr-ai\/plugin":\s*"/g, replacement: '"@sonderr/plugin": "' },
 
   // In any string context (mock.module, dynamic references, etc.)
-  // Only cli, sdk, and plugin are renamed — other @opencode-ai/* packages
-  // (e.g. @opencode-ai/ui, @opencode-ai/util) keep their upstream names.
-  { pattern: /@opencode-ai\/cli(?=\/|"|'|`|$)/g, replacement: "@kilocode/cli" },
-  { pattern: /@opencode-ai\/sdk(?=\/|"|'|`|$)/g, replacement: "@kilocode/sdk" },
-  { pattern: /@opencode-ai\/plugin(?=\/|"|'|`|$)/g, replacement: "@kilocode/plugin" },
+  // Only cli, sdk, and plugin are renamed — other @sonderr/* packages
+  // (e.g. @sonderr/ui, @sonderr/util) keep their upstream names.
+  { pattern: /@sonderr-ai\/cli(?=\/|"|'|`|$)/g, replacement: "@sonderr/cli" },
+  { pattern: /@sonderr-ai\/sdk(?=\/|"|'|`|$)/g, replacement: "@sonderr/sdk" },
+  { pattern: /@sonderr-ai\/plugin(?=\/|"|'|`|$)/g, replacement: "@sonderr/plugin" },
 
-  // In import statements (supports subpaths like @opencode-ai/sdk/v2)
-  { pattern: /from\s+["']opencode-ai["']/g, replacement: 'from "@kilocode/cli"' },
-  { pattern: /from\s+["']@opencode-ai\/cli(\/[^"']*)?["']/g, replacement: 'from "@kilocode/cli$1"' },
-  { pattern: /from\s+["']@opencode-ai\/sdk(\/[^"']*)?["']/g, replacement: 'from "@kilocode/sdk$1"' },
-  { pattern: /from\s+["']@opencode-ai\/plugin(\/[^"']*)?["']/g, replacement: 'from "@kilocode/plugin$1"' },
+  // In import statements (supports subpaths like @sonderr/sdk/v2)
+  { pattern: /from\s+["']sonderr-ai["']/g, replacement: 'from "@sonderr/cli"' },
+  { pattern: /from\s+["']@sonderr-ai\/cli(\/[^"']*)?["']/g, replacement: 'from "@sonderr/cli$1"' },
+  { pattern: /from\s+["']@sonderr-ai\/sdk(\/[^"']*)?["']/g, replacement: 'from "@sonderr/sdk$1"' },
+  { pattern: /from\s+["']@sonderr-ai\/plugin(\/[^"']*)?["']/g, replacement: 'from "@sonderr/plugin$1"' },
 
-  // In require statements (supports subpaths like @opencode-ai/sdk/v2)
-  { pattern: /require\(["']opencode-ai["']\)/g, replacement: 'require("@kilocode/cli")' },
-  { pattern: /require\(["']@opencode-ai\/cli(\/[^"']*)?["']\)/g, replacement: 'require("@kilocode/cli$1")' },
-  { pattern: /require\(["']@opencode-ai\/sdk(\/[^"']*)?["']\)/g, replacement: 'require("@kilocode/sdk$1")' },
-  { pattern: /require\(["']@opencode-ai\/plugin(\/[^"']*)?["']\)/g, replacement: 'require("@kilocode/plugin$1")' },
+  // In require statements (supports subpaths like @sonderr/sdk/v2)
+  { pattern: /require\(["']sonderr-ai["']\)/g, replacement: 'require("@sonderr/cli")' },
+  { pattern: /require\(["']@sonderr-ai\/cli(\/[^"']*)?["']\)/g, replacement: 'require("@sonderr/cli$1")' },
+  { pattern: /require\(["']@sonderr-ai\/sdk(\/[^"']*)?["']\)/g, replacement: 'require("@sonderr/sdk$1")' },
+  { pattern: /require\(["']@sonderr-ai\/plugin(\/[^"']*)?["']\)/g, replacement: 'require("@sonderr/plugin$1")' },
 
   // Internal placeholder hostname used for in-process RPC (never resolved by DNS)
-  { pattern: /opencode\.internal/g, replacement: "kilo.internal" },
+  { pattern: /sonderr\.internal/g, replacement: "kilo.internal" },
 
   // In npx/npm commands
-  { pattern: /npx opencode-ai/g, replacement: "npx @kilocode/cli" },
-  { pattern: /npm install opencode-ai/g, replacement: "npm install @kilocode/cli" },
-  { pattern: /bun add opencode-ai/g, replacement: "bun add @kilocode/cli" },
+  { pattern: /npx sonderr-ai/g, replacement: "npx @sonderr/cli" },
+  { pattern: /npm install sonderr-ai/g, replacement: "npm install @sonderr/cli" },
+  { pattern: /bun add sonderr-ai/g, replacement: "bun add @sonderr/cli" },
 
-  // SDK public API renames (Opencode → Kilo)
+  // SDK public API renames (Sonderr → Sonderr)
   // Order matters: longer names first to avoid partial matches
-  { pattern: /OpencodeClientConfig/g, replacement: "KiloClientConfig" },
-  { pattern: /createOpencodeClient/g, replacement: "createKiloClient" },
-  { pattern: /createOpencodeServer/g, replacement: "createKiloServer" },
-  { pattern: /createOpencodeTui/g, replacement: "createKiloTui" },
-  { pattern: /OpencodeClient/g, replacement: "KiloClient" },
-  // createOpencode (without suffix) needs negative lookahead to avoid matching createOpencodeClient
-  { pattern: /\bcreateOpencode\b(?!Client|Server|Tui)/g, replacement: "createKilo" },
+  { pattern: /SonderrClientConfig/g, replacement: "SonderrClientConfig" },
+  { pattern: /createSonderrClient/g, replacement: "createSonderrClient" },
+  { pattern: /createSonderrServer/g, replacement: "createSonderrServer" },
+  { pattern: /createSonderrTui/g, replacement: "createSonderrTui" },
+  { pattern: /SonderrClient/g, replacement: "SonderrClient" },
+  // createSonderr (without suffix) needs negative lookahead to avoid matching createSonderrClient
+  { pattern: /\bcreateSonderr\b(?!Client|Server|Tui)/g, replacement: "createSonderr" },
 
-  // Branding: environment variables (exclude OPENCODE_API_KEY — upstream Zen SaaS key)
-  { pattern: /\bOPENCODE_(?!API_KEY\b)([A-Z_]+)\b/g, replacement: "KILO_$1" },
-  { pattern: /VITE_OPENCODE_/g, replacement: "VITE_KILO_" },
-  { pattern: /_EXTENSION_OPENCODE_/g, replacement: "_EXTENSION_KILO_" },
+  // Branding: environment variables (exclude SONDERR_API_KEY — upstream Zen SaaS key)
+  { pattern: /\bSONDERR_(?!API_KEY\b)([A-Z_]+)\b/g, replacement: "SONDERR_$1" },
+  { pattern: /VITE_SONDERR_/g, replacement: "VITE_SONDERR_" },
+  { pattern: /_EXTENSION_SONDERR_/g, replacement: "_EXTENSION_SONDERR_" },
 
   // Branding: HTTP header prefix
-  { pattern: /x-opencode-/g, replacement: "x-kilo-" },
+  { pattern: /x-sonderr-/g, replacement: "x-sonderr-" },
 
   // Branding: window global
-  { pattern: /window\.__OPENCODE__/g, replacement: "window.__KILO__" },
+  { pattern: /window\.__SONDERR__/g, replacement: "window.__SONDERR__" },
 
   // Branding: database filename
-  { pattern: /opencode\.db/g, replacement: "kilo.db" },
+  { pattern: /sonderr\.db/g, replacement: "sonderr.db" },
 ]
 
 /**

@@ -70,7 +70,7 @@ export const dict = {
 
   "dialog.usageExceeded.freeTier.title": "Gratis grænse nået",
   "dialog.usageExceeded.freeTier.description":
-    "Abonnér på Kilo Go for pålidelig adgang til de bedste open source-modeller fra $5/måned.", // kilocode_change
+    "Abonnér på Sonderr Go for pålidelig adgang til de bedste open source-modeller fra $5/måned.", // sonderr_change
   "dialog.usageExceeded.freeTier.actionLabel": "Abonnér",
   "dialog.usageExceeded.accountRateLimit.title": "Go-grænse nået",
   "dialog.usageExceeded.accountRateLimit.description":
@@ -121,7 +121,7 @@ export const dict = {
   "ui.textField.copied": "Kopieret",
 
   "ui.imagePreview.alt": "Billedforhåndsvisning",
-  // kilocode_change start
+  // sonderr_change start
   "ui.mermaid.rendering": "Renderer Mermaid-diagram...",
   "ui.mermaid.renderError": "Mermaid-rendering mislykkedes: {{message}}",
   "ui.mermaid.errorDefault": "Kan ikke rendere Mermaid-diagram.",
@@ -132,7 +132,7 @@ export const dict = {
   "ui.mermaid.copyPng": "Kopiér PNG",
   "ui.mermaid.downloadSvg": "Download SVG",
   "ui.mermaid.downloadPng": "Download PNG",
-  // kilocode_change end
+  // sonderr_change end
   "ui.scrollView.ariaLabel": "rulbart indhold",
 
   "ui.tool.read": "Læs",
@@ -177,7 +177,7 @@ export const dict = {
   "ui.message.collapse": "Skjul besked",
   "ui.message.copy": "Kopier",
   "ui.message.copyMessage": "Kopier besked",
-  "ui.message.deleteQueued": "Slet besked i kø", // kilocode_change
+  "ui.message.deleteQueued": "Slet besked i kø", // sonderr_change
   "ui.message.forkMessage": "Forgren til ny session",
   "ui.message.revertMessage": "Nulstil til dette punkt",
   "ui.message.copyResponse": "Kopier svar",
@@ -191,12 +191,12 @@ export const dict = {
   "ui.patch.action.created": "Oprettet",
   "ui.patch.action.moved": "Flyttet",
   "ui.patch.action.patched": "Patchet",
-  "ui.patch.action.plan": "Plan", // kilocode_change
+  "ui.patch.action.plan": "Plan", // sonderr_change
 
   "ui.question.subtitle.answered": "{{count}} besvaret",
-  "ui.question.subtitle.dismissed": "{{count}} dismissed", // kilocode_change
+  "ui.question.subtitle.dismissed": "{{count}} dismissed", // sonderr_change
   "ui.question.answer.none": "(intet svar)",
-  "ui.question.answer.dismissed": "Dismissed", // kilocode_change
+  "ui.question.answer.dismissed": "Dismissed", // sonderr_change
   "ui.question.review.notAnswered": "(ikke besvaret)",
   "ui.question.multiHint": "Vælg alle der gælder",
   "ui.question.singleHint": "Vælg ét svar",

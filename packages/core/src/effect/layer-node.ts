@@ -330,7 +330,7 @@ function flatten(node: AnyNode): readonly AnyNode[] {
   return node.kind === "group" ? node.dependencies.flatMap(flatten) : [node]
 }
 
-// kilocode_change start - defer node construction to break circular dependency chains
+// sonderr_change start - defer node construction to break circular dependency chains
 export function suspend<A, E, T extends Tag | undefined = undefined>(fn: () => Node<A, E, T>): Node<A, E, T> {
   let cached: Node<A, E, T> | undefined
   const get = () => {
@@ -358,6 +358,6 @@ export function suspend<A, E, T extends Tag | undefined = undefined>(fn: () => N
     },
   }
 }
-// kilocode_change end
+// sonderr_change end
 
 export * as LayerNode from "./layer-node"

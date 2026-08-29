@@ -1,7 +1,7 @@
 import { describe, expect, mock, test } from "bun:test"
-import { decode } from "../src/kilocode/provider-usage/minimax/native"
-import { direct, normalize, query, type Candidate } from "../src/kilocode/provider-usage/minimax/usage"
-import type { ProviderUsage } from "@opencode-ai/schema/kilocode/provider-usage"
+import { decode } from "../src/sonderr/provider-usage/minimax/native"
+import { direct, normalize, query, type Candidate } from "../src/sonderr/provider-usage/minimax/usage"
+import type { ProviderUsage } from "@sonderr/schema/sonderr/provider-usage"
 
 const native = (row: Record<string, unknown>) =>
   decode({

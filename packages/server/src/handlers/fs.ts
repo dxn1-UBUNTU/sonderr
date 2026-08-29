@@ -1,5 +1,5 @@
-import { FileSystem } from "@opencode-ai/core/filesystem"
-import { RelativePath } from "@opencode-ai/core/schema"
+import { FileSystem } from "@sonderr/core/filesystem"
+import { RelativePath } from "@sonderr/core/schema"
 import { Effect } from "effect"
 import { HttpServerResponse } from "effect/unstable/http"
 import { HttpApiBuilder } from "effect/unstable/httpapi"
@@ -13,7 +13,7 @@ export const FileSystemHandler = HttpApiBuilder.group(Api, "server.fs", (handler
         Effect.gen(function* () {
           const file = yield* (yield* FileSystem.Service).read({
             path: RelativePath.make(
-              // kilocode_change - generated clients use the typed query; retain raw wildcard compatibility
+              // sonderr_change - generated clients use the typed query; retain raw wildcard compatibility
               ctx.query.path ?? decodeURIComponent(new URL(ctx.request.url, "http://localhost").pathname.slice(13)),
             ),
           })

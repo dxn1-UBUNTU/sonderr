@@ -1,6 +1,6 @@
-import type { Message, Session, Part, SnapshotFileDiff, SessionStatus, Provider } from "@kilocode/sdk/v2"
-import type { FileDiffInfo } from "@opencode-ai/client/promise"
-import { createSimpleContext } from "@opencode-ai/ui/context"
+import type { Message, Session, Part, SnapshotFileDiff, SessionStatus, Provider } from "@sonderr/sdk/v2"
+import type { FileDiffInfo } from "@sonderr/client/promise"
+import { createSimpleContext } from "@sonderr/ui/context"
 import { PreloadMultiFileDiffResult } from "@pierre/diffs/ssr"
 
 export type NormalizedProviderListResponse = {

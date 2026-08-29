@@ -3,7 +3,7 @@ import {
   createContext,
   createEffect,
   createMemo,
-  onCleanup, // kilocode_change
+  onCleanup, // sonderr_change
   createSignal,
   For,
   Match,
@@ -36,8 +36,8 @@ import type {
   TextPart,
   ReasoningPart,
   SessionStatus,
-  StepFinishPart, // kilocode_change
-} from "@kilocode/sdk/v2"
+  StepFinishPart, // sonderr_change
+} from "@sonderr/sdk/v2"
 import { useLocal } from "../../context/local"
 import { Locale } from "../../util/locale"
 import { webSearchProviderLabel } from "../../util/tool-display"
@@ -63,17 +63,17 @@ import { Toast, useToast } from "../../ui/toast"
 import { useKV } from "../../context/kv.tsx"
 import stripAnsi from "strip-ansi"
 import { usePromptRef } from "../../context/prompt"
-import { ApprovalBadge, describeApproval, stateMetadata } from "../../kilocode/tool-approval" // kilocode_change
+import { ApprovalBadge, describeApproval, stateMetadata } from "../../sonderr/tool-approval" // sonderr_change
 import { useEpilogue } from "../../context/epilogue"
 import { normalizePath } from "../../util/path"
 import { PermissionPrompt } from "./permission"
 import { QuestionPrompt } from "./question"
-// kilocode_change start
-import { Suggest } from "@/kilocode/suggestion/tui/render"
-import { SuggestPrompt } from "@/kilocode/suggestion/tui/prompt"
+// sonderr_change start
+import { Suggest } from "@/sonderr/suggestion/tui/render"
+import { SuggestPrompt } from "@/sonderr/suggestion/tui/prompt"
 import { NetworkPrompt } from "./network"
 import { TerminalPrompt } from "./terminal"
-// kilocode_change end
+// sonderr_change end
 import { DialogExportOptions } from "../../ui/dialog-export-options"
 import * as Model from "../../util/model"
 import { formatTranscript } from "../../util/transcript"
@@ -87,16 +87,16 @@ import { collapseToolOutput } from "../../util/collapse-tool-output"
 import { usePluginRuntime } from "../../plugin/runtime"
 import { DialogRetryAction } from "../../component/dialog-retry-action"
 import { getRevertDiffFiles } from "../../util/revert-diff"
-import { KILO_BASE_MODE, useBindings, useCommandShortcut, useOpencodeKeymap } from "../../keymap"
+import { SONDERR_BASE_MODE, useBindings, useCommandShortcut, useSonderrKeymap } from "../../keymap"
 import { usePathFormatter } from "../../context/path-format"
-// kilocode_change start
-import { KiloErrorBlock } from "@/kilocode/components/kilo-error-display"
-import { splitDiffHunks } from "@/kilocode/tui/diff"
-import { RoutedModelMeta } from "@/kilocode/cli/cmd/tui/routes/session/routed-model-meta"
-import { submitFeedback } from "@/kilocode/cli/cmd/tui/feedback"
-import { MemorySessionTui } from "@/kilocode/cli/cmd/tui/routes/session/memory"
+// sonderr_change start
+import { SonderrErrorBlock } from "@/sonderr/components/sonderr-error-display"
+import { splitDiffHunks } from "@/sonderr/tui/diff"
+import { RoutedModelMeta } from "@/sonderr/cli/cmd/tui/routes/session/routed-model-meta"
+import { submitFeedback } from "@/sonderr/cli/cmd/tui/feedback"
+import { MemorySessionTui } from "@/sonderr/cli/cmd/tui/routes/session/memory"
 import { formatMarkdownTables } from "../../util/markdown"
-// kilocode_change end
+// sonderr_change end
 import { LocationProvider } from "../../context/location"
 
 addDefaultParsers(parsers.parsers)
@@ -106,7 +106,7 @@ const GO_UPSELL_FREE_TIER_DONT_SHOW = "go_upsell_dont_show"
 const GO_UPSELL_ACCOUNT_RATE_LIMIT_LAST_SEEN_AT = "go_upsell_account_rate_limit_last_seen_at"
 const GO_UPSELL_ACCOUNT_RATE_LIMIT_DONT_SHOW = "go_upsell_account_rate_limit_dont_show"
 const GO_UPSELL_WINDOW = 86_400_000 // 24 hrs
-const GO_UPSELL_PROVIDERS = new Set(["opencode", "opencode-go"])
+const GO_UPSELL_PROVIDERS = new Set(["sonderr", "sonderr-go"])
 
 export const alwaysSeparate = new WeakSet<BoxRenderable>()
 
@@ -151,10 +151,10 @@ const sessionBindingCommands = [
   "session.message.next",
   "session.message.previous",
   "messages.copy",
-  // kilocode_change start - message feedback
+  // sonderr_change start - message feedback
   "messages.feedback.up",
   "messages.feedback.down",
-  // kilocode_change end
+  // sonderr_change end
   "session.copy",
   "session.export",
   "session.child.first",
@@ -252,7 +252,7 @@ export function Session() {
     if (session()?.parentID) return []
     return children().flatMap((x) => sync.data.question[x.id] ?? [])
   })
-  // kilocode_change start
+  // sonderr_change start
   const suggestions = createMemo(() => {
     if (session()?.parentID) return []
     return children().flatMap((x) => sync.data.suggestion[x.id] ?? [])
@@ -299,7 +299,7 @@ export function Session() {
       network().length > 0 ||
       terminals().length > 0,
   )
-  // kilocode_change end
+  // sonderr_change end
 
   const pending = createMemo(() => {
     const completed = messages().findLast((x) => x.role === "assistant" && x.time.completed)?.id
@@ -341,9 +341,9 @@ export function Session() {
   const toast = useToast()
   const sdk = useSDK()
   const editor = useEditorContext()
-  onCleanup(MemorySessionTui.attach({ event, toast, sessionID: route.sessionID })) // kilocode_change
+  onCleanup(MemorySessionTui.attach({ event, toast, sessionID: route.sessionID })) // sonderr_change
 
-  // kilocode_change start - background processes are scoped to the visible session
+  // sonderr_change start - background processes are scoped to the visible session
   function processGroup(sessionID: string) {
     const info = sync.session.get(sessionID)
     return info?.parentID ?? info?.id ?? sessionID
@@ -379,7 +379,7 @@ export function Session() {
   onCleanup(() => {
     stopProcesses(processSessionID)
   })
-  // kilocode_change end
+  // sonderr_change end
 
   createEffect(() => {
     const sessionID = route.sessionID
@@ -430,7 +430,7 @@ export function Session() {
     if (part.id === lastSwitch) return
 
     if (part.tool === "plan_enter") {
-      // kilocode_change
+      // sonderr_change
       local.agent.set("plan")
       lastSwitch = part.id
     }
@@ -446,7 +446,7 @@ export function Session() {
     seeded = true
     r.set(route.prompt)
   }
-  const keymap = useOpencodeKeymap()
+  const keymap = useSonderrKeymap()
   const dialog = useDialog()
   const renderer = useRenderer()
 
@@ -974,11 +974,11 @@ export function Session() {
       title: "Copy last assistant message",
       value: "messages.copy",
       category: "Session",
-      // kilocode_change start - /copy copies the latest assistant response
+      // sonderr_change start - /copy copies the latest assistant response
       slash: {
         name: "copy",
       },
-      // kilocode_change end
+      // sonderr_change end
       run: () => {
         const revertID = session()?.revert?.messageID
         const lastAssistantMessage = messages().findLast(
@@ -1018,7 +1018,7 @@ export function Session() {
         dialog.clear()
       },
     },
-    // kilocode_change start - message feedback
+    // sonderr_change start - message feedback
     {
       title: "Rate last assistant message helpful",
       value: "messages.feedback.up",
@@ -1031,28 +1031,28 @@ export function Session() {
       category: "Session",
       run: () => submitFeedback("down", dialog, { toast, session, messages }),
     },
-    // kilocode_change end
+    // sonderr_change end
     {
       title: "Copy session transcript",
       value: "session.copy",
       category: "Session",
       slash: {
-        name: "copy-session", // kilocode_change - transcript copy moved off /copy
+        name: "copy-session", // sonderr_change - transcript copy moved off /copy
       },
       run: async () => {
         try {
           const sessionData = session()
           if (!sessionData) return
-          // kilocode_change start - fetch all messages from server instead of truncated sync store
+          // sonderr_change start - fetch all messages from server instead of truncated sync store
           const allMessages = await sdk.client.session.messages({ sessionID: sessionData.id }, { throwOnError: true })
           const sessionMessages = allMessages.data.map((msg) => ({
             info: msg.info,
             parts: msg.parts,
           }))
-          // kilocode_change end
+          // sonderr_change end
           const transcript = formatTranscript(
             sessionData,
-            sessionMessages, // kilocode_change
+            sessionMessages, // sonderr_change
             {
               thinking: showThinking(),
               toolDetails: showDetails(),
@@ -1093,17 +1093,17 @@ export function Session() {
 
           if (options === null) return
 
-          // kilocode_change start - fetch all messages from server instead of truncated sync store
+          // sonderr_change start - fetch all messages from server instead of truncated sync store
           const allMessages = await sdk.client.session.messages({ sessionID: sessionData.id }, { throwOnError: true })
           const sessionMessages = allMessages.data.map((msg) => ({
             info: msg.info,
             parts: msg.parts,
           }))
-          // kilocode_change end
+          // sonderr_change end
 
           const transcript = formatTranscript(
             sessionData,
-            sessionMessages, // kilocode_change
+            sessionMessages, // sonderr_change
             {
               thinking: options.thinking,
               toolDetails: options.toolDetails,
@@ -1240,12 +1240,12 @@ export function Session() {
   }))
 
   useBindings(() => ({
-    mode: KILO_BASE_MODE,
+    mode: SONDERR_BASE_MODE,
     bindings: tuiConfig.keybinds.gather("session", sessionBindingCommands),
   }))
 
   useBindings(() => ({
-    mode: KILO_BASE_MODE,
+    mode: SONDERR_BASE_MODE,
     enabled: foregroundTasks().length > 0,
     priority: 1,
     bindings: tuiConfig.keybinds.get("session.background"),
@@ -1319,13 +1319,13 @@ export function Session() {
                 scrollAcceleration={scrollAcceleration()}
               >
                 <box height={1} />
-                {/* kilocode_change start */}
+                {/* sonderr_change start */}
                 <Show when={session()?.parentID && messages().length === 0}>
                   <box paddingLeft={3}>
                     <text fg={theme.textMuted}>↳ Initializing...</text>
                   </box>
                 </Show>
-                {/* kilocode_change end */}
+                {/* sonderr_change end */}
                 <For each={messages()}>
                   {(message, index) => (
                     <Switch>
@@ -1422,7 +1422,7 @@ export function Session() {
                 </For>
               </scrollbox>
               <box flexShrink={0}>
-                {/* kilocode_change start - arbitrate Kilo terminal, question, suggestion, and network input */}
+                {/* sonderr_change start - arbitrate Sonderr terminal, question, suggestion, and network input */}
                 <Show when={!terminal() && permissions().length > 0}>
                   <PermissionPrompt
                     request={permissions()[0]}
@@ -1476,7 +1476,7 @@ export function Session() {
                     />
                   </pluginRuntime.Slot>
                 </Show>
-                {/* kilocode_change end */}
+                {/* sonderr_change end */}
               </box>
             </Show>
             <Toast />
@@ -1619,8 +1619,8 @@ function AssistantMessage(props: { message: AssistantMessage; parts: Part[]; las
   const sync = useSync()
   const messages = createMemo(() => sync.data.message[props.message.sessionID] ?? [])
   const model = createMemo(() => Model.name(ctx.providers(), props.message.providerID, props.message.modelID))
-  const routed = createMemo(() => RoutedModelMeta.info(ctx.providers(), props.parts, ctx.showDetails(), props.message)) // kilocode_change
-  const route = createMemo(() => routed().footer) // kilocode_change
+  const routed = createMemo(() => RoutedModelMeta.info(ctx.providers(), props.parts, ctx.showDetails(), props.message)) // sonderr_change
+  const route = createMemo(() => routed().footer) // sonderr_change
 
   const final = createMemo(() => {
     return props.message.finish && !["tool-calls", "unknown"].includes(props.message.finish)
@@ -1639,7 +1639,7 @@ function AssistantMessage(props: { message: AssistantMessage; parts: Part[]; las
 
   return (
     <>
-      {/* kilocode_change start - provide compact routed-model metadata to part renderers */}
+      {/* sonderr_change start - provide compact routed-model metadata to part renderers */}
       <RoutedModelMeta.Context.Provider value={routed}>
         <For each={props.parts}>
           {(part, index) => {
@@ -1657,7 +1657,7 @@ function AssistantMessage(props: { message: AssistantMessage; parts: Part[]; las
           }}
         </For>
       </RoutedModelMeta.Context.Provider>
-      {/* kilocode_change end */}
+      {/* sonderr_change end */}
       <Show when={props.parts.some((x) => x.type === "tool" && x.tool === "task")}>
         <box paddingTop={1} paddingLeft={3}>
           <text fg={theme.text}>
@@ -1682,9 +1682,9 @@ function AssistantMessage(props: { message: AssistantMessage; parts: Part[]; las
           </text>
         </box>
       </Show>
-      {/* kilocode_change start - Kilo-specific error display */}
+      {/* sonderr_change start - Sonderr-specific error display */}
       <Show when={props.message.error && props.message.error.name !== "MessageAbortedError"}>
-        <KiloErrorBlock
+        <SonderrErrorBlock
           error={props.message.error!}
           fallback={
             <box
@@ -1703,7 +1703,7 @@ function AssistantMessage(props: { message: AssistantMessage; parts: Part[]; las
           }
         />
       </Show>
-      {/* kilocode_change end */}
+      {/* sonderr_change end */}
       <Switch>
         <Match when={props.last || final() || props.message.error?.name === "MessageAbortedError"}>
           <box ref={(el: BoxRenderable) => alwaysSeparate.add(el)} paddingLeft={3}>
@@ -1720,11 +1720,11 @@ function AssistantMessage(props: { message: AssistantMessage; parts: Part[]; las
               </span>{" "}
               <span style={{ fg: theme.text }}>{Locale.titlecase(props.message.mode)}</span>
               <span style={{ fg: theme.textMuted }}> · {model()}</span>
-              {/* kilocode_change start - show routed model in regular assistant footer */}
+              {/* sonderr_change start - show routed model in regular assistant footer */}
               <Show when={route()}>
                 <span style={{ fg: theme.textMuted }}> · {route()}</span>
               </Show>
-              {/* kilocode_change end */}
+              {/* sonderr_change end */}
               <Show when={duration()}>
                 <span style={{ fg: theme.textMuted }}> · {Locale.duration(duration())}</span>
               </Show>
@@ -1739,25 +1739,25 @@ function AssistantMessage(props: { message: AssistantMessage; parts: Part[]; las
   )
 }
 
-// kilocode_change start - register rendered step-finish parts
+// sonderr_change start - register rendered step-finish parts
 const PART_MAPPING = {
   text: TextPart,
   tool: ToolPart,
   reasoning: ReasoningPart,
   "step-finish": StepFinishPart,
 }
-// kilocode_change end
+// sonderr_change end
 
 const INLINE_TOOL_ICON_WIDTH = 2
 
-// kilocode_change start - show concrete routed models reported by gateway/provider responses
+// sonderr_change start - show concrete routed models reported by gateway/provider responses
 function StepFinishPart(props: { last: boolean; part: StepFinishPart; message: AssistantMessage }) {
   const ctx = use()
   const { theme } = useTheme()
   const info = useContext(RoutedModelMeta.Context)
   const routed = createMemo(() => {
-    if (props.message.providerID !== "kilo") return undefined
-    if (!props.message.modelID.startsWith("kilo-auto/")) return undefined
+    if (props.message.providerID !== "sonderr") return undefined
+    if (!props.message.modelID.startsWith("sonderr-auto/")) return undefined
     const model = props.part.model
     if (!model) return undefined
     if (model.providerID === props.message.providerID && model.modelID === props.message.modelID) return undefined
@@ -1773,7 +1773,7 @@ function StepFinishPart(props: { last: boolean; part: StepFinishPart; message: A
     </Show>
   )
 }
-// kilocode_change end
+// sonderr_change end
 
 function ReasoningPart(props: { last: boolean; part: ReasoningPart; message: AssistantMessage }) {
   const { theme } = useTheme()
@@ -1813,9 +1813,9 @@ function ReasoningPart(props: { last: boolean; part: ReasoningPart; message: Ass
       >
         <box onMouseUp={toggle}>
           <ReasoningHeader
-            /* kilocode_change start */
+            /* sonderr_change start */
             partID={props.part.id}
-            /* kilocode_change end */
+            /* sonderr_change end */
             toggleable={inMinimal()}
             open={!inMinimal() || expanded()}
             done={isDone()}
@@ -1842,7 +1842,7 @@ function ReasoningPart(props: { last: boolean; part: ReasoningPart; message: Ass
 }
 
 function ReasoningHeader(props: {
-  partID: string // kilocode_change
+  partID: string // sonderr_change
   toggleable: boolean
   open: boolean
   done: boolean
@@ -1880,9 +1880,9 @@ function ReasoningHeader(props: {
               {props.duration}
             </span>
           </Show>
-          {/* kilocode_change start */}
+          {/* sonderr_change start */}
           <RoutedModelMeta.View id={props.partID} />
-          {/* kilocode_change end */}
+          {/* sonderr_change end */}
         </text>
       </Match>
     </Switch>
@@ -1892,9 +1892,9 @@ function ReasoningHeader(props: {
 function TextPart(props: { last: boolean; part: TextPart; message: AssistantMessage }) {
   const ctx = use()
   const { theme, syntax } = useTheme()
-  // kilocode_change start - format markdown tables with fixed-width columns
+  // sonderr_change start - format markdown tables with fixed-width columns
   const content = createMemo(() => formatMarkdownTables(props.part.text.trim()))
-  // kilocode_change end
+  // sonderr_change end
   return (
     <Show when={props.part.text.trim()}>
       <box ref={(el: BoxRenderable) => alwaysSeparate.add(el)} paddingLeft={3} marginTop={1} flexShrink={0}>
@@ -1902,7 +1902,7 @@ function TextPart(props: { last: boolean; part: TextPart; message: AssistantMess
           syntaxStyle={syntax()}
           streaming={true}
           internalBlockMode="top-level"
-          content={content()} // kilocode_change
+          content={content()} // sonderr_change
           tableOptions={{ style: "grid" }}
           conceal={ctx.conceal()}
           fg={theme.markdownText}
@@ -1959,7 +1959,7 @@ function ToolPart(props: { last: boolean; part: ToolPart; message: AssistantMess
         <Match when={display() === "grep"}>
           <Grep {...toolprops} />
         </Match>
-        {/* kilocode_change start - preserve Kilo tool-specific status rendering */}
+        {/* sonderr_change start - preserve Sonderr tool-specific status rendering */}
         <Match when={display() === "background_process"}>
           <BackgroundProcess {...toolprops} />
         </Match>
@@ -1969,7 +1969,7 @@ function ToolPart(props: { last: boolean; part: ToolPart; message: AssistantMess
         <Match when={display() === "semantic_search"}>
           <SemanticSearch {...toolprops} />
         </Match>
-        {/* kilocode_change end */}
+        {/* sonderr_change end */}
         <Match when={display() === "webfetch"}>
           <WebFetch {...toolprops} />
         </Match>
@@ -2053,7 +2053,7 @@ function GenericTool(props: ToolProps) {
   )
 }
 
-// kilocode_change start - Kilo tool-specific status rendering
+// sonderr_change start - Sonderr tool-specific status rendering
 function BackgroundProcess(props: ToolProps) {
   const sync = useSync()
   const paths = usePathFormatter()
@@ -2157,7 +2157,7 @@ function SemanticSearch(props: ToolProps) {
     </InlineTool>
   )
 }
-// kilocode_change end
+// sonderr_change end
 
 function InlineTool(props: {
   icon: string
@@ -2197,7 +2197,7 @@ function InlineTool(props: {
 
   const failed = createMemo(() => Boolean(error() && !denied()))
   const clickable = createMemo(() => Boolean(props.onClick || failed()))
-  // kilocode_change - explain why the call was auto-approved or denied
+  // sonderr_change - explain why the call was auto-approved or denied
   const approvalNote = createMemo(() => describeApproval(stateMetadata(props.part.state)))
   const fg = createMemo(() => {
     if (props.color) return props.color
@@ -2223,8 +2223,8 @@ function InlineTool(props: {
       failure={props.failure}
       spinner={props.spinner}
       separate={props.separate}
-      note={approvalNote()} // kilocode_change
-      noteColor={theme.textMuted} // kilocode_change
+      note={approvalNote()} // sonderr_change
+      noteColor={theme.textMuted} // sonderr_change
       onMouseOver={() => clickable() && setHover(true)}
       onMouseOut={() => setHover(false)}
       onMouseUp={() => {
@@ -2255,8 +2255,8 @@ export function InlineToolRow(props: {
   failure?: string
   spinner?: boolean
   separate?: boolean
-  note?: string // kilocode_change - why the call was auto-approved or denied
-  noteColor?: RGBA // kilocode_change
+  note?: string // sonderr_change - why the call was auto-approved or denied
+  noteColor?: RGBA // sonderr_change
   children: JSX.Element
   onMouseOver?: () => void
   onMouseOut?: () => void
@@ -2309,7 +2309,7 @@ export function InlineToolRow(props: {
                 attributes={props.denied ? TextAttributes.STRIKETHROUGH : undefined}
               >
                 {props.failed && !props.complete ? (props.failure ?? props.children) : props.children}
-                {/* kilocode_change - explain why the call was auto-approved or denied, inline on the header */}
+                {/* sonderr_change - explain why the call was auto-approved or denied, inline on the header */}
                 <ApprovalBadge note={props.note} color={props.noteColor} />
               </text>
             </box>
@@ -2331,13 +2331,13 @@ function BlockTool(props: {
   onClick?: () => void
   part?: ToolPart
   spinner?: boolean
-  hideApproval?: boolean // kilocode_change - suppress the auto-approval note (e.g. todowrite)
+  hideApproval?: boolean // sonderr_change - suppress the auto-approval note (e.g. todowrite)
 }) {
   const { theme } = useTheme()
   const renderer = useRenderer()
   const [hover, setHover] = createSignal(false)
   const error = createMemo(() => (props.part?.state.status === "error" ? props.part.state.error : undefined))
-  // kilocode_change - explain why the call was auto-approved or denied
+  // sonderr_change - explain why the call was auto-approved or denied
   const approvalNote = createMemo(() =>
     props.hideApproval ? undefined : describeApproval(stateMetadata(props.part?.state)),
   )
@@ -2367,11 +2367,11 @@ function BlockTool(props: {
             fallback={
               <text paddingLeft={3} fg={theme.textMuted}>
                 {title()}
-                {/* kilocode_change start */}
+                {/* sonderr_change start */}
                 <RoutedModelMeta.View id={props.part?.id} />
                 {/* explain why the call was auto-approved or denied, inline on the title */}
                 <ApprovalBadge note={approvalNote()} color={theme.textMuted} />
-                {/* kilocode_change end */}
+                {/* sonderr_change end */}
               </text>
             }
           >
@@ -2628,7 +2628,7 @@ function Task(props: ToolProps) {
         const title = state.status === "running" || state.status === "completed" ? state.title : undefined
         content.push(`↳ ${Locale.titlecase(current()!.tool)} ${title}`)
       } else content.push(`↳ ${formatSubagentToolcalls(tools().length)}`)
-    } else if (isRunning()) content.push(`↳ Starting...`) // kilocode_change
+    } else if (isRunning()) content.push(`↳ Starting...`) // sonderr_change
 
     if (!isRunning() && props.part.state.status === "completed") {
       content.push(`↳ ${formatCompletedSubagentDetail(tools().length, Locale.duration(duration()))}`)
@@ -2751,13 +2751,13 @@ function Edit(props: ToolProps) {
   const ft = createMemo(() => filetype(stringValue(props.input.filePath)))
 
   const diffContent = createMemo(() => stringValue(props.metadata.diff) ?? "")
-  const hunks = createMemo(() => splitDiffHunks(diffContent())) // kilocode_change
+  const hunks = createMemo(() => splitDiffHunks(diffContent())) // sonderr_change
 
   return (
     <Switch>
       <Match when={stringValue(props.metadata.diff) !== undefined}>
         <BlockTool title={"← Edit " + pathFormatter.format(stringValue(props.input.filePath))} part={props.part}>
-          {/* kilocode_change start - preserve separated multi-hunk edit rendering */}
+          {/* sonderr_change start - preserve separated multi-hunk edit rendering */}
           <box paddingLeft={1} flexDirection="column">
             <For each={hunks()}>
               {(hunk, i) => (
@@ -2790,7 +2790,7 @@ function Edit(props: ToolProps) {
               )}
             </For>
           </box>
-          {/* kilocode_change end */}
+          {/* sonderr_change end */}
           <Diagnostics diagnostics={props.metadata.diagnostics} filePath={stringValue(props.input.filePath) ?? ""} />
         </BlockTool>
       </Match>
@@ -2817,7 +2817,7 @@ function ApplyPatch(props: ToolProps) {
   })
 
   function Diff(p: { diff: string; filePath: string }) {
-    // kilocode_change start
+    // sonderr_change start
     const hunks = createMemo(() => splitDiffHunks(p.diff))
     return (
       <box paddingLeft={1} flexDirection="column">
@@ -2853,7 +2853,7 @@ function ApplyPatch(props: ToolProps) {
         </For>
       </box>
     )
-    // kilocode_change end
+    // sonderr_change end
   }
 
   function title(file: { type: string; relativePath: string; filePath: string; deletions: number }) {
@@ -2898,7 +2898,7 @@ function TodoWrite(props: ToolProps) {
   return (
     <Switch>
       <Match when={parseTodos(props.metadata.todos).length}>
-        {/* kilocode_change - todo writes are orchestration, not a mutating action to explain */}
+        {/* sonderr_change - todo writes are orchestration, not a mutating action to explain */}
         <BlockTool title="# Todos" part={props.part} hideApproval>
           <box>
             <For each={todos()}>{(todo) => <TodoItem status={todo.status} content={todo.content} />}</For>
@@ -2925,7 +2925,7 @@ function Question(props: ToolProps) {
   const questions = createMemo(() => parseQuestions(props.input.questions))
   const answers = createMemo(() => parseQuestionAnswers(props.metadata.answers))
   const count = createMemo(() => questions().length)
-  // kilocode_change start - preserve dismissed content and the compact expandable summary
+  // sonderr_change start - preserve dismissed content and the compact expandable summary
   const dismissed = createMemo(
     () =>
       props.metadata.dismissed === true ||
@@ -2977,7 +2977,7 @@ function Question(props: ToolProps) {
           </BlockTool>
         </Show>
       </Match>
-      {/* kilocode_change end */}
+      {/* sonderr_change end */}
       <Match when={true}>
         <InlineTool icon="→" pending="Asking questions..." complete={count()} part={props.part}>
           Asked {count()} question{count() !== 1 ? "s" : ""}
@@ -3052,12 +3052,12 @@ const toolDisplays = new Set([
   "todowrite",
   "question",
   "skill",
-  // kilocode_change start - retain dedicated Kilo tool renderers
+  // sonderr_change start - retain dedicated Sonderr tool renderers
   "execute",
   "background_process",
   "interactive_terminal",
   "semantic_search",
-  // kilocode_change end
+  // sonderr_change end
 ])
 
 export function toolDisplay(tool: string) {
