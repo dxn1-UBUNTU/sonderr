@@ -1,0 +1,17 @@
+Replace a literal string in a file. Better than sed — purpose-built for precise code edits with clear error messages.
+
+Usage:
+- Replaces exact string matches in a file (not regex — use grep for pattern searching).
+- Use `replaceAll: true` to replace every occurrence at once.
+- If the string appears multiple times and `replaceAll` is false, the tool will error — include more surrounding text to make the match unique.
+- Requires that you have read the file first (the tool reads it internally).
+- Preserves file encoding (UTF-8, UTF-8-BOM) automatically.
+
+When to use str_replace over edit:
+- Simpler API for common string replacements
+- Clear error messages when matches aren't found or aren't unique
+- Better output showing how many occurrences were replaced
+
+When to edit instead:
+- You need exact control over whitespace matching
+- You're doing complex multi-line edits

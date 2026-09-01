@@ -5,6 +5,7 @@
 
 import SONDERR_CONFIG from "./sonderr-config.md" with { type: "text" }
 import DESIGN from "./design.md" with { type: "text" }
+import VERIFICATION from "./verification.md" with { type: "text" }
 
 export interface BuiltinSkill {
   name: string
@@ -24,5 +25,11 @@ export const BUILTIN_SKILLS: BuiltinSkill[] = [
     description:
       "Comprehensive UI/UX design guide for building polished, accessible, production-quality interfaces. Use when building frontend components, pages, forms, or any user-facing feature. Covers layout, spacing, typography, color, interaction states, accessibility, responsive design, and quality checklists.",
     content: DESIGN,
+  },
+  {
+    name: "verification",
+    description:
+      "Comprehensive pre-completion verification checklist and quality gates. Use before reporting ANY task as done. Catches bugs, edge cases, style violations, and missing requirements before the user ever sees your work.",
+    content: VERIFICATION,
   },
 ]

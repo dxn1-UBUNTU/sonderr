@@ -58,6 +58,63 @@ Color should communicate, not decorate:
 - **Opacity**: Use opacity for disabled states, overlays, and depth — not as a substitute for a proper color palette.
 - **Consistency**: Use the project's CSS variables/tokens. Never hardcode colors that already exist as tokens.
 
+## Icons
+
+**NEVER use emojis as icons.** Emojis render inconsistently across platforms, break in screen readers, have unpredictable sizing, and look unprofessional in production UIs. They are the hallmark of a prototype, not a shipped product.
+
+### The no-emoji rule
+
+- ❌ Never: `<button>💾 Save</button>` or `<span>⚠️ Warning</span>`
+- ❌ Never: Use emoji as a bullet point, status indicator, or decorative element
+- ❌ Never: Rely on emoji color (red ❌, green ✅) — color renders differently everywhere
+- ✅ Always: Use proper SVG icons, icon fonts, or CSS-drawn shapes
+- ✅ Always: Create your own simple icons when no icon library exists
+
+### Creating custom icons
+
+When you need an icon and none exists, create one:
+
+**SVG (preferred)**: Inline SVG gives you full control over size, color, and styling:
+```svg
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+  <polyline points="17 21 17 13 7 13 7 21"/>
+  <polyline points="7 3 7 8 15 8"/>
+</svg>
+```
+
+**CSS-drawn**: For simple icons (checkmarks, arrows, dots):
+```css
+.icon-check {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  position: relative;
+}
+.icon-check::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+```
+
+**Icon fonts**: If the project has an icon font (Font Awesome, Lucide, Heroicons), use it.
+
+### Icon requirements
+
+- **Sizing**: Icons should be 16x16 (sm), 20x20 (md), 24x24 (lg). Never arbitrary sizes.
+- **Color**: Use `currentColor` so icons inherit text color. This ensures they work in any context.
+- **Accessibility**: Decorative icons get `aria-hidden="true"`. Meaningful icons get `aria-label` or accompanying text.
+- **Touch targets**: Icon buttons need at least 44x44px tap target (padding around the icon).
+- **Consistency**: Use icons from the same family throughout the project. Don't mix styles.
+
 ## Interaction States
 
 Every interactive element needs these states:

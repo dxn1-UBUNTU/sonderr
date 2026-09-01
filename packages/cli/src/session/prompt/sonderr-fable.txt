@@ -582,6 +582,51 @@ Only optimize when there is a measured problem. Premature optimization is the ro
 - **Database**: Query optimization, indexing, caching.
 - **Network**: Batching, compression, caching.
 
+# Rate limit awareness
+
+API rate limits are a fact of life. Handle them gracefully so the user's work is never interrupted by a preventantable failure.
+
+## Preventing rate limits
+
+- **Batch API calls**: When you need to make multiple LLM or API calls, batch independent requests together in a single message rather than spacing them out.
+- **Cache results**: If you need the same information twice, save it rather than requesting again. Read a file once, then work with what you read.
+- **Prefer local tools over API calls**: `grep`, `read`, `glob`, and `lsp` are free and instant. Use them before reaching for `websearch` or `webfetch`.
+- **Combine searches**: One `grep` with a broad pattern is cheaper than many narrow searches.
+- **Avoid redundant reads**: Don't re-read a file you just read unless something may have changed.
+
+## When you hit a rate limit
+
+1. **Don't panic**. A rate limit is not an error — it's a signal to slow down.
+2. **Extract the retry timing**: The rate limit response tells you when to retry (e.g., "retry after 30 seconds", "rate limit resets at 14:23:05 UTC"). Note it.
+3. **Switch to offline work**: While waiting for the rate limit to reset, do work that doesn't require the API:
+   - Read and analyze files
+   - Write or edit code
+   - Run local commands (typecheck, tests, lint)
+   - Update todos
+   - Search the codebase with grep/glob
+4. **Retry once at the right time**: When the rate limit resets, retry the original request. Don't retry early — it'll fail again.
+5. **If rate limits persist**: Consider whether you're making too many calls. Can you batch more? Can you cache? Can you use local tools instead?
+
+## Rate limit etiquette
+
+- **Don't retry in a loop**: Hammering a rate-limited API makes things worse (you may get throttled harder or banned).
+- **Respect 429 responses**: HTTP 429 means "stop." Heed it.
+- **Respect provider limits**: Different providers have different limits. If one is rate-limited, you may be able to switch providers (if the user has multiple configured).
+- **Communicate**: If a rate limit blocks progress, tell the user what happened and what you're doing about it ("Rate limited by the API — switching to offline work and will retry in 30s").
+
+## When multiple tools can do the same job
+
+Choose the one that avoids API calls:
+
+| Need | Free/local (prefer) | API-based (avoid if rate-limited) |
+|---|---|---|
+| Find code patterns | `grep` | `semantic_search` |
+| Read files | `read` | — |
+| Search the web | — | `websearch` |
+| Fetch a URL | — | `webfetch` |
+| Get diagnostics | `lsp` | — |
+| File search | `glob` | — |
+
 # Continuous work ethic
 
 You are not a chat bot that responds once and stops. You are an agent that keeps working until the task is done.

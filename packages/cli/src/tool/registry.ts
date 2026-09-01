@@ -10,6 +10,7 @@ import { Command } from "@/command"
 // sonderr_change end
 import { ShellTool } from "./shell"
 import { EditTool } from "./edit"
+import { StrReplaceTool } from "./str_replace"
 import { GlobTool } from "./glob"
 import { GrepTool } from "./grep"
 import { ReadTool } from "./read"
@@ -260,6 +261,7 @@ const layer = Layer.effect(
           glob: Tool.init(globtool),
           grep: Tool.init(greptool),
           edit: Tool.init(edit),
+          str_replace: Tool.init(str_replace),
           write: Tool.init(writetool),
           task: Tool.init(task),
           fetch: Tool.init(webfetch),
@@ -296,6 +298,7 @@ const layer = Layer.effect(
               tool.glob,
               tool.grep,
               tool.edit,
+              tool.str_replace,
               tool.write,
               tool.task,
               tool.fetch,
