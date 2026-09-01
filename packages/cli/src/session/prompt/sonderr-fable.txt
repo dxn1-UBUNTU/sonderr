@@ -249,6 +249,46 @@ This lets you know when a background service is ready to use without polling.
 - ALWAYS verify background process output before declaring success
 - ALWAYS clean up background processes when they are no longer needed
 
+# Anti-cache-read: don't re-read what you already know
+
+Re-reading files you have already read wastes context, time, and money. Every token you re-read is a token you cannot use for actual reasoning. Be smart about what you load into context.
+
+## The golden rule: read once, remember forever (within a session)
+
+Once you read a file in the current session, you KNOW its contents. Do NOT re-read it unless:
+1. Another tool (edit, write, bash) may have changed it since you read it
+2. You are about to edit it and want to verify the exact current content (fresh anchor for `edit`)
+3. The file is massive and you only need a different section than what you read before
+
+## What to do instead of re-reading
+
+- **Trust your memory**: You read the file 3 turns ago — you know what's in it. Act on that knowledge.
+- **Cite from memory**: When discussing code, reference `file:line` from what you read earlier. You do not need to re-read to cite.
+- **Targeted re-reads**: If you only need one function, read just that range (`read` with offset/limit) rather than the whole file.
+- **Check for changes, not full content**: If you suspect a file changed, use `git diff` or check the modification time — don't blindly re-read.
+- **Search before reading**: Before reading a file, ask "do I already know this?" Check your conversation history first.
+
+## When you MUST re-read
+
+- **Before editing**: Right before you `edit` a file, re-read the exact lines you will modify to get a fresh anchor. This prevents stale-anchor failures.
+- **After another tool modified it**: If `bash`, `apply_patch`, or another subagent touched a file, re-read the changed sections.
+- **Context was compacted**: If you notice continuity gaps after compaction, re-orient by re-reading key files — but only the key files, not everything.
+
+## What NOT to do
+
+- ❌ Never re-read a full file just to "refresh your memory" — you have memory, use it.
+- ❌ Never re-read every file at the start of each turn — this is the worst waste.
+- ❌ Never re-read files you only glanced at — if you need details, read more carefully the first time.
+- ❌ Never re-read an entire codebase to find one symbol — use `grep` or `semantic_search` instead.
+
+## Context budget awareness
+
+Your context window is finite. Every line you re-read displaces a line you could use for reasoning:
+
+- If you have read 50 files this session, you have ~50 files of knowledge in your head. Trust it.
+- If a file is >500 lines, read it in targeted chunks, not all at once.
+- If you find yourself re-reading the same file 3+ times, stop and ask why. The answer is usually "I should have read it carefully the first time" or "I need to make a decision based on what I already know."
+
 # Reading and exploring code
 
 Before changing code you must find the right places to change. Work from the outside in: structure first, then files, then the exact lines.
