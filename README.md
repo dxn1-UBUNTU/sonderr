@@ -51,7 +51,7 @@ Before reporting done, Sonderr runs verification checklists. It catches its own 
 ## Features
 
 - **Complex systems** — Designed for OS kernels, game engines, compilers, distributed systems, not todo apps
-- **BYOK providers** — OpenAI, Anthropic, Gemini, Kilo Gateway. Swap providers or models at runtime
+- **Pure BYOK** — Any model from any provider. OpenAI, Anthropic, Gemini, or your own endpoint. Swap providers or models at runtime
 - **Model-agnostic** — Skills + prompt infrastructure lift cheap models to high-end output quality
 - **Background tasks** — Parallel execution: install, build, test while coding
 - **Terminal UI** — Full TUI with sessions, plan mode, file/command tooling, real-time streaming
@@ -113,11 +113,10 @@ Binary: `packages/cli/dist/@sonderr/cli/bin/sonderr`
 | OpenAI | GPT-4o, o-series, and newer |
 | Anthropic | Claude Sonnet 4.6, Opus 4.1, and newer |
 | Gemini | Gemini 2.5 Pro / Flash / Flash Lite and newer |
-| Kilo Gateway | Free/shortlist models via the Kilo Gateway API |
 
 Configure in-session with `/api_attach` or directly in `sonderr.json`. Keys are stored locally, encrypted, only sent to your configured provider.
 
-**Run cheap. Run fast.** Sonderr's skill system means Gemini Flash Lite delivers what raw Claude Opus can't.
+**Run any model.** Sonderr's skill system means even fast, cheap models deliver complex-system output.
 
 ## Architecture
 
@@ -131,7 +130,7 @@ Bun + Turborepo monorepo, 35 packages:
 | `@sonderr/server` | Local HTTP server |
 | `@sonderr/protocol` | Client/server protocol definitions |
 | `@sonderr/sdk` | Auto-generated JavaScript SDK |
-| `@sonderr/gateway` | Kilo Gateway provider integration |
+| `@sonderr/gateway` | Custom provider/endpoint integration |
 | `@sonderr-vscode` | VS Code extension with Agent Manager |
 | `@sonderr-jetbrains` | JetBrains plugin |
 | `sonderr-desktop` | Electron desktop app wrapper |
