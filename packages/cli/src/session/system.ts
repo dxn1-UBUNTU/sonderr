@@ -12,7 +12,7 @@ import PROMPT_GPT55 from "./prompt/sonderr-gpt-5.5.txt" // sonderr_change
 import PROMPT_KIMI from "./prompt/kimi.txt"
 import PROMPT_LING from "./prompt/ling.txt" // sonderr_change
 import PROMPT_META from "./prompt/meta.txt"
-import PROMPT_FABLE from "./prompt/sonderr-fable.txt" // sonderr_change - full Sonderr prompt (default for older/unknown models)
+import PROMPT_FABLE from "./prompt/sonderr-system-prompt.md" // sonderr_change - full Sonderr prompt (default for older/unknown models)
 
 import PROMPT_CODEX from "./prompt/codex.txt"
 import PROMPT_TRINITY from "./prompt/trinity.txt"
@@ -88,7 +88,7 @@ export function provider(model: Provider.Model) {
   if (model.api.id.toLowerCase().includes("kimi")) return [PROMPT_KIMI]
   if (isLing(model.api.id)) return [PROMPT_LING] // sonderr_change
   // sonderr_change start - older/unknown models get the full Sonderr prompt
-  // (sonderr-fable) instead of the terse default, so they operate at a much
+  // (sonderr-system-prompt) instead of the terse default, so they operate at a much
   // higher level inside the Sonderr environment
   return [PROMPT_FABLE]
   // sonderr_change end
