@@ -11,6 +11,7 @@ import TESTING from "./testing.md" with { type: "text" }
 import DEBUGGING from "./debugging.md" with { type: "text" }
 import CODE_REVIEW from "./code-review.md" with { type: "text" }
 import SECURITY from "./security.md" with { type: "text" }
+import DOCS from "./docs.md" with { type: "text" }
 
 export interface BuiltinSkill {
   name: string
@@ -66,5 +67,11 @@ export const BUILTIN_SKILLS: BuiltinSkill[] = [
     description:
       "Secure coding practices and common vulnerability prevention. Use when handling user input, authentication, data access, or any security-sensitive code. Covers OWASP top 10, injection prevention, and secure patterns.",
     content: SECURITY,
+  },
+  {
+    name: "docs",
+    description:
+      "Technical documentation and document generation. Use when writing docs, README files, API documentation, architecture docs, or generating PDFs. Covers document structure, writing quality, and PDF generation.",
+    content: DOCS,
   },
 ]
