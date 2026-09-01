@@ -2,9 +2,9 @@
 
 <img src=".github/assets/sonderr-banner.svg" alt="Sonderr — AI coding agent" width="800"/>
 
-**A BYOK AI coding agent — terminal-first, editor-integrated, desktop-wrapped.**
+**Built for complex systems. Runs on any model.**
 
-Bring your own key. Your providers, your models, your machine.
+Terminal-first, editor-integrated, desktop-wrapped. Bring your own key — your providers, your models, your machine.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-FF6A00?style=flat-square)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-typed-3178C6?style=flat-square)](https://www.typescript.org)
@@ -12,7 +12,7 @@ Bring your own key. Your providers, your models, your machine.
 [![Stars](https://img.shields.io/github/stars/dxn1-UBUNTU/sonderr?style=flat-square&color=FF6A00)](https://github.com/dxn1-UBUNTU/sonderr/stargazers)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-2EA043?style=flat-square)](https://github.com/dxn1-UBUNTU/sonderr/pulls)
 
-[Install](#install) · [Features](#features) · [Providers](#providers) · [Architecture](#architecture) · [Configuration](#configuration) · [Development](#development) · [License](#license)
+[Install](#install) · [Why Sonderr](#why-sonderr) · [Features](#features) · [Providers](#providers) · [Architecture](#architecture) · [Configuration](#configuration) · [Development](#development) · [License](#license)
 
 </div>
 
@@ -20,27 +20,53 @@ Bring your own key. Your providers, your models, your machine.
 
 ## What is Sonderr
 
-Sonderr is an agentic coding workspace that runs where you work: a terminal UI, a desktop app, and extensions for VS Code and JetBrains. It plans, reads and edits code, runs commands, and manages MCP servers — powered by API keys you own (BYOK), with no hosted middleman and no subscription.
+Sonderr is an agentic coding engine designed for one thing: **building complex systems**. Not toys. Not prototypes. Real, production-grade software — operating systems, game engines, compilers, distributed platforms, full-stack applications.
+
+It plans, reads and edits code, runs commands, manages MCP servers, executes long-running tasks in the background while it keeps coding, and verifies its own work before reporting done. Powered by API keys you own (BYOK), with no hosted middleman and no subscription.
+
+**You don't make CandyCrush with Sonderr. You make the next Unreal Engine.**
 
 Built on the MIT-licensed [Kilo Code](https://github.com/Kilo-Org/kilocode) codebase, which itself derives from [opencode](https://github.com/sst/opencode). Credit and thanks to both upstream projects.
 
+## Why Sonderr
+
+### Model-agnostic quality
+
+Sonderr's quality comes from its architecture, not just its model. The fable-grade system prompt (668+ lines), specialized skills, verification checklists, and planning system mean **even cheaper models deliver complex-system output**.
+
+Run Gemini 2.5 Flash Lite. Run an old Claude. The skills and prompt infrastructure lift every model's capability. You get fable-5-duo-level results on cheaper, faster models because the system does the heavy lifting that raw model intelligence normally handles.
+
+### Complexity-rated task system
+
+Every task gets rated S1-S4 (simple), M1-M4 (medium), H1-H4 (hard), or U1-U10 (ultra). A U10 task — full OS creation, game engine, compiler — triggers extensive planning, parallel subagent execution, and deep verification. An S1 task — typo fix — gets done immediately with zero ceremony. The agent scales its process to the complexity of the work.
+
+### Background task execution
+
+Never wait when you can work. Install dependencies while coding. Run builds while documenting. Execute tests while making more changes. Sonderr's background process system means the agent keeps producing while long-running operations complete.
+
+### Self-verification
+
+Before reporting done, Sonderr runs verification checklists. It catches its own bugs, checks its own edge cases, and reviews its own diffs. What it reports as done actually works.
+
 ## Features
 
-- **BYOK providers** — OpenAI, Anthropic, Gemini, plus the Kilo Gateway free-model endpoint. Swap providers or models at runtime without restarting a session.
-- **Background tasks** — Install dependencies, run builds, and execute tests in the background while you keep coding. Never wait when you can work.
-- **Terminal UI** — A full TUI with sessions, plan mode, file/command tooling, and real-time streaming.
-- **Desktop app** — Electron wrapper with an encrypted local config (`~/.config/sonderr/config.json`, AES-256-CBC, machine-derived key) and a built-in first-run setup screen.
-- **Editor integrations** — VS Code extension with Agent Manager (multi-session orchestration, git worktree isolation), JetBrains plugin.
-- **Enterprise MCP controls** — Dashboard-managed MCP server policy that can override local `mcp.json` files per organization.
-- **Code quality first** — Verification checklists, self-review, and proactive background task execution built into the agent loop.
-- **500+ AI models** — Via BYOK providers and the Kilo Gateway free-model endpoint.
-- **Open source** — MIT licensed. No vendor lock-in, no subscription, no telemetry beyond what you opt into.
+- **Complex systems** — Designed for OS kernels, game engines, compilers, distributed systems, not todo apps
+- **BYOK providers** — OpenAI, Anthropic, Gemini, Kilo Gateway. Swap providers or models at runtime
+- **Model-agnostic** — Skills + prompt infrastructure lift cheap models to high-end output quality
+- **Background tasks** — Parallel execution: install, build, test while coding
+- **Terminal UI** — Full TUI with sessions, plan mode, file/command tooling, real-time streaming
+- **Desktop app** — Electron wrapper with encrypted config and first-run setup
+- **Editor integrations** — VS Code extension with Agent Manager, JetBrains plugin
+- **Enterprise MCP controls** — Dashboard-managed MCP server policy
+- **Complexity ratings** — S1-S4, M1-M4, H1-H4, U1-U10 calibration
+- **Verification skill** — Pre-completion checklists, self-review, quality gates
+- **Planning skill** — Strategic decomposition, dependency mapping, subagent orchestration
+- **Design skill** — Production-quality UI/UX guidance, no emojis, custom SVG icons
+- **Open source** — MIT licensed, no vendor lock-in, no subscription
 
 ## Install
 
 ### Option 1: Global command (recommended)
-
-Clone the repo and run the installer. This sets up `sonderr` as a global command that always runs the latest code:
 
 ```bash
 git clone https://github.com/dxn1-UBUNTU/sonderr.git
@@ -54,9 +80,7 @@ Then run from any directory:
 sonderr
 ```
 
-The global command self-bootstraps on every launch: it updates the checkout (`git pull`), installs Bun if missing, syncs dependencies, and opens the TUI in the directory you ran it from — always fresh, no manual rebuilds.
-
-Make sure `~/.local/bin` is in your PATH. If not, add this to your shell profile:
+The global command self-bootstraps: git pull on every launch, auto-installs Bun if missing, syncs dependencies, always fresh. Make sure `~/.local/bin` is in your PATH:
 
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
@@ -70,17 +94,17 @@ Requires [Bun](https://bun.sh) 1.3+.
 git clone https://github.com/dxn1-UBUNTU/sonderr.git
 cd sonderr
 bun install
-bun run dev          # runs the CLI in dev mode
+bun run dev
 ```
 
-### Option 3: Build a production binary
+### Option 3: Build production binary
 
 ```bash
 bun install
 bun run --cwd packages/cli build
 ```
 
-The built binary goes to `packages/cli/dist/@sonderr/cli/bin/sonderr`.
+Binary: `packages/cli/dist/@sonderr/cli/bin/sonderr`
 
 ## Providers
 
@@ -88,20 +112,22 @@ The built binary goes to `packages/cli/dist/@sonderr/cli/bin/sonderr`.
 |---|---|
 | OpenAI | GPT-4o, o-series, and newer |
 | Anthropic | Claude Sonnet 4.6, Opus 4.1, and newer |
-| Gemini | Gemini 2.5 Pro / Flash and newer |
+| Gemini | Gemini 2.5 Pro / Flash / Flash Lite and newer |
 | Kilo Gateway | Free/shortlist models via the Kilo Gateway API |
 
-Configure in-session with `/api_attach` or directly in `sonderr.json`. Keys are stored locally, encrypted, and are only ever sent to the provider you configured.
+Configure in-session with `/api_attach` or directly in `sonderr.json`. Keys are stored locally, encrypted, only sent to your configured provider.
+
+**Run cheap. Run fast.** Sonderr's skill system means Gemini Flash Lite delivers what raw Claude Opus can't.
 
 ## Architecture
 
-Sonderr is a Bun + Turborepo monorepo with 35 packages:
+Bun + Turborepo monorepo, 35 packages:
 
 | Package | Description |
 |---|---|
-| `@sonderr/cli` | Agent engine, CLI entry point, and HTTP server |
+| `@sonderr/cli` | Agent engine, CLI entry point, HTTP server |
 | `@sonderr/tui` | Terminal UI (SolidJS + OpenTUI) |
-| `@sonderr/core` | Session, tool, and provider core |
+| `@sonderr/core` | Session, tool, provider core |
 | `@sonderr/server` | Local HTTP server |
 | `@sonderr/protocol` | Client/server protocol definitions |
 | `@sonderr/sdk` | Auto-generated JavaScript SDK |
@@ -116,11 +142,9 @@ Sonderr is a Bun + Turborepo monorepo with 35 packages:
 | Scope | Path |
 |---|---|
 | CLI config | `~/.sonderr/` |
-| Desktop config | `~/.config/sonderr/config.json` (AES-256-CBC encrypted, mode `0600`) |
+| Desktop config | `~/.config/sonderr/config.json` (AES-256-CBC, mode `0600`) |
 | Project config | `.sonderr/` (commands, agents, plans, `sonderr.json`) |
 | Global config | `~/.config/sonderr/` or `~/.sonderr/` |
-
-MCP servers are configured per project (`mcp.json`) or globally, unless organization policy supplies a managed configuration.
 
 ## Development
 
@@ -130,8 +154,8 @@ bun run typecheck    # tsgo across packages
 bun run lint         # oxlint
 ```
 
-Unit tests live inside each package and run with `bun test` from that package's directory. Never run tests from the root.
+Tests live inside each package. Run with `bun test` from the package directory. Never from root.
 
 ## License
 
-[MIT](LICENSE) — inherits and extends the licenses of Kilo Code and opencode. Upstream copyright notices are retained where applicable.
+[MIT](LICENSE) — inherits and extends the licenses of Kilo Code and opencode.
