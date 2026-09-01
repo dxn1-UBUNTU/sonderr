@@ -12,6 +12,21 @@ export const Info = Schema.Struct({
   priority: Schema.String.annotate({
     description: "Priority level of the task: high, medium, low",
   }),
+  dependencies: Schema.optional(
+    Schema.Array(Schema.String).annotate({
+      description: "List of task IDs that must be completed before this task can start",
+    }),
+  ),
+  estimated_minutes: Schema.optional(
+    Schema.Number.annotate({
+      description: "Estimated time to complete this task in minutes",
+    }),
+  ),
+  tags: Schema.optional(
+    Schema.Array(Schema.String).annotate({
+      description: "Tags for categorizing this task (e.g. 'frontend', 'bug', 'refactor')",
+    }),
+  ),
 }).annotate({ identifier: "Todo" })
 export interface Info extends Schema.Schema.Type<typeof Info> {}
 

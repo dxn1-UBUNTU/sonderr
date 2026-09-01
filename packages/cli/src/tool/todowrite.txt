@@ -8,6 +8,8 @@ Use proactively when:
 - New instructions arrive - capture them as todos
 - You start a task - mark it `in_progress` (only one at a time) before working
 - You finish a task - mark it `completed` and add any follow-ups discovered during the work
+- You identify blockers or dependencies between tasks
+- Work spans multiple files or systems
 
 ## When NOT to use
 Skip when:
@@ -21,6 +23,20 @@ Skip when:
 - `completed` - finished successfully
 - `cancelled` - no longer needed
 
+## Priority levels
+- `high` - critical path work, bugs blocking progress, user-critical features
+- `medium` - standard work items, normal features
+- `low` - nice-to-haves, polish, optimization
+
+## Dependencies
+Use the `dependencies` field to list task content descriptions that must be completed before this task can start. This creates a natural execution order and helps identify which tasks can run in parallel.
+
+## Time estimates
+Use `estimated_minutes` to track how long you expect each task to take. This helps with planning and keeps estimates realistic. Use rough estimates: 5, 10, 15, 30, 60 minutes.
+
+## Tags
+Use `tags` to categorize tasks by area or type. Common tags: `frontend`, `backend`, `testing`, `bug`, `feature`, `refactor`, `docs`, `config`, `deps`, `security`.
+
 ## Rules
 - Update status in real time; don't batch completions
 - After creating a list, call this tool before starting the first item.
@@ -31,6 +47,8 @@ Skip when:
 - If blocked or partial, keep it `in_progress` and add a follow-up todo describing the blocker
 - Preserve user-provided commands verbatim (flags, args, order)
 - Items should be specific and actionable; break large work into smaller steps
+- Use dependencies to prevent starting tasks that rely on incomplete work
+- Assign priority based on what unblocks other work or is most critical to the user's goal
 
 ## Examples
 
@@ -38,6 +56,7 @@ Use it:
 - "Add a dark mode toggle and run the tests" -> multi-step feature + explicit verification
 - "Rename getCwd -> getCurrentWorkingDirectory across the repo" -> grep reveals 15 occurrences in 8 files
 - "Implement registration, catalog, cart, checkout" -> multiple complex features
+- "Set up the project and install dependencies" -> deps task with install estimate
 
 Skip it:
 - "How do I print Hello World in Python?" -> informational

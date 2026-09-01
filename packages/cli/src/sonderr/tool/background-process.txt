@@ -1,28 +1,51 @@
 Run and manage long-running background processes.
 
-Use this tool only for processes that must keep running independently after this tool call returns, such as development servers, file watchers, local services, and test watchers (`npm run dev`, `next dev`, `vite`, or `bun --watch`).
+Use this tool for any command that takes more than ~10 seconds, so you can keep working while it runs. This is your most powerful tool for productivity — use it constantly.
 
-This tool cannot wait: `start` returns immediately and never blocks your turn. Do not start `sleep`, timers, cooldowns, delays, or polling loops with this tool. To wait a fixed time before your next action, run the wait as a normal blocking shell command and set its `timeout` higher than the wait.
+## When to use (use this constantly)
+- Package installation: `npm install`, `bun install`, `pip install`, `cargo build`, `bundle install`
+- Build operations: `npm run build`, `make`, `cargo check`, `tsc --build`
+- Test suites: `npm test`, `pytest`, `cargo test`, `go test`
+- Dev servers: `npm run dev`, `next dev`, `vite`, `bun --watch`
+- Database operations: migrations, seeding, dumps
+- Docker operations: `docker build`, `docker compose up`
+- Downloads: large files, datasets, dependencies
+- Any command that would block your turn waiting
 
-Do not use the shell tool with `&`, `nohup`, `disown`, `setsid`, `Start-Process`, or similar backgrounding patterns. Processes started with this tool are tracked and shown in the CLI sidebar.
+## The golden rule
+NEVER wait for a long command when you could be working. Start it in the background, continue coding, check on it later.
 
-Actions:
+## How to work while background tasks run
+1. Start the process with `action: "start"`
+2. Immediately continue working — edit files, write code, search, update todos
+3. Check status with `action: "status"` or `action: "logs"` when you need to verify
+4. You will also be notified automatically when background subagents complete
+
+## Actions
 - `start`: start a new background process. Include `command`, optional `workdir`, optional `description`, optional `ready` detection, and at most one lifetime option.
-- `list`: list background processes for this session.
+- `list`: list all background processes for this session.
 - `status`: inspect one process by `id`.
 - `logs`: return the retained tail output for one process.
 - `stop`: terminate one process and its child process tree.
-- `restart`: stop and restart one process with its original command and lifetime.
+- `restart`: stop and restart one process with its original command.
 
-Lifetime options for `start`:
+## Lifetime options for `start`
 - By default, the process stops when its session ends, the user switches session groups, or Sonderr exits.
-- Set `inherit: true` only from a subagent when the process should transfer to the immediate parent session after the subagent ends. It then follows the parent session lifetime.
+- Set `inherit: true` only from a subagents when the process should transfer to the immediate parent session after the subagent ends. It then follows the parent session lifetime.
 - Set `persistent: true` when the process must survive both session closure and Sonderr shutdown. Persistent processes are visible and manageable from every session, including after Sonderr starts again.
 - `inherit` and `persistent` cannot be combined.
 
-Only include `id` for `status`, `logs`, `stop`, and `restart`. Do not invent or pass an `id` when starting a process.
-
-Readiness:
+## Readiness detection
 - Use `ready.pattern` when the process prints a recognizable line like `ready`, `Local:`, or `started server`.
 - Use `ready.port` when a local server should accept TCP connections on a known port.
 - If readiness is not known, omit `ready`; the process is returned as running immediately.
+
+## Tips
+- Give each process a clear `description` so you can identify it later.
+- Use `ready.pattern` to know when a dev server is ready without polling.
+- Start multiple independent background processes in parallel when possible.
+- Clean up processes you no longer need with `action: "stop"`.
+
+Only include `id` for `status`, `logs`, `stop`, and `restart`. Do not invent or pass an `id` when starting a process.
+
+Do not use the shell tool with `&`, `nohup`, `disown`, `setsid`, `Start-Process`, or similar backgrounding patterns. Processes started with this tool are tracked and shown in the CLI sidebar.
