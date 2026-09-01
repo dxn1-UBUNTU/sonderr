@@ -133,6 +133,12 @@ export const Info = Schema.Struct({
     description:
       "Controls whether MCP and generic tool blocks are expanded or collapsed by default in the VS Code chat UI",
   }),
+  // sonderr_change start
+  output_token_max: Schema.optional(Schema.Number).annotate({
+    description:
+      "Maximum output tokens per model response. Set higher for long-form code generation (default: 200000).",
+  }),
+  // sonderr_change end
   hide_prompt_training_models: Schema.optional(Schema.Boolean).annotate({
     description: "Hide Sonderr Gateway models that may train on your prompts from model listings",
   }),

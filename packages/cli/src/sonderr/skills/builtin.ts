@@ -12,6 +12,10 @@ import DEBUGGING from "./debugging.md" with { type: "text" }
 import CODE_REVIEW from "./code-review.md" with { type: "text" }
 import SECURITY from "./security.md" with { type: "text" }
 import DOCS from "./docs.md" with { type: "text" }
+import LANG_TYPESCRIPT from "./lang-typescript.md" with { type: "text" }
+import LANG_PYTHON from "./lang-python.md" with { type: "text" }
+import LANG_GO from "./lang-go.md" with { type: "text" }
+import PATTERNS from "./patterns.md" with { type: "text" }
 
 export interface BuiltinSkill {
   name: string
@@ -73,5 +77,29 @@ export const BUILTIN_SKILLS: BuiltinSkill[] = [
     description:
       "Technical documentation and document generation. Use when writing docs, README files, API documentation, architecture docs, or generating PDFs. Covers document structure, writing quality, and PDF generation.",
     content: DOCS,
+  },
+  {
+    name: "lang-typescript",
+    description:
+      "Comprehensive TypeScript and JavaScript guide. Covers types, interfaces, generics, decorators, modules, async patterns, error handling, and advanced type manipulation. Use when writing or reviewing TypeScript/JavaScript code.",
+    content: LANG_TYPESCRIPT,
+  },
+  {
+    name: "lang-python",
+    description:
+      "Comprehensive Python guide. Covers types, dataclasses, async, decorators, context managers, generators, packaging, and idiomatic Python patterns. Use when writing or reviewing Python code.",
+    content: LANG_PYTHON,
+  },
+  {
+    name: "lang-go",
+    description:
+      "Comprehensive Go guide. Covers types, interfaces, goroutines, channels, error handling, testing, and idiomatic Go patterns. Use when writing or reviewing Go code.",
+    content: LANG_GO,
+  },
+  {
+    name: "patterns",
+    description:
+      "Design patterns and refactoring catalog. Covers creational, structural, behavioral patterns, and common refactorings with examples. Use when designing systems or improving existing code.",
+    content: PATTERNS,
   },
 ]
