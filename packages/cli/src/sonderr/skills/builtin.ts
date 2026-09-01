@@ -6,6 +6,7 @@
 import SONDERR_CONFIG from "./sonderr-config.md" with { type: "text" }
 import DESIGN from "./design.md" with { type: "text" }
 import VERIFICATION from "./verification.md" with { type: "text" }
+import PLANNING from "./planning.md" with { type: "text" }
 
 export interface BuiltinSkill {
   name: string
@@ -31,5 +32,11 @@ export const BUILTIN_SKILLS: BuiltinSkill[] = [
     description:
       "Comprehensive pre-completion verification checklist and quality gates. Use before reporting ANY task as done. Catches bugs, edge cases, style violations, and missing requirements before the user ever sees your work.",
     content: VERIFICATION,
+  },
+  {
+    name: "planning",
+    description:
+      "Strategic planning and task decomposition for complex work. Use when facing multi-step tasks, architectural decisions, or any work rated M2+ complexity. Teaches how to break down work, estimate complexity, and execute efficiently.",
+    content: PLANNING,
   },
 ]

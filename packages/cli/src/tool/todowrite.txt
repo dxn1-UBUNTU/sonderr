@@ -28,6 +28,43 @@ Skip when:
 - `medium` - standard work items, normal features
 - `low` - nice-to-haves, polish, optimization
 
+## Complexity rating
+Rate every task to calibrate effort and approach. Higher complexity means more planning, more verification, and often parallel subagents.
+
+### S1-S4: Simple (seconds to ~5 min)
+Quick, low-risk changes. Single file, obvious fix, no architectural decisions.
+- **S1**: Trivial — typo fix, single-line change, color tweak, spacing adjustment
+- **S2**: Simple — small edit, add a log, update a string, minor config change
+- **S3**: Straightforward — multi-line edit in one file, simple function, add a test
+- **S4**: Easy multi-step — a few related edits, simple feature, add a helper with tests
+
+### M1-M4: Medium (~5-30 min)
+Requires thought, touches multiple files, may need research or decisions.
+- **M1**: Moderate — new small feature, add an endpoint, wire up a component
+- **M2**: Involved — multi-file feature, refactor a module, add tests + implementation
+- **M3**: Challenging — cross-cutting change, new pattern, database migration + code
+- **M4**: Complex — significant feature, multiple systems, needs planning + verification
+
+### H1-H4: Hard (~30 min - 2 hours)
+Architectural decisions, many files, high risk of breakage, needs careful planning.
+- **H1**: Hard — major feature, new subsystem, API redesign
+- **H2**: Very hard — cross-system refactor, complex migration, performance overhaul
+- **H3**: Difficult — architecture change, new infrastructure, security implementation
+- **H4**: Extremely hard — rewrite a core system, complex distributed feature
+
+### U1-U10: Ultra (hours to days)
+Massive undertakings that should be broken into many sub-tasks, often parallelized across subagents.
+- **U1**: Large project — new app module, full feature area
+- **U2**: Major project — multiple subsystems, week-long effort
+- **U3**: Huge project — platform-level work, team-scale
+- **U4**: Massive — new product, complete rewrite of a system
+- **U5**: Ambitious — operating system components, database engine
+- **U6**: Extreme — full OS, compiler, game engine
+- **U7**: Legendary — distributed systems, large-scale infrastructure
+- **U8**: Mythic — enterprise platform, complex ecosystem
+- **U9**: Unprecedented — research-grade, novel architecture
+- **U10**: Singularity — AI system, full autonomous platform
+
 ## Dependencies
 Use the `dependencies` field to list task content descriptions that must be completed before this task can start. This creates a natural execution order and helps identify which tasks can run in parallel.
 
@@ -49,6 +86,9 @@ Use `tags` to categorize tasks by area or type. Common tags: `frontend`, `backen
 - Items should be specific and actionable; break large work into smaller steps
 - Use dependencies to prevent starting tasks that rely on incomplete work
 - Assign priority based on what unblocks other work or is most critical to the user's goal
+- Rate complexity honestly — it determines how much planning and verification you should do
+- For H3+ and U tasks, consider using `task` subagents to parallelize work
+- Break U-rated tasks into many smaller M/S sub-tasks before starting
 
 ## Examples
 

@@ -152,13 +152,16 @@ Use `todowrite` to track work with three or more distinct steps, and keep it cur
 - Skip the todo list for single-step requests ("rename this function", "what does this script do") — using it there is noise.
 - If the session's todo list already exists (injected in your context), read it before adding: continue or revise it rather than starting a competing list.
 - Assign `priority` to each todo: `high` for critical path work, `medium` for standard items, `low` for polish.
+- **Rate complexity** for every task: S1-S4 (simple), M1-M4 (medium), H1-H4 (hard), U1-U10 (ultra). Complexity determines how much planning and verification you should do. A U10 task (full OS creation) gets extensive planning and parallel subagents. An S1 task (typo fix) gets none.
 - Use `dependencies` to list which other todos must complete before this one can start — this enables parallel execution where possible.
 - Use `estimated_minutes` to track expected duration (5, 10, 15, 30, 60).
 - Use `tags` to categorize: `frontend`, `backend`, `testing`, `bug`, `feature`, `refactor`, `docs`, `config`, `deps`, `security`.
+- For H3+ and U-rated tasks, use the `planning` skill and consider parallelizing with `task` subagents.
+- Break U-rated tasks into many smaller M/S sub-tasks before starting.
 
 <example>
 user: add rate limiting to our API and make sure the tests still pass
-assistant: [writes todos: (1) [high] find existing middleware patterns and test setup, (2) [high] implement rate limit middleware [depends: 1], (3) [high] wire it into the API routes [depends: 2], (4) [medium] add tests [depends: 3], (5) [high] run full test suite and typecheck [depends: 4]] — then works through them one by one, updating statuses as each completes, and reports at the end which checks were run and their results.
+assistant: [rates this M3 — multi-file feature with testing; writes todos: (1) [M1] find existing middleware patterns and test setup, (2) [M2] implement rate limit middleware [depends: 1], (3) [M2] wire it into the API routes [depends: 2], (4) [M1] add tests [depends: 3], (5) [M2] run full test suite and typecheck [depends: 4]] — then works through them one by one, updating statuses as each completes, and reports at the end which checks were run and their results.
 </example>
 
 # Background tasks and parallel execution

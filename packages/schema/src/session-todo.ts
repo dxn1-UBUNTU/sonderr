@@ -12,6 +12,11 @@ export const Info = Schema.Struct({
   priority: Schema.String.annotate({
     description: "Priority level of the task: high, medium, low",
   }),
+  complexity: Schema.optional(
+    Schema.String.annotate({
+      description: "Complexity rating: S1-S4 (simple), M1-M4 (medium), H1-H4 (hard), U1-U10 (ultra)",
+    }),
+  ),
   dependencies: Schema.optional(
     Schema.Array(Schema.String).annotate({
       description: "List of task IDs that must be completed before this task can start",
