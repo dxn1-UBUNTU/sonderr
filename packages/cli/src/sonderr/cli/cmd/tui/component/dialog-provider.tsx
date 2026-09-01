@@ -47,12 +47,23 @@ export function failedDescription(providerID: string, failed: string[]): string 
 // ---------------------------------------------------------------------------
 
 export const PROVIDER_PRIORITY: Record<string, number> = {
-  sonderr: -1,
   anthropic: 0,
-  "github-copilot": 1,
-  openai: 2,
-  google: 3,
-  "anaconda-desktop": 4,
+  openai: 1,
+  google: 2,
+  "github-copilot": 3,
+  groq: 4,
+  mistral: 5,
+  cohere: 6,
+  xai: 7,
+  deepseek: 8,
+  openrouter: 9,
+  together: 10,
+  perplexity: 11,
+  nvidia: 12,
+  azure: 13,
+  bedrock: 14,
+  vertex: 15,
+  "anaconda-desktop": 16,
 }
 
 // ---------------------------------------------------------------------------
@@ -60,10 +71,23 @@ export const PROVIDER_PRIORITY: Record<string, number> = {
 // ---------------------------------------------------------------------------
 
 export const PROVIDER_DESCRIPTIONS: Record<string, string> = {
-  sonderr: "(Recommended)",
-  anthropic: "(Claude Max or API key)",
-  openai: "(ChatGPT login or API key)",
-  "anaconda-desktop": "(Local models)",
+  anthropic: "(Claude Sonnet/Opus — API key or Claude Pro)",
+  openai: "(GPT-4o, o-series — API key or ChatGPT)",
+  google: "(Gemini 2.5 Pro/Flash — API key)",
+  "github-copilot": "(GitHub Copilot — GitHub login)",
+  "anaconda-desktop": "(Local models — runs on your machine)",
+  groq: "(Llama, Mixtral — fast inference)",
+  mistral: "(Mistral Large — API key)",
+  cohere: "(Command R — API key)",
+  xai: "(Grok — API key)",
+  openrouter: "(Multi-provider — API key)",
+  together: "(Llama, Mistral — API key)",
+  deepseek: "(DeepSeek — API key)",
+  perplexity: "(Sonar — API key)",
+  nvidia: "(Nemotron — API key)",
+  azure: "(Azure OpenAI — API key)",
+  bedrock: "(AWS models — IAM auth)",
+  vertex: "(Google Cloud — IAM auth)",
 }
 
 export const PROVIDER_TITLES: Record<string, string> = {

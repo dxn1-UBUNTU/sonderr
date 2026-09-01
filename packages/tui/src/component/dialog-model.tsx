@@ -74,6 +74,27 @@ export function DialogModel(props: { providerID?: string }) {
   }
   // sonderr_change end
 
+  // sonderr_change start
+  type ModelOption = ReturnType<typeof options>[number]
+  const ADD_PROVIDER_VALUE = "__add_provider__" as const
+
+  const addProviderOption: ModelOption = {
+    key: ADD_PROVIDER_VALUE,
+    value: ADD_PROVIDER_VALUE as any,
+    title: "+ Add new provider",
+    description: "Connect a new AI provider with your API key",
+    category: "Actions",
+    releaseDate: "",
+    disabled: false,
+    providerName: "",
+    providerID: ADD_PROVIDER_VALUE,
+    modelID: "",
+    onSelect() {
+      dialog.replace(() => <DialogProvider />)
+    },
+  }
+  // sonderr_change end
+
   // sonderr_change start - option building lives in sonderr/model-picker so the
   // Sonderr Gateway grouping/search rules can be unit tested
   const options = createMemo(() => {
@@ -102,7 +123,11 @@ export function DialogModel(props: { providerID?: string }) {
         )
       : []
 
-    return [...modelOptions, ...(needle ? rankProviderOptions(needle, popularProviders) : popularProviders)]
+    return [
+      addProviderOption,
+      ...modelOptions,
+      ...(needle ? rankProviderOptions(needle, popularProviders) : popularProviders),
+    ]
   })
   // sonderr_change end
 
@@ -140,7 +165,7 @@ export function DialogModel(props: { providerID?: string }) {
           actions={[
             {
               command: "model.dialog.provider",
-              title: connected() ? "Connect provider" : "View all providers",
+              title: connected() ? "+ Add provider" : "View all providers",
               onTrigger() {
                 dialog.replace(() => <DialogProvider />)
               },
@@ -156,6 +181,10 @@ export function DialogModel(props: { providerID?: string }) {
           ]}
           onFilter={setQuery}
           onMove={(option) => {
+            if (option.value === ADD_PROVIDER_VALUE) {
+              setPreview(undefined)
+              return
+            }
             if (typeof option.value === "string") {
               setPreview(undefined)
               return
