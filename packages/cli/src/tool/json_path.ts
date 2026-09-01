@@ -34,8 +34,15 @@ export const JsonPathTool = Tool.define(
           const pre = yield* EncodedIO.read(afs, filePath)
           const json = JSON.parse(pre.text)
 
-          const { JSONPath } = require("jsonpath-plus")
-          const result = JSONPath({ path: params.query, json })
+          const result = yield* Effect.tryPromise({
+            try: async () => {
+              const { JSONPath } = await import("jsonpath-plus").catch(() => {
+                throw new Error("jsonpath-plus not installed. Run: bun add jsonpath-plus")
+              })
+              return JSONPath({ path: params.query, json })
+            },
+            catch: (err) => new Error(`JSONPath query failed: ${err}`),
+          })
 
           const output = JSON.stringify(result, null, params.compact ? 0 : 2)
 

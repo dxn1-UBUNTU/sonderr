@@ -1,6 +1,7 @@
 import * as path from "path"
 import { Effect, Schema } from "effect"
 import * as Tool from "./tool"
+import { glob } from "glob"
 import { FSUtil } from "@sonderr/core/fs-util"
 import { InstanceState } from "@/effect/instance-state"
 import * as EncodedIO from "../sonderr/tool/encoded-io"
@@ -42,10 +43,7 @@ export const NotesTool = Tool.define(
 
           if (params.action === "list") {
             const files = yield* Effect.tryPromise({
-              try: async () => {
-                const glob = require("glob")
-                return glob.sync("*.md", { cwd: notesDir, nodir: true })
-              },
+              try: async () => glob.sync("*.md", { cwd: notesDir, nodir: true }),
               catch: () => [] as string[],
             })
 

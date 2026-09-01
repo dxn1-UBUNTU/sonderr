@@ -1,10 +1,14 @@
 import * as path from "path"
 import { Effect, Schema } from "effect"
 import * as Tool from "./tool"
+import { execFile } from "child_process"
+import { promisify } from "util"
 import { FSUtil } from "@sonderr/core/fs-util"
 import { InstanceState } from "@/effect/instance-state"
 import * as EncodedIO from "../sonderr/tool/encoded-io"
 import DESCRIPTION from "./run_test.txt"
+
+const execFileAsync = promisify(execFile)
 
 export const Parameters = Schema.Struct({
   testPattern: Schema.optional(Schema.String).annotate({
@@ -31,25 +35,11 @@ export const RunTestTool = Tool.define(
           const instance = yield* InstanceState.context
           const cwd = params.cwd ?? instance.directory
 
-          const { execFile } = await import("child_process")
-          const util = await import("util")
-          const execFileAsync = util.promisify(execFile)
+          const bunLockPre = yield* EncodedIO.read(afs, path.join(cwd, "bun.lockb"))
+          const isBun = bunLockPre.exists
 
-          const isBun = yield* Effect.tryPromise({
-            try: async () => {
-              const pre = await EncodedIO.read(afs, path.join(cwd, "bun.lockb"))
-              return pre.exists
-            },
-            catch: () => false,
-          })
-
-          const isNode = yield* Effect.tryPromise({
-            try: async () => {
-              const pre = await EncodedIO.read(afs, path.join(cwd, "package.json"))
-              return pre.exists
-            },
-            catch: () => false,
-          })
+          const pkgPre = yield* EncodedIO.read(afs, path.join(cwd, "package.json"))
+          const isNode = pkgPre.exists
 
           let cmd: string
           let args: string[]
@@ -61,8 +51,7 @@ export const RunTestTool = Tool.define(
             if (params.testPattern) args.push(params.testPattern)
           } else if (isNode) {
             cmd = "npx"
-            const pre = yield* EncodedIO.read(afs, path.join(cwd, "package.json"))
-            const pkg = JSON.parse(pre.text)
+            const pkg = JSON.parse(pkgPre.text)
             const hasVitest = pkg.devDependencies?.vitest || pkg.dependencies?.vitest
             const hasJest = pkg.devDependencies?.jest || pkg.dependencies?.jest
 

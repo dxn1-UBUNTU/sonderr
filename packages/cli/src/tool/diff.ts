@@ -55,24 +55,25 @@ export const DiffTool = Tool.define(
             oldContent = currentContent
             oldLabel = "working tree"
           } else {
-            const { execFile } = await import("child_process")
-            const util = await import("util")
-            const execFileAsync = util.promisify(execFile)
-
             const gitArgs = compareAgainst === "staged"
               ? ["show", `::${filePath}`]
               : ["show", `${compareAgainst}:${filePath}`]
 
-            try {
-              const { stdout } = await execFileAsync("git", gitArgs, {
-                cwd: instance.directory,
-                encoding: "utf-8",
-              })
-              oldContent = stdout
-              oldLabel = compareAgainst
-            } catch {
-              yield* Effect.fail(new Error(`File not found in ${compareAgainst}`))
-            }
+            const gitResult = yield* Effect.tryPromise({
+              try: async () => {
+                const { execFile } = await import("child_process")
+                const util = await import("util")
+                const execFileAsync = util.promisify(execFile)
+                return execFileAsync("git", gitArgs, {
+                  cwd: instance.directory,
+                  encoding: "utf-8",
+                })
+              },
+              catch: () => new Error(`File not found in ${compareAgainst}`),
+            })
+
+            oldContent = gitResult.stdout
+            oldLabel = compareAgainst
           }
 
           const diff = yield* Effect.tryPromise({

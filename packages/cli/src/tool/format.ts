@@ -1,11 +1,16 @@
 import * as path from "path"
 import { Effect, Schema } from "effect"
 import * as Tool from "./tool"
+import { execFile } from "child_process"
+import { promisify } from "util"
 import { FSUtil } from "@sonderr/core/fs-util"
 import { InstanceState } from "@/effect/instance-state"
 import * as EncodedIO from "../sonderr/tool/encoded-io"
 import * as Encoding from "../sonderr/encoding"
+import { createTwoFilesPatch } from "diff"
 import DESCRIPTION from "./format.txt"
+
+const execFileAsync = promisify(execFile)
 
 export const Parameters = Schema.Struct({
   filePath: Schema.String.annotate({ description: "The absolute path to the file to format" }),
@@ -46,26 +51,24 @@ export const FormatTool = Tool.define(
 
           if (formatter === "auto") {
             if ([".ts", ".tsx", ".js", ".jsx", ".json", ".md", ".css", ".scss", ".html"].includes(ext)) {
-              const hasPrettier = yield* Effect.tryPromise({
-                try: async () => {
-                  const pkg = await EncodedIO.read(afs, path.join(instance.directory, "package.json"))
-                  if (!pkg.exists) return false
-                  const json = JSON.parse(pkg.text)
-                  return !!(json.devDependencies?.prettier || json.dependencies?.prettier ||
-                    await EncodedIO.read(afs, path.join(instance.directory, ".prettierrc")).then(r => r.exists).catch(() => false))
-                },
-                catch: () => false,
-              })
-              const hasBiome = yield* Effect.tryPromise({
-                try: async () => {
-                  const pkg = await EncodedIO.read(afs, path.join(instance.directory, "package.json"))
-                  if (!pkg.exists) return false
-                  const json = JSON.parse(pkg.text)
-                  return !!(json.devDependencies?.biome || json.dependencies?.biome ||
-                    await EncodedIO.read(afs, path.join(instance.directory, "biome.json")).then(r => r.exists).catch(() => false))
-                },
-                catch: () => false,
-              })
+              const pkgPre = yield* EncodedIO.read(afs, path.join(instance.directory, "package.json"))
+              const hasPrettier = pkgPre.exists && (() => {
+                try {
+                  const json = JSON.parse(pkgPre.text)
+                  return !!(json.devDependencies?.prettier || json.dependencies?.prettier)
+                } catch {
+                  return false
+                }
+              })()
+              const biomePre = yield* EncodedIO.read(afs, path.join(instance.directory, "biome.json"))
+              const hasBiome = biomePre.exists || (pkgPre.exists && (() => {
+                try {
+                  const json = JSON.parse(pkgPre.text)
+                  return !!(json.devDependencies?.["@biomejs/biome"] || json.dependencies?.["@biomejs/biome"])
+                } catch {
+                  return false
+                }
+              })())
               formatter = hasBiome ? "biome" : hasPrettier ? "prettier" : "prettier"
             } else if ([".rs"].includes(ext)) {
               formatter = "rustfmt"
@@ -75,10 +78,6 @@ export const FormatTool = Tool.define(
               formatter = "black"
             }
           }
-
-          const { execFile } = await import("child_process")
-          const util = await import("util")
-          const execFileAsync = util.promisify(execFile)
 
           let cmd: string
           let args: string[]
@@ -119,7 +118,6 @@ export const FormatTool = Tool.define(
           const post = yield* EncodedIO.read(afs, filePath)
           const formatted = post.text
 
-          const { createTwoFilesPatch } = require("diff")
           const diff = createTwoFilesPatch(
             path.basename(filePath),
             path.basename(filePath),

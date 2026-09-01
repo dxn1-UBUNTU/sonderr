@@ -24,65 +24,63 @@ export const WebSearchJsTool = Tool.define(
       description: DESCRIPTION,
       parameters: Parameters,
       execute: (params: Schema.Schema.Type<typeof Parameters>, ctx: Tool.Context) =>
-        Effect.gen(function* () {
-          const extractMode = params.extractMode ?? "markdown"
-          const maxChars = params.maxChars ?? 10000
+        Effect.tryPromise({
+          try: async () => {
+            const extractMode = params.extractMode ?? "markdown"
+            const maxChars = params.maxChars ?? 10000
 
-          let browser: any
-          try {
-            const { chromium } = require("playwright")
-            browser = await chromium.launch({ headless: true })
-          } catch {
-            yield* Effect.fail(
-              new Error("Playwright not installed. Run: bun add -g playwright && playwright install chromium"),
-            )
-          }
+            const { chromium } = await import("playwright").catch(() => {
+              throw new Error("Playwright not installed. Run: bun add playwright && playwright install chromium")
+            })
 
-          const page = await browser.newPage()
-          await page.setViewportSize({ width: 1280, height: 800 })
+            const browser = await chromium.launch({ headless: true })
+            const page = await browser.newPage()
+            await page.setViewportSize({ width: 1280, height: 800 })
 
-          try {
-            await page.goto(params.url, { waitUntil: "networkidle", timeout: 30000 })
+            try {
+              await page.goto(params.url, { waitUntil: "networkidle", timeout: 30000 })
 
-            if (params.waitFor) {
-              await page.waitForSelector(params.waitFor, { timeout: 10000 })
+              if (params.waitFor) {
+                await page.waitForSelector(params.waitFor, { timeout: 10000 })
+              }
+
+              await page.waitForTimeout(1000)
+
+              let content: string
+
+              if (extractMode === "text") {
+                content = await page.evaluate(() => document.body.innerText)
+              } else if (extractMode === "html") {
+                content = await page.content()
+              } else {
+                const { default: Turndown } = await import("turndown").catch(() => {
+                  throw new Error("turndown not installed. Run: bun add turndown")
+                })
+                const td = new Turndown()
+                content = td.turndown(await page.innerHTML("body"))
+              }
+
+              await browser.close()
+
+              if (content.length > maxChars) {
+                content = content.slice(0, maxChars) + "\n\n... [truncated]"
+              }
+
+              return {
+                title: `JS Render: ${params.url}`,
+                output: content,
+                metadata: {
+                  url: params.url,
+                  extractMode,
+                  chars: content.length,
+                },
+              }
+            } catch (err: any) {
+              await browser.close()
+              throw new Error(`Failed to render ${params.url}: ${err.message}`)
             }
-
-            await page.waitForTimeout(1000)
-
-            let content: string
-
-            if (extractMode === "text") {
-              content = await page.evaluate(() => document.body.innerText)
-            } else if (extractMode === "html") {
-              content = await page.content()
-            } else {
-              content = await page.evaluate(() => {
-                const turndown = require("turndown")
-                const td = new turndown()
-                return td.turndown(document.body.innerHTML)
-              })
-            }
-
-            await browser.close()
-
-            if (content.length > maxChars) {
-              content = content.slice(0, maxChars) + "\n\n... [truncated]"
-            }
-
-            return {
-              title: `JS Render: ${params.url}`,
-              output: content,
-              metadata: {
-                url: params.url,
-                extractMode,
-                chars: content.length,
-              },
-            }
-          } catch (err: any) {
-            await browser.close()
-            yield* Effect.fail(new Error(`Failed to render ${params.url}: ${err.message}`))
-          }
+          },
+          catch: (err) => new Error(`WebSearch JS failed: ${err}`),
         }).pipe(Effect.orDie),
     }
   }),
