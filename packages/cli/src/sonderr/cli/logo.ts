@@ -2,42 +2,58 @@
 const yes = new Set(["1", "true", "yes", "on"])
 const no = new Set(["0", "false", "no", "off"])
 
+// SONDERR wordmark - 7 letters at 5-wide each + 2-space gaps between letters.
+// Hand-designed 5-row pixel font. Top, mid1, mid2, mid3, bottom:
+//   S: top arc, top-left bar, middle arc, bottom-right bar, bottom arc
+//   O: top arc, full vertical sides, full vertical sides, full vertical sides, bottom arc
+//   N: vertical sides, diagonal via mid1 pixels, diagonal via mid2 pixels,
+//      diagonal via mid3 pixels, vertical sides
+//   D: top bar, side verticals x3, bottom bar
+//   E: top bar, left bar, full middle, left bar, bottom bar
+//   R: top bar, side vertical, full middle, side + mid leg, side + bottom leg
+// `plain` is the compact 3-row version (top + center + bottom) for use in
+// places that need a single-line wordmark without the shading detail.
+const SONDERR_TUI = [
+  "███    ███   █   █  ████   █████  ████   ████ ",
+  "█      █   █  ██  █  █   █  █      █   █  █   █",
+  " ███   █   █  █ █ █  █   █  ████   ████   ████ ",
+  "    █  █   █  █  ██  █   █  █      █  █   █  █ ",
+  "████    ███   █   █  ████   █████  █   █  █   █",
+]
+
+const SONDERR_PLAIN = [
+  "███    ███   █   █  ████   █████  ████   ████ ",
+  " ███   █   █  █ █ █  █   █  ████   ████   ████ ",
+  "████    ███   █   █  ████   █████  █   █  █   █",
+]
+
+// SONDE prefix (first 5 letters) for the child-session banner. Indented 2
+// spaces so the title text that follows aligns cleanly to the right of the
+// wordmark (see packages/tui/src/util/presentation.ts which assembles it).
+const SONDE_EXIT = [
+  "  ███    ███   █   █  ████   ████",
+  "  █      █   █  ██  █  █   █  █  ",
+  "   ███   █   █  █ █ █  █   █  ███",
+  "      █  █   █  █  ██  █   █  █  ",
+  "  ████    ███   █   █  ████   ███",
+]
+
+// sonderr_change - the SONDERR wordmark uses only ASCII chars (█, space) so it
+// renders identically on every terminal - dumb terminals, Windows Console Host,
+// SSH sessions, anything. The fallback is kept structurally identical to the
+// modern slot for now; the terminal-capability gate is preserved so a richer
+// Unicode art (sextants, half-blocks) can be reintroduced later without
+// touching any caller. SONDERR_UNICODE_LOGO still overrides.
 const modern = {
-  tui: [
-    `██  ██ ██🬺🬏   ██  ██   ██🬺🬏     ████ ██     ██🬺🬏   `,
-    `████🬺🬏 ~~██   ██  ~~ ██~~██   ██~~~~ ██     ~~██   `,
-    `██  ██ ██████ 🬁🬬████ 🬁🬬██~~   🬁🬬████ 🬁🬬████ ██████ `,
-    `~~  ~~ ~~~~~~   ~~~~   ~~       ~~~~   ~~~~ ~~~~~~ `,
-  ],
-  plain: [
-    `██  ██ ██🬺🬏   ██  ██   ██🬺🬏     ████ ██     ██🬺🬏   `,
-    `████🬺🬏   ██   ██     ██  ██   ██     ██       ██   `,
-    `██  ██ ██████ 🬁🬬████ 🬁🬬██     🬁🬬████ 🬁🬬████ ██████ `,
-  ],
-  exit: [
-    `  ██  ██ ██🬺🬏   ██  ██   ██🬺🬏  `,
-    `  ████🬺🬏   ██   ██     ██  ██  `,
-    `  ██  ██ ██████ 🬁🬬████ 🬁🬬██    `,
-  ],
+  tui: SONDERR_TUI,
+  plain: SONDERR_PLAIN,
+  exit: SONDE_EXIT,
 }
 
 const fallback = {
-  tui: [
-    `██  ██ ████   ██  ██   ██       ████ ██     ████   `,
-    `████   ~~██   ██  ~~ ██~~██   ██~~~~ ██     ~~██   `,
-    `██  ██ ██████ ██████   ██~~     ████   ████ ██████ `,
-    `~~  ~~ ~~~~~~  ~~~~~   ~~       ~~~~   ~~~~ ~~~~~~ `,
-  ],
-  plain: [
-    `██  ██ ████   ██  ██   ███      ████ ██     ████   `,
-    `████     ██   ██     ██  ██   ██     ██       ██   `,
-    `██  ██ ██████ ██████   ██       ████ ██████ ██████ `,
-  ],
-  exit: [
-    `  ██  ██ ████   ██  ██   ██    `,
-    `  ████     ██   ██     ██  ██  `,
-    `  ██  ██ ██████ ██████   ██    `,
-  ],
+  tui: SONDERR_TUI,
+  plain: SONDERR_PLAIN,
+  exit: SONDE_EXIT,
 }
 
 function flag(value: string | undefined) {
@@ -55,35 +71,18 @@ function windows(env: NodeJS.ProcessEnv) {
   return false
 }
 
-// sonderr_change start - the modern logo draws with Unicode 13 sextant/octant
-// glyphs (U+1FB00 block: 🬺 🬏 🬁 🬬). Those render only in terminals that ship
-// coverage for "Symbols for Legacy Computing"; in macOS Terminal.app,
-// Alacritty, older VTE/gnome-terminal, and unknown SSH clients they render as
-// tofu boxes. Detect capability with an allowlist of terminals confirmed to
-// ship the block; everything else gets the fallback art, which uses only
-// block elements (██) and literal tildes and looks right everywhere.
-// SONDERR_UNICODE_LOGO=1 still forces the modern art for power users.
-function octantCapable(env: NodeJS.ProcessEnv) {
-  if (env.WT_SESSION) return true // Windows Terminal (Cascadia Mono 2111.01+)
-  if (env.TERM_PROGRAM === "WezTerm" || env.WEZTERM_PANE) return true
-  if (env.TERM_PROGRAM === "ghostty") return true
-  if (env.TERM_PROGRAM === "iTerm.app") return true // iTerm2 3.5+
-  if (env.KITTY_WINDOW_ID || env.TERM === "xterm-kitty") return true
-  if (env.TERM_PROGRAM === "vscode") return true // xterm.js draws sextants itself
-  return false
-}
-
+// sonderr_change start - the SONDERR wordmark now uses only ASCII block
+// elements, so the terminal-capability gate is dormant. Kept so that richer
+// glyph art (Unicode 13 sextants, etc.) can be reintroduced later without
+// touching callers. SONDERR_UNICODE_LOGO=1 forces the "modern" slot.
 export function supports(env = process.env, platform = process.platform) {
   const override = flag(env.SONDERR_UNICODE_LOGO)
   if (override !== undefined) return override
   if (env.TERM === "dumb") return false
-  // Old Windows Console Host cannot render the block glyphs used by the modern logo.
   if (platform === "win32") return windows(env)
   if (env.ConEmuPID) return false
   if (env.ANSICON) return false
-  // sonderr_change - default to the fallback art unless the terminal is known
-  // to cover the sextant block (was: return true).
-  return octantCapable(env)
+  return true
 }
 
 export function tui(env = process.env, platform = process.platform) {
@@ -103,5 +102,13 @@ export function session(
   platform = process.platform,
 ) {
   const logo = supports(env, platform) ? modern.exit : fallback.exit
-  return [``, `${logo[0]}${dim}${title}${normal}`, `${logo[1]}${dim}sonderr -s ${id}${normal}`, logo[2]].join("\n")
+  return [
+    ``,
+    `${logo[0]}${dim}${title}${normal}`,
+    `${logo[1]}${dim}sonderr -s ${id}${normal}`,
+    `${logo[2]}${dim}${normal}`,
+    logo[3],
+    logo[4],
+  ].join("\n")
 }
+// sonderr_change end
