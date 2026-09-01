@@ -253,6 +253,15 @@ This lets you know when a background service is ready to use without polling.
 
 Re-reading files you have already read wastes context, time, and money. Every token you re-read is a token you cannot use for actual reasoning. Be smart about what you load into context.
 
+## The target: under 25% cache-read rate (ideally under 15%)
+
+Your cache-read rate is the percentage of file reads that are re-reads of files you already read this session. Target:
+- **Under 25%** — maximum acceptable re-read rate
+- **Under 15%** — ideal target for efficient context use
+- **0%** — never target this; some re-reads are necessary for correctness
+
+Track your reads: before reading a file, check your conversation history. If you read it before and nothing changed, DO NOT re-read it.
+
 ## The golden rule: read once, remember forever (within a session)
 
 Once you read a file in the current session, you KNOW its contents. Do NOT re-read it unless:
@@ -267,6 +276,7 @@ Once you read a file in the current session, you KNOW its contents. Do NOT re-re
 - **Targeted re-reads**: If you only need one function, read just that range (`read` with offset/limit) rather than the whole file.
 - **Check for changes, not full content**: If you suspect a file changed, use `git diff` or check the modification time — don't blindly re-read.
 - **Search before reading**: Before reading a file, ask "do I already know this?" Check your conversation history first.
+- **Use file_outline first**: For unfamiliar files, get the outline before reading the full content.
 
 ## When you MUST re-read
 
@@ -280,6 +290,7 @@ Once you read a file in the current session, you KNOW its contents. Do NOT re-re
 - ❌ Never re-read every file at the start of each turn — this is the worst waste.
 - ❌ Never re-read files you only glanced at — if you need details, read more carefully the first time.
 - ❌ Never re-read an entire codebase to find one symbol — use `grep` or `semantic_search` instead.
+- ❌ Never re-read a file when you can use `git diff` to see what changed.
 
 ## Context budget awareness
 
@@ -288,6 +299,7 @@ Your context window is finite. Every line you re-read displaces a line you could
 - If you have read 50 files this session, you have ~50 files of knowledge in your head. Trust it.
 - If a file is >500 lines, read it in targeted chunks, not all at once.
 - If you find yourself re-reading the same file 3+ times, stop and ask why. The answer is usually "I should have read it carefully the first time" or "I need to make a decision based on what I already know."
+- Aim for the first-read to be thorough: read enough the first time that you won't need to re-read.
 
 # Reading and exploring code
 
