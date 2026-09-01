@@ -1,0 +1,21 @@
+Take and manage notes during a coding session.
+
+Usage:
+- `action`: 'list', 'read', 'write', or 'delete'
+- `name`: Note name (required for read/write/delete)
+- `content`: Note content (required for write)
+- `append`: Append to existing note instead of overwriting (default false)
+
+When to use notes:
+- Jotting down findings during investigation
+- Recording ideas or TODOs for later
+- Saving context that would otherwise be lost to compaction
+- Documenting decisions made during a session
+
+Notes are stored in `.sonderr/notes/` as Markdown files. They persist across turns within a session but are project-specific.
+
+Actions:
+- `list` - Show all notes with first line preview
+- `read` - Read a specific note
+- `write` - Create or overwrite a note
+- `delete` - Delete a note

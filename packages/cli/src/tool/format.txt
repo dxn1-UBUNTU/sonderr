@@ -1,0 +1,19 @@
+Format a file using the project's formatter.
+
+Usage:
+- `filePath`: The absolute path to the file to format
+- `formatter`: Which formatter to use: 'auto' (detect from project), 'prettier', 'biome', 'rustfmt', 'gofmt', 'black'. Default: 'auto'
+
+When to use format:
+- After editing a file to ensure consistent formatting
+- Before committing to match the project's style
+- When the project has a formatter configured but you want to format a specific file
+
+Auto-detection:
+- Detects formatter from project config (package.json, .prettierrc, biome.json, etc.)
+- Supports: Prettier, Biome, rustfmt, gofmt, black
+- Falls back to Prettier for unknown file types
+
+Output:
+- Shows a diff of formatting changes
+- Reports how many lines were changed

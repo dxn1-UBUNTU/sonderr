@@ -1,0 +1,23 @@
+Get the structural outline of a file without reading the entire contents.
+
+Usage:
+- Extracts symbols (functions, classes, interfaces, types, imports, exports) from a file
+- Shows line numbers for each symbol
+- Supports TypeScript, JavaScript, Python, Go, and Markdown
+- Use `maxDepth` to control nesting depth (default 2)
+
+When to use file_outline:
+- Understanding the structure of an unfamiliar file
+- Finding where a function or class is defined
+- Getting a quick overview before deciding what to read
+- Navigating large files without loading them entirely
+
+When to use read instead:
+- You need the actual implementation details
+- You need to see the full file content
+- The file is small enough to read entirely
+
+Output format:
+- Each symbol shows: kind, name, and line number
+- Symbols are indented by nesting depth
+- Example: "function: calculateTotal (L42)"

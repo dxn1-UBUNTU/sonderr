@@ -1,0 +1,19 @@
+Show the diff of a file compared to a previous version.
+
+Usage:
+- Compares the current file content against a git reference or the working tree.
+- Use `compareAgainst: "HEAD"` to see changes since the last commit.
+- Use `compareAgainst: "staged"` to see changes in the index.
+- Use `compareAgainst: "HEAD~1"` to compare against the previous commit.
+- Use `compareAgainst: "working"` to compare working tree against the index.
+
+When to use diff:
+- Before committing, to review what changed
+- To understand what a recent edit modified
+- To compare current state against a known-good version
+- To verify no unintended changes were introduced
+
+Output format:
+- Standard unified diff output
+- Shows added/removed lines with context
+- Includes a summary of total additions/deletions

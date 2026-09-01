@@ -11,6 +11,14 @@ import { Command } from "@/command"
 import { ShellTool } from "./shell"
 import { EditTool } from "./edit"
 import { StrReplaceTool } from "./str_replace"
+import { DiffTool } from "./diff"
+import { SearchReplaceTool } from "./search_replace"
+import { FileOutlineTool } from "./file_outline"
+import { RunTestTool } from "./run_test"
+import { WebSearchJsTool } from "./websearch_js"
+import { FormatTool } from "./format"
+import { JsonPathTool } from "./json_path"
+import { NotesTool } from "./notes"
 import { GlobTool } from "./glob"
 import { GrepTool } from "./grep"
 import { ReadTool } from "./read"
@@ -140,6 +148,15 @@ const layer = Layer.effect(
     const globtool = yield* GlobTool
     const writetool = yield* WriteTool
     const edit = yield* EditTool
+    const str_replace = yield* StrReplaceTool
+    const diff = yield* DiffTool
+    const search_replace = yield* SearchReplaceTool
+    const file_outline = yield* FileOutlineTool
+    const run_test = yield* RunTestTool
+    const websearch_js = yield* WebSearchJsTool
+    const format = yield* FormatTool
+    const json_path = yield* JsonPathTool
+    const notes = yield* NotesTool
     const greptool = yield* GrepTool
     const patchtool = yield* ApplyPatchTool
     const skilltool = yield* SkillTool
@@ -262,6 +279,14 @@ const layer = Layer.effect(
           grep: Tool.init(greptool),
           edit: Tool.init(edit),
           str_replace: Tool.init(str_replace),
+          diff: Tool.init(diff),
+          search_replace: Tool.init(search_replace),
+          file_outline: Tool.init(file_outline),
+          run_test: Tool.init(run_test),
+          websearch_js: Tool.init(websearch_js),
+          format: Tool.init(format),
+          json_path: Tool.init(json_path),
+          notes: Tool.init(notes),
           write: Tool.init(writetool),
           task: Tool.init(task),
           fetch: Tool.init(webfetch),
@@ -299,6 +324,14 @@ const layer = Layer.effect(
               tool.grep,
               tool.edit,
               tool.str_replace,
+              tool.diff,
+              tool.search_replace,
+              tool.file_outline,
+              tool.run_test,
+              tool.websearch_js,
+              tool.format,
+              tool.json_path,
+              tool.notes,
               tool.write,
               tool.task,
               tool.fetch,

@@ -1,0 +1,25 @@
+Fetch and render a web page with JavaScript, then extract the content.
+
+This tool uses a headless browser (Playwright) to load pages that require JavaScript to render content. Use this when `webfetch` returns empty or incomplete content because the page relies on client-side rendering.
+
+Usage:
+- `url`: The URL to fetch and render
+- `waitFor`: CSS selector to wait for before extracting (e.g. '#content', '.results')
+- `extractMode`: How to extract: 'markdown' (default), 'text', or 'html'
+- `maxChars`: Maximum characters to return (default: 10000)
+
+When to use websearch-js:
+- The page content is rendered by JavaScript (React, Vue, Angular, etc.)
+- `webfetch` returned a loading spinner or empty content
+- You need to see the final rendered state of a page
+- The page requires JavaScript to display its content
+
+When to use webfetch instead:
+- The page is server-rendered (static HTML)
+- You need raw HTML source
+- You're fetching API endpoints or plain text
+
+Rate limit awareness:
+- This tool is slow (spawns a browser), so use it sparingly
+- Prefer webfetch when possible
+- Only use when JavaScript rendering is actually required

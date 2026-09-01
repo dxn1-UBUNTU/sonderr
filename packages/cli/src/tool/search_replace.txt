@@ -1,0 +1,23 @@
+Search for a literal string across multiple files and optionally replace it.
+
+Usage:
+- `pattern`: The exact string to search for (not regex)
+- `replacement`: The string to replace matches with
+- `glob`: Limit search to files matching this glob pattern (e.g. '**/*.ts', 'src/**/*.js')
+- `replaceAll`: Replace all occurrences in each file (default true)
+- `dryRun`: Preview changes without applying them (default true — set to false to apply)
+
+When to use search_replace:
+- Renaming a function/variable across multiple files
+- Updating an import path everywhere it's used
+- Changing a configuration value across many files
+- Refactoring a repeated pattern
+
+When to use edit or str_replace instead:
+- Single-file edits where you need exact control
+- Edits that require surrounding context for uniqueness
+
+Safety:
+- Always runs in dryRun mode first — review the preview before applying
+- Set `dryRun: false` to actually apply the changes
+- Limited to files matching the glob pattern (default: all files except node_modules, .git, dist, build)

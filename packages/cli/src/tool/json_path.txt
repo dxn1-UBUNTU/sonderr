@@ -1,0 +1,26 @@
+Query a JSON file using JSONPath expressions.
+
+Usage:
+- `filePath`: The absolute path to the JSON file to query
+- `query`: JSONPath expression (e.g. '$.items[*].name', '$.users[?(@.age > 18)]', '$..price')
+- `compact`: Output compact JSON (default false)
+
+When to use json_path:
+- Extracting specific values from large JSON files
+- Filtering arrays within JSON data
+- Querying nested structures
+- Finding all values for a key at any depth
+
+JSONPath syntax:
+- `$` - root object
+- `.` - child operator
+- `[]` - array index or filter
+- `[*]` - all elements in array
+- `[?(@.field > value)]` - filter expression
+- `..` - recursive descent (find at any depth)
+
+Examples:
+- `$.users[*].name` - all user names
+- `$.items[?(@.price > 100)]` - items with price > 100
+- `$..error` - all error fields at any depth
+- `$.data[0].results[*].id` - all IDs in first data result

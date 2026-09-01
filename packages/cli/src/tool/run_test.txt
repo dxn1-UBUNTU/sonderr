@@ -1,0 +1,21 @@
+Run tests for the project.
+
+Usage:
+- `testPattern`: Pattern to match test files or test names (e.g. 'auth', '**/*.test.ts')
+- `watch`: Run tests in watch mode (default false)
+- `cwd`: Working directory to run tests in (default: project root)
+
+When to use run_test:
+- After making changes to verify nothing broke
+- To run a specific test file or test suite
+- To check if a bug fix resolved the test failure
+
+Auto-detection:
+- Detects the project's test runner (bun test, vitest, jest, pytest)
+- Uses the project's package.json to determine the correct command
+- Supports TypeScript, JavaScript, Python, and Go projects
+
+Output:
+- Shows test results summary
+- Lists passed/failed tests
+- Includes error messages for failures
