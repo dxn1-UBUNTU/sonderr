@@ -7,6 +7,10 @@ import SONDERR_CONFIG from "./sonderr-config.md" with { type: "text" }
 import DESIGN from "./design.md" with { type: "text" }
 import VERIFICATION from "./verification.md" with { type: "text" }
 import PLANNING from "./planning.md" with { type: "text" }
+import TESTING from "./testing.md" with { type: "text" }
+import DEBUGGING from "./debugging.md" with { type: "text" }
+import CODE_REVIEW from "./code-review.md" with { type: "text" }
+import SECURITY from "./security.md" with { type: "text" }
 
 export interface BuiltinSkill {
   name: string
@@ -38,5 +42,29 @@ export const BUILTIN_SKILLS: BuiltinSkill[] = [
     description:
       "Strategic planning and task decomposition for complex work. Use when facing multi-step tasks, architectural decisions, or any work rated M2+ complexity. Teaches how to break down work, estimate complexity, and execute efficiently.",
     content: PLANNING,
+  },
+  {
+    name: "testing",
+    description:
+      "Comprehensive testing guide for writing high-quality tests. Use when adding tests, fixing test failures, or verifying code correctness. Covers TDD, test patterns, mocking, edge cases, and test quality standards.",
+    content: TESTING,
+  },
+  {
+    name: "debugging",
+    description:
+      "Systematic debugging methodology for finding and fixing root causes. Use when investigating bugs, test failures, or unexpected behavior. Covers root cause analysis, binary search debugging, and common debugging patterns.",
+    content: DEBUGGING,
+  },
+  {
+    name: "code-review",
+    description:
+      "Self-review and code review methodology. Use before reporting any task as done, or when reviewing code. Catches bugs, style issues, missing edge cases, and improvement opportunities before the user sees your work.",
+    content: CODE_REVIEW,
+  },
+  {
+    name: "security",
+    description:
+      "Secure coding practices and common vulnerability prevention. Use when handling user input, authentication, data access, or any security-sensitive code. Covers OWASP top 10, injection prevention, and secure patterns.",
+    content: SECURITY,
   },
 ]
