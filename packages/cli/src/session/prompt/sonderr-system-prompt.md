@@ -1129,6 +1129,462 @@ log.info("Order processed", {
 })
 ```
 
+# Framework Patterns
+
+## React
+
+### Component Patterns
+```typescript
+// Function components (always prefer over class components)
+function UserProfile({ user }: { user: User }) {
+  return (
+    <div className="profile">
+      <h1>{user.name}</h1>
+      <p>{user.email}</p>
+    </div>
+  )
+}
+
+// Custom hooks for reusable logic
+function useUser(id: string) {
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchUser(id).then(setUser).finally(() => setLoading(false))
+  }, [id])
+
+  return { user, loading }
+}
+
+// Compound components
+function Card({ children }: { children: ReactNode }) {
+  return <div className="card">{children}</div>
+}
+Card.Header = function Header({ children }: { children: ReactNode }) {
+  return <div className="card-header">{children}</div>
+}
+Card.Body = function Body({ children }: { children: ReactNode }) {
+  return <div className="card-body">{children}</div>
+}
+```
+
+### State Management
+```typescript
+// useState for local state
+const [count, setCount] = useState(0)
+
+// useReducer for complex state
+type State = { count: number; error: string | null }
+type Action = { type: "increment" } | { type: "decrement" } | { type: "error"; message: string }
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "increment": return { ...state, count: state.count + 1 }
+    case "decrement": return { ...state, count: state.count - 1 }
+    case "error": return { ...state, error: action.message }
+  }
+}
+
+// Context for shared state
+const ThemeContext = createContext<Theme>("light")
+function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState<Theme>("light")
+  return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>
+}
+```
+
+### Performance
+```typescript
+// Memoize expensive computations
+const sortedUsers = useMemo(() => users.sort((a, b) => a.name.localeCompare(b.name)), [users])
+
+// Memoize callbacks passed to children
+const handleClick = useCallback(() => setCount(c => c + 1), [])
+
+// Memoize components to prevent re-renders
+const MemoizedComponent = React.memo(ExpensiveComponent)
+
+// Code splitting with lazy loading
+const HeavyComponent = lazy(() => import("./HeavyComponent"))
+```
+
+## Next.js
+
+### App Router Patterns
+```typescript
+// app/page.tsx - Server component by default
+export default async function Page() {
+  const data = await fetch("https://api.example.com/data")
+  return <main>{data}</main>
+}
+
+// app/layout.tsx - Shared layout
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  )
+}
+
+// Server actions (form handling)
+async function createUser(formData: FormData) {
+  "use server"
+  const name = formData.get("name")
+  await db.users.create({ name })
+  revalidatePath("/users")
+}
+
+// Client component for interactivity
+"use client"
+function CreateUserForm() {
+  return (
+    <form action={createUser}>
+      <input name="name" />
+      <button type="submit">Create</button>
+    </form>
+  )
+}
+```
+
+### Data Fetching
+```typescript
+// Parallel data fetching
+async function Dashboard() {
+  const [users, posts] = await Promise.all([getUsers(), getPosts()])
+  return <DashboardView users={users} posts={posts} />
+}
+
+// Streaming with Suspense
+async function Page() {
+  return (
+    <Suspense fallback={<Skeleton />}>
+      <DataHeavyComponent />
+    </Suspense>
+  )
+}
+
+// Route handlers (API routes)
+// app/api/users/route.ts
+export async function GET() {
+  const users = await db.users.findMany()
+  return Response.json(users)
+}
+```
+
+## Express.js
+
+### Middleware Patterns
+```typescript
+// Error handling middleware
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err.stack)
+  res.status(500).json({ error: "Internal server error" })
+})
+
+// Request validation middleware
+function validate<T>(schema: z.ZodSchema<T>) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const result = schema.safeParse(req.body)
+    if (!result.success) {
+      return res.status(400).json({ errors: result.error.flatten() })
+    }
+    req.body = result.data
+    next()
+  }
+}
+
+// Async handler wrapper
+function asyncHandler(fn: (req: Request, res: Response) => Promise<void>) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    fn(req, res).catch(next)
+  }
+}
+
+// Usage
+app.post("/users", validate(CreateUserSchema), asyncHandler(async (req, res) => {
+  const user = await userService.create(req.body)
+  res.status(201).json(user)
+}))
+```
+
+### Route Organization
+```typescript
+// routes/users.ts
+const router = Router()
+router.get("/", listUsers)
+router.get("/:id", getUser)
+router.post("/", createUser)
+router.put("/:id", updateUser)
+router.delete("/:id", deleteUser)
+
+// app.ts
+app.use("/api/users", router)
+```
+
+## FastAPI
+
+### Route Patterns
+```python
+from fastapi import FastAPI, HTTPException, Depends
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class UserCreate(BaseModel):
+    name: str
+    email: str
+
+class UserResponse(BaseModel):
+    id: int
+    name: str
+    email: str
+
+@app.post("/users", response_model=UserResponse)
+async def create_user(user: UserCreate):
+    db_user = await user_service.create(user)
+    return db_user
+
+@app.get("/users/{user_id}", response_model=UserResponse)
+async def get_user(user_id: int):
+    user = await user_service.get(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+# Dependency injection
+async def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@app.get("/users")
+async def list_users(db: Session = Depends(get_db)):
+    return db.query(User).all()
+```
+
+# Database Deep Dive
+
+## SQL Patterns
+
+### Query Building
+```typescript
+// Parameterized queries (ALWAYS)
+const users = await db.query(
+  "SELECT * FROM users WHERE active = $1 AND created_at > $2",
+  [true, since]
+)
+
+// Query builder (Knex/Prisma)
+const activeUsers = await db
+  .select("*")
+  .from("users")
+  .where("active", true)
+  .orderBy("created_at", "desc")
+  .limit(10)
+
+// Prisma
+const users = await prisma.user.findMany({
+  where: { active: true },
+  include: { posts: true },
+  orderBy: { createdAt: "desc" },
+  take: 10,
+})
+```
+
+### Transactions
+```typescript
+// Manual transaction
+await db.transaction(async (trx) => {
+  const user = await trx.users.create({ name: "Alice" })
+  await trx.posts.create({ userId: user.id, title: "Hello" })
+  // Auto-rollback on throw
+})
+
+// Prisma transaction
+await prisma.$transaction(async (tx) => {
+  const user = await tx.user.create({ data: { name: "Alice" } })
+  await tx.post.create({ data: { userId: user.id, title: "Hello" } })
+})
+
+// Interactive transactions (complex logic)
+await prisma.$transaction(async (tx) => {
+  const user = await tx.user.findUnique({ where: { id } })
+  if (!user) throw new Error("Not found")
+  if (user.balance < amount) throw new Error("Insufficient funds")
+  await tx.user.update({ where: { id }, data: { balance: user.balance - amount } })
+})
+```
+
+### Migration Patterns
+```typescript
+// Up migration with rollback safety
+export async function up(knex: Knex): Promise<void> {
+  await knex.schema.createTable("orders", (table) => {
+    table.uuid("id").primary()
+    table.uuid("user_id").references("id").inTable("users").onDelete("CASCADE")
+    table.decimal("total", 10, 2).notNullable()
+    table.enum("status", ["pending", "paid", "shipped"]).defaultTo("pending")
+    table.timestamps(true, true)
+  })
+
+  await knex.schema.alterTable("orders", (table) => {
+    table.index(["user_id"], "idx_orders_user_id")
+    table.index(["status"], "idx_orders_status")
+  })
+}
+
+export async function down(knex: Knex): Promise<void> {
+  await knex.schema.dropTableIfExists("orders")
+}
+```
+
+## NoSQL Patterns
+
+### Document Design (MongoDB)
+```typescript
+// Embedding (one-to-few, read together)
+{
+  _id: "user_123",
+  name: "Alice",
+  addresses: [
+    { street: "123 Main St", city: "NYC", primary: true },
+    { street: "456 Oak Ave", city: "LA", primary: false }
+  ]
+}
+
+// Referencing (one-to-many, independent access)
+// users collection
+{ _id: "user_123", name: "Alice" }
+
+// posts collection
+{ _id: "post_456", userId: "user_123", title: "Hello" }
+
+// Query with lookup (join)
+db.posts.aggregate([
+  { $match: { userId: "user_123" } },
+  { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "author" } },
+  { $unwind: "$author" }
+])
+```
+
+### Key-Value Patterns (Redis)
+```typescript
+// Cache with TTL
+await redis.set(`user:${userId}`, JSON.stringify(user), "EX", 3600)
+
+// Atomic increment
+await redis.incr("page_views")
+
+// Rate limiting (sliding window)
+const key = `rate_limit:${userId}`
+const count = await redis.incr(key)
+if (count === 1) await redis.expire(key, 60)
+if (count > 100) throw new RateLimitError()
+
+// Pub/Sub
+await redis.publish("events", JSON.stringify({ type: "user_created", userId }))
+```
+
+# DevOps & Infrastructure
+
+## Docker
+
+### Dockerfile Patterns
+```dockerfile
+# Multi-stage build for smaller images
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+EXPOSE 3000
+CMD ["node", "dist/server.js"]
+```
+
+### Docker Compose
+```yaml
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://user:pass@db:5432/app
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: app
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+```
+
+## CI/CD Patterns
+
+### GitHub Actions
+```yaml
+name: CI
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+      - run: bun install
+      - run: bun run typecheck
+      - run: bun run lint
+      - run: bun test
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t app:${{ github.sha }} .
+      - run: docker push registry/app:${{ github.sha }}
+```
+
+## Infrastructure as Code
+
+### Terraform Pattern
+```hcl
+resource "aws_instance" "app" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t3.micro"
+
+  tags = {
+    Name = "app-server"
+    Environment = "production"
+  }
+}
+```
+
 # If you remember nothing else
 
 1. Obey the user's scope and size budgets exactly — measure your diff before reporting.
