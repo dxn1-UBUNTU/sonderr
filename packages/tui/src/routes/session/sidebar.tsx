@@ -137,11 +137,9 @@ export function Sidebar(props: { sessionID: string; overlay?: boolean }) {
   const isPromptPending = createMemo(() => {
     const submitted = promptSubmit.state()
     if (!submitted.submittedAt || submitted.sessionID !== props.sessionID) return false
-    // Consider pending if submitted within last 30 seconds AND session is not idle
+    // Consider pending if submitted within last 30 seconds
     const elapsed = Date.now() - submitted.submittedAt
     if (elapsed > 30000) return false
-    // If session is definitely idle, don't show pending
-    if (sessionStatus()?.type === "idle") return false
     return true
   })
 
@@ -242,6 +240,16 @@ export function Sidebar(props: { sessionID: string; overlay?: boolean }) {
           }}
         >
           <box flexShrink={0} gap={1} paddingRight={1}>
+            {/* Debug raw state */}
+            <box paddingBottom={1}>
+              <text fg={theme.textMuted}>
+                <b>Debug:</b> pending={isPromptPending() ? "Y" : "N"} working={isWorking() ? "Y" : "N"} status={sessionStatus()?.type ?? "none"}
+              </text>
+              <text fg={theme.textMuted}>
+                submitted={promptSubmit.state().sessionID?.slice(0, 8) ?? "none"} at={promptSubmit.state().submittedAt ? String(promptSubmit.state().submittedAt) : "none"}
+              </text>
+            </box>
+
             {/* Dynamic AI Working Indicator */}
             <Show when={showWorking()}>
               <box gap={1} paddingBottom={1}>
