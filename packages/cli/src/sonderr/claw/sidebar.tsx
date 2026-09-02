@@ -11,6 +11,7 @@
 
 import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import { useTheme } from "@tui/context/theme"
+import { useRenderer } from "@opentui/solid"
 import { Spinner } from "@tui/component/spinner"
 import type { ChatMessage, ClawStatus, ConversationListItem, ConversationStatusRecord, TypingMember } from "./types"
 
@@ -168,9 +169,18 @@ export function ClawSidebar(props: {
   conversationStatus: ConversationStatusRecord | null
   typingMembers: TypingMember[]
   messages: ChatMessage[]
-  waitingForResponse: boolean
+  waitingForResponse: () => boolean
 }) {
   const { theme } = useTheme()
+  const renderer = useRenderer()
+
+  // Force re-render when thinking state changes (OpenTUI needs this)
+  createEffect(() => {
+    props.waitingForResponse()
+    props.typingMembers.length
+    props.chatLoading
+    renderer.requestRender()
+  })
 
   const conversationTitle = () => {
     const id = props.activeConversationId
@@ -181,7 +191,7 @@ export function ClawSidebar(props: {
 
   // Determine if the bot is currently thinking/working
   const isThinking = () => {
-    return props.waitingForResponse || props.typingMembers.length > 0 || props.chatLoading
+    return props.waitingForResponse() || props.typingMembers.length > 0 || props.chatLoading
   }
 
   // Track elapsed time since thinking started
@@ -190,9 +200,10 @@ export function ClawSidebar(props: {
 
   createEffect(() => {
     if (isThinking()) {
-      setThinkingStart(Date.now())
+      const start = Date.now()
+      setThinkingStart(start)
       const timer = setInterval(() => {
-        setElapsed(Date.now() - thinkingStart())
+        setElapsed(Date.now() - start)
       }, 1000)
       onCleanup(() => clearInterval(timer))
     } else {
@@ -219,7 +230,7 @@ export function ClawSidebar(props: {
 
   // Calculate progress based on response state
   const progress = createMemo(() => {
-    if (props.waitingForResponse && !props.typingMembers.length) return 0.15
+    if (props.waitingForResponse() && !props.typingMembers.length) return 0.15
     if (props.typingMembers.length > 0) return 0.6
     const text = latestBotMessage()?.text ?? ""
     if (text.length > 0) return Math.min(0.95, 0.6 + text.length / 1000)
@@ -363,7 +374,7 @@ export function ClawSidebar(props: {
                 <AnimatedProgress />
                 <text fg="#00ff88">
                   <b>
-                    {props.waitingForResponse && !props.typingMembers.length
+                    {props.waitingForResponse() && !props.typingMembers.length
                       ? "WAITING"
                       : props.typingMembers.length > 0
                         ? "TYPING"
@@ -387,11 +398,11 @@ export function ClawSidebar(props: {
                 <ProgressBar
                   width={36}
                   progress={progress()}
-                  color={props.waitingForResponse && !props.typingMembers.length ? "#ffaa00" : "#00ff88"}
+                  color={props.waitingForResponse() && !props.typingMembers.length ? "#ffaa00" : "#00ff88"}
                 />
                 <box flexDirection="row" justifyContent="space-between">
                   <text fg={theme.textMuted}>
-                    {props.waitingForResponse && !props.typingMembers.length ? "Processing request..." : "Generating response..."}
+                    {props.waitingForResponse() && !props.typingMembers.length ? "Processing request..." : "Generating response..."}
                   </text>
                   <text fg={theme.text}>{Math.round(progress() * 100)}%</text>
                 </box>
