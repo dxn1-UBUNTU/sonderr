@@ -98,6 +98,7 @@ import { submitFeedback } from "@/sonderr/cli/cmd/tui/feedback"
 import { MemorySessionTui } from "@/sonderr/cli/cmd/tui/routes/session/memory"
 import { formatMarkdownTables } from "../../util/markdown"
 // sonderr_change end
+import { PromptSubmitProvider } from "../../context/prompt-submit"
 import { LocationProvider } from "../../context/location"
 
 addDefaultParsers(parsers.parsers)
@@ -1279,14 +1280,15 @@ export function Session() {
   createEffect(on(() => route.sessionID, toBottom))
 
   return (
-    <LocationProvider location={location()}>
-      <context.Provider
-        value={{
-          get width() {
-            return contentWidth()
-          },
-          sessionID: route.sessionID,
-          conceal,
+    <PromptSubmitProvider>
+      <LocationProvider location={location()}>
+        <context.Provider
+          value={{
+            get width() {
+              return contentWidth()
+            },
+            sessionID: route.sessionID,
+            conceal,
           thinkingMode,
           showThinking,
           showTimestamps,
@@ -1504,7 +1506,8 @@ export function Session() {
           </Show>
         </box>
       </context.Provider>
-    </LocationProvider>
+      </LocationProvider>
+    </PromptSubmitProvider>
   )
 }
 

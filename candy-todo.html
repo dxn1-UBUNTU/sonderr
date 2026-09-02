@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candy Crush Todo Saga - Animated Deluxe</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;900&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #ff2a85 0%, #7b1fa2 50%, #0d47a1 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 900px;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Top Header */
+        .top-bar {
+            width: 100%;
+            max-width: 850px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 900;
+            font-size: 1.15rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            animation: bounceStat 2s infinite ease-in-out;
+        }
+
+        @keyframes bounceStat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        /* Map Screen */
+        .map-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .map-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3.2rem;
+            color: #ffeb3b;
+            text-shadow: 4px 4px 0px #e91e63, 6px 6px 15px rgba(0,0,0,0.5);
+            letter-spacing: 2px;
+            animation: pulseTitle 2s infinite alternate;
+        }
+
+        @keyframes pulseTitle {
+            from { transform: scale(1); }
+            to { transform: scale(1.03); }
+        }
+
+        .levels-path {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            align-items: center;
+            max-height: 60vh;
+            overflow-y: auto;
+            width: 100%;
+            padding: 15px;
+        }
+
+        .level-node {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff4081, #c51162);
+            border: 5px solid #fff;
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 4px 10px rgba(255,255,255,0.5);
+            transition: transform 0.2s, filter 0.2s;
+            position: relative;
+        }
+
+        .level-node:hover {
+            transform: scale(1.15) rotate(5deg);
+            filter: brightness(1.2);
+        }
+
+        .level-node.locked {
+            background: #757575;
+            border-color: #bdbdbd;
+            cursor: not-allowed;
+            filter: grayscale(0.8);
+        }
+
+        .level-node.completed {
+            background: linear-gradient(135deg, #00e676, #00c853);
+        }
+
+        .stars-display {
+            font-size: 0.75rem;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 900;
+            color: #ffeb3b;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.9);
+        }
+
+        /* Game Layout with Todo */
+        .game-layout {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            flex: 1;
+            min-width: 320px;
+        }
+
+        .panel h3 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: #ffeb3b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            padding-bottom: 8px;
+        }
+
+        /* Todo Form & List */
+        .todo-form {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .todo-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-weight: 700;
+            outline: none;
+        }
+
+        .candy-select {
+            padding: 8px;
+            border: none;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .todo-list {
+            list-style: none;
+            max-height: 320px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .todo-item {
+            background: rgba(255, 255, 255, 0.2);
+            margin-bottom: 10px;
+            padding: 10px 14px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: slideIn 0.3s ease-out;
+            transition: all 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .todo-item.completed {
+            background: rgba(0, 230, 118, 0.3);
+            text-decoration: line-through;
+            opacity: 0.75;
+            transform: scale(0.98);
+        }
+
+        .todo-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900;
+            word-break: break-all;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.15);
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .delete-btn:hover {
+            background: #ff1744 !important;
+        }
+
+        /* Match-3 Board */
+        .game-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .objective-card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 15px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: inset 0 6px 15px rgba(0,0,0,0.7), 0 10px 25px rgba(0,0,0,0.4);
+            width: 340px;
+            height: 340px;
+            margin: 0 auto 12px auto;
+        }
+
+        .candy-cell {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
+            box-shadow: inset 0 3px 6px rgba(255,255,255,0.5), 0 4px 8px rgba(0,0,0,0.25);
+        }
+
+        .candy-cell:hover {
+            transform: scale(1.12);
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .candy-cell.selected {
+            background: rgba(255, 215, 0, 0.8);
+            transform: scale(1.18);
+            border: 2px dashed #fff;
+            box-shadow: 0 0 15px #ffeb3b;
+        }
+
+        /* Animations */
+        @keyframes popCandy {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4) rotate(15deg); filter: brightness(1.5); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .candy-pop {
+            animation: popCandy 0.35s ease-out forwards;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff4081, #f50057);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 20px rgba(245, 0, 87, 0.6);
+            transition: transform 0.15s, filter 0.2s;
+            border: 2px solid rgba(255,255,255,0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-blue {
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            box-shadow: 0 6px 20px rgba(0, 188, 212, 0.6);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #8e24aa, #4a148c);
+            padding: 35px;
+            border-radius: 30px;
+            text-align: center;
+            border: 5px solid #fff;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+            max-width: 380px;
+            width: 90%;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-content h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.6rem;
+            margin-bottom: 12px;
+            color: #ffeb3b;
+            text-shadow: 3px 3px 0px #e91e63;
+        }
+
+        .modal-content p {
+            font-size: 1.15rem;
+            margin-bottom: 22px;
+            font-weight: 900;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP GLOBAL BAR -->
+    <div class="top-bar" id="topBar" style="display:none;">
+        <div class="stat-badge">🍬 Score: <span id="globalScore">0</span></div>
+        <div class="stat-badge">❤️ Lives: <span id="globalLives">5</span></div>
+    </div>
+
+    <!-- MAP SCREEN -->
+    <div class="screen active" id="mapScreen">
+        <div class="map-header">
+            <div class="map-title">CANDY TODO SAGA</div>
+            <p style="color: #ff80ab; font-weight: 900; font-size: 1.1rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">Complete Todo tasks & crush matching puzzles!</p>
+        </div>
+        <div class="levels-path" id="levelsPath"></div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div class="screen" id="gameScreen">
+        <div class="game-header" style="width:100%; max-width:850px; margin-bottom: 15px;">
+            <button class="btn btn-blue" onclick="returnToMap()" style="padding: 8px 16px; font-size: 1rem;">🗺️ Map</button>
+            <h2 id="levelTitle" style="font-family: 'Fredoka One', cursive; font-size: 1.6rem; color: #ffeb3b;">Level 1</h2>
+            <div class="stat-badge" style="font-size: 1rem;">⭐ <span id="currentScore">0</span></div>
+        </div>
+
+        <div class="game-layout">
+            <!-- Todo Panel -->
+            <div class="panel">
+                <h3><span>📝 Sugary Tasks</span></h3>
+                <form class="todo-form" id="todoForm">
+                    <select id="todoCandy" class="candy-select">
+                        <option value="🍓">🍓</option>
+                        <option value="🍊">🍊</option>
+                        <option value="🍋">🍋</option>
+                        <option value="🍏">🍏</option>
+                        <option value="🍇">🍇</option>
+                    </select>
+                    <input type="text" id="todoInput" class="todo-input" placeholder="Add sweet task..." required autocomplete="off">
+                    <button type="submit" class="btn" style="padding: 10px 16px; font-size: 1rem;">Add</button>
+                </form>
+                <ul class="todo-list" id="todoList"></ul>
+            </div>
+
+            <!-- Match-3 Panel -->
+            <div class="panel">
+                <div class="objective-card" id="objectiveBox">
+                    Objective: Collect 12 Strawberries in 15 moves!
+                </div>
+                <div class="grid-container" id="gridContainer"></div>
+                <div style="text-align: center;">
+                    <button class="btn btn-blue" id="shuffleBtn" style="padding: 10px 20px; font-size: 1rem;">🔀 Shuffle Board</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Victory!</h2>
+            <p id="modalText">Level completed!</p>
+            <button class="btn" onclick="closeModal()">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        const CANDIES = ['🍓', '🍊', '🍋', '🍏', '🍇'];
+        const GRID_SIZE = 6;
+
+        let gameData = {
+            score: 0,
+            lives: 5,
+            levels: [
+                { id: 1, targetType: '🍓', targetAmount: 10, moves: 15, unlocked: true, completed: false, stars: 0 },
+                { id: 2, targetType: '🍋', targetAmount: 14, moves: 16, unlocked: false, completed: false, stars: 0 },
+                { id: 3, targetType: '🍇', targetAmount: 18, moves: 18, unlocked: false, completed: false, stars: 0 },
+                { id: 4, targetType: '🍊', targetAmount: 22, moves: 20, unlocked: false, completed: false, stars: 0 }
+            ]
+        };
+
+        let todos = [
+            { id: 1, text: 'Defeat Level Objective', candy: '🍓', completed: false },
+            { id: 2, text: 'Bake celebration cupcakes', candy: '🧁', completed: false }
+        ];
+
+        let board = [];
+        let selectedCell = null;
+        let currentLevel = null;
+        let movesLeft = 0;
+        let collectedCount = 0;
+        let isBusy = false;
+
+        const mapScreen = document.getElementById('mapScreen');
+        const gameScreen = document.getElementById('gameScreen');
+        const topBar = document.getElementById('topBar');
+        const levelsPath = document.getElementById('levelsPath');
+        const gridContainer = document.getElementById('gridContainer');
+        const globalScore = document.getElementById('globalScore');
+        const globalLives = document.getElementById('globalLives');
+        const currentScore = document.getElementById('currentScore');
+        const levelTitle = document.getElementById('levelTitle');
+        const objectiveBox = document.getElementById('objectiveBox');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalText = document.getElementById('modalText');
+
+        function initMap() {
+            topBar.style.display = 'flex';
+            globalScore.textContent = gameData.score;
+            globalLives.textContent = gameData.lives;
+            levelsPath.innerHTML = '';
+
+            gameData.levels.forEach(lvl => {
+                const node = document.createElement('div');
+                node.className = `level-node ${lvl.unlocked ? '' : 'locked'} ${lvl.completed ? 'completed' : ''}`;
+                node.innerHTML = `
+                    ${lvl.id}
+                    <div class="stars-display">${lvl.completed ? '⭐'.repeat(lvl.stars) : (lvl.unlocked ? '🔓' : '🔒')}</div>
+                `;
+                if (lvl.unlocked) {
+                    node.addEventListener('click', () => startLevel(lvl.id));
+                }
+                levelsPath.appendChild(node);
+            });
+        }
+
+        function startLevel(id) {
+            currentLevel = gameData.levels.find(l => l.id === id);
+            if (!currentLevel || !currentLevel.unlocked) return;
+
+            movesLeft = currentLevel.moves;
+            collectedCount = 0;
+            levelTitle.textContent = `Level ${id}`;
+            updateObjective();
+
+            mapScreen.classList.remove('active');
+            gameScreen.classList.add('active');
+
+            generateValidBoard();
+            renderBoard();
+            renderTodos();
+        }
+
+        function returnToMap() {
+            gameScreen.classList.remove('active');
+            mapScreen.classList.add('active');
+            initMap();
+        }
+
+        function updateObjective() {
+            objectiveBox.innerHTML = `🎯 Collect <b style="color:#ffeb3b">${currentLevel.targetAmount}</b> ${currentLevel.targetType} | Collected: <b style="color:#00e676">${collectedCount}</b> | Moves: <span style="color:#ffeb3b">${movesLeft}</span>`;
+        }
+
+        // --- Todo List Logic ---
+        const todoForm = document.getElementById('todoForm');
+        const todoInput = document.getElementById('todoInput');
+        const todoCandy = document.getElementById('todoCandy');
+        const todoList = document.getElementById('todoList');
+
+        function renderTodos() {
+            todoList.innerHTML = '';
+            todos.forEach(todo => {
+                const li = document.createElement('li');
+                li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+                li.innerHTML = `
+                    <div class="todo-content">
+                        <span style="font-size: 1.4rem;">${todo.candy}</span>
+                        <span>${escapeHtml(todo.text)}</span>
+                    </div>
+                    <div class="action-btns">
+                        <button class="action-btn" title="Complete" onclick="toggleTodo(${todo.id})">✓</button>
+                        <button class="action-btn delete-btn" title="Delete" onclick="deleteTodo(${todo.id})">✕</button>
+                    </div>
+                `;
+                todoList.appendChild(li);
+            });
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        todoForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = todoInput.value.trim();
+            if (!text) return;
+            todos.unshift({ id: Date.now(), text, candy: todoCandy.value, completed: false });
+            todoInput.value = '';
+            renderTodos();
+        });
+
+        window.toggleTodo = function(id) {
+            const todo = todos.find(t => t.id === id);
+            if (todo) {
+                todo.completed = !todo.completed;
+                if (todo.completed) {
+                    gameData.score += 100;
+                }
+                renderTodos();
+            }
+        };
+
+        window.deleteTodo = function(id) {
+            todos = todos.filter(t => t.id !== id);
+            renderTodos();
+        };
+
+        // --- Match-3 Core ---
+        function generateValidBoard() {
+            do {
+                board = [];
+                for (let r = 0; r < GRID_SIZE; r++) {
+                    const row = [];
+                    for (let c = 0; c < GRID_SIZE; c++) {
+                        row.push(CANDIES[Math.floor(Math.random() * CANDIES.length)]);
+                    }
+                    board.push(row);
+                }
+            } while (checkInitialMatches() || !hasValidMoves());
+        }
+
+        function checkInitialMatches() {
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    let t = board[r][c];
+                    if (c < GRID_SIZE - 2 && t === board[r][c+1] && t === board[r][c+2]) return true;
+                    if (r < GRID_SIZE - 2 && t === board[r+1][c] && t === board[r+2][c]) return true;
+                }
+            }
+            return false;
+        }
+
+        function hasValidMoves() {
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    if (c < GRID_SIZE - 1) {
+                        swapCells(r, c, r, c+1);
+                        let ok = checkMatchesSilent();
+                        swapCells(r, c, r, c+1);
+                        if (ok) return true;
+                    }
+                    if (r < GRID_SIZE - 1) {
+                        swapCells(r, c, r+1, c);
+                        let ok = checkMatchesSilent();
+                        swapCells(r, c, r+1, c);
+                        if (ok) return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function swapCells(r1, c1, r2, c2) {
+            let temp = board[r1][c1];
+            board[r1][c1] = board[r2][c2];
+            board[r2][c2] = temp;
+        }
+
+        function checkMatchesSilent() {
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    let t = board[r][c];
+                    if (!t) continue;
+                    if (c < GRID_SIZE - 2 && t === board[r][c+1] && t === board[r][c+2]) return true;
+                    if (r < GRID_SIZE - 2 && t === board[r+1][c] && t === board[r+2][c]) return true;
+                }
+            }
+            return false;
+        }
+
+        function renderBoard() {
+            gridContainer.innerHTML = '';
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'candy-cell';
+                    if (selectedCell && selectedCell.r === r && selectedCell.c === c) {
+                        cell.classList.add('selected');
+                    }
+                    cell.textContent = board[r][c];
+                    cell.addEventListener('click', () => handleCellClick(r, c));
+                    gridContainer.appendChild(cell);
+                }
+            }
+            currentScore.textContent = gameData.score;
+        }
+
+        function handleCellClick(r, c) {
+            if (isBusy || movesLeft <= 0) return;
+
+            if (!selectedCell) {
+                selectedCell = { r, c };
+                renderBoard();
+            } else {
+                let pr = selectedCell.r;
+                let pc = selectedCell.c;
+                let isAdjacent = (Math.abs(pr - r) === 1 && pc === c) || (Math.abs(pc - c) === 1 && pr === r);
+
+                if (isAdjacent) {
+                    swapCells(pr, pc, r, c);
+                    if (checkMatchesSilent()) {
+                        selectedCell = null;
+                        movesLeft--;
+                        processTurn();
+                    } else {
+                        swapCells(pr, pc, r, c);
+                        selectedCell = null;
+                        renderBoard();
+                    }
+                } else {
+                    selectedCell = { r, c };
+                    renderBoard();
+                }
+            }
+        }
+
+        function processTurn() {
+            isBusy = true;
+            let matched = findAndEliminateMatches();
+            if (matched) {
+                renderBoard();
+                updateObjective();
+                setTimeout(() => fallAndRefill(), 350);
+            } else {
+                isBusy = false;
+                checkGameState();
+            }
+        }
+
+        function findAndEliminateMatches() {
+            let toRemove = Array(GRID_SIZE).fill(0).map(() => Array(GRID_SIZE).fill(false));
+            let found = false;
+
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE - 2; c++) {
+                    let t = board[r][c];
+                    if (t && t === board[r][c+1] && t === board[r][c+2]) {
+                        toRemove[r][c] = toRemove[r][c+1] = toRemove[r][c+2] = true;
+                        found = true;
+                    }
+                }
+            }
+
+            for (let r = 0; r < GRID_SIZE - 2; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    let t = board[r][c];
+                    if (t && t === board[r+1][c] && t === board[r+2][c]) {
+                        toRemove[r][c] = toRemove[r+1][c] = toRemove[r+2][c] = true;
+                        found = true;
+                    }
+                }
+            }
+
+            if (found) {
+                for (let r = 0; r < GRID_SIZE; r++) {
+                    for (let c = 0; c < GRID_SIZE; c++) {
+                        if (toRemove[r][c]) {
+                            if (board[r][c] === currentLevel.targetType) {
+                                collectedCount++;
+                            }
+                            gameData.score += 75;
+                            board[r][c] = null;
+                        }
+                    }
+                }
+            }
+            return found;
+        }
+
+        function fallAndRefill() {
+            for (let c = 0; c < GRID_SIZE; c++) {
+                let emptyRow = GRID_SIZE - 1;
+                for (let r = GRID_SIZE - 1; r >= 0; r--) {
+                    if (board[r][c] !== null) {
+                        let item = board[r][c];
+                        board[r][c] = null;
+                        board[emptyRow][c] = item;
+                        emptyRow--;
+                    }
+                }
+                for (let r = emptyRow; r >= 0; r--) {
+                    board[r][c] = CANDIES[Math.floor(Math.random() * CANDIES.length)];
+                }
+            }
+
+            renderBoard();
+
+            setTimeout(() => {
+                if (checkMatchesSilent()) {
+                    processTurn();
+                } else {
+                    isBusy = false;
+                    checkGameState();
+                }
+            }, 350);
+        }
+
+        function checkGameState() {
+            if (collectedCount >= currentLevel.targetAmount) {
+                currentLevel.completed = true;
+                let stars = movesLeft > 6 ? 3 : (movesLeft > 2 ? 2 : 1);
+                currentLevel.stars = Math.max(currentLevel.stars, stars);
+
+                let next = gameData.levels.find(l => l.id === currentLevel.id + 1);
+                if (next) next.unlocked = true;
+
+                showModal("SUGAR CRUSH! 🌟", `Level Passed!\nYou earned ${stars} stars!`);
+            } else if (movesLeft <= 0) {
+                gameData.lives = Math.max(0, gameData.lives - 1);
+                showModal("OUT OF MOVES! 💔", "Out of moves! Try again.");
+            } else if (!hasValidMoves()) {
+                generateValidBoard();
+                renderBoard();
+            }
+        }
+
+        function showModal(title, text) {
+            modalTitle.textContent = title;
+            modalText.textContent = text;
+            modal.style.display = 'flex';
+        }
+
+        window.closeModal = function() {
+            modal.style.display = 'none';
+            returnToMap();
+        };
+
+        document.getElementById('shuffleBtn').addEventListener('click', () => {
+            if (isBusy) return;
+            generateValidBoard();
+            renderBoard();
+        });
+
+        initMap();
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+Analyze code structure, complexity, and dependencies.
+
+Usage:
+- Analyzes a source file for complexity metrics, imports/dependencies, and symbol definitions.
+- Use `analysisType: "complexity"` for cyclomatic complexity and line metrics.
+- Use `analysisType: "dependencies"` for import/require analysis.
+- Use `analysisType: "symbols"` for function, class, interface, and type definitions.
+- Use `analysisType: "all"` for complete analysis (default).
+
+When to use code analysis:
+- Before refactoring, to understand code structure
+- To identify overly complex functions that need simplification
+- To map dependencies between modules
+- To document public API surface
+- To find unused or redundant imports
+
+Output includes:
+- Cyclomatic complexity score with rating (low/medium/high/very_high)
+- Line counts (total, non-empty, comment)
+- Import breakdown (static vs dynamic, external vs internal)
+- Symbol inventory (functions, classes, interfaces, types)

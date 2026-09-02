@@ -30,6 +30,7 @@ import { useEvent } from "../../context/event"
 import { editorSelectionKey, useEditorContext, type EditorSelection } from "../../context/editor"
 import { normalizePromptContent, openEditor } from "../../editor"
 import { useExit } from "../../context/exit"
+import { usePromptSubmit } from "../../context/prompt-submit" // sonderr_change
 import { promptOffsetWidth } from "../../prompt/display"
 import { createStore, produce, unwrap } from "solid-js/store"
 import { usePromptHistory, type PromptInfo } from "../../prompt/history"
@@ -1033,6 +1034,7 @@ export function Prompt(props: PromptProps) {
 
   async function submitInner() {
     workspace.clearNotice()
+    const promptSubmit = usePromptSubmit() // sonderr_change
 
     // IME: double-defer may fire before onContentChange flushes the last
     // composed character (e.g. Korean hangul) to the store, so read
@@ -1247,6 +1249,12 @@ export function Prompt(props: PromptProps) {
     })
     setStore("extmarkToPartIndex", new Map())
     props.onSubmit?.()
+
+    // sonderr_change start - immediately show working state in sidebar
+    if (sessionID) {
+      promptSubmit.markSubmitted(sessionID)
+    }
+    // sonderr_change end
 
     // temporary hack to make sure the message is sent
     if (!props.sessionID) {

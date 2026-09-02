@@ -1,0 +1,24 @@
+Validate file syntax and structure against schemas.
+
+Usage:
+- Validates JSON, YAML, TOML, and TypeScript files for syntax correctness.
+- Optionally validates JSON data against a provided JSON Schema.
+- Use `strict: true` in JSON Schema validation to reject unknown properties.
+
+When to use validate:
+- After editing configuration files to catch syntax errors
+- Before deploying to verify config structure
+- To validate API response shapes against expected schemas
+- To check TypeScript files for parse errors without full compilation
+
+Output includes:
+- Validity status (true/false)
+- Parsed data type (for JSON/YAML/TOML)
+- Parse errors with line numbers (for TypeScript)
+- Schema validation errors (when schema provided)
+
+Supported formats:
+- JSON (with optional JSON Schema validation)
+- YAML/YML
+- TOML
+- TypeScript/TSX (syntax check only)
