@@ -19,6 +19,8 @@ import { WebSearchJsTool } from "./websearch_js"
 import { FormatTool } from "./format"
 import { JsonPathTool } from "./json_path"
 import { NotesTool } from "./notes"
+import { CodeAnalysisTool } from "./code-analysis"
+import { ValidateTool } from "./validate"
 import { GlobTool } from "./glob"
 import { GrepTool } from "./grep"
 import { ReadTool } from "./read"
@@ -133,31 +135,33 @@ const layer = Layer.effect(
     const mcp = yield* MCP.Service
     const sessions = yield* Session.Service
 
-    const invalid = yield* InvalidTool
-    const task = yield* TaskTool
-    const read = yield* ReadTool
-    const question = yield* QuestionTool
-    const todo = yield* TodoWriteTool
-    const lsptool = yield* LspTool
-    const plan = yield* PlanExitTool
-    const webfetch = yield* WebFetchTool
-    const websearch = yield* WebSearchTool
-    const clone = yield* RepoCloneTool // sonderr_change
-    const overview = yield* RepoOverviewTool // sonderr_change
-    const shell = yield* ShellTool
-    const globtool = yield* GlobTool
-    const writetool = yield* WriteTool
-    const edit = yield* EditTool
-    const str_replace = yield* StrReplaceTool
-    const diff = yield* DiffTool
-    const search_replace = yield* SearchReplaceTool
-    const file_outline = yield* FileOutlineTool
-    const run_test = yield* RunTestTool
-    const websearch_js = yield* WebSearchJsTool
-    const format = yield* FormatTool
-    const json_path = yield* JsonPathTool
-    const notes = yield* NotesTool
-    const greptool = yield* GrepTool
+     const invalid = yield* InvalidTool
+     const task = yield* TaskTool
+     const read = yield* ReadTool
+     const question = yield* QuestionTool
+     const todo = yield* TodoWriteTool
+     const lsptool = yield* LspTool
+     const plan = yield* PlanExitTool
+     const webfetch = yield* WebFetchTool
+     const websearch = yield* WebSearchTool
+     const clone = yield* RepoCloneTool // sonderr_change
+     const overview = yield* RepoOverviewTool // sonderr_change
+     const shell = yield* ShellTool
+     const globtool = yield* GlobTool
+     const writetool = yield* WriteTool
+     const edit = yield* EditTool
+     const str_replace = yield* StrReplaceTool
+     const diff = yield* DiffTool
+     const search_replace = yield* SearchReplaceTool
+     const file_outline = yield* FileOutlineTool
+     const run_test = yield* RunTestTool
+     const websearch_js = yield* WebSearchJsTool
+     const format = yield* FormatTool
+     const json_path = yield* JsonPathTool
+     const notes = yield* NotesTool
+     const code_analysis = yield* CodeAnalysisTool
+     const validate = yield* ValidateTool
+     const greptool = yield* GrepTool
     const patchtool = yield* ApplyPatchTool
     const skilltool = yield* SkillTool
     const agent = yield* Agent.Service
@@ -271,23 +275,25 @@ const layer = Layer.effect(
         // sonderr_change end
         const questionEnabled = ["app", "cli", "desktop", "vscode"].includes(flags.client) || flags.enableQuestionTool // sonderr_change: add vscode client
 
-        const tool = yield* Effect.all({
-          invalid: Tool.init(invalid),
-          shell: Tool.init(shell),
-          read: Tool.init(read),
-          glob: Tool.init(globtool),
-          grep: Tool.init(greptool),
-          edit: Tool.init(edit),
-          str_replace: Tool.init(str_replace),
-          diff: Tool.init(diff),
-          search_replace: Tool.init(search_replace),
-          file_outline: Tool.init(file_outline),
-          run_test: Tool.init(run_test),
-          websearch_js: Tool.init(websearch_js),
-          format: Tool.init(format),
-          json_path: Tool.init(json_path),
-          notes: Tool.init(notes),
-          write: Tool.init(writetool),
+         const tool = yield* Effect.all({
+           invalid: Tool.init(invalid),
+           shell: Tool.init(shell),
+           read: Tool.init(read),
+           glob: Tool.init(globtool),
+           grep: Tool.init(greptool),
+           edit: Tool.init(edit),
+           str_replace: Tool.init(str_replace),
+           diff: Tool.init(diff),
+           search_replace: Tool.init(search_replace),
+           file_outline: Tool.init(file_outline),
+           run_test: Tool.init(run_test),
+           websearch_js: Tool.init(websearch_js),
+           format: Tool.init(format),
+           json_path: Tool.init(json_path),
+           notes: Tool.init(notes),
+           code_analysis: Tool.init(code_analysis),
+           validate: Tool.init(validate),
+           write: Tool.init(writetool),
           task: Tool.init(task),
           fetch: Tool.init(webfetch),
           todo: Tool.init(todo),
@@ -314,25 +320,27 @@ const layer = Layer.effect(
         return {
           custom,
           // sonderr_change start
-          builtin: SonderrToolRegistry.describe(
-            [
-              tool.invalid,
-              ...(questionEnabled ? [tool.question] : []),
-              tool.shell,
-              tool.read,
-              tool.glob,
-              tool.grep,
-              tool.edit,
-              tool.str_replace,
-              tool.diff,
-              tool.search_replace,
-              tool.file_outline,
-              tool.run_test,
-              tool.websearch_js,
-              tool.format,
-              tool.json_path,
-              tool.notes,
-              tool.write,
+           builtin: SonderrToolRegistry.describe(
+             [
+               tool.invalid,
+               ...(questionEnabled ? [tool.question] : []),
+               tool.shell,
+               tool.read,
+               tool.glob,
+               tool.grep,
+               tool.edit,
+               tool.str_replace,
+               tool.diff,
+               tool.search_replace,
+               tool.file_outline,
+               tool.run_test,
+               tool.websearch_js,
+               tool.format,
+               tool.json_path,
+               tool.notes,
+               tool.code_analysis,
+               tool.validate,
+               tool.write,
               tool.task,
               tool.fetch,
               tool.todo,

@@ -41,9 +41,9 @@ export namespace SonderrSessionProcessor {
     finished: boolean
     finish?: string
   }
-  export const OUTPUT_LENGTH_WARNING = "The model hit its output limit, so this response may be incomplete."
+  export const OUTPUT_LENGTH_WARNING = "Output limit reached — response truncated. Continue where you left off in the next response."
   export const REASONING_LENGTH_WARNING =
-    "The model hit its output limit while reasoning and produced no actionable output. Try disabling reasoning or increasing the output limit."
+    "Output limit reached while reasoning with no actionable output. Try disabling reasoning or continue in the next response."
   export const PROVIDER_FINISH_ERROR_MESSAGE =
     "The provider ended the response with an error before returning details. Start a new message to retry; Sonderr will compact the oversized conversation first if needed."
 

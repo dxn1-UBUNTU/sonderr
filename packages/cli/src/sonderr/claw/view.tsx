@@ -145,6 +145,8 @@ export function SonderrClawView() {
         conversations={chat.conversations()}
         activeConversationId={chat.activeConversationId()}
         conversationStatus={chat.conversationStatus()}
+        typingMembers={chat.typingMembers()}
+        messages={chat.messages()}
       />
     </box>
   )

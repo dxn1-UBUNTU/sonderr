@@ -4,14 +4,15 @@
 /**
  * SonderrClaw status sidebar
  *
- * Mirrors the session sidebar (routes/session/sidebar.tsx): bold
- * conversation title at the top, then context-window usage, then
- * instance/bot/details sections.
+ * Dynamic sidebar that switches between:
+ * - Idle: shows context window, tokens, model info
+ * - Working: shows AI thinking output (last 30 lines, auto-scrolling)
  */
 
-import { Show } from "solid-js"
+import { createMemo, For, Show } from "solid-js"
 import { useTheme } from "@tui/context/theme"
-import type { ClawStatus, ConversationListItem, ConversationStatusRecord } from "./types"
+import { Spinner } from "@tui/component/spinner"
+import type { ChatMessage, ClawStatus, ConversationListItem, ConversationStatusRecord, TypingMember } from "./types"
 
 function dot(status: string | null | undefined, theme: any): string {
   if (!status) return theme.textMuted
@@ -41,6 +42,8 @@ function formatTokens(n: number): string {
   return `${(n / 1_000_000).toFixed(1)}M`
 }
 
+const MAX_THINKING_LINES = 30
+
 export function ClawSidebar(props: {
   status: ClawStatus | null
   loading: boolean
@@ -52,6 +55,8 @@ export function ClawSidebar(props: {
   conversations: ConversationListItem[]
   activeConversationId: string | null
   conversationStatus: ConversationStatusRecord | null
+  typingMembers: TypingMember[]
+  messages: ChatMessage[]
 }) {
   const { theme } = useTheme()
 
@@ -61,6 +66,28 @@ export function ClawSidebar(props: {
     const conv = props.conversations.find((c) => c.conversationId === id)
     return conv?.title ?? "Untitled"
   }
+
+  // Determine if the bot is currently thinking/working
+  const isThinking = () => {
+    return props.typingMembers.length > 0 || props.chatLoading
+  }
+
+  // Get the latest bot message content
+  const latestBotMessage = createMemo(() => {
+    const msgs = props.messages
+    for (let i = msgs.length - 1; i >= 0; i--) {
+      if (msgs[i].bot) return msgs[i]
+    }
+    return null
+  })
+
+  // Get the last N lines of the thinking output
+  const thinkingLines = createMemo(() => {
+    const msg = latestBotMessage()
+    if (!msg || !msg.text) return []
+    const lines = msg.text.split("\n")
+    return lines.slice(-MAX_THINKING_LINES)
+  })
 
   return (
     <box
@@ -74,7 +101,7 @@ export function ClawSidebar(props: {
     >
       <scrollbox flexGrow={1}>
         <box flexShrink={0} gap={1} paddingRight={1}>
-          {/* Conversation title (top, like session title) */}
+          {/* Conversation title */}
           <Show when={props.connected}>
             <box paddingRight={1}>
               <text fg={theme.text} wrapMode="word">
@@ -83,71 +110,141 @@ export function ClawSidebar(props: {
             </box>
           </Show>
 
-          {/* Bot status — same section pattern as Instance/Details */}
-          <Show when={props.connected || props.chatLoading || props.chatError}>
-            <box>
-              <text fg={theme.text}>
-                <b>Bot Status</b>
-              </text>
-              <Show when={props.chatError}>
-                <text fg={theme.error}>{props.chatError}</text>
-              </Show>
-              <Show when={!props.chatError && props.chatLoading}>
-                <text fg={theme.textMuted}>Connecting...</text>
-              </Show>
-              <Show when={!props.chatError && !props.chatLoading && props.connected}>
-                <box flexDirection="row" gap={1}>
-                  <text flexShrink={0} style={{ fg: props.online ? theme.success : theme.textMuted }}>
-                    •
-                  </text>
-                  <text fg={theme.text}>{props.online ? "Online" : "Offline"}</text>
-                </box>
-              </Show>
-              <Show when={!props.chatError && !props.chatLoading && !props.connected}>
-                <text fg={theme.textMuted}>Unavailable</text>
-              </Show>
-            </box>
-          </Show>
-
-          {/* Context window usage */}
-          <Show when={props.connected && props.conversationStatus}>
-            {(s) => (
-              <box>
-                <text fg={theme.text}>
-                  <b>Context</b>
-                </text>
-                <Show when={s().contextWindow > 0}>
-                  <box flexDirection="row" justifyContent="space-between">
-                    <text fg={theme.textMuted}>Used</text>
+          {/* Dynamic content: thinking vs idle */}
+          <Show
+            when={isThinking()}
+            fallback={
+              /* Idle state: show stats */
+              <box gap={1}>
+                {/* Bot status */}
+                <Show when={props.connected || props.chatLoading || props.chatError}>
+                  <box>
                     <text fg={theme.text}>
-                      {Math.min(100, Math.round((s().contextTokens / s().contextWindow) * 100))}%
+                      <b>Status</b>
                     </text>
+                    <Show when={props.chatError}>
+                      <text fg={theme.error}>{props.chatError}</text>
+                    </Show>
+                    <Show when={!props.chatError && props.chatLoading}>
+                      <text fg={theme.textMuted}>Connecting...</text>
+                    </Show>
+                    <Show when={!props.chatError && !props.chatLoading && props.connected}>
+                      <box flexDirection="row" gap={1}>
+                        <text flexShrink={0} style={{ fg: props.online ? theme.success : theme.textMuted }}>
+                          •
+                        </text>
+                        <text fg={theme.text}>{props.online ? "Online" : "Offline"}</text>
+                      </box>
+                    </Show>
+                    <Show when={!props.chatError && !props.chatLoading && !props.connected}>
+                      <text fg={theme.textMuted}>Unavailable</text>
+                    </Show>
                   </box>
                 </Show>
-                <box flexDirection="row" justifyContent="space-between">
-                  <text fg={theme.textMuted}>Tokens</text>
-                  <text fg={theme.text}>
-                    {formatTokens(s().contextTokens)} / {formatTokens(s().contextWindow)}
-                  </text>
-                </box>
-                <Show when={s().model}>
-                  <box flexDirection="row" justifyContent="space-between">
-                    <text fg={theme.textMuted}>Model</text>
-                    <text fg={theme.text} wrapMode="none">
-                      {s().model}
-                    </text>
-                  </box>
+
+                {/* Context window usage */}
+                <Show when={props.connected && props.conversationStatus}>
+                  {(s) => (
+                    <box>
+                      <text fg={theme.text}>
+                        <b>Context</b>
+                      </text>
+                      <Show when={s().contextWindow > 0}>
+                        <box flexDirection="row" justifyContent="space-between">
+                          <text fg={theme.textMuted}>Used</text>
+                          <text fg={theme.text}>
+                            {Math.min(100, Math.round((s().contextTokens / s().contextWindow) * 100))}%
+                          </text>
+                        </box>
+                      </Show>
+                      <box flexDirection="row" justifyContent="space-between">
+                        <text fg={theme.textMuted}>Tokens</text>
+                        <text fg={theme.text}>
+                          {formatTokens(s().contextTokens)} / {formatTokens(s().contextWindow)}
+                        </text>
+                      </box>
+                      <Show when={s().model}>
+                        <box flexDirection="row" justifyContent="space-between">
+                          <text fg={theme.textMuted}>Model</text>
+                          <text fg={theme.text} wrapMode="none">
+                            {s().model}
+                          </text>
+                        </box>
+                      </Show>
+                      <Show when={s().provider}>
+                        <box flexDirection="row" justifyContent="space-between">
+                          <text fg={theme.textMuted}>Provider</text>
+                          <text fg={theme.text} wrapMode="none">
+                            {s().provider}
+                          </text>
+                        </box>
+                      </Show>
+                    </box>
+                  )}
                 </Show>
-                <Show when={s().provider}>
-                  <box flexDirection="row" justifyContent="space-between">
-                    <text fg={theme.textMuted}>Provider</text>
-                    <text fg={theme.text} wrapMode="none">
-                      {s().provider}
+
+                {/* Instance details */}
+                <Show when={!props.loading && !props.error && props.status}>
+                  <box>
+                    <text fg={theme.text}>
+                      <b>Instance</b>
                     </text>
+                    <box flexDirection="row" gap={1}>
+                      <text flexShrink={0} style={{ fg: dot(props.status!.status, theme) }}>
+                        •
+                      </text>
+                      <text fg={theme.text}>
+                        {(props.status!.status ?? "unknown").replace(/^./, (c) => c.toUpperCase())}{" "}
+                        <span style={{ fg: theme.textMuted }}>
+                          {props.status!.status === "running" ? uptime(props.status!.lastStartedAt) : ""}
+                        </span>
+                      </text>
+                    </box>
+                  </box>
+                  <box>
+                    <text fg={theme.text}>
+                      <b>Details</b>
+                    </text>
+                    <box flexDirection="row" justifyContent="space-between">
+                      <text fg={theme.textMuted}>Region</text>
+                      <text fg={theme.text}>{props.status!.flyRegion?.toUpperCase() ?? "—"}</text>
+                    </box>
+                    <box flexDirection="row" justifyContent="space-between">
+                      <text fg={theme.textMuted}>Version</text>
+                      <text fg={theme.text}>{props.status!.openclawVersion ?? "—"}</text>
+                    </box>
                   </box>
                 </Show>
               </box>
-            )}
+            }
+          >
+            {/* Thinking state: show AI output */}
+            <box gap={1}>
+              <box flexDirection="row" gap={1} alignItems="center">
+                <Spinner color={theme.success} />
+                <text fg={theme.text}>
+                  <b>Thinking...</b>
+                </text>
+              </box>
+              <box
+                backgroundColor={theme.backgroundElement}
+                paddingLeft={1}
+                paddingRight={1}
+                paddingTop={1}
+                paddingBottom={1}
+              >
+                <For each={thinkingLines()}>
+                  {(line, i) => (
+                    <text fg={theme.textMuted} wrapMode="word">
+                      {line || " "}
+                    </text>
+                  )}
+                </For>
+              </box>
+              <text fg={theme.textMuted}>
+                <span style={{ fg: theme.text }}>Last {MAX_THINKING_LINES} lines</span>
+              </text>
+            </box>
           </Show>
 
           <Show when={props.loading}>
@@ -156,45 +253,6 @@ export function ClawSidebar(props: {
 
           <Show when={props.error}>
             <text fg={theme.error}>{props.error}</text>
-          </Show>
-
-          <Show when={!props.loading && !props.error && props.status}>
-            <box>
-              <text fg={theme.text}>
-                <b>Instance</b>
-              </text>
-              <box flexDirection="row" gap={1}>
-                <text flexShrink={0} style={{ fg: dot(props.status!.status, theme) }}>
-                  •
-                </text>
-                <text fg={theme.text}>
-                  {(props.status!.status ?? "unknown").replace(/^./, (c) => c.toUpperCase())}{" "}
-                  <span style={{ fg: theme.textMuted }}>
-                    {props.status!.status === "running" ? uptime(props.status!.lastStartedAt) : ""}
-                  </span>
-                </text>
-              </box>
-            </box>
-
-            <box>
-              <text fg={theme.text}>
-                <b>Details</b>
-              </text>
-              <box flexDirection="row" justifyContent="space-between">
-                <text fg={theme.textMuted}>Region</text>
-                <text fg={theme.text}>{props.status!.flyRegion?.toUpperCase() ?? "—"}</text>
-              </box>
-              <box flexDirection="row" justifyContent="space-between">
-                <text fg={theme.textMuted}>Version</text>
-                <text fg={theme.text}>{props.status!.openclawVersion ?? "—"}</text>
-              </box>
-              <Show when={props.status!.channelCount != null && props.status!.channelCount >= 1}>
-                <box flexDirection="row" justifyContent="space-between">
-                  <text fg={theme.textMuted}>Channels</text>
-                  <text fg={theme.text}>{props.status!.channelCount}</text>
-                </box>
-              </Show>
-            </box>
           </Show>
 
           <Show when={!props.loading && !props.error && !props.status}>

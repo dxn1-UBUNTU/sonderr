@@ -45,7 +45,7 @@ function BotMessageRow(props: { msg: ChatMessage; index: number }) {
   return (
     <box marginTop={props.index === 0 ? 0 : 1} flexShrink={0}>
       <box paddingLeft={3}>
-        <Show when={!empty()} fallback={<text fg={theme.textMuted}>Thinking...</text>}>
+        <Show when={!empty()} fallback={<box paddingBottom={1}><Spinner color={theme.textMuted}>Thinking...</Spinner></box>}>
           <code
             filetype="markdown"
             drawUnstyledText={false}
@@ -190,7 +190,7 @@ export function ClawChat(props: {
 
       {/* Typing indicator */}
       <Show when={typingLabel()}>
-        <box flexShrink={0} paddingLeft={2}>
+        <box flexShrink={0} paddingLeft={2} paddingBottom={1}>
           <Spinner color={theme.textMuted}>{typingLabel()}</Spinner>
         </box>
       </Show>
