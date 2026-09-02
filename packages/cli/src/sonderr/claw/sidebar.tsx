@@ -173,13 +173,15 @@ export function ClawSidebar(props: {
 }) {
   const { theme } = useTheme()
   const renderer = useRenderer()
+  const [tick, setTick] = createSignal(0)
 
-  // Force re-render when thinking state changes (OpenTUI needs this)
-  createEffect(() => {
-    props.waitingForResponse()
-    props.typingMembers.length
-    props.chatLoading
-    renderer.requestRender()
+  // Heartbeat ticker - forces continuous re-renders for animations
+  onMount(() => {
+    const timer = setInterval(() => {
+      setTick((t) => t + 1)
+      renderer.requestRender()
+    }, 100)
+    onCleanup(() => clearInterval(timer))
   })
 
   const conversationTitle = () => {
@@ -194,20 +196,18 @@ export function ClawSidebar(props: {
     return props.waitingForResponse() || props.typingMembers.length > 0 || props.chatLoading
   }
 
-  // Track elapsed time since thinking started
+  // Track elapsed time - updates with ticker
   const [thinkingStart, setThinkingStart] = createSignal(Date.now())
-  const [elapsed, setElapsed] = createSignal(0)
+
+  const elapsed = createMemo(() => {
+    tick() // subscribe to ticker for updates
+    if (!isThinking()) return 0
+    return Date.now() - thinkingStart()
+  })
 
   createEffect(() => {
     if (isThinking()) {
-      const start = Date.now()
-      setThinkingStart(start)
-      const timer = setInterval(() => {
-        setElapsed(Date.now() - start)
-      }, 1000)
-      onCleanup(() => clearInterval(timer))
-    } else {
-      setElapsed(0)
+      setThinkingStart(Date.now())
     }
   })
 
@@ -258,6 +258,13 @@ export function ClawSidebar(props: {
               </text>
             </box>
           </Show>
+
+          {/* Debug: show raw state */}
+          <box paddingBottom={1}>
+            <text fg={theme.textMuted}>
+              <b>Debug:</b> waiting={props.waitingForResponse() ? "true" : "false"} | typing={props.typingMembers.length} | loading={props.chatLoading ? "true" : "false"}
+            </text>
+          </box>
 
           {/* Dynamic content: thinking vs idle */}
           <Show
