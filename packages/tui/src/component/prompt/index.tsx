@@ -182,6 +182,7 @@ export function Prompt(props: PromptProps) {
   const paletteShortcut = useCommandShortcut("command.palette.show")
   const variantShortcut = useCommandShortcut("variant.cycle")
   const renderer = useRenderer()
+  const promptSubmit = usePromptSubmit() // sonderr_change
   const exit = useExit()
   const dimensions = useTerminalDimensions()
   const { theme, syntax } = useTheme()
@@ -1034,7 +1035,6 @@ export function Prompt(props: PromptProps) {
 
   async function submitInner() {
     workspace.clearNotice()
-    const promptSubmit = usePromptSubmit() // sonderr_change
 
     // IME: double-defer may fire before onContentChange flushes the last
     // composed character (e.g. Korean hangul) to the store, so read
