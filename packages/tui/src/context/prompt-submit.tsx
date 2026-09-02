@@ -12,11 +12,18 @@ type PromptSubmitContextType = {
   clear: () => void
 }
 
-const PromptSubmitContext = createContext<PromptSubmitContextType>()
+const PromptSubmitContext = createContext<PromptSubmitContextType | null>(null)
 
 export function usePromptSubmit() {
   const ctx = useContext(PromptSubmitContext)
-  if (!ctx) throw new Error("usePromptSubmit must be used within PromptSubmitProvider")
+  if (!ctx) {
+    // Return no-op defaults when provider is not present (e.g. home route)
+    return {
+      state: () => ({ submittedAt: null, sessionID: null }),
+      markSubmitted: () => {},
+      clear: () => {},
+    }
+  }
   return ctx
 }
 
