@@ -9,7 +9,7 @@
  * - Working: shows AI thinking output (last 30 lines, auto-scrolling)
  */
 
-import { createMemo, For, Show } from "solid-js"
+import { createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import { useTheme } from "@tui/context/theme"
 import { Spinner } from "@tui/component/spinner"
 import type { ChatMessage, ClawStatus, ConversationListItem, ConversationStatusRecord, TypingMember } from "./types"
@@ -43,6 +43,39 @@ function formatTokens(n: number): string {
 }
 
 const MAX_THINKING_LINES = 30
+
+const BANNER_FRAMES = [
+  "╔══════════════════════════════╗\n║          S O N D E R R       ║\n╚══════════════════════════════╝",
+  "╔══════════════════════════════╗\n║          ◆ S O N D E R R     ║\n╚══════════════════════════════╝",
+  "╔══════════════════════════════╗\n║        ◆ S O N D E R R ◆     ║\n╚══════════════════════════════╝",
+  "╔══════════════════════════════╗\n║          S O N D E R R ◆     ║\n╚══════════════════════════════╝",
+]
+
+const BANNER_COLORS = ["#00ff88", "#00ddff", "#ff00ff", "#ffaa00", "#00ff88"]
+
+function AnimatedBanner() {
+  const { theme } = useTheme()
+  const [frame, setFrame] = createSignal(0)
+
+  onMount(() => {
+    const timer = setInterval(() => {
+      setFrame((f) => (f + 1) % BANNER_FRAMES.length)
+    }, 800)
+    onCleanup(() => clearInterval(timer))
+  })
+
+  return (
+    <box
+      flexShrink={0}
+      paddingBottom={1}
+      alignItems="center"
+    >
+      <text fg={BANNER_COLORS[frame() % BANNER_COLORS.length]}>
+        <b>{BANNER_FRAMES[frame()]}</b>
+      </text>
+    </box>
+  )
+}
 
 export function ClawSidebar(props: {
   status: ClawStatus | null
@@ -99,6 +132,7 @@ export function ClawSidebar(props: {
       paddingLeft={2}
       paddingRight={2}
     >
+      <AnimatedBanner />
       <scrollbox flexGrow={1}>
         <box flexShrink={0} gap={1} paddingRight={1}>
           {/* Conversation title */}
