@@ -90,6 +90,7 @@ export function ClawSidebar(props: {
   conversationStatus: ConversationStatusRecord | null
   typingMembers: TypingMember[]
   messages: ChatMessage[]
+  waitingForResponse: boolean
 }) {
   const { theme } = useTheme()
 
@@ -102,7 +103,7 @@ export function ClawSidebar(props: {
 
   // Determine if the bot is currently thinking/working
   const isThinking = () => {
-    return props.typingMembers.length > 0 || props.chatLoading
+    return props.waitingForResponse || props.typingMembers.length > 0 || props.chatLoading
   }
 
   // Get the latest bot message content

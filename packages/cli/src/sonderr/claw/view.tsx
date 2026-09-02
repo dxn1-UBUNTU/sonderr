@@ -147,6 +147,7 @@ export function SonderrClawView() {
         conversationStatus={chat.conversationStatus()}
         typingMembers={chat.typingMembers()}
         messages={chat.messages()}
+        waitingForResponse={chat.waitingForResponse()}
       />
     </box>
   )

@@ -73,6 +73,7 @@ export function createClawChat(sdk: SDK) {
   const [activeConversationId, setActiveConversationId] = createSignal<string | null>(null)
   const [conversationStatus, setConversationStatus] = createSignal<ConversationStatusRecord | null>(null)
   const [typingMembers, setTypingMembers] = createSignal<TypingMember[]>([])
+  const [waitingForResponse, setWaitingForResponse] = createSignal(false)
 
   const MAX_MESSAGES = 500
   let chat: ClawChatClient | null = null
@@ -82,9 +83,11 @@ export function createClawChat(sdk: SDK) {
   const send = async (text: string): Promise<boolean> => {
     if (!chat) return false
     try {
+      setWaitingForResponse(true)
       await chat.send(text)
       return true
     } catch (err) {
+      setWaitingForResponse(false)
       log.error("send failed", { error: errText(err) })
       setError("Failed to send message")
       return false
@@ -242,6 +245,7 @@ export function createClawChat(sdk: SDK) {
           const next = [...prev, msg]
           return next.length > MAX_MESSAGES ? next.slice(-MAX_MESSAGES) : next
         })
+        if (msg.bot) setWaitingForResponse(false)
       })
 
       cleanup.unsubUpdated = chat.onMessageUpdated((msg) => {
@@ -255,6 +259,7 @@ export function createClawChat(sdk: SDK) {
           next[idx] = msg
           return next
         })
+        if (msg.bot) setWaitingForResponse(false)
       })
 
       cleanup.unsubPresence = chat.onPresence(setOnline)
@@ -291,6 +296,7 @@ export function createClawChat(sdk: SDK) {
     activeConversationId,
     conversationStatus,
     typingMembers,
+    waitingForResponse,
     newConversation,
     selectConversation,
     renameConversation,
