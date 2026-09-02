@@ -6,10 +6,10 @@
  *
  * Dynamic sidebar that switches between:
  * - Idle: shows context window, tokens, model info
- * - Working: shows AI thinking output (last 30 lines, auto-scrolling)
+ * - Working: shows live AI output with animated progress, elapsed time, streaming text
  */
 
-import { createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
+import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import { useTheme } from "@tui/context/theme"
 import { Spinner } from "@tui/component/spinner"
 import type { ChatMessage, ClawStatus, ConversationListItem, ConversationStatusRecord, TypingMember } from "./types"
@@ -42,7 +42,14 @@ function formatTokens(n: number): string {
   return `${(n / 1_000_000).toFixed(1)}M`
 }
 
-const MAX_THINKING_LINES = 30
+function formatElapsed(ms: number): string {
+  const seconds = Math.floor(ms / 1000)
+  const minutes = Math.floor(seconds / 60)
+  if (minutes > 0) return `${minutes}m ${seconds % 60}s`
+  return `${seconds}s`
+}
+
+const MAX_THINKING_LINES = 20
 
 const BANNER_FRAMES = [
   "╔══════════════════════════════╗\n║          S O N D E R R       ║\n╚══════════════════════════════╝",
@@ -77,6 +84,77 @@ function AnimatedBanner() {
   )
 }
 
+const PROGRESS_CHARS = ["/", "-", "\\", "|", "/", "-", "\\", "|"]
+
+function AnimatedProgress() {
+  const [tick, setTick] = createSignal(0)
+
+  onMount(() => {
+    const timer = setInterval(() => {
+      setTick((t) => (t + 1) % PROGRESS_CHARS.length)
+    }, 80)
+    onCleanup(() => clearInterval(timer))
+  })
+
+  return (
+    <text fg="#00ff88">
+      {PROGRESS_CHARS[tick()]}
+    </text>
+  )
+}
+
+const PULSE_CHARS = [".", "o", "O", "O", "o", "."]
+
+function AnimatedPulse() {
+  const [tick, setTick] = createSignal(0)
+
+  onMount(() => {
+    const timer = setInterval(() => {
+      setTick((t) => (t + 1) % PULSE_CHARS.length)
+    }, 150)
+    onCleanup(() => clearInterval(timer))
+  })
+
+  return (
+    <text fg="#00ddff">
+      {PULSE_CHARS[tick()]}
+    </text>
+  )
+}
+
+const TYPING_DOTS = [".", "..", "...", "..", "."]
+
+function TypingAnimation() {
+  const [tick, setTick] = createSignal(0)
+
+  onMount(() => {
+    const timer = setInterval(() => {
+      setTick((t) => (t + 1) % TYPING_DOTS.length)
+    }, 200)
+    onCleanup(() => clearInterval(timer))
+  })
+
+  return (
+    <text fg="#ff00ff">
+      {TYPING_DOTS[tick()]}
+    </text>
+  )
+}
+
+function ProgressBar(props: { width: number; progress: number; color: string }) {
+  const filled = () => Math.round(props.width * props.progress)
+  const empty = () => props.width - filled()
+  const filledChar = "="
+  const emptyChar = "-"
+
+  return (
+    <box flexDirection="row">
+      <text fg={props.color}>{filledChar.repeat(filled())}</text>
+      <text fg="#333333">{emptyChar.repeat(empty())}</text>
+    </box>
+  )
+}
+
 export function ClawSidebar(props: {
   status: ClawStatus | null
   loading: boolean
@@ -106,6 +184,22 @@ export function ClawSidebar(props: {
     return props.waitingForResponse || props.typingMembers.length > 0 || props.chatLoading
   }
 
+  // Track elapsed time since thinking started
+  const [thinkingStart, setThinkingStart] = createSignal(Date.now())
+  const [elapsed, setElapsed] = createSignal(0)
+
+  createEffect(() => {
+    if (isThinking()) {
+      setThinkingStart(Date.now())
+      const timer = setInterval(() => {
+        setElapsed(Date.now() - thinkingStart())
+      }, 1000)
+      onCleanup(() => clearInterval(timer))
+    } else {
+      setElapsed(0)
+    }
+  })
+
   // Get the latest bot message content
   const latestBotMessage = createMemo(() => {
     const msgs = props.messages
@@ -121,6 +215,15 @@ export function ClawSidebar(props: {
     if (!msg || !msg.text) return []
     const lines = msg.text.split("\n")
     return lines.slice(-MAX_THINKING_LINES)
+  })
+
+  // Calculate progress based on response state
+  const progress = createMemo(() => {
+    if (props.waitingForResponse && !props.typingMembers.length) return 0.15
+    if (props.typingMembers.length > 0) return 0.6
+    const text = latestBotMessage()?.text ?? ""
+    if (text.length > 0) return Math.min(0.95, 0.6 + text.length / 1000)
+    return 0
   })
 
   return (
@@ -253,14 +356,48 @@ export function ClawSidebar(props: {
               </box>
             }
           >
-            {/* Thinking state: show AI output */}
+            {/* Thinking state: LIVE dynamic UI */}
             <box gap={1}>
+              {/* Header with animated indicators */}
               <box flexDirection="row" gap={1} alignItems="center">
-                <Spinner color={theme.success} />
-                <text fg={theme.text}>
-                  <b>Thinking...</b>
+                <AnimatedProgress />
+                <text fg="#00ff88">
+                  <b>
+                    {props.waitingForResponse && !props.typingMembers.length
+                      ? "WAITING"
+                      : props.typingMembers.length > 0
+                        ? "TYPING"
+                        : "STREAMING"}
+                  </b>
+                </text>
+                <TypingAnimation />
+              </box>
+
+              {/* Elapsed time + pulse */}
+              <box flexDirection="row" gap={1} alignItems="center">
+                <AnimatedPulse />
+                <text fg={theme.textMuted}>Elapsed:</text>
+                <text fg="#ffaa00">
+                  <b>{formatElapsed(elapsed())}</b>
                 </text>
               </box>
+
+              {/* Animated progress bar */}
+              <box gap={0}>
+                <ProgressBar
+                  width={36}
+                  progress={progress()}
+                  color={props.waitingForResponse && !props.typingMembers.length ? "#ffaa00" : "#00ff88"}
+                />
+                <box flexDirection="row" justifyContent="space-between">
+                  <text fg={theme.textMuted}>
+                    {props.waitingForResponse && !props.typingMembers.length ? "Processing request..." : "Generating response..."}
+                  </text>
+                  <text fg={theme.text}>{Math.round(progress() * 100)}%</text>
+                </box>
+              </box>
+
+              {/* Live output preview */}
               <box
                 backgroundColor={theme.backgroundElement}
                 paddingLeft={1}
@@ -268,17 +405,32 @@ export function ClawSidebar(props: {
                 paddingTop={1}
                 paddingBottom={1}
               >
-                <For each={thinkingLines()}>
-                  {(line, i) => (
-                    <text fg={theme.textMuted} wrapMode="word">
-                      {line || " "}
-                    </text>
-                  )}
-                </For>
+                <Show
+                  when={thinkingLines().length > 0}
+                  fallback={
+                    <box flexDirection="row" gap={1} alignItems="center">
+                      <Spinner color={theme.textMuted} />
+                      <text fg={theme.textMuted}>Awaiting response...</text>
+                    </box>
+                  }
+                >
+                  <For each={thinkingLines()}>
+                    {(line, i) => (
+                      <text fg={theme.textMuted} wrapMode="word">
+                        {line || " "}
+                      </text>
+                    )}
+                  </For>
+                </Show>
               </box>
-              <text fg={theme.textMuted}>
-                <span style={{ fg: theme.text }}>Last {MAX_THINKING_LINES} lines</span>
-              </text>
+
+              {/* Streaming indicator */}
+              <box flexDirection="row" gap={1}>
+                <text fg="#00ddff">{">"}</text>
+                <text fg={theme.textMuted}>
+                  <span style={{ fg: theme.text }}>Live output</span> · {thinkingLines().length} lines
+                </text>
+              </box>
             </box>
           </Show>
 
