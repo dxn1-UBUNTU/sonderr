@@ -2,3 +2,12 @@ loot/
 /tmp/recon_*
 *.log
 .DS_Store
+
+# Sonderr local
+.bun/
+.cache/
+.gh.json
+node_modules/
+dist/
+.DS_Store
+*.log
