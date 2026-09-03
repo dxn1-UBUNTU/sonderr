@@ -1,10 +1,10 @@
 import { LayerNode } from "@sonderr/core/effect/layer-node"
-import path from "path"
 import { InstanceState } from "@/effect/instance-state"
 import { EffectBridge } from "@/effect/bridge"
 import type { InstanceContext } from "@/project/instance-context"
 import { Effect, Layer, Context, Schema } from "effect"
 import { Config } from "@/config/config"
+import { RuntimeFlags } from "@/effect/runtime-flags"
 import { MCP } from "../mcp"
 import { Skill } from "../skill"
 import { legacyReviewCommand, reviewCommand } from "@/sonderr/review/command" // sonderr_change
@@ -12,6 +12,7 @@ import { apply as applyOverride, type Override } from "@/sonderr/command/overrid
 import PROMPT_INITIALIZE from "./template/initialize.txt"
 import { LegacyEvent } from "@sonderr/schema/legacy-event"
 import { SessionResume } from "@/sonderr/session-resume" // sonderr_change
+import { SonderrHiveConfig } from "@/sonderr/hive/config"
 
 type State = {
   commands: Record<string, Info>
@@ -57,34 +58,7 @@ export interface Interface {
   readonly list: () => Effect.Effect<Info[]>
 }
 
-// sonderr_change start - skills can share names with slash commands
-function fromSkill(item: Skill.Info, dir?: string): Info {
-  return {
-    name: item.name,
-    description: item.description,
-    source: "skill",
-    trusted: item.trusted === true,
-    get template() {
-      if (!dir) return item.content
-      return [
-        item.content,
-        "",
-        `Base directory for this skill: ${dir}`,
-        "Relative paths in this skill (e.g., scripts/, references/) are relative to this base directory.",
-      ].join("\n")
-    },
-    hints: [],
-  }
-}
-
-function directory(item: Skill.Info) {
-  return item.location === "<built-in>" ? undefined : path.dirname(item.location)
-}
-
-function skillName(name: string) {
-  return name.endsWith(":skill") ? name.slice(0, -6) : undefined
-}
-
+// sonderr_change start - skills are loaded via the `skill` tool, not slash commands
 function mcpName(name: string) {
   return name.endsWith(":mcp") ? name.slice(0, -4) : undefined
 }
@@ -155,35 +129,66 @@ const layer = Layer.effect(
         }
       }
 
-      for (const item of yield* skill.all()) {
-        if (commands[item.name]) continue
-        commands[item.name] = fromSkill(item, directory(item)) // sonderr_change
-      }
-
-      // sonderr_change start - apply deferred overrides to their registered source
       for (const item of overrides) {
-        const skillTarget = skillName(item.name)
-        if (skillTarget) {
-          const found = yield* skill.get(skillTarget)
-          if (found) {
-            if (commands[skillTarget]?.source !== "skill") {
-              commands[item.name] = fromSkill(found, directory(found))
-              applyOverride(commands, item.name, item.command, hints) // sonderr_change
-            } else {
-              applyOverride(commands, skillTarget, item.command, hints) // sonderr_change
-            }
-          }
-          continue
-        }
-        const mcpTarget = mcpName(item.name)
-        if (mcpTarget) {
-          if (commands[mcpTarget]?.source !== "mcp") continue
-          applyOverride(commands, mcpTarget, item.command, hints) // sonderr_change
+        const prompt = mcpName(item.name)
+        if (prompt) {
+          applyOverride(commands, prompt, item.command, hints) // sonderr_change
           continue
         }
         applyOverride(commands, item.name, item.command, hints) // sonderr_change
       }
-      // sonderr_change end
+
+      commands["skills"] = {
+        name: "skills",
+        description: "list available skills",
+        source: "command",
+        get template() {
+          return bridge.promise(
+            Skill.Service.pipe(
+              Effect.flatMap((skill) => skill.all()),
+              Effect.map((items) =>
+                items
+                  .map(
+                    (item) =>
+                      `- ${item.name}${item.trusted === true ? " (trusted)" : ""}: ${item.description ?? "no description"}`,
+                  )
+                  .join("\n") || "No skills available.",
+              ),
+            ),
+          )
+        },
+        hints: [],
+      }
+
+      commands["hive"] = {
+        name: "hive",
+        description: "show hive swarm status and configuration",
+        source: "command",
+        get template() {
+          return bridge.promise(
+            Effect.gen(function* () {
+              const flags = yield* RuntimeFlags.Service
+              const cfg = SonderrHiveConfig.resolve(flags)
+              const lines = [
+                `Hive mode: ${cfg.enabled ? cfg.mode : "off"}`,
+                `Max agents: ${cfg.maxAgents}`,
+                `Max concurrent: ${cfg.maxConcurrent}`,
+                "",
+                "Available tools:",
+                "- hive_send: publish a memo to the hive swarm bus",
+                "- hive_recall: read recent memos from the hive bus",
+                "",
+                "Environment:",
+                `- SONDERR_HIVE_MODE=${process.env["SONDERR_HIVE_MODE"] ?? "(unset)"}`,
+                `- SONDERR_HIVE_MAX_AGENTS=${process.env["SONDERR_HIVE_MAX_AGENTS"] ?? "(unset)"}`,
+                `- SONDERR_HIVE_MAX_CONCURRENT=${process.env["SONDERR_HIVE_MAX_CONCURRENT"] ?? "(unset)"}`,
+              ]
+              return lines.join("\n")
+            }),
+          )
+        },
+        hints: [],
+      }
 
       return {
         commands,
@@ -200,16 +205,6 @@ const layer = Layer.effect(
       if (alias) return alias // sonderr_change
 
       // sonderr_change start
-      const target = skillName(name)
-      if (target) {
-        const exact = s.commands[target]
-        if (exact?.source === "skill") return exact
-        const item = yield* skill.get(target)
-        if (item) return fromSkill(item, directory(item))
-        return undefined
-      }
-      // sonderr_change end
-      // sonderr_change start
       const prompt = mcpName(name)
       if (prompt) {
         const cmd = s.commands[prompt]
@@ -219,18 +214,10 @@ const layer = Layer.effect(
       return undefined // sonderr_change
     })
 
-    // sonderr_change start
     const list = Effect.fn("Command.list")(function* () {
       const s = yield* InstanceState.get(state)
-      const result = Object.values(s.commands)
-      const names = new Set(result.map((item) => item.name))
-      for (const item of yield* skill.all()) {
-        if (s.commands[item.name]?.source === "skill" || s.commands[`${item.name}:skill`]?.source === "skill") continue
-        if (names.has(item.name)) result.push(fromSkill(item, directory(item)))
-      }
-      return result
+      return Object.values(s.commands)
     })
-    // sonderr_change end
 
     return Service.of({ get, list })
   }),
