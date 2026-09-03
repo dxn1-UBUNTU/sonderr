@@ -6,7 +6,7 @@ export type InternalTuiPlugin = BuiltinTuiPlugin
 
 // sonderr_change start
 export function internalTuiPlugins(
-  flags: Pick<RuntimeFlags.Info, "experimentalEventSystem" | "experimentalSessionSwitcher">,
+  flags: Pick<RuntimeFlags.Info, "experimentalEventSystem" | "experimentalSessionSwitcher" | "experimentalHive">,
 ): InternalTuiPlugin[] {
   return withSonderrTuiPlugins(
     createBuiltinPlugins({
@@ -14,5 +14,4 @@ export function internalTuiPlugins(
     }),
     flags,
   )
-  // sonderr_change end
 }

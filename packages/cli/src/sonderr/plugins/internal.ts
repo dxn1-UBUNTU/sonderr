@@ -16,6 +16,7 @@ import Remote from "@/sonderr/plugins/remote"
 import Reload from "@/sonderr/plugins/reload"
 import SessionSwitcher from "@/sonderr/plugins/session-switcher"
 import SessionV2Debug from "@/sonderr/plugins/session-v2-debug"
+import HivePalette from "@/sonderr/plugins/hive-palette"
 import type { RuntimeFlags } from "@/effect/runtime-flags"
 
 const plugins = [
@@ -38,12 +39,13 @@ const plugins = [
 
 export function withSonderrTuiPlugins(
   builtins: BuiltinTuiPlugin[],
-  flags: Pick<RuntimeFlags.Info, "experimentalEventSystem" | "experimentalSessionSwitcher">,
+  flags: Pick<RuntimeFlags.Info, "experimentalEventSystem" | "experimentalSessionSwitcher" | "experimentalHive">,
 ) {
   return [
     ...plugins,
     ...(flags.experimentalEventSystem ? [SessionV2Debug] : []),
     ...(flags.experimentalSessionSwitcher ? [SessionSwitcher] : []),
+    ...(flags.experimentalHive ? [HivePalette] : []),
     ...builtins,
   ]
 }
