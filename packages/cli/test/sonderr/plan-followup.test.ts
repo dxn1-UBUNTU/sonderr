@@ -13,7 +13,7 @@ import { ModelV2 } from "@sonderr/core/model"
 import { EventV2 } from "@sonderr/core/event"
 import { LayerNode } from "@sonderr/core/effect/layer-node"
 import { SessionProjector } from "@sonderr/core/session/projector"
-import { formatTodos, generateHandover, PlanFollowup, PlanFollowupRuntime } from "../../src/sonderr/plan-followup"
+import { formatAcceptance, formatTodos, generateHandover, PlanFollowup, PlanFollowupRuntime } from "../../src/sonderr/plan-followup"
 import { Instance } from "../../src/sonderr/instance"
 import * as SonderrInstance from "../../src/sonderr/instance"
 import { Provider } from "../../src/provider/provider"
@@ -1724,6 +1724,31 @@ describe("plan follow-up", () => {
     ]
     const result = formatTodos(todos)
     expect(result).toBe("- [x] Set up project\n- [~] Write code\n- [ ] Add tests\n- [-] Dropped task")
+  })
+
+  test("formatAcceptance - returns empty string for no todos", () => {
+    expect(formatAcceptance([])).toBe("")
+  })
+
+  test("formatAcceptance - returns empty string when all todos are done", () => {
+    expect(
+      formatAcceptance([
+        { content: "Done", status: "completed", priority: "high" },
+        { content: "Skipped", status: "cancelled", priority: "low" },
+      ]),
+    ).toBe("")
+  })
+
+  test("formatAcceptance - renders pending todos as verify criteria with complexity", () => {
+    const result = formatAcceptance([
+      { content: "Add auth", status: "pending", priority: "high", complexity: "M1" },
+      { content: "Wire up tests", status: "in_progress", priority: "medium" },
+      { content: "Drop legacy", status: "completed", priority: "low" },
+    ])
+    expect(result).toContain("Before reporting this complete")
+    expect(result).toContain("- [ ] [M1] Add auth")
+    expect(result).toContain("- [ ] Wire up tests")
+    expect(result).not.toContain("Drop legacy")
   })
 
   test("generateHandover - returns empty string on LLM stream failure", () =>

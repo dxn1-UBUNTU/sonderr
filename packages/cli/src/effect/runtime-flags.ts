@@ -55,6 +55,9 @@ export class Service extends ConfigService.Service<Service>()("@sonderr/RuntimeF
   experimentalPlanMode: enabledByExperimental("SONDERR_EXPERIMENTAL_PLAN_MODE"),
   experimentalCodeMode: enabledByExperimental("SONDERR_EXPERIMENTAL_CODE_MODE"),
   experimentalEventSystem: enabledByExperimental("SONDERR_EXPERIMENTAL_EVENT_SYSTEM"),
+  // sonderr_change start - SONDERR-HIVE swarm mode
+  experimentalHive: enabledByExperimental("SONDERR_EXPERIMENTAL_HIVE"),
+  // sonderr_change end
   experimentalSessionSwitcher: enabledByExperimental("SONDERR_EXPERIMENTAL_SESSION_SWITCHER"), // sonderr_change
   experimentalWorkspaces: enabledByExperimental("SONDERR_EXPERIMENTAL_WORKSPACES"),
   experimentalIconDiscovery: enabledByExperimental("SONDERR_EXPERIMENTAL_ICON_DISCOVERY"),

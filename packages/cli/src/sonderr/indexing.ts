@@ -18,7 +18,6 @@ import { makeRuntime } from "@/effect/run-service"
 import { registerDisposer } from "@/effect/instance-registry"
 import { Global } from "@sonderr/core/global"
 import * as Log from "@sonderr/core/util/log"
-import { NamedError } from "@sonderr/core/util/error"
 import type { WorkspaceV2 } from "@sonderr/core/workspace"
 import { WorkspaceContext } from "@/control-plane/workspace-context"
 import { Event as IndexingEvent, Warning as IndexingWarningEvent } from "./indexing-event"
@@ -38,9 +37,18 @@ const unsafeRoot = () => disabledIndexingStatus(message)
 const noConsent = () =>
   disabledIndexingStatus("Codebase indexing is disabled until you enable it for this project in Sonderr Settings.")
 
-export const IndexingModelError = NamedError.create("IndexingModelError", {
+export class IndexingModelError extends Schema.TaggedErrorClass<IndexingModelError>()("IndexingModelError", {
   model: Schema.String,
-})
+  cause: Schema.optional(Schema.Defect()),
+}) {
+  override get message() {
+    return `Invalid indexing model: ${this.model}`
+  }
+
+  static isInstance(input: unknown): input is IndexingModelError {
+    return input instanceof IndexingModelError
+  }
+}
 
 const baselineDirectory = Effect.fn("SonderrIndexing.baselineDirectory")(function* (dir: string) {
   if (Instance.project.vcs !== "git") return undefined
@@ -58,7 +66,7 @@ const baselineDirectory = Effect.fn("SonderrIndexing.baselineDirectory")(functio
 
 function failed(err: unknown): z.infer<typeof IndexingStatus> {
   const base = IndexingModelError.isInstance(err)
-    ? `Invalid indexing.model "${err.data.model}"`
+    ? `Invalid indexing.model "${err.model}"`
     : err instanceof Error
       ? err.message
       : String(err)

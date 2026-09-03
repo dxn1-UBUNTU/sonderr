@@ -14,6 +14,9 @@ import PROMPT_LING from "./prompt/ling.txt" // sonderr_change
 import PROMPT_META from "./prompt/meta.txt"
 import PROMPT_FABLE from "./prompt/sonderr-system-prompt.md" // sonderr_change - full Sonderr prompt (default for older/unknown models)
 
+import { Todo } from "./todo" // sonderr_change
+import { SessionID } from "./schema" // sonderr_change
+
 import PROMPT_CODEX from "./prompt/codex.txt"
 import PROMPT_TRINITY from "./prompt/trinity.txt"
 import type { Provider } from "@/provider/provider"
@@ -95,7 +98,7 @@ export function provider(model: Provider.Model) {
 }
 
 export interface Interface {
-  readonly environment: (model: Provider.Model, editorContext?: EditorContext) => Effect.Effect<string[]> // sonderr_change
+  readonly environment: (model: Provider.Model, sessionID: SessionID, editorContext?: EditorContext) => Effect.Effect<string[]> // sonderr_change
   readonly skills: (agent: Agent.Info) => Effect.Effect<string | undefined>
   readonly mcp: (agent: Agent.Info, permission?: PermissionV1.Ruleset) => Effect.Effect<string | undefined>
 }
@@ -114,10 +117,15 @@ const layer = Layer.effect(
       // sonderr_change start
       environment: Effect.fn("SystemPrompt.environment")(function* (
         model: Provider.Model,
+        sessionID: SessionID, // sonderr_change
         editorContext?: EditorContext,
       ) {
         const ctx = yield* InstanceState.context
         const cfg = yield* config.get()
+        // sonderr_change start - query todos to conditionally inject acceptance guidance
+        const todos = yield* Todo.Service
+        const todoList = yield* todos.get(sessionID)
+        // sonderr_change end
         const references = yield* SonderrReference.list(
           {
             references: cfg.references ?? cfg.reference ?? {},
@@ -128,6 +136,8 @@ const layer = Layer.effect(
         ).pipe(Effect.map((references) => references.filter((reference) => reference.description !== undefined)))
         return [
           ...SonderrSystemPrompt.environment({ ctx, model, editor: editorContext }),
+          // sonderr_change - inject acceptance guidance only when there are pending todos
+          SonderrSystemPrompt.acceptanceGuidance(todoList),
           references.length === 0
             ? undefined
             : [
@@ -194,7 +204,7 @@ const locationServiceMapNode = LayerNode.make({
 export const node = LayerNode.make({
   service: Service,
   layer: layer,
-  deps: [Skill.node, MCP.node, Config.node, locationServiceMapNode], // sonderr_change
+  deps: [Skill.node, MCP.node, Config.node, locationServiceMapNode, Todo.node], // sonderr_change
 })
 
 export * as SystemPrompt from "./system"

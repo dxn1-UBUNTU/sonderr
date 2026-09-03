@@ -203,7 +203,7 @@ export const sonderrHandlers = HttpApiBuilder.group(InstanceHttpApi, "sonderr", 
       }).pipe(
         Effect.catch((err) => {
           if (SonderrAgent.RemoveError.isInstance(err))
-            return Effect.fail(new InvalidRequestError({ message: err.data.message }))
+            return Effect.fail(new InvalidRequestError({ message: err.message })) // sonderr_change — RemoveError migrated to TaggedErrorClass
           return Effect.die(err)
         }),
       )

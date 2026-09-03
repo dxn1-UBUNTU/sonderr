@@ -885,7 +885,7 @@ describe("indexing startup degradation", () => {
           const err = warn.mock.calls[0]?.[1]?.err
           expect(err).toBeDefined()
           expect(IndexingModelError.isInstance(err)).toBe(true)
-          expect(err.data.model).toBe("custom/model")
+          expect(err.model).toBe("custom/model")
         },
       })
     } finally {

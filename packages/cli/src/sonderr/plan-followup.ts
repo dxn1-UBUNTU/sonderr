@@ -104,6 +104,13 @@ export function formatTodos(todos: Todo.Info[]): string {
   return todos.map((t) => `- ${icons[t.status] ?? "[ ]"} ${t.content}`).join("\n")
 }
 
+export function formatAcceptance(todos: Todo.Info[]): string {
+  const pending = todos.filter((t) => t.status !== "completed" && t.status !== "cancelled")
+  if (!pending.length) return ""
+  const items = pending.map((t) => `- [ ] ${t.complexity ? `[${t.complexity}] ` : ""}${t.content}`)
+  return `Before reporting this complete, run typecheck and the relevant tests on your changes and confirm each criterion below is satisfied.\n\n${items.join("\n")}`
+}
+
 export async function generateHandover(input: {
   messages: MessageV2.WithParts[]
   model: MessageV2.User["model"]
@@ -427,7 +434,11 @@ export namespace PlanFollowup {
               `Plan file: ${file}\nRead this file first and treat it as the source of truth for implementation.`,
             ]
             if (handover) sections.push(`## Handover from Planning Session\n\n${handover}`)
-            if (todoList) sections.push(`## Todo List\n\n${todoList}`)
+            if (todoList) {
+              sections.push(`## Todo List\n\n${todoList}`)
+              const acceptance = formatAcceptance(todos)
+              if (acceptance) sections.push(`## Acceptance & Verification\n\n${acceptance}`)
+            }
             return sections.join("\n\n")
           }
 

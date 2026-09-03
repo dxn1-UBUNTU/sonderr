@@ -6,6 +6,7 @@ import fs from "node:fs" // sonderr_change
 import { SessionV1 } from "@sonderr/core/v1/session"
 import os from "os"
 import { SonderrSessionPrompt } from "@/sonderr/session/prompt" // sonderr_change
+import { formatAcceptance } from "@/sonderr/plan-followup" // sonderr_change
 import { SKILL_SHELL_DISABLED, SKILL_SHELL_UNTRUSTED } from "@/sonderr/skills/display" // sonderr_change
 import { SonderrSessionMessageOrder } from "@/sonderr/session/message-order" // sonderr_change
 import { SonderrSessionPromptQueue } from "@/sonderr/session/prompt-queue" // sonderr_change
@@ -85,6 +86,7 @@ import * as SonderrConfiguredReference from "@/sonderr/reference" // sonderr_cha
 import { eq } from "drizzle-orm"
 import { SessionTable } from "@sonderr/core/session/sql"
 import { SessionReminders } from "./reminders"
+import { Todo } from "./todo" // sonderr_change
 import { SessionTools } from "./tools"
 import { LLMEvent } from "@sonderr/llm"
 import { RepositoryCache } from "@sonderr/core/repository-cache" // sonderr_change
@@ -176,6 +178,7 @@ export const layer = Layer.effect(
     const scope = yield* Scope.Scope
     const instruction = yield* Instruction.Service
     const state = yield* SessionRunState.Service
+    const todo = yield* Todo.Service // sonderr_change
     const revert = yield* SessionRevert.Service
     const summary = yield* SessionSummary.Service
     const sys = yield* SystemPrompt.Service
@@ -1463,6 +1466,7 @@ export const layer = Layer.effect(
 
     // sonderr_change — mutable close-reason per session, set by runLoop and read by loop
     const closeReasons = new Map<string, SonderrSession.CloseReason>()
+    const acceptanceInjected = new Set<string>() // sonderr_change
 
     // sonderr_change start - retain request-scoped snapshot initialization policy
     const runLoop: (input: LoopInput) => Effect.Effect<MessageV2.WithParts, NotFoundError> = Effect.fn(
@@ -1523,6 +1527,33 @@ export const layer = Layer.effect(
           lastAssistantMsg?.parts.some(
             (part) => part.type === "tool" && !part.metadata?.providerExecuted && !isOrphanedInterruptedTool(part),
           ) ?? false
+
+        // sonderr_change start - formatAcceptance gate: inject acceptance criteria from todos before next model call
+        if (!acceptanceInjected.has(sessionID)) {
+          const todos = yield* todo.get(sessionID)
+          const acceptance = formatAcceptance(todos)
+          if (acceptance) {
+            const lastUserMsg = msgs.findLast(
+              (m) => m.info.role === "user" && m.info.id === lastUser.id,
+            )
+            const hasAcceptance = lastUserMsg?.parts.some(
+              (p) => p.type === "text" && p.text.includes("Acceptance & Verification"),
+            )
+            if (!hasAcceptance && lastUserMsg) {
+              yield* sessions.updatePart({
+                id: PartID.ascending(),
+                messageID: lastUser.id,
+                sessionID,
+                type: "text",
+                text: acceptance,
+                synthetic: true,
+              })
+              acceptanceInjected.add(sessionID)
+              yield* Effect.logInfo("injected acceptance criteria", { "session.id": sessionID })
+            }
+          }
+        }
+        // sonderr_change end
 
         // sonderr_change start - plan_exit is a hard stop before another model call
         if (
@@ -1729,7 +1760,7 @@ export const layer = Layer.effect(
           // sonderr_change start - persistently prune stale tool outputs when payload is already large
           const [skills, env, mem, instructions, mcpInstructions] = yield* Effect.all([
             sys.skills(agent),
-            sys.environment(model, lastUser.editorContext), // sonderr_change
+            sys.environment(model, sessionID, lastUser.editorContext), // sonderr_change
             SonderrSessionPrompt.memoryInject({ ctx, sessionID, record: step === 1, cache: memoryCache }), // sonderr_change
             instruction.system().pipe(Effect.orDie),
             sys.mcp(agent, session.permission),
@@ -2661,6 +2692,7 @@ export const node = LayerNode.make({
     RuntimeFlags.node,
     Database.node,
     Question.node, // sonderr_change
+    Todo.node, // sonderr_change
     repositoryCacheNode, // sonderr_change
   ],
 })

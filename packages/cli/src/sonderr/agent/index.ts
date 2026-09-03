@@ -1,6 +1,5 @@
 // sonderr_change - new file
 import { Permission } from "@/permission"
-import { NamedError } from "@sonderr/core/util/error"
 import { Glob } from "@sonderr/core/util/glob"
 import { Wildcard } from "@sonderr/core/util/wildcard"
 import * as Truncate from "../../tool/truncate"
@@ -649,10 +648,15 @@ export function patchAgents(
   hardenSystemAgents(agents)
 }
 
-export const RemoveError = NamedError.create("AgentRemoveError", {
-  name: Schema.String,
-  message: Schema.String,
-})
+export class RemoveError extends Schema.TaggedErrorClass<RemoveError>()("RemoveError", {
+  agentName: Schema.String,
+  message: Schema.optional(Schema.String),
+  cause: Schema.optional(Schema.Defect()),
+}) {
+  static isInstance(input: unknown): input is RemoveError {
+    return input instanceof RemoveError
+  }
+}
 
 /**
  * Remove a custom agent by deleting its markdown source file, removing it from
@@ -667,12 +671,12 @@ export async function remove(input: {
   worktree?: string
   scope?: "global" | "project"
 }) {
-  if (!input.agent) throw new RemoveError({ name: input.name, message: "agent not found" })
-  if (input.agent.native) throw new RemoveError({ name: input.name, message: "cannot remove native agent" })
+  if (!input.agent) throw new RemoveError({ agentName: input.name, message: "agent not found" })
+  if (input.agent.native) throw new RemoveError({ agentName: input.name, message: "cannot remove native agent" })
   // Prevent removal of organization-managed agents
   if (input.agent.source === "organization" || input.agent.options?.source === "organization")
     throw new RemoveError({
-      name: input.name,
+      agentName: input.name,
       message: "cannot remove organization agent — manage it from the cloud dashboard",
     })
 
@@ -742,7 +746,7 @@ export async function remove(input: {
     found = true
   }
 
-  if (!found) throw new RemoveError({ name: input.name, message: "no agent file found on disk" })
+  if (!found) throw new RemoveError({ agentName: input.name, message: "no agent file found on disk" })
 }
 
 async function removeConfigAgent(name: string, sources: SonderrConfigSources.Source[]) {

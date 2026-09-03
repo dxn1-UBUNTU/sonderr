@@ -9,6 +9,7 @@ import { MemoryMarker } from "@/sonderr/memory/marker"
 import type { Provider } from "@/provider/provider"
 import type { InstanceContext } from "@/project/instance-context"
 import * as Log from "@sonderr/core/util/log"
+import type { Todo } from "@/session/todo" // sonderr_change
 
 const log = Log.create({ service: "sonderr.system-prompt" })
 
@@ -32,6 +33,28 @@ export namespace SonderrSystemPrompt {
         `</env>`,
       ].join("\n"),
     ]
+  }
+
+  /**
+   * Returns system-prompt guidance for the acceptance & verification gate.
+   * Only emits guidance when there are pending (non-completed, non-cancelled) todos.
+   * The agent sees the formatted criteria in the user message (injected by the
+   * turn-end gate in SessionPrompt) and must self-verify before reporting completion.
+   */
+  export function acceptanceGuidance(todos: Todo.Info[]): string | undefined {
+    const pending = todos.filter((t) => t.status !== "completed" && t.status !== "cancelled")
+    if (!pending.length) return undefined
+    return [
+      "## Acceptance & Verification",
+      "",
+      "Before reporting this task complete, you MUST:",
+      "1. Run typecheck (`bun run typecheck`) and confirm zero errors in affected packages.",
+      "2. Run the relevant tests and confirm they pass.",
+      "3. Verify each acceptance criterion listed in the user message above is satisfied.",
+      "4. Do NOT call plan_exit or report complete until all criteria pass.",
+      "",
+      "If any criterion fails, continue working until it passes — you may not hand off to a planning session until verification is green.",
+    ].join("\n")
   }
 
   export function memoryBlocks(input: {

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { SystemPrompt } from "../../src/session/system"
+import { SonderrSystemPrompt } from "../../src/sonderr/system-prompt" // sonderr_change
 import { environmentDetails } from "../../src/sonderr/editor-context"
 import { ProviderTest } from "../fake/provider"
 
@@ -146,5 +147,32 @@ describe("environmentDetails", () => {
     const result = environmentDetails({}, new Date("2026-08-24T12:34:56.123Z"))
 
     expect(result).toContain("Message time: 2026-08-24T12:34:56Z")
+  })
+})
+
+describe("SonderrSystemPrompt.acceptanceGuidance", () => {
+  test("returns undefined when all todos are completed", () => {
+    const result = SonderrSystemPrompt.acceptanceGuidance([
+      { content: "Done", status: "completed", priority: "high" },
+    ])
+    expect(result).toBeUndefined()
+  })
+
+  test("returns undefined when all todos are cancelled", () => {
+    const result = SonderrSystemPrompt.acceptanceGuidance([
+      { content: "Skipped", status: "cancelled", priority: "low" },
+    ])
+    expect(result).toBeUndefined()
+  })
+
+  test("returns guidance when there are pending todos", () => {
+    const result = SonderrSystemPrompt.acceptanceGuidance([
+      { content: "Add auth", status: "pending", priority: "high", complexity: "M1" },
+      { content: "Wire up tests", status: "in_progress", priority: "medium" },
+    ])
+    expect(result).toContain("Acceptance & Verification")
+    expect(result).toContain("Before reporting this task complete")
+    expect(result).toContain("typecheck")
+    expect(result).toContain("tests")
   })
 })
