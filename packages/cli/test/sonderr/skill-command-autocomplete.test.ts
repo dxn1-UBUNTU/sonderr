@@ -80,16 +80,18 @@ Run: !\`printf hi\`
      ),
    )
 
-   it.live("hive command exists", () =>
-     provideTmpdirInstance(
-       (dir) =>
-         Effect.gen(function* () {
-           const command = yield* Command.Service
-           const hive = yield* command.get("hive")
+  it.live("hive is a TUI slash command, not a command registry entry", () =>
+    provideTmpdirInstance(
+      (dir) =>
+        Effect.gen(function* () {
+          const command = yield* Command.Service
+          const hive = yield* command.get("hive")
+          const sonDerrHive = yield* command.get("SONDERR-HIVE")
 
-           expect(hive?.name).toBe("hive")
-         }),
-       { git: true },
-     ),
-   )
+          expect(hive).toBeUndefined()
+          expect(sonDerrHive).toBeUndefined()
+        }),
+      { git: true },
+    ),
+  )
 })

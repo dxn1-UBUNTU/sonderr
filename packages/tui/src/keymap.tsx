@@ -51,6 +51,8 @@ function isVisiblePaletteCommand(command: Command) {
   return command.hidden !== true && command.name !== COMMAND_PALETTE_COMMAND
 }
 
+export { isVisiblePaletteCommand }
+
 export function createSonderrModeStack(keymap: OpenTuiKeymap) {
   keymap.setData(SONDERR_MODE_KEY, SONDERR_BASE_MODE)
 

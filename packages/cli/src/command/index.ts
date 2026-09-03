@@ -4,7 +4,6 @@ import { EffectBridge } from "@/effect/bridge"
 import type { InstanceContext } from "@/project/instance-context"
 import { Effect, Layer, Context, Schema } from "effect"
 import { Config } from "@/config/config"
-import { RuntimeFlags } from "@/effect/runtime-flags"
 import { MCP } from "../mcp"
 import { Skill } from "../skill"
 import { legacyReviewCommand, reviewCommand } from "@/sonderr/review/command" // sonderr_change
@@ -12,7 +11,6 @@ import { apply as applyOverride, type Override } from "@/sonderr/command/overrid
 import PROMPT_INITIALIZE from "./template/initialize.txt"
 import { LegacyEvent } from "@sonderr/schema/legacy-event"
 import { SessionResume } from "@/sonderr/session-resume" // sonderr_change
-import { SonderrHiveConfig } from "@/sonderr/hive/config"
 
 type State = {
   commands: Record<string, Info>
@@ -155,36 +153,6 @@ const layer = Layer.effect(
                   .join("\n") || "No skills available.",
               ),
             ),
-          )
-        },
-        hints: [],
-      }
-
-      commands["hive"] = {
-        name: "hive",
-        description: "show hive swarm status and configuration",
-        source: "command",
-        get template() {
-          return bridge.promise(
-            Effect.gen(function* () {
-              const flags = yield* RuntimeFlags.Service
-              const cfg = SonderrHiveConfig.resolve(flags)
-              const lines = [
-                `Hive mode: ${cfg.enabled ? cfg.mode : "off"}`,
-                `Max agents: ${cfg.maxAgents}`,
-                `Max concurrent: ${cfg.maxConcurrent}`,
-                "",
-                "Available tools:",
-                "- hive_send: publish a memo to the hive swarm bus",
-                "- hive_recall: read recent memos from the hive bus",
-                "",
-                "Environment:",
-                `- SONDERR_HIVE_MODE=${process.env["SONDERR_HIVE_MODE"] ?? "(unset)"}`,
-                `- SONDERR_HIVE_MAX_AGENTS=${process.env["SONDERR_HIVE_MAX_AGENTS"] ?? "(unset)"}`,
-                `- SONDERR_HIVE_MAX_CONCURRENT=${process.env["SONDERR_HIVE_MAX_CONCURRENT"] ?? "(unset)"}`,
-              ]
-              return lines.join("\n")
-            }),
           )
         },
         hints: [],

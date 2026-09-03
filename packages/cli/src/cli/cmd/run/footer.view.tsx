@@ -35,6 +35,8 @@ import {
   formatKeySequence,
   useBindings,
   useKeymapSelector,
+  useSonderrKeymap,
+  isVisiblePaletteCommand,
   type OpenTuiKeymap,
 } from "@sonderr/tui/keymap"
 import type {
@@ -367,30 +369,54 @@ export function RunFooterView(props: RunFooterViewProps) {
 
     openTab(next.sessionID)
   }
-  const composer = createPromptState({
-    directory: props.directory,
-    findFiles: props.findFiles,
-    agents: props.agents,
-    resources: props.resources,
-    commands: props.commands,
-    tuiConfig: props.tuiConfig,
-    state: props.state,
-    view: promptView,
-    prompt,
-    width,
-    theme,
-    history: props.history,
-    onSubmit: props.onSubmit,
-    onCycle: props.onCycle,
-    onInterrupt: props.onInterrupt,
-    onEditorOpen: props.onEditorOpen,
-    onInputClear: props.onInputClear,
-    onExitRequest: props.onExitRequest,
-    onExit: props.onExit,
-    onSkillMenu: openSkillMenu,
-    onRows: props.onRows,
-    onStatus: props.onStatus,
+  const keymap = useSonderrKeymap()
+  const tuiSlashCommands = createMemo(() => {
+    if (!keymap) return []
+    const entries = keymap.getCommandEntries({
+      visibility: "reachable",
+      namespace: "palette",
+      filter: isVisiblePaletteCommand,
+    })
+    return entries.flatMap((entry) => {
+      const slashName = entry.command.slashName
+      if (typeof slashName !== "string" || !slashName) return []
+      const slashAliases = entry.command.slashAliases
+      return {
+        name: slashName,
+        aliases: Array.isArray(slashAliases)
+          ? slashAliases.filter((alias): alias is string => typeof alias === "string")
+          : [],
+        run: () => keymap.dispatchCommand(entry.command.name),
+      }
+    })
   })
+  const composer = createPromptState(
+    {
+      directory: props.directory,
+      findFiles: props.findFiles,
+      agents: props.agents,
+      resources: props.resources,
+      commands: props.commands,
+      tuiConfig: props.tuiConfig,
+      state: props.state,
+      view: promptView,
+      prompt,
+      width,
+      theme,
+      history: props.history,
+      onSubmit: props.onSubmit,
+      onCycle: props.onCycle,
+      onInterrupt: props.onInterrupt,
+      onEditorOpen: props.onEditorOpen,
+      onInputClear: props.onInputClear,
+      onExitRequest: props.onExitRequest,
+      onExit: props.onExit,
+      onSkillMenu: openSkillMenu,
+      onRows: props.onRows,
+      onStatus: props.onStatus,
+    },
+    tuiSlashCommands,
+  )
   const shell = createMemo(() => prompt() && composer.shell())
   const menu = createMemo(() => prompt() && composer.visible())
   const stateStatus = createMemo(() => props.state().status.trim())

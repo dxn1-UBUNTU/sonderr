@@ -80,6 +80,9 @@ type PromptInput = {
   onSkillMenu: () => void
   onRows: (rows: number) => void
   onStatus: (text: string) => void
+  // sonderr_change start - intercept TUI slash commands like /SONDERR-HIVE
+  tuiSlashCommands?: Accessor<Array<{ name: string; aliases: string[]; run: () => void }>>
+  // sonderr_change end
 }
 
 export type PromptState = {
@@ -282,7 +285,10 @@ export function RunPromptBody(props: {
   )
 }
 
-export function createPromptState(input: PromptInput): PromptState {
+export function createPromptState(
+  input: PromptInput,
+  tuiSlashCommands?: Accessor<Array<{ name: string; aliases: string[]; run: () => void }>>,
+): PromptState {
   const [shell, setShell] = createSignal(false)
   const placeholder = createMemo(() => {
     if (shell()) {
@@ -1196,6 +1202,18 @@ export function createPromptState(input: PromptInput): PromptState {
       input.onStatus("loading commands")
       return
     }
+
+    // sonderr_change start - intercept TUI slash commands and open their dialogs
+    if (parsed?.type === "command" && input.tuiSlashCommands) {
+      const tuiCommand = input.tuiSlashCommands().find(
+        (cmd) => cmd.name === parsed.command.name || cmd.aliases.includes(parsed.command.name),
+      )
+      if (tuiCommand?.run) {
+        tuiCommand.run()
+        return
+      }
+    }
+    // sonderr_change end
 
     const submit = command
       ? { ...next, command }
