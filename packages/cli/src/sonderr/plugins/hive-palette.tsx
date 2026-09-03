@@ -13,7 +13,6 @@ const tui: TuiPlugin = async (api) => {
         name: "hive.menu",
         title: "Hive",
         slashName: "SONDERR-HIVE",
-        slashAliases: ["hive"],
         category: "Sonderr",
         run() {
           api.ui.dialog.setSize("large")

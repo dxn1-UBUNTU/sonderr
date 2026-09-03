@@ -25,7 +25,7 @@ export function DialogHive() {
 
   const options: DialogSelectOption<string>[] = HIVE_COMMANDS.map((item) => ({
     title: item.title,
-    footer: `/hive ${item.value}`,
+    footer: `/SONDERR-HIVE ${item.value}`,
     category: "Hive",
     value: item.value,
   }))
@@ -40,7 +40,7 @@ export function DialogHive() {
         const workspace = project.workspace.current()
         const result = await sdk.client.tui.appendPrompt({
           ...route({ workspace, directory: undefined }),
-          text: `/hive ${option.value}`,
+          text: `/SONDERR-HIVE ${option.value}`,
         })
         if (!result.error) return
         toast.show({ variant: "error", message: `Hive menu failed: ${errorMessage(result.error)}` })

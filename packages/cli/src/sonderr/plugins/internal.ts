@@ -35,17 +35,17 @@ const plugins = [
   Sandbox,
   Remote,
   Reload,
+  HivePalette,
 ] satisfies BuiltinTuiPlugin[]
 
 export function withSonderrTuiPlugins(
   builtins: BuiltinTuiPlugin[],
-  flags: Pick<RuntimeFlags.Info, "experimentalEventSystem" | "experimentalSessionSwitcher" | "experimentalHive">,
+  flags: Pick<RuntimeFlags.Info, "experimentalEventSystem" | "experimentalSessionSwitcher">,
 ) {
   return [
     ...plugins,
     ...(flags.experimentalEventSystem ? [SessionV2Debug] : []),
     ...(flags.experimentalSessionSwitcher ? [SessionSwitcher] : []),
-    ...(flags.experimentalHive ? [HivePalette] : []),
     ...builtins,
   ]
 }
