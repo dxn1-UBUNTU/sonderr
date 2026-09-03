@@ -3,11 +3,9 @@ import { useDialog } from "@tui/ui/dialog"
 import { DialogAlert } from "@tui/ui/dialog-alert"
 import { DialogPrompt } from "@tui/ui/dialog-prompt"
 import { DialogSelect, type DialogSelectOption } from "@tui/ui/dialog-select"
-import { useProject } from "@tui/context/project"
-import { useSDK } from "@tui/context/sdk"
 import { useTheme } from "@tui/context/theme"
 import { useToast } from "@tui/ui/toast"
-import { createSignal } from "solid-js"
+import { createMemo, createSignal } from "solid-js"
 
 const MENU_OPTIONS = [
   { title: "Hive status", value: "status", description: "Show hive swarm status and configuration" },
@@ -18,36 +16,36 @@ const MENU_OPTIONS = [
 ] as const
 
 export function DialogHive() {
-  const sdk = useSDK()
-  const project = useProject()
   const dialog = useDialog()
   const { theme } = useTheme()
   const toast = useToast()
   const [enabled, setEnabled] = createSignal(false)
   const [keys, setKeys] = createSignal<string[]>([])
 
-  const options: DialogSelectOption<string>[] = MENU_OPTIONS.map((item) => ({
-    title: item.title,
-    footer: item.value,
-    category: "Hive",
-    value: item.value,
-  }))
+  const options = createMemo<DialogSelectOption<string>[]>(() =>
+    MENU_OPTIONS.map((item) => ({
+      title: item.title,
+      footer: item.value,
+      category: "Hive",
+      value: item.value,
+    })),
+  )
 
-  const handleAddKey = async () => {
+  const showMain = () => dialog.replace(() => <DialogHive />)
+
+  const handleAddKey = () => {
     dialog.replace(() => (
       <DialogPrompt
         title="Add Hive API Key"
         placeholder="Enter API key (e.g., sk-...)"
-        onConfirm={async (value) => {
-          dialog.clear()
-          if (!value.trim()) return
-          setKeys([...keys(), value.trim()])
-          toast.show({ variant: "success", message: `Added key: ${value.trim().slice(0, 8)}...` })
+        onConfirm={(value) => {
+          const trimmed = value.trim()
+          if (!trimmed) return
+          setKeys([...keys(), trimmed])
+          toast.show({ variant: "success", message: `Added key: ${trimmed.slice(0, 8)}...` })
+          showMain()
         }}
-        onCancel={() => {
-          dialog.clear()
-          dialog.replace(() => <DialogHive />)
-        }}
+        onCancel={showMain}
       />
     ))
   }
@@ -58,10 +56,7 @@ export function DialogHive() {
         <DialogAlert
           title="Hive API Keys"
           message={'No keys in the hive key pool yet.\nUse "Add API key" to add one.'}
-          onConfirm={() => {
-            dialog.clear()
-            dialog.replace(() => <DialogHive />)
-          }}
+          onConfirm={showMain}
         />
       ))
       return
@@ -75,10 +70,7 @@ export function DialogHive() {
           category: "Keys",
         }))}
         flat
-        onSelect={async () => {
-          dialog.clear()
-          dialog.replace(() => <DialogHive />)
-        }}
+        onSelect={() => showMain()}
       />
     ))
   }
@@ -96,15 +88,12 @@ export function DialogHive() {
       <DialogAlert
         title="Hive Status"
         message={lines.join("\n")}
-        onConfirm={() => {
-          dialog.clear()
-          dialog.replace(() => <DialogHive />)
-        }}
+        onConfirm={showMain}
       />
     ))
   }
 
-  const handleSelect = async (option: DialogSelectOption<string>) => {
+  const handleSelect = (option: DialogSelectOption<string>) => {
     switch (option.value) {
       case "status":
         handleStatus()
@@ -129,14 +118,8 @@ export function DialogHive() {
   return (
     <DialogSelect
       title={`Hive ${enabled() ? "(enabled)" : "(disabled)"}`}
-      options={options}
+      options={options()}
       flat
-      footer={
-        <text fg={theme.textMuted}>
-          Status:{" "}
-          {enabled() ? <text fg={theme.success}>enabled</text> : <text fg={theme.error}>disabled</text>}
-        </text>
-      }
       onSelect={handleSelect}
     />
   )
