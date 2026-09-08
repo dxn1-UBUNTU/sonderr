@@ -220,7 +220,7 @@ export function Session() {
   const session = createMemo(() => sync.session.get(route.sessionID))
   const isHiveSession = createMemo(() => {
     const agent = session()?.agent
-    if (!agent || !Flag.SONDERR_EXPERIMENTAL_HIVE) return false
+    if (!agent) return false
     return agent === "hive" || ["researcher", "coder", "reviewer", "tester", "documenter", "debugger", "architect"].includes(agent)
   })
   const location = createMemo(() => {
