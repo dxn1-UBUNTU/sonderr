@@ -1,6 +1,6 @@
 {
   "name": "@sonderr/upstream-merge",
-  "version": "7.5.6",
+  "version": "0.0.63",
   "private": true,
   "type": "module",
   "description": "Scripts for automating upstream sonderr merges into Sonderr",
