@@ -7,6 +7,7 @@ import { QuestionTool } from "./question"
 // sonderr_change start
 import { SuggestTool } from "../sonderr/suggestion/tool"
 import { Command } from "@/command"
+import { SonderrOrchestrator } from "../sonderr/hive"
 // sonderr_change end
 import { ShellTool } from "./shell"
 import { EditTool } from "./edit"
@@ -581,7 +582,8 @@ export const node = LayerNode.suspend(() =>
       SessionStatus.node,
       AgentManager.node,
       Notebook.node,
-      RepositoryCache.node,
+       RepositoryCache.node,
+       SonderrOrchestrator.node,
       SonderrSessions.node,
     ],
   }),

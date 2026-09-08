@@ -1,5 +1,6 @@
 import type { HiveID, HiveMemo } from "./model"
 import { SONDERR_HIVE_TTL_MS } from "./model"
+import { HiveEvents } from "./events"
 
 type Subscriber = (memo: HiveMemo) => void
 
@@ -26,6 +27,13 @@ export class SonderrHiveBus {
     list.push(memo)
     this.memos.set(input.channel, list)
     this.subs.get(input.channel)?.forEach((sub) => sub(memo))
+    HiveEvents.memoSent({
+      hiveID: this.hiveID,
+      channel: input.channel,
+      from: input.from,
+      role: input.role,
+      text: input.text,
+    })
     return memo
   }
 
@@ -44,7 +52,17 @@ export class SonderrHiveBus {
     }
     seen.sort((a, b) => a.ts - b.ts)
     const limit = input.limit ?? seen.length
-    return seen.slice(Math.max(0, seen.length - limit), seen.length)
+    const result = seen.slice(Math.max(0, seen.length - limit), seen.length)
+    for (const memo of result) {
+      HiveEvents.memoRecalled({
+        hiveID: this.hiveID,
+        channel: memo.channel,
+        from: memo.from,
+        role: memo.role,
+        text: memo.text,
+      })
+    }
+    return result
   }
 
   subscribe(channel: string, sub: Subscriber): () => void {

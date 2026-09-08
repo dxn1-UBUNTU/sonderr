@@ -1,6 +1,6 @@
 # @sonderr/cli
 
-## 7.5.6
+## 0.0.63
 
 ### Minor Changes
 

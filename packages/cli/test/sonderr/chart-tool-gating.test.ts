@@ -16,6 +16,8 @@ const tools = {
   image: stub("image"),
   notify: stub("notify"),
   send: stub("send_file"),
+  hiveSend: stub("hive_send"),
+  hiveRecall: stub("hive_recall"),
 }
 
 function ids(client: string) {

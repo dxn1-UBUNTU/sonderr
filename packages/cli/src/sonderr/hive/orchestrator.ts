@@ -1,6 +1,9 @@
 import { Context, Effect, Layer } from "effect"
 import { LayerNode } from "@sonderr/core/effect/layer-node"
+import { Session } from "@/session/session"
+import { SessionID } from "@/session/schema"
 import { SonderrHiveBus } from "./bus"
+import { HiveEvents } from "./events"
 import type { HiveID, HiveConfig, HiveMemo } from "./model"
 
 export interface Interface {
@@ -18,7 +21,7 @@ export interface Interface {
     hiveID: HiveID,
     input: { channel?: string; since?: number; limit?: number },
   ) => Effect.Effect<HiveMemo[]>
-  readonly spawn: (hiveID: HiveID, input: { agent: string; prompt: string }) => Effect.Effect<string>
+  readonly spawn: (hiveID: HiveID, input: { agent: string; prompt: string; parentSessionID: string }) => Effect.Effect<string>
   readonly runTurn: (hiveID: HiveID, prompt: string, parts: unknown) => Effect.Effect<string>
   readonly cancel: (hiveID: HiveID) => Effect.Effect<void>
 }
@@ -33,9 +36,10 @@ export const node = LayerNode.make({
   service: Service,
   layer: Layer.effect(
     Service,
-    Effect.sync(() => {
+    Effect.gen(function* () {
+      const sessions = yield* Session.Service
       const buses = new Map<string, SonderrHiveBus>()
-      const sessions = new Map<string, HiveID>()
+      const sessionMap = new Map<string, HiveID>()
 
       const ensure = (hiveID: HiveID): SonderrHiveBus => {
         const hit = buses.get(hiveID)
@@ -49,17 +53,18 @@ export const node = LayerNode.make({
         Effect.sync(() => {
           const hiveID = `hive_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}` as HiveID
           ensure(hiveID)
-          sessions.set(sessionID, hiveID)
+          sessionMap.set(sessionID, hiveID)
+          HiveEvents.created({ hiveID, parentSessionID: sessionID })
           return hiveID
         })
 
       const tagChild = (childSessionID: string, hiveID: HiveID): Effect.Effect<void> =>
         Effect.sync(() => {
-          sessions.set(childSessionID, hiveID)
+          sessionMap.set(childSessionID, hiveID)
         })
 
       const hiveForSession = (sessionID: string): Effect.Effect<HiveID | undefined> =>
-        Effect.sync(() => sessions.get(sessionID))
+        Effect.sync(() => sessionMap.get(sessionID))
 
       const broadcast = (
         hiveID: HiveID,
@@ -78,16 +83,27 @@ export const node = LayerNode.make({
         Effect.sync(() => {
           buses.get(hiveID)?.close()
           buses.delete(hiveID)
-          for (const [sessionID, hid] of sessions) {
-            if (hid === hiveID) sessions.delete(sessionID)
+          for (const [sessionID, hid] of sessionMap) {
+            if (hid === hiveID) sessionMap.delete(sessionID)
           }
+          HiveEvents.cancelled({ hiveID })
         })
 
-      const spawn = (): Effect.Effect<string> => stub("hive spawn not wired")
+      const spawn = (hiveID: HiveID, input: { agent: string; prompt: string; parentSessionID: string }): Effect.Effect<string> =>
+        Effect.gen(function* () {
+          const child = yield* sessions.create({
+            parentID: SessionID.make(input.parentSessionID),
+            title: `hive child (${input.agent})`,
+            agent: input.agent,
+          })
+          yield* tagChild(child.id, hiveID)
+          return child.id
+        })
+
       const runTurn = (): Effect.Effect<string> => stub("hive runTurn not wired")
 
       return Service.of({ create, tagChild, hiveForSession, broadcast, recall, spawn, runTurn, cancel })
     }),
   ),
-  deps: [],
+  deps: [Session.node],
 })

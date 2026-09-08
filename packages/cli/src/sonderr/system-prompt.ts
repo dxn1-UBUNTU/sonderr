@@ -10,6 +10,7 @@ import type { Provider } from "@/provider/provider"
 import type { InstanceContext } from "@/project/instance-context"
 import * as Log from "@sonderr/core/util/log"
 import type { Todo } from "@/session/todo" // sonderr_change
+import { InstallationVersion } from "@sonderr/core/installation/version" // sonderr_change
 
 const log = Log.create({ service: "sonderr.system-prompt" })
 
@@ -27,6 +28,7 @@ export namespace SonderrSystemPrompt {
         `  Is directory a git repo: ${input.ctx.project.vcs === "git" ? "yes" : "no"}`,
         `  Platform: ${process.platform}`,
         `  Today's date: ${new Date().toDateString()}`,
+        `  Sonderr version: ${InstallationVersion}`,
         `  Project config: .sonderr/command/*.md, .sonderr/agent/*.md, sonderr.json, AGENTS.md. Put new commands and agents in .sonderr/. Do not use .sonderr/ or .sonderr/.`,
         `  Global config: ${Global.Path.config}/ (same structure)`,
         ...staticEnvLines(input.editor),

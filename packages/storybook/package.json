@@ -28,7 +28,7 @@
     "@sonderr/session-ui": "workspace:*",
     "react-dom": "18.2.0"
   },
-  "version": "7.5.6",
+  "version": "0.0.63",
   "dependencies": {},
   "peerDependencies": {}
 }

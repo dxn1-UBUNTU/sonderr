@@ -367,8 +367,7 @@ export function Sidebar(props: { sessionID: string; overlay?: boolean }) {
           <pluginRuntime.Slot name="sidebar_footer" mode="single_winner" session_id={props.sessionID}>
             {/* sonderr_change start */}
             <text fg={theme.textMuted}>
-              <span style={{ fg: isWorking() ? "#00ff88" : theme.success }}>•</span>{" "}
-              <b>Sonderr</b> <span>{InstallationVersion}</span>
+              sonderr -- version -- {InstallationVersion}
             </text>
             {/* sonderr_change end */}
           </pluginRuntime.Slot>

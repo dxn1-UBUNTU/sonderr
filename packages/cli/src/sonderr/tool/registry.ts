@@ -10,6 +10,8 @@ import { MemoryRecallTool } from "./memory-recall"
 import { MemorySaveTool } from "./memory-save"
 import { NotifyUserTool } from "./notify-user"
 import { SendFileTool } from "./send-file"
+import { HiveSendTool, HiveRecallTool } from "../hive/tool"
+import { SonderrOrchestrator } from "../hive"
 import * as Tool from "../../tool/tool"
 import { Flag } from "@sonderr/core/flag/flag"
 import { Effect } from "effect"
@@ -82,14 +84,17 @@ export namespace SonderrToolRegistry {
       const sessions = yield* SonderrSessions.Service
       const notify = yield* NotifyUserTool.pipe(Effect.provideService(SonderrSessions.Service, sessions))
       const send = yield* SendFileTool
+      const orchestrator = yield* SonderrOrchestrator.Service
+      const hiveSend = yield* HiveSendTool.pipe(Effect.provideService(SonderrOrchestrator.Service, orchestrator))
+      const hiveRecall = yield* HiveRecallTool.pipe(Effect.provideService(SonderrOrchestrator.Service, orchestrator))
       if (!notebook)
-        return { recall, managerModels, memory, save, manager, process, chart, image, terminal, notify, send }
+        return { recall, managerModels, memory, save, manager, process, chart, image, terminal, notify, send, hiveSend, hiveRecall }
       const tools = yield* Effect.all({
         notebookRead: NotebookReadTool,
         notebookEdit: NotebookEditTool,
         notebookExecute: NotebookExecuteTool,
       }).pipe(Effect.provideService(Notebook.Service, notebook))
-      return { recall, managerModels, memory, save, manager, process, chart, image, terminal, notify, send, ...tools }
+      return { recall, managerModels, memory, save, manager, process, chart, image, terminal, notify, send, hiveSend, hiveRecall, ...tools }
     })
   }
 
@@ -108,6 +113,8 @@ export namespace SonderrToolRegistry {
       terminal?: Tool.Info
       notify: Tool.Info
       send: Tool.Info
+      hiveSend: Tool.Info
+      hiveRecall: Tool.Info
       notebookRead?: Tool.Info
       notebookEdit?: Tool.Info
       notebookExecute?: Tool.Info
@@ -127,6 +134,8 @@ export namespace SonderrToolRegistry {
         image: Tool.init(tools.image),
         notify: Tool.init(tools.notify),
         send: Tool.init(tools.send),
+        hiveSend: Tool.init(tools.hiveSend),
+        hiveRecall: Tool.init(tools.hiveRecall),
       })
       const terminal = tools.terminal ? yield* Tool.init(tools.terminal) : undefined
       const notebooks =
@@ -138,7 +147,7 @@ export namespace SonderrToolRegistry {
             })
           : {}
       const semantic = yield* semanticTool(deps, loaders)
-      return { ...base, terminal, ...notebooks, semantic, notify: base.notify, send: base.send }
+      return { ...base, terminal, ...notebooks, semantic, notify: base.notify, send: base.send, hiveSend: base.hiveSend, hiveRecall: base.hiveRecall }
     })
   }
 
@@ -202,6 +211,8 @@ export namespace SonderrToolRegistry {
       terminal?: Tool.Def
       notify: Tool.Def
       send: Tool.Def
+      hiveSend: Tool.Def
+      hiveRecall: Tool.Def
       notebookRead?: Tool.Def
       notebookEdit?: Tool.Def
       notebookExecute?: Tool.Def
@@ -214,6 +225,8 @@ export namespace SonderrToolRegistry {
       tools.memory,
       tools.save,
       tools.recall,
+      tools.hiveSend,
+      tools.hiveRecall,
       ...(Flag.SONDERR_CLIENT === "vscode" ? [tools.chart] : []),
       ...(Flag.SONDERR_CLIENT === "cli" || Flag.SONDERR_CLIENT === "vscode" ? [tools.process] : []),
       ...(Flag.SONDERR_CLIENT === "cli" && tools.terminal ? [tools.terminal] : []),
