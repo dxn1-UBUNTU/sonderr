@@ -1,5 +1,17 @@
 # @sonderr/cli
 
+## 0.0.72
+
+### Patch Changes
+
+- Fix hive sidebar not switching in hive sessions by removing the experimental flag gate from the TUI sidebar condition.
+
+## 0.0.71
+
+### Minor Changes
+
+- Improve system prompt with structured output templates and formatting rules. Add hive sidebar boot sequence animation, HIVE MODE ACTIVATED flash, and fade-in reveal effects for all sections.
+
 ## 0.0.70
 
 ### Minor Changes

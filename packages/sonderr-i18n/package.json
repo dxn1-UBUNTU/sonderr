@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@sonderr/sonderr-i18n",
-  "version": "0.0.70",
+  "version": "0.0.72",
   "type": "module",
   "license": "MIT",
   "description": "Sonderr-specific i18n translations and overrides",

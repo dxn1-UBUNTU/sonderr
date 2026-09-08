@@ -1,6 +1,6 @@
 {
   "name": "@sonderr/sonderr-web-ui",
-  "version": "0.0.70",
+  "version": "0.0.72",
   "type": "module",
   "license": "MIT",
   "exports": {
