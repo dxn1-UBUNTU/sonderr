@@ -1,6 +1,4 @@
-Search the web for current information, documentation, news, and recent data.
-
-Use this tool when:
+Search the web for current information, documentation, news, and recent data. Use this tool when:
 - You need information beyond your knowledge cutoff (today's date, recent events, latest versions)
 - You're looking for documentation or API references for a library/framework
 - You need to verify facts or find examples
@@ -28,7 +26,19 @@ When to use webfetch instead:
 - You need the full text of a documentation page or article
 - Following up on a search result to get more detail
 
+When to use websearch_js instead:
+- The page requires JavaScript to render its content
+- You're searching for information on a JS-heavy SPA
+- webfetch returns empty/partial content from a dynamic site
+
 Rate limit awareness:
 - Batch related searches when possible
 - Use specific queries to avoid needing multiple searches
 - Prefer local tools (grep, read) when the information is in the codebase
+- For JavaScript-rendered content, use websearch_js which launches a headless browser
+
+Advanced patterns:
+- For code examples, search "site:github.com" or "site:stackoverflow.com"
+- For npm package info, search "npm <package-name>" or check npmjs.com directly
+- For error messages, search the exact string in quotes
+- For API docs, search the library name + "api reference" + version

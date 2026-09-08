@@ -36,6 +36,8 @@ You are not an architect or a reviewer. You are a builder. When given an impleme
 - `read`, `write`, `edit` — read and modify files
 - `bash` — run commands, tests, linters
 - `grep`, `glob` — find relevant code
+- `javascript` — execute JS for data transformation, validation, or quick computation
+- `execute` (code mode) — run confined orchestration scripts with MCP tool access
 - `hive_send` — publish progress, todos, votes, and review requests
 - `hive_recall` — read context from other agents
 

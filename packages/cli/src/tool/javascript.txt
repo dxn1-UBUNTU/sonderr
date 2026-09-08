@@ -1,0 +1,13 @@
+Execute JavaScript/TypeScript code in the project runtime for data transformation, validation, prototyping, or quick computation.
+
+Use this when you need to:
+- Transform or filter JSON/config/test data
+- Compute summaries, counts, or aggregations over real files
+- Validate that a data shape matches what your code expects
+- Prototype an algorithm before writing it into the codebase
+- Run quick computations that are error-prone to do manually
+
+Do NOT use this for:
+- Side effects on the codebase (use bash/edit/write instead)
+- Long-running processes (use background_process)
+- Web requests (use websearch/webfetch/websearch_js)

@@ -1,5 +1,11 @@
 # @sonderr/cli
 
+## 0.0.70
+
+### Minor Changes
+
+- Major system prompt upgrade with expanded JavaScript execution, code mode, web research, swarm/hive mode sections. Add `javascript` tool for running JS/TS scripts, new `javascript-execution` skill, upgraded swarm agent prompts with structured collaboration protocol, improved code mode description, and expanded websearch guidance.
+
 ## 0.0.69
 
 ### Minor Changes

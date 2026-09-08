@@ -35,6 +35,7 @@ import A11Y from "./accessibility.md" with { type: "text" }
 import I18N from "./i18n-localization.md" with { type: "text" }
 import CLOUD from "./cloud-patterns.md" with { type: "text" }
 import DSA from "./data-structures-algorithms.md" with { type: "text" }
+import JAVASCRIPT_EXECUTION from "./javascript-execution.md" with { type: "text" }
 
 export interface BuiltinSkill {
   name: string
@@ -234,5 +235,11 @@ export const BUILTIN_SKILLS: BuiltinSkill[] = [
     description:
       "Data structures and algorithms patterns. Covers arrays, trees, graphs, dynamic programming, sorting, and searching. Use for algorithm-heavy problems and interview prep.",
     content: DSA,
+  },
+  {
+    name: "javascript-execution",
+    description:
+      "Guide for executing JavaScript/TypeScript code within Sonderr for data transformation, validation, prototyping, and quick computation. Use when you need to run JS logic against real project data.",
+    content: JAVASCRIPT_EXECUTION,
   },
 ]

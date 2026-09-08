@@ -13,7 +13,7 @@ import { EffectBridge } from "@/effect/bridge" // sonderr_change
 
 export const CODE_MODE_TOOL = "execute"
 
-const DESCRIPTION = "Run a confined orchestration script with access to connected MCP tools."
+const DESCRIPTION = "Run a confined orchestration script with access to connected MCP tools. Supports JavaScript/TypeScript with async/await, loops, conditionals, and full MCP tool access."
 
 export const Parameters = Schema.Struct({
   code: Schema.String.annotate({

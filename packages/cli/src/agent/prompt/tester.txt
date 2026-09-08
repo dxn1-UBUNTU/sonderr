@@ -41,6 +41,7 @@ You are not a builder or a reviewer. You are a quality verifier. When given code
 - `read`, `write`, `edit` — create and modify test files
 - `bash` — run test commands
 - `grep`, `glob` — find existing tests and patterns
+- `javascript` — execute JS for test data generation, validation, or quick assertions
 - `hive_send` — publish test plans, progress, and results
 - `hive_recall` — read context from other agents
 

@@ -22,6 +22,7 @@ import { JsonPathTool } from "./json_path"
 import { NotesTool } from "./notes"
 import { CodeAnalysisTool } from "./code-analysis"
 import { ValidateTool } from "./validate"
+import { JavaScriptTool } from "./javascript" // sonderr_change
 import { GlobTool } from "./glob"
 import { GrepTool } from "./grep"
 import { ReadTool } from "./read"
@@ -159,10 +160,11 @@ const layer = Layer.effect(
      const websearch_js = yield* WebSearchJsTool
      const format = yield* FormatTool
      const json_path = yield* JsonPathTool
-     const notes = yield* NotesTool
-     const code_analysis = yield* CodeAnalysisTool
-     const validate = yield* ValidateTool
-     const greptool = yield* GrepTool
+      const notes = yield* NotesTool
+      const code_analysis = yield* CodeAnalysisTool
+      const validate = yield* ValidateTool
+      const javascript = yield* JavaScriptTool // sonderr_change
+      const greptool = yield* GrepTool
     const patchtool = yield* ApplyPatchTool
     const skilltool = yield* SkillTool
     const agent = yield* Agent.Service
@@ -291,9 +293,10 @@ const layer = Layer.effect(
            websearch_js: Tool.init(websearch_js),
            format: Tool.init(format),
            json_path: Tool.init(json_path),
-           notes: Tool.init(notes),
-           code_analysis: Tool.init(code_analysis),
-           validate: Tool.init(validate),
+            notes: Tool.init(notes),
+            code_analysis: Tool.init(code_analysis),
+            validate: Tool.init(validate),
+            javascript: Tool.init(javascript), // sonderr_change
            write: Tool.init(writetool),
           task: Tool.init(task),
           fetch: Tool.init(webfetch),
@@ -338,10 +341,11 @@ const layer = Layer.effect(
                tool.websearch_js,
                tool.format,
                tool.json_path,
-               tool.notes,
-               tool.code_analysis,
-               tool.validate,
-               tool.write,
+                tool.notes,
+                tool.code_analysis,
+                tool.validate,
+                tool.javascript, // sonderr_change
+                tool.write,
               tool.task,
               tool.fetch,
               tool.todo,
