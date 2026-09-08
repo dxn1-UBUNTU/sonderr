@@ -67,19 +67,18 @@ const it = testEffect(
 )
 
 describe("session.system", () => {
-  test("selects the Meta prompt for Muse Spark model IDs", () => {
+  test("uses the full Sonderr fable prompt for every model by default", () => {
     expect(SystemPrompt.provider({ api: { id: "meta/muse-spark-preview" } } as Provider.Model)[0]).toContain(
-      "Meta Muse Spark",
+      "You are Sonderr 1.1 Ultra Engine",
     )
-  })
-
-  test("falls back to the full Sonderr fable prompt for older/unknown models", () => {
-    // sonderr_change - unknown model IDs (no provider pattern match) get sonderr-fable
-    expect(SystemPrompt.provider({ api: { id: "qwen/qwen-2.5-coder-32b" } } as Provider.Model)[0]).toContain(
-      "You are Sonderr",
+    expect(SystemPrompt.provider({ api: { id: "meta/muse-spark-preview" } } as Provider.Model)[0]).toContain(
+      "Official site: https://sonderr-ai.vercel.app",
     )
     expect(SystemPrompt.provider({ api: { id: "qwen/qwen-2.5-coder-32b" } } as Provider.Model)[0]).toContain(
-      "Prime directives",
+      "You are Sonderr 1.1 Ultra Engine",
+    )
+    expect(SystemPrompt.provider({ api: { id: "qwen/qwen-2.5-coder-32b" } } as Provider.Model)[0]).toContain(
+      "Parent organization: https://dxn1-docs.vercel.app",
     )
   })
 

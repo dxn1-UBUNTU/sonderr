@@ -48,51 +48,16 @@ export function soul() {
 // sonderr_change end
 
 export function provider(model: Provider.Model) {
-  // sonderr_change start
+  // sonderr_change start - sonderr-system-prompt.md is the single default system prompt for every model
   function prompt() {
-    switch (model.prompt) {
-      case "anthropic":
-        return [PROMPT_ANTHROPIC]
-      case "anthropic_without_todo":
-        return [PROMPT_DEFAULT]
-      case "beast":
-        return [PROMPT_BEAST]
-      case "codex":
-        return [PROMPT_CODEX]
-      case "gemini":
-        return [PROMPT_GEMINI]
-      case "gpt55":
-        return [PROMPT_GPT55]
-      case "ling":
-        return [PROMPT_LING]
-      case "trinity":
-        return [PROMPT_TRINITY]
-      case "fable": // sonderr_change - explicit opt-in via model metadata
-        return [PROMPT_FABLE]
-    }
-    return undefined
+    return [PROMPT_FABLE]
   }
+  // sonderr_change end
 
   const sonderr = prompt()
   if (sonderr) return sonderr
   // sonderr_change end
-  if (model.api.id.includes("muse-spark")) return [PROMPT_META]
-  if (model.api.id.includes("gpt-4") || model.api.id.includes("o1") || model.api.id.includes("o3"))
-    return [PROMPT_BEAST]
-  if (model.api.id.includes("gpt")) {
-    if (model.api.id.includes("codex")) {
-      return [PROMPT_CODEX]
-    }
-    return [PROMPT_GPT]
-  }
-  if (model.api.id.includes("gemini-")) return [PROMPT_GEMINI]
-  if (model.api.id.includes("claude")) return [PROMPT_ANTHROPIC]
-  if (model.api.id.toLowerCase().includes("trinity")) return [PROMPT_TRINITY]
-  if (model.api.id.toLowerCase().includes("kimi")) return [PROMPT_KIMI]
-  if (isLing(model.api.id)) return [PROMPT_LING] // sonderr_change
-  // sonderr_change start - older/unknown models get the full Sonderr prompt
-  // (sonderr-system-prompt) instead of the terse default, so they operate at a much
-  // higher level inside the Sonderr environment
+  // sonderr_change start - sonderr-system-prompt.md is the single system prompt for every model path
   return [PROMPT_FABLE]
   // sonderr_change end
 }
