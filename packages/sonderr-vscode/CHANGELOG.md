@@ -1,5 +1,11 @@
 # sonderr-code
 
+## 0.0.68
+
+### Minor Changes
+
+- Hive Phase 4: upgrade swarm agent system prompts for structured collaboration with proposals, votes, and todos. Add hive tools for proposal/vote/todo management, an orange hive sidebar in the TUI, and improved orchestrator support for long-running swarm work.
+
 ## 0.0.67
 
 ### Minor Changes

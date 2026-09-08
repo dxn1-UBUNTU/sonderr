@@ -11,6 +11,15 @@ import { MemorySaveTool } from "./memory-save"
 import { NotifyUserTool } from "./notify-user"
 import { SendFileTool } from "./send-file"
 import { HiveSendTool, HiveRecallTool } from "../hive/tool"
+import {
+  HiveCreateProposalTool,
+  HiveVoteTool,
+  HiveCloseProposalTool,
+  HiveListProposalsTool,
+  HiveCreateTodoTool,
+  HiveUpdateTodoTool,
+  HiveListTodosTool,
+} from "../hive/todo-tools"
 import { SonderrOrchestrator } from "../hive"
 import * as Tool from "../../tool/tool"
 import { Flag } from "@sonderr/core/flag/flag"
@@ -87,14 +96,21 @@ export namespace SonderrToolRegistry {
       const orchestrator = yield* SonderrOrchestrator.Service
       const hiveSend = yield* HiveSendTool.pipe(Effect.provideService(SonderrOrchestrator.Service, orchestrator))
       const hiveRecall = yield* HiveRecallTool.pipe(Effect.provideService(SonderrOrchestrator.Service, orchestrator))
+      const hiveCreateProposal = yield* HiveCreateProposalTool.pipe(Effect.provideService(SonderrOrchestrator.Service, orchestrator))
+      const hiveVote = yield* HiveVoteTool.pipe(Effect.provideService(SonderrOrchestrator.Service, orchestrator))
+      const hiveCloseProposal = yield* HiveCloseProposalTool.pipe(Effect.provideService(SonderrOrchestrator.Service, orchestrator))
+      const hiveListProposals = yield* HiveListProposalsTool.pipe(Effect.provideService(SonderrOrchestrator.Service, orchestrator))
+      const hiveCreateTodo = yield* HiveCreateTodoTool.pipe(Effect.provideService(SonderrOrchestrator.Service, orchestrator))
+      const hiveUpdateTodo = yield* HiveUpdateTodoTool.pipe(Effect.provideService(SonderrOrchestrator.Service, orchestrator))
+      const hiveListTodos = yield* HiveListTodosTool.pipe(Effect.provideService(SonderrOrchestrator.Service, orchestrator))
       if (!notebook)
-        return { recall, managerModels, memory, save, manager, process, chart, image, terminal, notify, send, hiveSend, hiveRecall }
+        return { recall, managerModels, memory, save, manager, process, chart, image, terminal, notify, send, hiveSend, hiveRecall, hiveCreateProposal, hiveVote, hiveCloseProposal, hiveListProposals, hiveCreateTodo, hiveUpdateTodo, hiveListTodos }
       const tools = yield* Effect.all({
         notebookRead: NotebookReadTool,
         notebookEdit: NotebookEditTool,
         notebookExecute: NotebookExecuteTool,
       }).pipe(Effect.provideService(Notebook.Service, notebook))
-      return { recall, managerModels, memory, save, manager, process, chart, image, terminal, notify, send, hiveSend, hiveRecall, ...tools }
+      return { recall, managerModels, memory, save, manager, process, chart, image, terminal, notify, send, hiveSend, hiveRecall, hiveCreateProposal, hiveVote, hiveCloseProposal, hiveListProposals, hiveCreateTodo, hiveUpdateTodo, hiveListTodos, ...tools }
     })
   }
 

@@ -1,13 +1,22 @@
-import type { HiveID, HiveMemo } from "./model"
+import type { HiveID, HiveMemo, HiveProposal, HiveTodo } from "./model"
 import { SONDERR_HIVE_TTL_MS } from "./model"
 import { HiveEvents } from "./events"
 
 type Subscriber = (memo: HiveMemo) => void
 
+let proposalCounter = 0
+let todoCounter = 0
+
+function nextId(prefix: string): string {
+  return `${prefix}_${Date.now().toString(36)}_${(++proposalCounter).toString(36)}`
+}
+
 export class SonderrHiveBus {
   readonly hiveID: HiveID
   private readonly memos = new Map<string, HiveMemo[]>()
   private readonly subs = new Map<string, Set<Subscriber>>()
+  private readonly proposals = new Map<string, HiveProposal>()
+  private readonly todos = new Map<string, HiveTodo>()
   private closed = false
 
   constructor(hiveID: HiveID) {
@@ -80,6 +89,124 @@ export class SonderrHiveBus {
     this.closed = true
     this.memos.clear()
     this.subs.clear()
+    this.proposals.clear()
+    this.todos.clear()
+  }
+
+  createProposal(input: {
+    title: string
+    description: string
+    createdBy: string
+  }): HiveProposal {
+    const proposal: HiveProposal = {
+      id: nextId("prop"),
+      hiveID: this.hiveID,
+      title: input.title,
+      description: input.description,
+      status: "open",
+      votes: {},
+      createdBy: input.createdBy,
+      createdAt: Date.now(),
+    }
+    this.proposals.set(proposal.id, proposal)
+    this.publish({
+      channel: "swarm",
+      from: input.createdBy,
+      role: "orchestrator",
+      text: `[PROPOSAL] ${proposal.id}\nTitle: ${input.title}\nDescription: ${input.description}`,
+    })
+    return proposal
+  }
+
+  vote(proposalId: string, voter: string, vote: string): HiveProposal | undefined {
+    const proposal = this.proposals.get(proposalId)
+    if (!proposal || proposal.status !== "open") return proposal
+    proposal.votes[voter] = vote
+    this.publish({
+      channel: "swarm",
+      from: voter,
+      role: "subagent",
+      text: `[VOTE] ${proposalId}: ${vote}`,
+    })
+    return proposal
+  }
+
+  closeProposal(proposalId: string, status: "accepted" | "rejected" | "cancelled"): HiveProposal | undefined {
+    const proposal = this.proposals.get(proposalId)
+    if (!proposal || proposal.status !== "open") return proposal
+    proposal.status = status
+    proposal.closedAt = Date.now()
+    this.publish({
+      channel: "swarm",
+      from: "orchestrator",
+      role: "orchestrator",
+      text: `[PROPOSAL_CLOSED] ${proposalId}: ${status}`,
+    })
+    return proposal
+  }
+
+  getProposal(proposalId: string): HiveProposal | undefined {
+    return this.proposals.get(proposalId)
+  }
+
+  listProposals(): HiveProposal[] {
+    return Array.from(this.proposals.values()).sort((a, b) => b.createdAt - a.createdAt)
+  }
+
+  createTodo(input: {
+    title: string
+    description?: string
+    assignee?: string
+    dependencies?: string[]
+  }): HiveTodo {
+    const todo: HiveTodo = {
+      id: nextId("todo"),
+      hiveID: this.hiveID,
+      title: input.title,
+      description: input.description,
+      status: "pending",
+      assignee: input.assignee,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      dependencies: input.dependencies,
+    }
+    this.todos.set(todo.id, todo)
+    this.publish({
+      channel: "swarm",
+      from: input.assignee ?? "orchestrator",
+      role: "orchestrator",
+      text: `[TODO_CREATED] ${todo.id}\nTitle: ${todo.title}\nAssignee: ${todo.assignee ?? "unassigned"}`,
+    })
+    return todo
+  }
+
+  updateTodo(todoId: string, updates: Partial<Pick<HiveTodo, "status" | "assignee" | "description" | "dependencies">>): HiveTodo | undefined {
+    const todo = this.todos.get(todoId)
+    if (!todo) return todo
+    const prev = todo.status
+    if (updates.status) todo.status = updates.status
+    if (updates.assignee !== undefined) todo.assignee = updates.assignee
+    if (updates.description !== undefined) todo.description = updates.description
+    if (updates.dependencies !== undefined) todo.dependencies = updates.dependencies
+    if (updates.status === "completed") todo.completedAt = Date.now()
+    todo.updatedAt = Date.now()
+    if (prev !== todo.status) {
+      this.publish({
+        channel: "swarm",
+        from: todo.assignee ?? "orchestrator",
+        role: "orchestrator",
+        text: `[TODO_UPDATED] ${todo.id}\nStatus: ${prev} -> ${todo.status}`,
+      })
+    }
+    return todo
+  }
+
+  getTodo(todoId: string): HiveTodo | undefined {
+    return this.todos.get(todoId)
+  }
+
+  listTodos(): HiveTodo[] {
+    return Array.from(this.todos.values()).sort((a, b) => b.createdAt - a.createdAt)
   }
 
   private make(input: {

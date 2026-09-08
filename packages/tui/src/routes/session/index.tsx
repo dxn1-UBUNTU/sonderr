@@ -56,6 +56,7 @@ import { DialogTimeline } from "./dialog-timeline"
 import { DialogForkFromTimeline } from "./dialog-fork-from-timeline"
 import { DialogSessionRename } from "../../component/dialog-session-rename"
 import { Sidebar } from "./sidebar"
+import { HiveSidebar } from "./sidebar-hive"
 import { SubagentFooter } from "./subagent-footer.tsx"
 import { filetype } from "../../util/filetype"
 import parsers from "../../parsers-config"
@@ -67,6 +68,7 @@ import { usePromptRef } from "../../context/prompt"
 import { ApprovalBadge, describeApproval, stateMetadata } from "../../sonderr/tool-approval" // sonderr_change
 import { useEpilogue } from "../../context/epilogue"
 import { normalizePath } from "../../util/path"
+import { Flag } from "@sonderr/core/flag/flag"
 import { PermissionPrompt } from "./permission"
 import { QuestionPrompt } from "./question"
 // sonderr_change start
@@ -216,6 +218,11 @@ export function Session() {
   const { theme } = useTheme()
   const promptRef = usePromptRef()
   const session = createMemo(() => sync.session.get(route.sessionID))
+  const isHiveSession = createMemo(() => {
+    const agent = session()?.agent
+    if (!agent || !Flag.SONDERR_EXPERIMENTAL_HIVE) return false
+    return agent === "hive" || ["researcher", "coder", "reviewer", "tester", "documenter", "debugger", "architect"].includes(agent)
+  })
   const location = createMemo(() => {
     const current = session()
     return current ? { directory: current.directory, workspaceID: current.workspaceID } : undefined
@@ -1487,7 +1494,9 @@ export function Session() {
           <Show when={sidebarVisible()}>
             <Switch>
               <Match when={wide()}>
-                <Sidebar sessionID={route.sessionID} />
+                <Show when={isHiveSession()} fallback={<Sidebar sessionID={route.sessionID} />}>
+                  <HiveSidebar sessionID={route.sessionID} />
+                </Show>
               </Match>
               <Match when={!wide()}>
                 <box
@@ -1499,7 +1508,9 @@ export function Session() {
                   alignItems="flex-end"
                   backgroundColor={RGBA.fromInts(0, 0, 0, 70)}
                 >
-                  <Sidebar sessionID={route.sessionID} />
+                  <Show when={isHiveSession()} fallback={<Sidebar sessionID={route.sessionID} />}>
+                    <HiveSidebar sessionID={route.sessionID} overlay />
+                  </Show>
                 </box>
               </Match>
             </Switch>

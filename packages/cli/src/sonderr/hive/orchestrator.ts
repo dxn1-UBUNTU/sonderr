@@ -4,7 +4,7 @@ import { Session } from "@/session/session"
 import { SessionID } from "@/session/schema"
 import { SonderrHiveBus } from "./bus"
 import { HiveEvents } from "./events"
-import type { HiveID, HiveConfig, HiveMemo } from "./model"
+import type { HiveID, HiveConfig, HiveMemo, HiveProposal, HiveTodo } from "./model"
 
 export interface Interface {
   readonly create: (sessionID: string) => Effect.Effect<HiveID>
@@ -24,6 +24,33 @@ export interface Interface {
   readonly spawn: (hiveID: HiveID, input: { agent: string; prompt: string; parentSessionID: string }) => Effect.Effect<string>
   readonly runTurn: (hiveID: HiveID, prompt: string, parts: unknown) => Effect.Effect<string>
   readonly cancel: (hiveID: HiveID) => Effect.Effect<void>
+  readonly createProposal: (
+    hiveID: HiveID,
+    input: { title: string; description: string; createdBy: string },
+  ) => Effect.Effect<HiveProposal>
+  readonly vote: (
+    hiveID: HiveID,
+    proposalId: string,
+    voter: string,
+    vote: string,
+  ) => Effect.Effect<HiveProposal | undefined>
+  readonly closeProposal: (
+    hiveID: HiveID,
+    proposalId: string,
+    status: "accepted" | "rejected" | "cancelled",
+  ) => Effect.Effect<HiveProposal | undefined>
+  readonly listProposals: (hiveID: HiveID) => Effect.Effect<HiveProposal[]>
+  readonly createTodo: (
+    hiveID: HiveID,
+    input: { title: string; description?: string; assignee?: string; dependencies?: string[] },
+  ) => Effect.Effect<HiveTodo>
+  readonly updateTodo: (
+    hiveID: HiveID,
+    todoId: string,
+    updates: Partial<Pick<HiveTodo, "status" | "assignee" | "description" | "dependencies">>,
+  ) => Effect.Effect<HiveTodo | undefined>
+  readonly getTodo: (hiveID: HiveID, todoId: string) => Effect.Effect<HiveTodo | undefined>
+  readonly listTodos: (hiveID: HiveID) => Effect.Effect<HiveTodo[]>
 }
 
 export class Service extends Context.Service<Service, Interface>()("@sonderr/HiveOrchestrator") {}
@@ -102,7 +129,67 @@ export const node = LayerNode.make({
 
       const runTurn = (): Effect.Effect<string> => stub("hive runTurn not wired")
 
-      return Service.of({ create, tagChild, hiveForSession, broadcast, recall, spawn, runTurn, cancel })
+      const createProposal = (
+        hiveID: HiveID,
+        input: { title: string; description: string; createdBy: string },
+      ): Effect.Effect<HiveProposal> =>
+        Effect.sync(() => ensure(hiveID).createProposal(input))
+
+      const vote = (
+        hiveID: HiveID,
+        proposalId: string,
+        voter: string,
+        vote: string,
+      ): Effect.Effect<HiveProposal | undefined> =>
+        Effect.sync(() => ensure(hiveID).vote(proposalId, voter, vote))
+
+      const closeProposal = (
+        hiveID: HiveID,
+        proposalId: string,
+        status: "accepted" | "rejected" | "cancelled",
+      ): Effect.Effect<HiveProposal | undefined> =>
+        Effect.sync(() => ensure(hiveID).closeProposal(proposalId, status))
+
+      const listProposals = (hiveID: HiveID): Effect.Effect<HiveProposal[]> =>
+        Effect.sync(() => ensure(hiveID).listProposals())
+
+      const createTodo = (
+        hiveID: HiveID,
+        input: { title: string; description?: string; assignee?: string; dependencies?: string[] },
+      ): Effect.Effect<HiveTodo> =>
+        Effect.sync(() => ensure(hiveID).createTodo(input))
+
+      const updateTodo = (
+        hiveID: HiveID,
+        todoId: string,
+        updates: Partial<Pick<HiveTodo, "status" | "assignee" | "description" | "dependencies">>,
+      ): Effect.Effect<HiveTodo | undefined> =>
+        Effect.sync(() => ensure(hiveID).updateTodo(todoId, updates))
+
+      const getTodo = (hiveID: HiveID, todoId: string): Effect.Effect<HiveTodo | undefined> =>
+        Effect.sync(() => ensure(hiveID).getTodo(todoId))
+
+      const listTodos = (hiveID: HiveID): Effect.Effect<HiveTodo[]> =>
+        Effect.sync(() => ensure(hiveID).listTodos())
+
+      return Service.of({
+        create,
+        tagChild,
+        hiveForSession,
+        broadcast,
+        recall,
+        spawn,
+        runTurn,
+        cancel,
+        createProposal,
+        vote,
+        closeProposal,
+        listProposals,
+        createTodo,
+        updateTodo,
+        getTodo,
+        listTodos,
+      })
     }),
   ),
   deps: [Session.node],

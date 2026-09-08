@@ -14,6 +14,42 @@ export const HiveMemo = Schema.Struct({
 }).annotate({ identifier: "HiveMemo" })
 export type HiveMemo = Schema.Schema.Type<typeof HiveMemo>
 
+export const HiveProposalStatus = Schema.Literals(["open", "accepted", "rejected", "cancelled"])
+export type HiveProposalStatus = Schema.Schema.Type<typeof HiveProposalStatus>
+
+export const HiveVote = Schema.Literals(["yes", "no", "abstain"])
+export type HiveVote = Schema.Schema.Type<typeof HiveVote>
+
+export const HiveProposal = Schema.Struct({
+  id: Schema.String,
+  hiveID: HiveID,
+  title: Schema.String,
+  description: Schema.String,
+  status: HiveProposalStatus,
+  votes: Schema.Record(Schema.String, Schema.String),
+  createdBy: Schema.String,
+  createdAt: Schema.Number,
+  closedAt: Schema.optional(Schema.Number),
+}).annotate({ identifier: "HiveProposal" })
+export type HiveProposal = Schema.Schema.Type<typeof HiveProposal>
+
+export const HiveTodoStatus = Schema.Literals(["pending", "in_progress", "completed", "cancelled", "blocked"])
+export type HiveTodoStatus = Schema.Schema.Type<typeof HiveTodoStatus>
+
+export const HiveTodo = Schema.Struct({
+  id: Schema.String,
+  hiveID: HiveID,
+  title: Schema.String,
+  description: Schema.optional(Schema.String),
+  status: HiveTodoStatus,
+  assignee: Schema.optional(Schema.String),
+  createdAt: Schema.Number,
+  updatedAt: Schema.Number,
+  completedAt: Schema.optional(Schema.Number),
+  dependencies: Schema.optional(Schema.Array(Schema.String)),
+}).annotate({ identifier: "HiveTodo" })
+export type HiveTodo = Schema.Schema.Type<typeof HiveTodo>
+
 export const HiveConfig = Schema.Struct({
   enabled: Schema.Boolean,
   mode: Schema.Literals(["off", "auto", "manual"]),
