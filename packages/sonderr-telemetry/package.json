@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@sonderr/sonderr-telemetry",
-  "version": "0.0.63",
+  "version": "0.0.64",
   "type": "module",
   "license": "MIT",
   "description": "Telemetry for Sonderr CLI - PostHog analytics integration",

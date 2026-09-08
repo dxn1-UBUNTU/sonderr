@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "version": "0.0.63",
+  "version": "0.0.64",
   "name": "@sonderr/cli",
   "type": "module",
   "license": "MIT",

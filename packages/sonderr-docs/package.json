@@ -1,6 +1,6 @@
 {
   "name": "@sonderr/sonderr-docs",
-  "version": "0.0.63",
+  "version": "0.0.64",
   "private": true,
   "scripts": {
     "dev": "next dev --webpack --port 3002",
