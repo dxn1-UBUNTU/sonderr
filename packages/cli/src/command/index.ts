@@ -89,6 +89,54 @@ const layer = Layer.effect(
       commands[Default.REVIEW] = reviewCommand()
       commands["resume-claude"] = SessionResume.resumeClaude
       commands["resume-codex"] = SessionResume.resumeCodex
+      commands["mcp"] = {
+        name: "mcp",
+        description: "list and manage MCP servers",
+        source: "command",
+        get template() {
+          return bridge.promise(
+            Effect.gen(function* () {
+              const cfg = yield* config.get()
+              const mcpService = yield* MCP.Service
+              const clients = yield* mcpService.clients()
+              const tools = yield* mcpService.tools()
+              const lines: string[] = []
+              lines.push("# MCP Servers")
+              lines.push("")
+              const entries = Object.entries(cfg.mcp ?? {})
+              if (!entries.length) {
+                lines.push("No MCP servers configured.")
+                return lines.join("\n")
+              }
+               for (const [name, server] of entries) {
+                 const enabled = clients[name] !== undefined
+                 lines.push(`## ${name}`)
+                 lines.push(`- Status: ${enabled ? "connected" : "disabled"}`)
+                 if ("type" in server) {
+                   const type = server.type
+                   lines.push(`- Type: ${type}`)
+                   if (type === "local" && Array.isArray(server.command)) {
+                     lines.push(`- Command: ${server.command.join(" ")}`)
+                   }
+                   if (type === "remote" && server.url) {
+                     lines.push(`- URL: ${server.url}`)
+                   }
+                 }
+                 const serverTools = Object.entries(tools).filter(([toolName]) => toolName.startsWith(`${name}_`))
+                 if (serverTools.length) {
+                   lines.push("- Tools:")
+                   for (const [toolName, tool] of serverTools) {
+                     lines.push(`  - ${toolName}: ${tool.def.description}`)
+                   }
+                 }
+                 lines.push("")
+               }
+              return lines.join("\n")
+            }),
+          )
+        },
+        hints: [],
+      }
       // sonderr_change end
 
       // sonderr_change start - defer partial overrides until all command sources are registered

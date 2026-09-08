@@ -1,5 +1,11 @@
 # @sonderr/cli
 
+## 0.0.66
+
+### Minor Changes
+
+- Add a `/mcp` slash command that lists configured MCP servers and their connected tools in the conversation.
+
 ## 0.0.65
 
 ### Minor Changes

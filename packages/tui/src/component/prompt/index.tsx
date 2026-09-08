@@ -606,6 +606,23 @@ export function Prompt(props: PromptProps) {
           move.open()
         },
       },
+      // sonderr_change start
+      {
+        title: "MCP",
+        desc: "List and manage MCP servers",
+        name: "prompt.mcp",
+        category: "Session",
+        slashName: "mcp",
+        run: () => {
+          input.setText("/mcp ")
+          setStore("prompt", {
+            input: "/mcp ",
+            parts: [],
+          })
+          input.gotoBufferEnd()
+        },
+      },
+      // sonderr_change end
     ].map((entry) => ({
       namespace: "palette",
       ...entry,
