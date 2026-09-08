@@ -1,7 +1,9 @@
 import { Effect, Schema } from "effect"
 import * as Tool from "@/tool/tool"
 import { SonderrOrchestrator } from "./index"
-import type { HiveProposal, HiveTodo } from "./model"
+import { Todo } from "@/session/todo"
+import { SessionID } from "@/session/schema"
+import type { HiveProposal, HiveTodo, HiveID } from "./model"
 
 const HiveCreateProposalParameters = Schema.Struct({
   title: Schema.String.annotate({ description: "Short title for the proposal" }),
@@ -192,6 +194,32 @@ export const HiveListProposalsTool = Tool.define<
   } satisfies Tool.DefWithoutID<typeof HiveListProposalsParameters, ListProposalsMeta>
 }))
 
+function mapHiveTodoToSessionTodo(todo: HiveTodo): Todo.Info {
+  const status = todo.status === "blocked" ? "pending" : todo.status
+  return {
+    content: todo.title,
+    status: status as Todo.Info["status"],
+    priority: "medium",
+    dependencies: todo.dependencies,
+  }
+}
+
+function syncHiveTodosToSession(
+  orchestrator: SonderrOrchestrator.Interface,
+  todoService: Todo.Interface,
+  sessionID: string,
+  hiveID: HiveID,
+): Effect.Effect<void> {
+  return Effect.gen(function* () {
+    const todos = yield* orchestrator.listTodos(hiveID)
+    if (!todos.length) return
+    yield* todoService.update({
+      sessionID: SessionID.make(sessionID),
+      todos: todos.map(mapHiveTodoToSessionTodo),
+    })
+  })
+}
+
 export const HiveCreateTodoTool = Tool.define<
   typeof HiveCreateTodoParameters,
   CreateTodoMeta,
@@ -215,7 +243,7 @@ export const HiveCreateTodoTool = Tool.define<
           title: params.title,
           description: params.description,
           assignee: params.assignee,
-          dependencies: params.dependencies,
+          dependencies: params.dependencies ? [...params.dependencies] : undefined,
         })
         return {
           title: `Hive todo created: ${todo.id}`,

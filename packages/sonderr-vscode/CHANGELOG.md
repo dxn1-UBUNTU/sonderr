@@ -1,5 +1,11 @@
 # sonderr-code
 
+## 0.0.69
+
+### Minor Changes
+
+- Add an animated orange HiveSidebar in the TUI that replaces the normal sidebar in hive/swarm sessions. Shows ASCII HIVE header, swarm agent list, working indicator with animations, todo tracking, and proposal voting bars.
+
 ## 0.0.68
 
 ### Minor Changes

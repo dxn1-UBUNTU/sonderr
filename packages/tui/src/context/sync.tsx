@@ -26,6 +26,17 @@ import type {
   InteractiveTerminalSnapshot, // sonderr_change
   IndexingStatus, // sonderr_change
 } from "@sonderr/sdk/v2"
+
+type HiveProposal = {
+  id: string
+  title: string
+  description: string
+  status: string
+  votes: Record<string, string>
+  createdBy: string
+  createdAt: number
+  closedAt?: number
+} // sonderr_change - hive proposal
 import { createStore, produce, reconcile } from "solid-js/store"
 import { useProject } from "./project"
 import { useEvent } from "./event"
@@ -106,6 +117,9 @@ export const {
         [sessionID: string]: Todo[]
       }
       // sonderr_change start
+      hive_proposals: {
+        [sessionID: string]: HiveProposal[]
+      }
       background_process: Record<string, BackgroundProcessInfo[]>
       interactive_terminal: Record<string, InteractiveTerminalSnapshot[]>
       // sonderr_change end
@@ -152,6 +166,7 @@ export const {
       session_status: {},
       session_diff: {},
       todo: {},
+      hive_proposals: {}, // sonderr_change
       background_process: {}, // sonderr_change
       interactive_terminal: {}, // sonderr_change
       message: {},
@@ -361,6 +376,18 @@ export const {
         case "todo.updated":
           setStore("todo", event.properties.sessionID, event.properties.todos)
           break
+
+        // sonderr_change start
+        const eventType = event.type as string
+        if (eventType === "hive.proposal.created" || eventType === "hive.proposal.updated") {
+          const proposal = event.properties as any as HiveProposal
+          const sessionID = (event.properties as any).sessionID as string
+          const current = store.hive_proposals[sessionID] ?? []
+          const idx = current.findIndex((p) => p.id === proposal.id)
+          const next = idx >= 0 ? current.map((p, i) => (i === idx ? proposal : p)) : [...current, proposal]
+          setStore("hive_proposals", sessionID, next)
+        }
+        // sonderr_change end
 
         case "session.diff":
           setStore("session_diff", event.properties.sessionID, event.properties.diff)
