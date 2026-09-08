@@ -17,6 +17,13 @@ import PROMPT_ORCHESTRATOR from "../../agent/prompt/orchestrator.txt"
 import PROMPT_ASK from "../../agent/prompt/ask.txt"
 import PROMPT_EXPLORE from "../../agent/prompt/explore.txt"
 import PROMPT_HIVE from "../../agent/prompt/hive.txt"
+import PROMPT_RESEARCHER from "../../agent/prompt/researcher.txt"
+import PROMPT_CODER from "../../agent/prompt/coder.txt"
+import PROMPT_REVIEWER from "../../agent/prompt/reviewer.txt"
+import PROMPT_TESTER from "../../agent/prompt/tester.txt"
+import PROMPT_DOCUMENTER from "../../agent/prompt/documenter.txt"
+import PROMPT_DEBUGGER from "../../agent/prompt/debugger.txt"
+import PROMPT_ARCHITECT from "../../agent/prompt/architect.txt"
 
 export const bash: Record<string, "allow" | "ask" | "deny"> = {
   "*": "ask",
@@ -682,6 +689,150 @@ export function patchAgents(
       }),
     ),
     mode: "primary",
+    native: true,
+  }
+
+  // Add swarm agents
+  const swarmDefaults = Permission.merge(
+    defaults,
+    Permission.fromConfig({
+      read: "allow",
+      grep: "allow",
+      glob: "allow",
+      list: "allow",
+      webfetch: "allow",
+      websearch: "allow",
+      semantic_search: "allow",
+      hive_send: "allow",
+      hive_recall: "allow",
+    }),
+  )
+
+  agents.researcher = {
+    name: "researcher",
+    description: "Investigate topics, gather evidence, and synthesize findings from multiple sources.",
+    prompt: PROMPT_RESEARCHER,
+    options: {},
+    permission: Permission.merge(
+      swarmDefaults,
+      Permission.fromConfig({
+        "*": "deny",
+        bash: "deny",
+        edit: "deny",
+        task: "deny",
+      }),
+      user,
+    ),
+    mode: "subagent",
+    native: true,
+  }
+
+  agents.coder = {
+    name: "coder",
+    description: "Implement features, fix bugs, and write clean, working code.",
+    prompt: PROMPT_CODER,
+    options: {},
+    permission: Permission.merge(
+      swarmDefaults,
+      Permission.fromConfig({
+        "*": "deny",
+        task: "deny",
+      }),
+      user,
+    ),
+    mode: "subagent",
+    native: true,
+  }
+
+  agents.reviewer = {
+    name: "reviewer",
+    description: "Examine code for bugs, security issues, performance problems, and style violations.",
+    prompt: PROMPT_REVIEWER,
+    options: {},
+    permission: Permission.merge(
+      swarmDefaults,
+      Permission.fromConfig({
+        "*": "deny",
+        bash: "deny",
+        edit: "deny",
+        task: "deny",
+      }),
+      user,
+    ),
+    mode: "subagent",
+    native: true,
+  }
+
+  agents.tester = {
+    name: "tester",
+    description: "Write tests, run them, and verify that code works correctly.",
+    prompt: PROMPT_TESTER,
+    options: {},
+    permission: Permission.merge(
+      swarmDefaults,
+      Permission.fromConfig({
+        "*": "deny",
+        bash: "deny",
+        task: "deny",
+      }),
+      user,
+    ),
+    mode: "subagent",
+    native: true,
+  }
+
+  agents.documenter = {
+    name: "documenter",
+    description: "Write clear, useful documentation for code, APIs, and features.",
+    prompt: PROMPT_DOCUMENTER,
+    options: {},
+    permission: Permission.merge(
+      swarmDefaults,
+      Permission.fromConfig({
+        "*": "deny",
+        bash: "deny",
+        edit: "deny",
+        task: "deny",
+      }),
+      user,
+    ),
+    mode: "subagent",
+    native: true,
+  }
+
+  agents.debugger = {
+    name: "debugger",
+    description: "Diagnose and fix software issues through systematic investigation.",
+    prompt: PROMPT_DEBUGGER,
+    options: {},
+    permission: Permission.merge(
+      swarmDefaults,
+      Permission.fromConfig({
+        "*": "deny",
+        task: "deny",
+      }),
+      user,
+    ),
+    mode: "subagent",
+    native: true,
+  }
+
+  agents.architect = {
+    name: "architect",
+    description: "Design systems, plan implementations, and make high-level technical decisions.",
+    prompt: PROMPT_ARCHITECT,
+    options: {},
+    permission: Permission.merge(
+      swarmDefaults,
+      Permission.fromConfig({
+        "*": "deny",
+        bash: "deny",
+        edit: "deny",
+        task: "deny",
+      }),
+      user,
+    ),
+    mode: "subagent",
     native: true,
   }
 

@@ -3,7 +3,6 @@ import { useDialog } from "@tui/ui/dialog"
 import { DialogAlert } from "@tui/ui/dialog-alert"
 import { DialogPrompt } from "@tui/ui/dialog-prompt"
 import { DialogSelect, type DialogSelectOption } from "@tui/ui/dialog-select"
-import { useTheme } from "@tui/context/theme"
 import { useToast } from "@tui/ui/toast"
 import { createMemo, createSignal } from "solid-js"
 
@@ -13,11 +12,21 @@ const MENU_OPTIONS = [
   { title: "Disable hive mode", value: "disable", description: "Disable hive mode" },
   { title: "Add API key", value: "add-key", description: "Add an API key to the hive key pool" },
   { title: "List API keys", value: "list-keys", description: "List API keys in the hive key pool" },
+  { title: "Swarm agents", value: "swarm-agents", description: "View available swarm agents" },
+] as const
+
+const SWARM_AGENTS = [
+  { name: "researcher", role: "Research", desc: "Investigate topics and gather evidence" },
+  { name: "coder", role: "Implementation", desc: "Write production code and fix bugs" },
+  { name: "reviewer", role: "Quality", desc: "Review code for bugs and issues" },
+  { name: "tester", role: "Testing", desc: "Write and run tests" },
+  { name: "documenter", role: "Docs", desc: "Write documentation and guides" },
+  { name: "debugger", role: "Debugging", desc: "Diagnose and fix bugs" },
+  { name: "architect", role: "Design", desc: "Design systems and plan implementations" },
 ] as const
 
 export function DialogHive() {
   const dialog = useDialog()
-  const { theme } = useTheme()
   const toast = useToast()
   const [enabled, setEnabled] = createSignal(false)
   const [keys, setKeys] = createSignal<string[]>([])
@@ -75,6 +84,25 @@ export function DialogHive() {
     ))
   }
 
+  const handleSwarmAgents = () => {
+    const lines = [
+      "Available swarm agents:",
+      "",
+      ...SWARM_AGENTS.map((a) => `  ${a.name} (${a.role}): ${a.desc}`),
+      "",
+      "Use the hive agent to delegate tasks to these swarm agents.",
+      "Example: spawn a `researcher` agent to investigate a topic,",
+      "or a `coder` agent to implement a feature.",
+    ]
+    dialog.replace(() => (
+      <DialogAlert
+        title="Swarm Agents"
+        message={lines.join("\n")}
+        onConfirm={showMain}
+      />
+    ))
+  }
+
   const handleStatus = () => {
     const lines = [
       `Hive mode: ${enabled() ? "enabled" : "disabled"}`,
@@ -83,6 +111,9 @@ export function DialogHive() {
       "Available tools:",
       "- hive_send: publish a memo to the hive swarm bus",
       "- hive_recall: read recent memos from the hive bus",
+      "",
+      "Swarm agents:",
+      ...SWARM_AGENTS.map((a) => `  - ${a.name}: ${a.desc}`),
     ]
     dialog.replace(() => (
       <DialogAlert
@@ -111,6 +142,9 @@ export function DialogHive() {
         break
       case "list-keys":
         handleListKeys()
+        break
+      case "swarm-agents":
+        handleSwarmAgents()
         break
     }
   }

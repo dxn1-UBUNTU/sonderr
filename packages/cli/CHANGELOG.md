@@ -1,5 +1,11 @@
 # @sonderr/cli
 
+## 0.0.67
+
+### Minor Changes
+
+- Hive Phase 3: add specialized swarm agents (researcher, coder, reviewer, tester, documenter, debugger, architect) with dedicated system prompts and permissions. Add a `/hive` slash command and improve hive setup.
+
 ## 0.0.66
 
 ### Minor Changes

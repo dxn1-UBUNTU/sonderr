@@ -622,6 +622,21 @@ export function Prompt(props: PromptProps) {
           input.gotoBufferEnd()
         },
       },
+      {
+        title: "Hive",
+        desc: "Open hive swarm manager",
+        name: "prompt.hive",
+        category: "Session",
+        slashName: "hive",
+        run: () => {
+          input.setText("/hive ")
+          setStore("prompt", {
+            input: "/hive ",
+            parts: [],
+          })
+          input.gotoBufferEnd()
+        },
+      },
       // sonderr_change end
     ].map((entry) => ({
       namespace: "palette",
