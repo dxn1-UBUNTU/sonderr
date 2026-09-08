@@ -445,6 +445,7 @@ export async function run(db: SQLiteBunDatabase | NodeSQLiteDatabase, options?: 
           content: todo.content,
           status: todo.status,
           priority: todo.priority,
+          complexity: todo.complexity ?? null,
           position,
           time_created: now,
           time_updated: now,

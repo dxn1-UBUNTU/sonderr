@@ -77,6 +77,7 @@ const layer = Layer.effect(
     const mcp = yield* MCP.Service
     const locations = yield* LocationServiceMap.Service
     const config = yield* Config.Service // sonderr_change
+    const todo = yield* Todo.Service // sonderr_change
 
     return Service.of({
       // sonderr_change start
@@ -87,10 +88,7 @@ const layer = Layer.effect(
       ) {
         const ctx = yield* InstanceState.context
         const cfg = yield* config.get()
-        // sonderr_change start - query todos to conditionally inject acceptance guidance
-        const todos = yield* Todo.Service
-        const todoList = yield* todos.get(sessionID)
-        // sonderr_change end
+        const todos = yield* todo.get(sessionID)
         const references = yield* SonderrReference.list(
           {
             references: cfg.references ?? cfg.reference ?? {},
@@ -102,7 +100,7 @@ const layer = Layer.effect(
         return [
           ...SonderrSystemPrompt.environment({ ctx, model, editor: editorContext }),
           // sonderr_change - inject acceptance guidance only when there are pending todos
-          SonderrSystemPrompt.acceptanceGuidance(todoList),
+          SonderrSystemPrompt.acceptanceGuidance(todos),
           references.length === 0
             ? undefined
             : [

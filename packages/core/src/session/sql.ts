@@ -111,6 +111,7 @@ export const TodoTable = sqliteTable(
     content: text().notNull(),
     status: text().notNull(),
     priority: text().notNull(),
+    complexity: text(),
     position: integer().notNull(),
     ...Timestamps,
   },

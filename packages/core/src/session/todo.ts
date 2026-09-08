@@ -46,6 +46,7 @@ const layer = Layer.effect(
                   content: todo.content,
                   status: todo.status,
                   priority: todo.priority,
+                  complexity: todo.complexity ?? null,
                   position,
                 })),
               )
@@ -68,6 +69,7 @@ const layer = Layer.effect(
         content: row.content,
         status: row.status,
         priority: row.priority,
+        complexity: row.complexity ?? undefined,
       }))
     })
 

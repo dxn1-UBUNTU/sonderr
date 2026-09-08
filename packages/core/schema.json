@@ -1,9 +1,9 @@
 {
   "version": "7",
   "dialect": "sqlite",
-  "id": "08cfecbf-f95d-404b-a76a-2afc564baa8b",
+  "id": "9841a5ec-f28a-42f0-8a58-edadd4f7805f",
   "prevIds": [
-    "f14a9b18-8207-487e-a3d3-227e629ba9ad"
+    "08cfecbf-f95d-404b-a76a-2afc564baa8b"
   ],
   "ddl": [
     {
@@ -1389,6 +1389,16 @@
       "default": null,
       "generated": null,
       "name": "priority",
+      "entityType": "columns",
+      "table": "todo"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "complexity",
       "entityType": "columns",
       "table": "todo"
     },
