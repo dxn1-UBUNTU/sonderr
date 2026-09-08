@@ -26,7 +26,7 @@ export namespace ModesMigrator {
   }
 
   // Default modes to skip - these have native Sonderr equivalents
-  const DEFAULT_MODE_SLUGS = new Set(["code", "build", "architect", "ask", "debug", "orchestrator"])
+  const DEFAULT_MODE_SLUGS = new Set(["code", "build", "architect", "ask", "debug", "orchestrator", "hive"])
 
   // Group to permission mapping
   const GROUP_TO_PERMISSION: Record<string, string> = {

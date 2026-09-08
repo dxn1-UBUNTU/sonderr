@@ -7,7 +7,7 @@ import { CloudCatalog } from "./catalog"
 import { ModelSchema, ModeSchema } from "./contracts"
 
 export namespace CloudDefaults {
-  const COMPATIBLE = new Set(["code", "plan", "debug", "orchestrator", "ask", "build", "architect"])
+  const COMPATIBLE = new Set(["code", "plan", "debug", "orchestrator", "ask", "build", "architect", "hive"])
 
   export type ModelStateInfo = SonderrModelState.State
 

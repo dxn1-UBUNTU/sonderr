@@ -16,6 +16,7 @@ import PROMPT_DEBUG from "../../agent/prompt/debug.txt"
 import PROMPT_ORCHESTRATOR from "../../agent/prompt/orchestrator.txt"
 import PROMPT_ASK from "../../agent/prompt/ask.txt"
 import PROMPT_EXPLORE from "../../agent/prompt/explore.txt"
+import PROMPT_HIVE from "../../agent/prompt/hive.txt"
 
 export const bash: Record<string, "allow" | "ask" | "deny"> = {
   "*": "ask",
@@ -640,6 +641,45 @@ export function patchAgents(
       baseline(guard, user, sonderr.mcpRules),
       askEditGuard(),
       denies(user),
+    ),
+    mode: "primary",
+    native: true,
+  }
+
+  // Add hive agent
+  agents.hive = {
+    name: "hive",
+    description: "Swarm intelligence coordinator. Delegates to subagents and shares results via the hive bus.",
+    prompt: PROMPT_HIVE,
+    options: {},
+    permission: Permission.merge(
+      defaults,
+      Permission.fromConfig({
+        "*": "deny",
+        read: "allow",
+        grep: "allow",
+        glob: "allow",
+        list: "allow",
+        question: "allow",
+        skill: "allow",
+        suggest: "allow",
+        task: "allow",
+        todoread: "allow",
+        todowrite: "allow",
+        webfetch: "allow",
+        websearch: "allow",
+        semantic_search: "allow",
+        hive_send: "allow",
+        hive_recall: "allow",
+        external_directory: {
+          [Truncate.GLOB]: "allow",
+        },
+      }),
+      user,
+      Permission.fromConfig({
+        bash: "deny",
+        edit: "deny",
+      }),
     ),
     mode: "primary",
     native: true,
