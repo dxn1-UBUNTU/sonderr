@@ -12,7 +12,8 @@ const tui: TuiPlugin = async (api) => {
         namespace: "palette",
         name: "hive.menu",
         title: "Hive",
-        slashName: "SONDERR-HIVE",
+        desc: "Open the hive swarm manager",
+        slashName: "hive",
         category: "Sonderr",
         run() {
           api.ui.dialog.setSize("large")

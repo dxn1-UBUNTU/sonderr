@@ -62,7 +62,7 @@ export const HiveCreateProposalTool = Tool.define<
     parameters: HiveCreateProposalParameters,
     execute: (params: Schema.Schema.Type<typeof HiveCreateProposalParameters>, ctx: Tool.Context) =>
       Effect.gen(function* () {
-        const hiveID = yield* orchestrator.hiveForSession(ctx.sessionID)
+        const hiveID = yield* orchestrator.ensureForSession(ctx.sessionID)
         if (!hiveID)
           return {
             title: "Hive create proposal: inactive",
@@ -95,7 +95,7 @@ export const HiveVoteTool = Tool.define<
     parameters: HiveVoteParameters,
     execute: (params: Schema.Schema.Type<typeof HiveVoteParameters>, ctx: Tool.Context) =>
       Effect.gen(function* () {
-        const hiveID = yield* orchestrator.hiveForSession(ctx.sessionID)
+        const hiveID = yield* orchestrator.ensureForSession(ctx.sessionID)
         if (!hiveID)
           return {
             title: "Hive vote: inactive",
@@ -130,7 +130,7 @@ export const HiveCloseProposalTool = Tool.define<
     parameters: HiveCloseProposalParameters,
     execute: (params: Schema.Schema.Type<typeof HiveCloseProposalParameters>, ctx: Tool.Context) =>
       Effect.gen(function* () {
-        const hiveID = yield* orchestrator.hiveForSession(ctx.sessionID)
+        const hiveID = yield* orchestrator.ensureForSession(ctx.sessionID)
         if (!hiveID)
           return {
             title: "Hive close proposal: inactive",
@@ -165,7 +165,7 @@ export const HiveListProposalsTool = Tool.define<
     parameters: HiveListProposalsParameters,
     execute: (_params: Schema.Schema.Type<typeof HiveListProposalsParameters>, ctx: Tool.Context) =>
       Effect.gen(function* () {
-        const hiveID = yield* orchestrator.hiveForSession(ctx.sessionID)
+        const hiveID = yield* orchestrator.ensureForSession(ctx.sessionID)
         if (!hiveID)
           return {
             title: "Hive list proposals: inactive",
@@ -232,7 +232,7 @@ export const HiveCreateTodoTool = Tool.define<
     parameters: HiveCreateTodoParameters,
     execute: (params: Schema.Schema.Type<typeof HiveCreateTodoParameters>, ctx: Tool.Context) =>
       Effect.gen(function* () {
-        const hiveID = yield* orchestrator.hiveForSession(ctx.sessionID)
+        const hiveID = yield* orchestrator.ensureForSession(ctx.sessionID)
         if (!hiveID)
           return {
             title: "Hive create todo: inactive",
@@ -266,7 +266,7 @@ export const HiveUpdateTodoTool = Tool.define<
     parameters: HiveUpdateTodoParameters,
     execute: (params: Schema.Schema.Type<typeof HiveUpdateTodoParameters>, ctx: Tool.Context) =>
       Effect.gen(function* () {
-        const hiveID = yield* orchestrator.hiveForSession(ctx.sessionID)
+        const hiveID = yield* orchestrator.ensureForSession(ctx.sessionID)
         if (!hiveID)
           return {
             title: "Hive update todo: inactive",
@@ -305,7 +305,7 @@ export const HiveListTodosTool = Tool.define<
     parameters: HiveListTodosParameters,
     execute: (params: Schema.Schema.Type<typeof HiveListTodosParameters>, ctx: Tool.Context) =>
       Effect.gen(function* () {
-        const hiveID = yield* orchestrator.hiveForSession(ctx.sessionID)
+        const hiveID = yield* orchestrator.ensureForSession(ctx.sessionID)
         if (!hiveID)
           return {
             title: "Hive list todos: inactive",

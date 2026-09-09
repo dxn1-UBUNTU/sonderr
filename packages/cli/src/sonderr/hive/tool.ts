@@ -34,7 +34,7 @@ export const HiveSendTool = Tool.define<typeof HiveSendParameters, SendMeta, Son
       parameters: HiveSendParameters,
       execute: (params: Schema.Schema.Type<typeof HiveSendParameters>, ctx: Tool.Context) =>
         Effect.gen(function* () {
-          const hiveID = yield* orchestrator.hiveForSession(ctx.sessionID)
+          const hiveID = yield* orchestrator.ensureForSession(ctx.sessionID)
           if (!hiveID)
             return {
               title: "Hive send: inactive",
@@ -61,7 +61,7 @@ export const HiveRecallTool = Tool.define<typeof HiveRecallParameters, RecallMet
       parameters: HiveRecallParameters,
       execute: (params: Schema.Schema.Type<typeof HiveRecallParameters>, ctx: Tool.Context) =>
         Effect.gen(function* () {
-          const hiveID = yield* orchestrator.hiveForSession(ctx.sessionID)
+          const hiveID = yield* orchestrator.ensureForSession(ctx.sessionID)
           if (!hiveID)
             return {
               title: "Hive recall: inactive",

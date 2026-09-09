@@ -1,18 +1,14 @@
 /** @jsxImportSource @opentui/solid */
 import { useDialog } from "@tui/ui/dialog"
 import { DialogAlert } from "@tui/ui/dialog-alert"
-import { DialogPrompt } from "@tui/ui/dialog-prompt"
 import { DialogSelect, type DialogSelectOption } from "@tui/ui/dialog-select"
-import { useToast } from "@tui/ui/toast"
-import { createMemo, createSignal } from "solid-js"
+import { createMemo } from "solid-js"
 
 const MENU_OPTIONS = [
   { title: "Hive status", value: "status", description: "Show hive swarm status and configuration" },
-  { title: "Enable hive mode", value: "enable", description: "Enable hive mode" },
-  { title: "Disable hive mode", value: "disable", description: "Disable hive mode" },
-  { title: "Add API key", value: "add-key", description: "Add an API key to the hive key pool" },
-  { title: "List API keys", value: "list-keys", description: "List API keys in the hive key pool" },
   { title: "Swarm agents", value: "swarm-agents", description: "View available swarm agents" },
+  { title: "Hive tools", value: "tools", description: "List the tools available inside a hive" },
+  { title: "Configuration", value: "config", description: "How to enable and tune hive mode" },
 ] as const
 
 const SWARM_AGENTS = [
@@ -25,16 +21,63 @@ const SWARM_AGENTS = [
   { name: "architect", role: "Design", desc: "Design systems and plan implementations" },
 ] as const
 
+const HIVE_TOOLS = [
+  { name: "hive_send", desc: "Publish a memo to the hive swarm bus" },
+  { name: "hive_recall", desc: "Read recent memos from the hive bus" },
+  { name: "hive_create_proposal", desc: "Open a proposal for the swarm to vote on" },
+  { name: "hive_vote", desc: "Cast a vote on an open proposal" },
+  { name: "hive_close_proposal", desc: "Accept, reject, or cancel a proposal" },
+  { name: "hive_list_proposals", desc: "List proposals in this hive" },
+  { name: "hive_create_todo", desc: "Add a shared todo to the hive board" },
+  { name: "hive_update_todo", desc: "Update status, assignee, or dependencies of a hive todo" },
+  { name: "hive_list_todos", desc: "List the hive todo board" },
+] as const
+
+const ENV = {
+  experimental: "SONDERR_EXPERIMENTAL",
+  hive: "SONDERR_EXPERIMENTAL_HIVE",
+  mode: "SONDERR_HIVE_MODE",
+  maxAgents: "SONDERR_HIVE_MAX_AGENTS",
+  maxConcurrent: "SONDERR_HIVE_MAX_CONCURRENT",
+} as const
+
+function truthy(value: string | undefined): boolean {
+  if (!value) return false
+  const normalized = value.trim().toLowerCase()
+  return normalized === "1" || normalized === "true" || normalized === "yes" || normalized === "on"
+}
+
+type HiveState = {
+  enabled: boolean
+  enabledBy: string
+  mode: string
+  maxAgents: string
+  maxConcurrent: string
+}
+
+/** Mirrors SonderrHiveConfig.resolve so the dialog reports what the engine actually sees. */
+function readState(): HiveState {
+  const direct = process.env[ENV.hive]
+  const enabled = direct !== undefined ? truthy(direct) : truthy(process.env[ENV.experimental])
+  const raw = process.env[ENV.mode] ?? "auto"
+  const mode = raw === "off" || raw === "auto" || raw === "manual" ? raw : "auto"
+  return {
+    enabled: enabled && mode !== "off",
+    enabledBy: direct !== undefined ? ENV.hive : truthy(process.env[ENV.experimental]) ? ENV.experimental : "unset",
+    mode,
+    maxAgents: process.env[ENV.maxAgents] ?? "8 (default)",
+    maxConcurrent: process.env[ENV.maxConcurrent] ?? "4 (default)",
+  }
+}
+
 export function DialogHive() {
   const dialog = useDialog()
-  const toast = useToast()
-  const [enabled, setEnabled] = createSignal(false)
-  const [keys, setKeys] = createSignal<string[]>([])
+  const state = createMemo(readState)
 
   const options = createMemo<DialogSelectOption<string>[]>(() =>
     MENU_OPTIONS.map((item) => ({
       title: item.title,
-      footer: item.value,
+      footer: item.description,
       category: "Hive",
       value: item.value,
     })),
@@ -42,116 +85,73 @@ export function DialogHive() {
 
   const showMain = () => dialog.replace(() => <DialogHive />)
 
-  const handleAddKey = () => {
-    dialog.replace(() => (
-      <DialogPrompt
-        title="Add Hive API Key"
-        placeholder="Enter API key (e.g., sk-...)"
-        onConfirm={(value) => {
-          const trimmed = value.trim()
-          if (!trimmed) return
-          setKeys([...keys(), trimmed])
-          toast.show({ variant: "success", message: `Added key: ${trimmed.slice(0, 8)}...` })
-          showMain()
-        }}
-        onCancel={showMain}
-      />
-    ))
+  const alert = (title: string, lines: string[]) =>
+    dialog.replace(() => <DialogAlert title={title} message={lines.join("\n")} onConfirm={showMain} />)
+
+  const handleStatus = () => {
+    const current = state()
+    alert("Hive Status", [
+      `Hive mode: ${current.enabled ? "enabled" : "disabled"}`,
+      `Enabled by: ${current.enabledBy}`,
+      `Mode: ${current.mode}`,
+      `Max agents: ${current.maxAgents}`,
+      `Max concurrent: ${current.maxConcurrent}`,
+      "",
+      current.enabled
+        ? "Start a session with the `hive` agent to coordinate a swarm."
+        : `Set ${ENV.hive}=1 (or ${ENV.experimental}=1) and restart to enable hive mode.`,
+    ])
   }
 
-  const handleListKeys = () => {
-    if (keys().length === 0) {
-      dialog.replace(() => (
-        <DialogAlert
-          title="Hive API Keys"
-          message={'No keys in the hive key pool yet.\nUse "Add API key" to add one.'}
-          onConfirm={showMain}
-        />
-      ))
-      return
-    }
-    dialog.replace(() => (
-      <DialogSelect
-        title="Hive API Keys"
-        options={keys().map((key, i) => ({
-          title: `Key ${i + 1}: ${key.slice(0, 8)}...`,
-          value: key,
-          category: "Keys",
-        }))}
-        flat
-        onSelect={() => showMain()}
-      />
-    ))
-  }
-
-  const handleSwarmAgents = () => {
-    const lines = [
+  const handleSwarmAgents = () =>
+    alert("Swarm Agents", [
       "Available swarm agents:",
       "",
       ...SWARM_AGENTS.map((a) => `  ${a.name} (${a.role}): ${a.desc}`),
       "",
-      "Use the hive agent to delegate tasks to these swarm agents.",
-      "Example: spawn a `researcher` agent to investigate a topic,",
-      "or a `coder` agent to implement a feature.",
-    ]
-    dialog.replace(() => (
-      <DialogAlert
-        title="Swarm Agents"
-        message={lines.join("\n")}
-        onConfirm={showMain}
-      />
-    ))
-  }
+      "The `hive` agent delegates to these via the `task` tool. Every spawned",
+      "subagent joins the parent's hive automatically and shares its bus.",
+    ])
 
-  const handleStatus = () => {
-    const lines = [
-      `Hive mode: ${enabled() ? "enabled" : "disabled"}`,
-      `Keys in pool: ${keys().length}`,
+  const handleTools = () =>
+    alert("Hive Tools", [
+      "Tools available to agents inside a hive:",
       "",
-      "Available tools:",
-      "- hive_send: publish a memo to the hive swarm bus",
-      "- hive_recall: read recent memos from the hive bus",
+      ...HIVE_TOOLS.map((t) => `  ${t.name}: ${t.desc}`),
+    ])
+
+  const handleConfig = () =>
+    alert("Hive Configuration", [
+      "Hive mode is configured through environment variables:",
       "",
-      "Swarm agents:",
-      ...SWARM_AGENTS.map((a) => `  - ${a.name}: ${a.desc}`),
-    ]
-    dialog.replace(() => (
-      <DialogAlert
-        title="Hive Status"
-        message={lines.join("\n")}
-        onConfirm={showMain}
-      />
-    ))
-  }
+      `  ${ENV.hive}=1       enable hive mode (or ${ENV.experimental}=1)`,
+      `  ${ENV.mode}=auto|manual|off   how hives are formed (default: auto)`,
+      `  ${ENV.maxAgents}=8            max agents per hive`,
+      `  ${ENV.maxConcurrent}=4        max agents running at once`,
+      "",
+      "Changes take effect on the next Sonderr start.",
+    ])
 
   const handleSelect = (option: DialogSelectOption<string>) => {
     switch (option.value) {
       case "status":
         handleStatus()
         break
-      case "enable":
-        setEnabled(true)
-        toast.show({ variant: "success", message: "Hive mode enabled" })
-        break
-      case "disable":
-        setEnabled(false)
-        toast.show({ variant: "info", message: "Hive mode disabled" })
-        break
-      case "add-key":
-        handleAddKey()
-        break
-      case "list-keys":
-        handleListKeys()
-        break
       case "swarm-agents":
         handleSwarmAgents()
+        break
+      case "tools":
+        handleTools()
+        break
+      case "config":
+        handleConfig()
         break
     }
   }
 
   return (
     <DialogSelect
-      title={`Hive ${enabled() ? "(enabled)" : "(disabled)"}`}
+      title={`Hive ${state().enabled ? "(enabled)" : "(disabled)"}`}
       options={options()}
       flat
       onSelect={handleSelect}

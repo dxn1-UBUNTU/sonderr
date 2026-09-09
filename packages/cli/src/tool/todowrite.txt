@@ -29,7 +29,22 @@ Skip when:
 - `low` - nice-to-haves, polish, optimization
 
 ## Complexity rating
-Rate every task to calibrate effort and approach. Higher complexity means more planning, more verification, and often parallel subagents.
+Rate the whole request BEFORE writing the list, then rate every individual todo with the `complexity` field. The rating is not decoration: it sets how many todos you write, whether you plan first, and how hard you verify.
+
+The most common failure is under-rating — treating a hard request as trivial because the first edit looks small. Rate the request, not its first step. When you are between two bands, take the higher one.
+
+### List size by rating (floors, not targets)
+- **S1-S2**: no list
+- **S3-S4**: 2-4 todos if the work is multi-step
+- **M1-M2**: 3-6 todos
+- **M3-M4**: 5-10 todos, survey the affected code first
+- **H1-H2**: 8-15 todos, plan and map dependencies
+- **H3-H4**: 12-25 todos, parallelize independent lanes with `task` subagents
+- **U1-U10**: 20+ todos grouped into phases, decomposed before any edit
+
+A U-rated task with four todos is not a plan, it is four headlines. Split until every todo is something you could verify on its own.
+
+Requests that sound small and almost never are: "add auth", "make it faster", "add tests", "support offline", "migrate to X", "add multi-tenancy", "make it production ready".
 
 ### S1-S4: Simple (seconds to ~5 min)
 Quick, low-risk changes. Single file, obvious fix, no architectural decisions.
@@ -87,8 +102,10 @@ Use `tags` to categorize tasks by area or type. Common tags: `frontend`, `backen
 - Use dependencies to prevent starting tasks that rely on incomplete work
 - Assign priority based on what unblocks other work or is most critical to the user's goal
 - Rate complexity honestly — it determines how much planning and verification you should do
-- For H3+ and U tasks, consider using `task` subagents to parallelize work
-- Break U-rated tasks into many smaller M/S sub-tasks before starting
+- Set `complexity` on every todo, not just on the plan as a whole
+- Include the verification work as todos (tests, typecheck, lint, manual check) — a list ending at "implement it" is incomplete
+- For H3+ and U tasks, use `task` subagents to run independent lanes in parallel
+- Break U-rated tasks into many smaller M/S sub-tasks before starting, grouped into phases
 
 ## Examples
 
@@ -104,3 +121,27 @@ Skip it:
 - "Run npm install and tell me what happened" -> one command
 
 When in doubt, use it.
+
+## Worked example: decomposing an H-rated request
+
+Request: "add rate limiting to the public API".
+
+Rating: H1 — new subsystem, touches routing, config, storage, and every public handler.
+
+A bad list (under-decomposed, all rated S):
+1. Add rate limiting
+2. Test it
+
+A good list:
+1. [M1] Read the router and middleware chain in the API package, note where handlers register
+2. [S3] Decide the algorithm and limits; write the choice into the config schema
+3. [M2] Implement the token-bucket store with an in-memory backend (deps: 2)
+4. [M1] Add the middleware that consumes the store and sets rate-limit headers (deps: 3)
+5. [M1] Wire the middleware into the public routes only, leaving internal routes untouched (deps: 4)
+6. [M2] Return 429 with a Retry-After header and cover the error path (deps: 4)
+7. [M2] Unit tests for the bucket: refill, burst, exhaustion (deps: 3)
+8. [M1] Integration test hitting a route past the limit (deps: 5, 6)
+9. [S3] Document the limits and the config keys in the API README (deps: 2)
+10. [S2] Run typecheck and lint, review the full diff (deps: 8)
+
+Note what changed: the survey is a todo, each step is verifiable on its own, dependencies show that 7 and 9 can run in parallel with 4-6, and the verification work is on the list rather than assumed.

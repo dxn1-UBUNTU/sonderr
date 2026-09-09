@@ -10,6 +10,8 @@ export interface Interface {
   readonly create: (sessionID: string) => Effect.Effect<HiveID>
   readonly tagChild: (childSessionID: string, hiveID: HiveID) => Effect.Effect<void>
   readonly hiveForSession: (sessionID: string) => Effect.Effect<HiveID | undefined>
+  /** Resolve the hive for a session, walking up parent sessions and creating one on demand. */
+  readonly ensureForSession: (sessionID: string) => Effect.Effect<HiveID>
   readonly broadcast: (
     hiveID: HiveID,
     channel: string,
@@ -22,7 +24,6 @@ export interface Interface {
     input: { channel?: string; since?: number; limit?: number },
   ) => Effect.Effect<HiveMemo[]>
   readonly spawn: (hiveID: HiveID, input: { agent: string; prompt: string; parentSessionID: string }) => Effect.Effect<string>
-  readonly runTurn: (hiveID: HiveID, prompt: string, parts: unknown) => Effect.Effect<string>
   readonly cancel: (hiveID: HiveID) => Effect.Effect<void>
   readonly createProposal: (
     hiveID: HiveID,
@@ -55,9 +56,8 @@ export interface Interface {
 
 export class Service extends Context.Service<Service, Interface>()("@sonderr/HiveOrchestrator") {}
 
-function stub<A>(msg: string): Effect.Effect<A> {
-  return Effect.die(new Error(msg))
-}
+/** Guards against a cycle or a pathologically deep session tree while walking to the root. */
+const MAX_ANCESTOR_WALK = 32
 
 export const node = LayerNode.make({
   service: Service,
@@ -93,6 +93,33 @@ export const node = LayerNode.make({
       const hiveForSession = (sessionID: string): Effect.Effect<HiveID | undefined> =>
         Effect.sync(() => sessionMap.get(sessionID))
 
+      /** Collect sessionID plus its ancestors, nearest first. Stops at the root or on a lookup failure. */
+      const lineage = (sessionID: string): Effect.Effect<string[]> =>
+        Effect.gen(function* () {
+          const chain: string[] = [sessionID]
+          let current = sessionID
+          for (let depth = 0; depth < MAX_ANCESTOR_WALK; depth++) {
+            const info = yield* sessions.get(SessionID.make(current)).pipe(Effect.catch(() => Effect.succeed(undefined)))
+            const parent = info?.parentID
+            if (!parent || chain.includes(parent)) break
+            chain.push(parent)
+            current = parent
+          }
+          return chain
+        })
+
+      const ensureForSession = (sessionID: string): Effect.Effect<HiveID> =>
+        Effect.gen(function* () {
+          const hit = sessionMap.get(sessionID)
+          if (hit) return hit
+          const chain = yield* lineage(sessionID)
+          // A subagent spawned outside orchestrator.spawn is untagged; inherit the nearest tagged ancestor.
+          const inherited = chain.map((id) => sessionMap.get(id)).find((id): id is HiveID => id !== undefined)
+          const hiveID = inherited ?? (yield* create(chain[chain.length - 1] ?? sessionID))
+          for (const id of chain) sessionMap.set(id, hiveID)
+          return hiveID
+        })
+
       const broadcast = (
         hiveID: HiveID,
         channel: string,
@@ -126,8 +153,6 @@ export const node = LayerNode.make({
           yield* tagChild(child.id, hiveID)
           return child.id
         })
-
-      const runTurn = (): Effect.Effect<string> => stub("hive runTurn not wired")
 
       const createProposal = (
         hiveID: HiveID,
@@ -176,10 +201,10 @@ export const node = LayerNode.make({
         create,
         tagChild,
         hiveForSession,
+        ensureForSession,
         broadcast,
         recall,
         spawn,
-        runTurn,
         cancel,
         createProposal,
         vote,

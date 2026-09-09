@@ -678,6 +678,13 @@ export function patchAgents(
         semantic_search: "allow",
         hive_send: "allow",
         hive_recall: "allow",
+        hive_create_proposal: "allow",
+        hive_vote: "allow",
+        hive_close_proposal: "allow",
+        hive_list_proposals: "allow",
+        hive_create_todo: "allow",
+        hive_update_todo: "allow",
+        hive_list_todos: "allow",
         external_directory: {
           [Truncate.GLOB]: "allow",
         },
@@ -705,6 +712,10 @@ export function patchAgents(
       semantic_search: "allow",
       hive_send: "allow",
       hive_recall: "allow",
+      hive_vote: "allow",
+      hive_list_proposals: "allow",
+      hive_update_todo: "allow",
+      hive_list_todos: "allow",
     }),
   )
 

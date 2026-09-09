@@ -131,6 +131,13 @@ export namespace SonderrToolRegistry {
       send: Tool.Info
       hiveSend: Tool.Info
       hiveRecall: Tool.Info
+      hiveCreateProposal: Tool.Info
+      hiveVote: Tool.Info
+      hiveCloseProposal: Tool.Info
+      hiveListProposals: Tool.Info
+      hiveCreateTodo: Tool.Info
+      hiveUpdateTodo: Tool.Info
+      hiveListTodos: Tool.Info
       notebookRead?: Tool.Info
       notebookEdit?: Tool.Info
       notebookExecute?: Tool.Info
@@ -152,6 +159,13 @@ export namespace SonderrToolRegistry {
         send: Tool.init(tools.send),
         hiveSend: Tool.init(tools.hiveSend),
         hiveRecall: Tool.init(tools.hiveRecall),
+        hiveCreateProposal: Tool.init(tools.hiveCreateProposal),
+        hiveVote: Tool.init(tools.hiveVote),
+        hiveCloseProposal: Tool.init(tools.hiveCloseProposal),
+        hiveListProposals: Tool.init(tools.hiveListProposals),
+        hiveCreateTodo: Tool.init(tools.hiveCreateTodo),
+        hiveUpdateTodo: Tool.init(tools.hiveUpdateTodo),
+        hiveListTodos: Tool.init(tools.hiveListTodos),
       })
       const terminal = tools.terminal ? yield* Tool.init(tools.terminal) : undefined
       const notebooks =
@@ -163,7 +177,7 @@ export namespace SonderrToolRegistry {
             })
           : {}
       const semantic = yield* semanticTool(deps, loaders)
-      return { ...base, terminal, ...notebooks, semantic, notify: base.notify, send: base.send, hiveSend: base.hiveSend, hiveRecall: base.hiveRecall }
+      return { ...base, terminal, ...notebooks, semantic }
     })
   }
 
@@ -229,6 +243,13 @@ export namespace SonderrToolRegistry {
       send: Tool.Def
       hiveSend: Tool.Def
       hiveRecall: Tool.Def
+      hiveCreateProposal: Tool.Def
+      hiveVote: Tool.Def
+      hiveCloseProposal: Tool.Def
+      hiveListProposals: Tool.Def
+      hiveCreateTodo: Tool.Def
+      hiveUpdateTodo: Tool.Def
+      hiveListTodos: Tool.Def
       notebookRead?: Tool.Def
       notebookEdit?: Tool.Def
       notebookExecute?: Tool.Def
@@ -243,6 +264,13 @@ export namespace SonderrToolRegistry {
       tools.recall,
       tools.hiveSend,
       tools.hiveRecall,
+      tools.hiveCreateProposal,
+      tools.hiveVote,
+      tools.hiveCloseProposal,
+      tools.hiveListProposals,
+      tools.hiveCreateTodo,
+      tools.hiveUpdateTodo,
+      tools.hiveListTodos,
       ...(Flag.SONDERR_CLIENT === "vscode" ? [tools.chart] : []),
       ...(Flag.SONDERR_CLIENT === "cli" || Flag.SONDERR_CLIENT === "vscode" ? [tools.process] : []),
       ...(Flag.SONDERR_CLIENT === "cli" && tools.terminal ? [tools.terminal] : []),

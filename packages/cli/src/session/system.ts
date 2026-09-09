@@ -13,6 +13,7 @@ import PROMPT_KIMI from "./prompt/kimi.txt"
 import PROMPT_LING from "./prompt/ling.txt" // sonderr_change
 import PROMPT_META from "./prompt/meta.txt"
 import PROMPT_FABLE from "./prompt/sonderr-system-prompt.md" // sonderr_change - full Sonderr prompt (default for older/unknown models)
+import PROMPT_CALIBRATION from "./prompt/task-calibration.md" // sonderr_change - complexity rating + decomposition doctrine, appended to every prompt
 
 import { Todo } from "./todo" // sonderr_change
 import { SessionID } from "./schema" // sonderr_change
@@ -48,17 +49,54 @@ export function soul() {
 // sonderr_change end
 
 export function provider(model: Provider.Model) {
-  // sonderr_change start - sonderr-system-prompt.md is the single default system prompt for every model
-  function prompt() {
-    return [PROMPT_FABLE]
+  // sonderr_change start - every prompt path gets the shared complexity/decomposition doctrine appended.
+  // Without it, the per-model prompts carry no complexity scale at all and every request is treated as trivial.
+  function calibrated(parts: string[]) {
+    return [...parts, PROMPT_CALIBRATION]
   }
-  // sonderr_change end
+
+  function prompt() {
+    switch (model.prompt) {
+      case "anthropic":
+        return [PROMPT_ANTHROPIC]
+      case "anthropic_without_todo":
+        return [PROMPT_DEFAULT]
+      case "beast":
+        return [PROMPT_BEAST]
+      case "codex":
+        return [PROMPT_CODEX]
+      case "gemini":
+        return [PROMPT_GEMINI]
+      case "gpt55":
+        return [PROMPT_GPT55]
+      case "ling":
+        return [PROMPT_LING]
+      case "trinity":
+        return [PROMPT_TRINITY]
+      case "fable":
+        return [PROMPT_FABLE]
+    }
+    return undefined
+  }
 
   const sonderr = prompt()
-  if (sonderr) return sonderr
-  // sonderr_change end
-  // sonderr_change start - sonderr-system-prompt.md is the single system prompt for every model path
-  return [PROMPT_FABLE]
+  if (sonderr) return calibrated(sonderr)
+  if (model.api.id.includes("muse-spark")) return calibrated([PROMPT_META])
+  if (model.api.id.includes("gpt-4") || model.api.id.includes("o1") || model.api.id.includes("o3"))
+    return calibrated([PROMPT_BEAST])
+  if (model.api.id.includes("gpt")) {
+    if (model.api.id.includes("codex")) {
+      return calibrated([PROMPT_CODEX])
+    }
+    return calibrated([PROMPT_GPT])
+  }
+  if (model.api.id.includes("gemini-")) return calibrated([PROMPT_GEMINI])
+  if (model.api.id.includes("claude")) return calibrated([PROMPT_ANTHROPIC])
+  if (model.api.id.toLowerCase().includes("trinity")) return calibrated([PROMPT_TRINITY])
+  if (model.api.id.toLowerCase().includes("kimi")) return calibrated([PROMPT_KIMI])
+  if (isLing(model.api.id)) return calibrated([PROMPT_LING])
+  // older/unknown models get the full Sonderr prompt
+  return calibrated([PROMPT_FABLE])
   // sonderr_change end
 }
 
